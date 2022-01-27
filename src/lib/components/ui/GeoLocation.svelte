@@ -31,8 +31,7 @@
 </script>
 
 {#if geoLocationCoordinates}
-  <p>Dein Standort: {geoLocationCoordinates.latitude} / {geoLocationCoordinates.longitude}</p>
-  <p>{address}</p>
+  <p>Dein Standort: {address} [{geoLocationCoordinates.latitude} / {geoLocationCoordinates.longitude}]</p>
 {:else}
   <p>Dein Standort wird ermittelt...</p>
 {/if}

@@ -1,8 +1,8 @@
 <script lang="ts">
   export let type = '';
-  export let fullwidth = false;
+  export let small = false;
 </script>
 
-<button class:w-full={fullwidth} class="bg-stone-200 p-2 border rounded-md hover:shadow-lg" {type} on:click>
+<button class="btn btn-outline" class:btn-sm={small} {type} on:click>
   <slot />
 </button>

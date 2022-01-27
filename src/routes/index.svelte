@@ -7,13 +7,12 @@
   import GeoLocation from '$lib/components/ui/GeoLocation.svelte';
 </script>
 
-<ProfileSettings />
-<div class="p-4">
+<div class="flex flex-col gap-6">
   <GeoLocation />
+  <div class="grid grid-cols-3 gap-2">
+    <Button>Favorit</Button>
+    <Button><HeartIcon /></Button>
+    <Button>Hot <FireIcon /></Button>
+  </div>
+  <DealsList />
 </div>
-<div class="flex space-x-3 p-4 justify-items-stretch mt-14">
-  <Button fullwidth>Favorit</Button>
-  <Button fullwidth><span class="flex justify-around"><HeartIcon /></span></Button>
-  <Button fullwidth><span class="flex justify-around">Hot <FireIcon /></span></Button>
-</div>
-<DealsList />

@@ -1,5 +1,8 @@
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {},
-  plugins: []
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: ['dark']
+  }
 };

@@ -1,6 +1,5 @@
 <script>
-  import HamburgerIcon from '$lib/components/icons/HamburgerIcon.svelte';
-  import ProfilePicture from './ProfilePicture.svelte';
+  import ProfilePicture from "./ProfilePicture.svelte";
 </script>
 
 <div class="flex justify-between items-center">

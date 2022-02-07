@@ -12,21 +12,15 @@
 
 <div class="flex flex-col h-full p-2 gap-2">
   <GeoLocation />
-  <div class="tabs mt-6">
+  <div class="tabs mt-6 max-h-8">
     <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
-      <div class="h-8 w-8">
-        <StarIcon />
-      </div>
+      <StarIcon />
     </button>
     <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
-      <div class="h-8 w-8">
-        <HeartIcon />
-      </div>
+      <HeartIcon />
     </button>
     <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
-      <div class="h-8 w-8">
-        <FireIcon />
-      </div>
+      <FireIcon />
     </button>
   </div>
   {#if showTabIndex === 0}

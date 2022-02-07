@@ -4,7 +4,7 @@
   import TagIcon from "../ui/icons/TagIcon.svelte";
 </script>
 
-<footer class="flex justify-between py-2 px-6 rounded-t-xl border-t-2 max-h-min">
+<footer class="flex justify-between py-2 px-6 md:px-52 rounded-t-xl border-t-2 max-h-min">
   <div class="h-8 w-8">
     <HomeIcon />
   </div>

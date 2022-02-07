@@ -6,7 +6,7 @@
 
 <div class="flex flex-col h-screen">
   <Navbar />
-  <div class="min-h-0 flex-grow">
+  <div class="min-h-0 flex-grow container self-center">
     <slot />
   </div>
   <Footer />

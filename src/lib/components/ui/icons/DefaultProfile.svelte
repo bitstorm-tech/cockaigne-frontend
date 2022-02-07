@@ -2,7 +2,7 @@
   viewBox="0 0 401 401"
   xmlns="http://www.w3.org/2000/svg"
   style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
-  class="rounded-full border"
+  class="rounded-full border h-full"
 >
   <g transform="matrix(1.223,0,0,1.223,-397.719,-843.416)">
     <rect x="288.641" y="653.07" width="401" height="401" style="fill:rgb(63,91,255);" />

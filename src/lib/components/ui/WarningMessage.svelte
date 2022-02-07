@@ -1,6 +1,7 @@
 <script lang="ts">
-  import WarningIcon from '../icons/WarningIcon.svelte';
-  import { blur } from 'svelte/transition';
+  import WarningIcon from "./icons/WarningIcon.svelte";
+  import { blur } from "svelte/transition";
+
   export let show = false;
 </script>
 

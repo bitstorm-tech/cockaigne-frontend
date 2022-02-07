@@ -1,10 +1,11 @@
 <script>
-  import DefaultProfile from '../icons/DefaultProfile.svelte';
+  import DefaultProfile from "../ui/icons/DefaultProfile.svelte";
+
   export let defaultPicture = false;
 </script>
 
 <div class="avatar cursor-pointer">
-  <div class="rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+  <div class="mask mask-squircle">
     {#if defaultPicture}
       <DefaultProfile />
     {:else}

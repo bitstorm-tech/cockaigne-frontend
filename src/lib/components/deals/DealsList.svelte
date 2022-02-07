@@ -1,8 +1,21 @@
 <script>
-  import Deal from './Deal.svelte';
+  import Deal from "./Deal.svelte";
 </script>
 
-<ul class="menu menu-compact border bg-base-100 rounded-box">
+<ul class="h-full overflow-auto">
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
+  <li><Deal /></li>
   <li><Deal /></li>
   <li><Deal /></li>
   <li><Deal /></li>

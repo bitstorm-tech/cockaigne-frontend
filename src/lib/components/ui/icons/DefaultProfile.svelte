@@ -1,8 +1,5 @@
 <svg
-  width="100%"
-  height="100%"
   viewBox="0 0 401 401"
-  version="1.1"
   xmlns="http://www.w3.org/2000/svg"
   style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
   class="rounded-full border"

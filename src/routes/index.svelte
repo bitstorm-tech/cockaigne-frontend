@@ -1,21 +1,39 @@
 <script lang="ts">
   import DealsList from "$lib/components/deals/DealsList.svelte";
-  import FireIcon from "$lib/components/icons/FireIcon.svelte";
-  import HeartIcon from "$lib/components/icons/HeartIcon.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import GeoLocation from "$lib/components/ui/GeoLocation.svelte";
+  import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
+  import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
+  import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import GeoLocation from "$lib/components/geo/GeoLocation.svelte";
+  import HotList from "$lib/components/hot/HotList.svelte";
+  import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
+
+  let showTabIndex = 0;
 </script>
 
-<div class="flex flex-col gap-6">
+<div class="flex flex-col h-full p-2 gap-2">
   <GeoLocation />
-  <div class="grid grid-cols-3 gap-2">
-    <Button>Favorit</Button>
-    <Button>
-      <HeartIcon />
-    </Button>
-    <Button>Hot
-      <FireIcon />
-    </Button>
+  <div class="tabs mt-6">
+    <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+      <div class="h-8 w-8">
+        <StarIcon />
+      </div>
+    </button>
+    <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
+      <div class="h-8 w-8">
+        <HeartIcon />
+      </div>
+    </button>
+    <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
+      <div class="h-8 w-8">
+        <FireIcon />
+      </div>
+    </button>
   </div>
-  <DealsList />
+  {#if showTabIndex === 0}
+    <DealsList />
+  {:else if showTabIndex === 1}
+    <FavoritesList />
+  {:else}
+    <HotList />
+  {/if}
 </div>

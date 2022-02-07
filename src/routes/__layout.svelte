@@ -6,7 +6,7 @@
 
 <div class="flex flex-col h-screen">
   <Navbar />
-  <div class="min-h-0 mb-auto">
+  <div class="min-h-0 flex-grow">
     <slot />
   </div>
   <Footer />

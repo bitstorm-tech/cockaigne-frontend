@@ -4,10 +4,14 @@
   import "../tailwind.css";
 </script>
 
-<div class="flex flex-col h-screen">
+<!--<div class="grid grid-rows-3 auto-rows-auto h-screen">-->
+<div class="sticky top-0 max-h-fit">
   <Navbar />
-  <div class="min-h-0 flex-grow container self-center">
-    <slot />
-  </div>
+</div>
+<div class="container mx-auto">
+  <slot />
+</div>
+<div class="sticky bottom-0 max-h-fit">
   <Footer />
 </div>
+<!--</div>-->

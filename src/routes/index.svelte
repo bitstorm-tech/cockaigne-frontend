@@ -10,7 +10,7 @@
   let showTabIndex = 0;
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="flex flex-col gap-2 h-full">
   <GeoLocation />
   <div class="tabs mt-6 max-h-8">
     <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>

@@ -1,13 +1,26 @@
 <script lang="ts">
+  import MobileMenu from "$lib/components/nav/MobileMenu.svelte";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
-  import Link from "$lib/components/ui/Link.svelte";
+  import CrossIcon from "$lib/components/ui/icons/CrossIcon.svelte";
   import HamburgerIcon from "$lib/components/ui/icons/HamburgerIcon.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
+  import { slide } from "svelte/transition";
+
+  let showMobileMenu = false;
+
+  function toggleMobileMenu() {
+    showMobileMenu = !showMobileMenu;
+  }
 </script>
 
-<nav class="flex justify-between py-2 px-4 md:px-52 items-center rounded-b-xl border-b-2 ">
+<nav class="flex justify-between py-2 px-4 md:px-52 items-center border-b-2 ">
   <div class="flex items-center text-xl gap-2">
-    <div class="w-8 h-8">
-      <HamburgerIcon />
+    <div class="w-8 h-8 cursor-pointer">
+      {#if showMobileMenu}
+        <CrossIcon on:click={toggleMobileMenu} />
+      {:else}
+        <HamburgerIcon on:click={toggleMobileMenu} />
+      {/if}
     </div>
     <Link href="/" hoverUnderline>Hotspots</Link>
   </div>
@@ -15,3 +28,8 @@
     <ProfilePicture />
   </div>
 </nav>
+{#if showMobileMenu}
+  <div class="absolute w-screen z-50" on:click={toggleMobileMenu} transition:slide>
+    <MobileMenu />
+  </div>
+{/if}

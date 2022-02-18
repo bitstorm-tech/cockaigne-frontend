@@ -29,4 +29,5 @@
   <li><Deal /></li>
   <li><Deal /></li>
   <li><Deal /></li>
+  <li class="bg-red-600">ENDE</li>
 </ul>

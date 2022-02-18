@@ -13,7 +13,7 @@
   }
 </script>
 
-<nav class="flex justify-between py-2 px-4 md:px-52 items-center border-b-2 ">
+<nav class="flex justify-between py-2 px-4 md:px-52 items-center">
   <div class="flex items-center text-xl gap-2">
     <div class="w-8 h-8 cursor-pointer">
       {#if showMobileMenu}

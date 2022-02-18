@@ -5,12 +5,5 @@
 @layer base {
     body {
         @apply box-border;
-        min-height: 100vh;
-        /* mobile viewport bug fix */
-        min-height: -webkit-fill-available;
-    }
-
-    html {
-        height: -webkit-fill-available;
     }
 }

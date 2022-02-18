@@ -6,6 +6,6 @@
 <div class="w-screen">
   <Navbar />
 </div>
-<div class="h-[90vh]">
+<div class="h-[50vh]">
   <slot />
 </div>

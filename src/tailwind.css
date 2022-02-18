@@ -5,5 +5,7 @@
 @layer base {
     body {
         @apply box-border;
+        @apply min-h-screen;
+        min-height: -webkit-fill-available;
     }
 }

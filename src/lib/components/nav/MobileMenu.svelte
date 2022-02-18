@@ -3,6 +3,7 @@
   import TagIcon from "$lib/components/ui/icons/TagIcon.svelte";
   import MapIcon from "$lib/components/ui/icons/MapIcon.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
+  import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
 </script>
 
 <div class="flex flex-col gap-8 p-4 z-50 bg-base-200">
@@ -10,4 +11,7 @@
   <a href="/privacy" class="h-8 flex items-center gap-3"><TagIcon /> Schnäppchen</a>
   <a href="/map" class="h-8 flex items-center gap-3"><MapIcon /> Umgebungskarte</a>
   <a href="/test" class="h-8 flex items-center gap-3"><FireIcon /> Test</a>
+  <div class="mt-8">
+    <LegalFooter />
+  </div>
 </div>

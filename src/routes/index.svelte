@@ -1,29 +1,22 @@
-<script lang="ts">
-  import DealsList from "$lib/components/deals/DealsList.svelte";
-  import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
-  import HotList from "$lib/components/hot/HotList.svelte";
-  import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
-  import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
-  import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+<script>
+  import Button from "$lib/components/ui/Button.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
 
-  let showTabIndex = 0;
+  let email = "";
+  let password = "";
+
+  $: disabled = email.length === 0 || password.length === 0;
+
+  function login() {
+    alert(email + password);
+  }
 </script>
 
-<div class="tabs mt-6 max-h-8">
-  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
-    <StarIcon />
-  </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
-    <HeartIcon />
-  </button>
-  <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
-    <FireIcon />
-  </button>
+<div class="flex flex-col gap-3 mx-auto mt-10 h-full w-5/6 lg:w-1/3">
+  <h1>Bei Hotspots einloggen</h1>
+  <Input label="E-Mail" bind:value={email} />
+  <Input label="Password" bind:value={password} />
+  <Button on:click={login} {disabled}>Einloggen</Button>
+  <span class="text-xs">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
 </div>
-{#if showTabIndex === 0}
-  <DealsList />
-{:else if showTabIndex === 1}
-  <FavoritesList />
-{:else}
-  <HotList />
-{/if}

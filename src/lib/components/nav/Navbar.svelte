@@ -4,7 +4,6 @@
   import CrossIcon from "$lib/components/ui/icons/CrossIcon.svelte";
   import HamburgerIcon from "$lib/components/ui/icons/HamburgerIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import { slide } from "svelte/transition";
 
   let showMobileMenu = false;
 
@@ -29,7 +28,7 @@
   </div>
 </nav>
 {#if showMobileMenu}
-  <div class="absolute w-screen z-50" on:click={toggleMobileMenu} transition:slide>
+  <div class="absolute w-screen z-50" on:click={toggleMobileMenu}>
     <MobileMenu />
   </div>
 {/if}

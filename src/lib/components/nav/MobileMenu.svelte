@@ -6,7 +6,7 @@
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
 </script>
 
-<div class="flex flex-col gap-8 p-4 z-50 bg-base-200">
+<div class="flex flex-col gap-8 p-4 z-50 bg-base-300">
   <a href="/" class="h-8 flex items-center gap-3"><HomeIcon /> Home</a>
   <a href="/privacy" class="h-8 flex items-center gap-3"><TagIcon /> Schnäppchen</a>
   <a href="/map" class="h-8 flex items-center gap-3"><MapIcon /> Umgebungskarte</a>

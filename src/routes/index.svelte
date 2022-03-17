@@ -4,6 +4,7 @@
   import Input from "$lib/components/ui/Input.svelte";
   import { goto } from "$app/navigation";
   import Modal from "$lib/components/ui/Modal.svelte";
+  import { session } from "$app/stores";
 
   let email = "";
   let password = "";
@@ -19,6 +20,12 @@
 
     if (response.ok) {
       const body = await response.json();
+      session.update(() => {
+        return {
+          isAuthenticated: true
+        };
+      });
+
       if (body.dealer) {
         await goto("/dealer");
       } else {

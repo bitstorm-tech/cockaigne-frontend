@@ -1,4 +1,5 @@
 <script lang="ts">
+  export let disabled = false;
   export let type = "";
   export let small = false;
   export let href = "";
@@ -6,12 +7,12 @@
 
 {#if href}
   <a {href}>
-    <button class="btn btn-outline" class:btn-sm={small} {type}>
+    <button class="btn btn-outline" class:btn-sm={small} {type} {disabled}>
       <slot />
     </button>
   </a>
-{:else }
-  <button class="btn btn-outline" class:btn-sm={small} {type} on:click>
+{:else}
+  <button class="btn btn-outline" class:btn-sm={small} {type} on:click {disabled}>
     <slot />
   </button>
 {/if}

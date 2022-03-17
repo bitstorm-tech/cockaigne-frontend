@@ -22,7 +22,7 @@
         <HamburgerIcon on:click={toggleMobileMenu} />
       {/if}
     </div>
-    <Link href="/" hoverUnderline>Hotspots</Link>
+    <Link href="/"><img class="h-7" src="/images/logo-text.png" alt="Logo Text" /></Link>
   </div>
   <div class="w-12 h-12">
     <ProfilePicture />

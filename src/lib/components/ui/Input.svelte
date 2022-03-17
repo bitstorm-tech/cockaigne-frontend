@@ -1,9 +1,13 @@
 <script lang="ts">
   export let label: string;
   export let id = label.toLowerCase();
-  export let type = 'text';
-  export let placeholder = '';
-  export let value = '';
+  export let type = "text";
+  export let placeholder = "";
+  export let value = "";
+
+  function setValue(event) {
+    value = event.target.value;
+  }
 </script>
 
 <div class="w-full">
@@ -13,7 +17,7 @@
     {id}
     {type}
     {placeholder}
-    on:change
-    on:input={(event) => (value = event.target.value)}
+    on:input={setValue}
+    {value}
   />
 </div>

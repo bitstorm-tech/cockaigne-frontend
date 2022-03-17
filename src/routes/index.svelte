@@ -2,14 +2,27 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import Input from "$lib/components/ui/Input.svelte";
+  import { goto } from "$app/navigation";
 
   let email = "";
   let password = "";
 
   $: disabled = email.length === 0 || password.length === 0;
 
-  function login() {
-    alert(email + password);
+  async function login() {
+    const response = await fetch("/api/login", {
+      method: "post",
+      body: JSON.stringify({ email, password })
+    });
+
+    if (response.ok) {
+      const body = await response.json();
+      if (body.dealer) {
+        await goto("/dealer");
+      } else {
+        await goto("/user");
+      }
+    }
   }
 </script>
 

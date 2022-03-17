@@ -25,7 +25,7 @@ export async function post({ request }: RequestEvent) {
       status: 200
     };
   } catch (error) {
-    console.error("Can't post account:", error);
+    console.error("Error during post account:", error);
     return {
       status: 500
     };

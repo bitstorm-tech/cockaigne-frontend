@@ -13,7 +13,7 @@
 
   async function register() {
     const response = await fetch("/api/accounts", {
-      method: "POST",
+      method: "post",
       body: JSON.stringify({ email, password, dealer })
     });
 

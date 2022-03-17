@@ -23,18 +23,11 @@
   }
 </script>
 
-<div class="flex items-center justify-center mt-10 mb-32">
-  <div class="w-5/6 lg:w-1/3 space-y-3">
-    <h1>Bei Hotspots registrieren</h1>
-    <Checkbox label="Ich bin ein Dealer" bind:checked={dealer} />
-    <Input label="E-Mail" type="email" bind:value={email} />
-    <Input label="Passwort" type="password" bind:value={password} />
-    <div class="flex flex-col space-y-2">
-      <Button on:click={register} {disabled}>Registrieren</Button>
-      <div class="flex text-xs space-x-1">
-        <span>Du hast schon Account?</span>
-        <Link href="/">Hier einloggen!</Link>
-      </div>
-    </div>
-  </div>
+<div class="flex flex-col gap-3 mx-auto mt-10 h-full w-5/6 lg:w-1/3">
+  <h1>Registrieren</h1>
+  <Checkbox label="Ich bin ein Dealer" bind:checked={dealer} />
+  <Input label="E-Mail" type="email" bind:value={email} />
+  <Input label="Passwort" type="password" bind:value={password} />
+  <Button on:click={register} {disabled}>Registrieren</Button>
+  <span class="text-xs mt-6">Du hast schon Account? <Link href="/">Hier einloggen!</Link></span>
 </div>

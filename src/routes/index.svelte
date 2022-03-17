@@ -3,9 +3,11 @@
   import Link from "$lib/components/ui/Link.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import { goto } from "$app/navigation";
+  import Modal from "$lib/components/ui/Modal.svelte";
 
   let email = "";
   let password = "";
+  let openModal = false;
 
   $: disabled = email.length === 0 || password.length === 0;
 
@@ -22,6 +24,8 @@
       } else {
         await goto("/user");
       }
+    } else {
+      openModal = true;
     }
   }
 </script>
@@ -33,3 +37,4 @@
   <Button on:click={login} {disabled}>Einloggen</Button>
   <span class="text-xs mt-6">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
 </div>
+<Modal open={openModal} on:close={() => (openModal = false)}>E-Mail und/oder Passwort falsch!</Modal>

@@ -4,10 +4,12 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
+  import Modal from "$lib/components/ui/Modal.svelte";
 
   let dealer = true;
   let email = "";
   let password = "";
+  let openModal = false;
 
   $: disabled = email.length === 0 || password.length === 0;
 
@@ -19,6 +21,8 @@
 
     if (response.ok) {
       await goto(dealer ? "/dealer" : "/user");
+    } else {
+      openModal = true;
     }
   }
 </script>
@@ -31,3 +35,4 @@
   <Button on:click={register} {disabled}>Registrieren</Button>
   <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>
+<Modal open={openModal} on:close={() => (openModal = false)}>E-Mail wurde bereits registriert!</Modal>

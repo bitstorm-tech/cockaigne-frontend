@@ -29,5 +29,5 @@
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Passwort" type="password" bind:value={password} />
   <Button on:click={register} {disabled}>Registrieren</Button>
-  <span class="text-xs mt-6">Du hast schon Account? <Link href="/">Hier einloggen!</Link></span>
+  <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>

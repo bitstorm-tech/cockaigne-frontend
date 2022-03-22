@@ -10,8 +10,13 @@
 
   async function logout() {
     await fetch("/api/logout");
+    session.update((oldSession) => {
+      return {
+        ...oldSession,
+        isAuthenticated: false
+      };
+    });
     await goto("/");
-    session.set({ isAuthenticated: false });
   }
 </script>
 

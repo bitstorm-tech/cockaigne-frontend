@@ -1,10 +1,14 @@
 import type { JWTPayload } from "jose";
 import * as jose from "jose";
 
-export async function createJwt(subject: string): Promise<string> {
+export async function createJwt(subject: string, payload = {}): Promise<string> {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
 
-  return await new jose.SignJWT({}).setProtectedHeader({ alg: "HS512" }).setIssuedAt().setSubject(subject).sign(secret);
+  return await new jose.SignJWT(payload)
+    .setProtectedHeader({ alg: "HS512" })
+    .setIssuedAt()
+    .setSubject(subject)
+    .sign(secret);
 }
 
 export async function extractJwt(requestOrResponse: Request | Response): Promise<JWTPayload | undefined> {

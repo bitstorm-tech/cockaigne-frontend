@@ -9,6 +9,7 @@ export async function handle({ event, resolve }): Promise<Response> {
 
 export async function getSession(event: RequestEvent) {
   return {
-    isAuthenticated: !!event.locals.jwt
+    isAuthenticated: !!event.locals.jwt,
+    isDealer: event.locals.jwt?.isDealer
   };
 }

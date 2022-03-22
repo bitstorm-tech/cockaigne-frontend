@@ -19,7 +19,7 @@ export async function post({ request }: RequestEvent) {
       };
     }
 
-    const jwt = await createJwt(account._id.toString());
+    const jwt = await createJwt(account._id.toString(), { isDealer: account.dealer });
 
     return {
       status: 200,

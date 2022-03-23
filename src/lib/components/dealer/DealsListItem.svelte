@@ -14,7 +14,7 @@
   >
     {title}
     {#if showDetails}
-      <div class="h-32 bg-stone-400 rounded-br-xl">blablub</div>
+      <div class="h-32 bg-stone-400 rounded-br-xl text-xs p-2">blablub</div>
     {/if}
   </div>
   <div class="w-6">

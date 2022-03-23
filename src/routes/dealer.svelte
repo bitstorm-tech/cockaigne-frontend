@@ -1,11 +1,28 @@
-<script>
+<script lang="ts" context="module">
+  export async function load({ fetch }) {
+    const response = await fetch("/api/deals");
+
+    if (response.ok) {
+      const deals = await response.json();
+      return {
+        props: {
+          deals
+        }
+      };
+    }
+  }
+</script>
+
+<script lang="ts">
   import DealerHeader from "$lib/components/dealer/DealerHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
+  import { Deal } from "$lib/deal.model";
 
   let activeTab = 0;
+  export let deals: Deal[] = [];
 </script>
 
 <DealerHeader />
@@ -21,5 +38,5 @@
   </div>
 </div>
 {#if activeTab === 0}
-  <DealsList />
+  <DealsList {deals} />
 {/if}

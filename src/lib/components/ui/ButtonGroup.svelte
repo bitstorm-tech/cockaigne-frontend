@@ -1,8 +1,9 @@
 <script lang="ts">
-  export let buttons: string[];
+  export let options: Record<unknown, unknown>;
   export let label: string;
+  export let value: string;
 
-  let activeButton = 0;
+  let activeButton = value;
 </script>
 
 <div class="form-control">
@@ -10,13 +11,13 @@
     <span class="label-text text-xs">{label}</span>
   </label>
   <div class="btn-group">
-    {#each buttons as button, i}
+    {#each Object.keys(options) as key}
       <button
         class="btn btn-sm btn-outline grow"
-        class:btn-active={activeButton === i}
-        on:click={() => (activeButton = i)}
+        class:btn-active={activeButton === key}
+        on:click={() => (activeButton = key)}
       >
-        {button}
+        {options[key]}
       </button>
     {/each}
   </div>

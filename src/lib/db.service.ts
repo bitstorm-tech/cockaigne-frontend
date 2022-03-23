@@ -1,4 +1,5 @@
 import type { Account } from "$lib/account.model";
+import type { Deal } from "$lib/deal.model";
 import { Collection, MongoClient } from "mongodb";
 
 const MONGODB_USER = process.env.MONGODB_USER;
@@ -14,4 +15,9 @@ async function getAccountCollection(): Promise<Collection<Account>> {
   return client.db().collection<Account>("accounts");
 }
 
-export default { getAccountCollection };
+async function getDealCollection(): Promise<Collection<Deal>> {
+  await client.connect();
+  return client.db().collection<Deal>("deals");
+}
+
+export default { getAccountCollection, getDealCollection };

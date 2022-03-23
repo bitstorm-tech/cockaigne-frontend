@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
+  import { Deal } from "$lib/deal.model";
 
-  export let title = "Deal 1";
+  export let deal: Deal;
 
   let showDetails = false;
 </script>
@@ -12,9 +13,12 @@
     class:h-14={!showDetails}
     on:click={() => (showDetails = !showDetails)}
   >
-    {title}
+    {deal.title}
     {#if showDetails}
-      <div class="h-32 bg-stone-400 rounded-br-xl text-xs p-2">blablub</div>
+      <div class="h-32 bg-stone-400 rounded-br-xl text-xs p-2">
+        {deal.description}
+        <span class="mt-4 text-2xs">{deal.startDate}</span>
+      </div>
     {/if}
   </div>
   <div class="w-6">

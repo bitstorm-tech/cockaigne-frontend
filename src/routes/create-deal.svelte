@@ -3,6 +3,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import Input from "$lib/components/ui/Input.svelte";
+  import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import { Category, Deal, Duration } from "$lib/deal.model";
@@ -17,6 +18,7 @@
     fashion: "Mode"
   };
 
+  let openModal = false;
   let loading = false;
   let startDate = new Date().toISOString().substring(0, 16);
   let title = "";
@@ -26,6 +28,7 @@
   $: disabled = title.length === 0 || description.length === 0;
 
   async function save() {
+    loading = true;
     const deal: Deal = {
       startDate: new Date(startDate),
       title,
@@ -41,8 +44,11 @@
 
     if (response.ok) {
       await goto("/");
+    } else if (response.status === 403) {
+      await goto("/login");
     } else {
       loading = false;
+      openModal = true;
     }
   }
 </script>
@@ -58,3 +64,6 @@
     <Button outline href="/">Abbrechen</Button>
   </div>
 </div>
+<Modal open={openModal} on:close={() => (openModal = false)}>
+  Ups, da ging was schief. Konnte den Deal leider nicht speichern!
+</Modal>

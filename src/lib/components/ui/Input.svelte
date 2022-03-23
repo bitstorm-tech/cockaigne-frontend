@@ -14,5 +14,12 @@
   <label class="label">
     <span class="label-text text-xs">{label}</span>
   </label>
-  <input class="input input-bordered focus:outline-none" {id} {type} {placeholder} on:input={setValue} {value} />
+  <input
+    class="input input-bordered focus:border-primary focus:outline-none"
+    {id}
+    {type}
+    {placeholder}
+    on:input={setValue}
+    {value}
+  />
 </div>

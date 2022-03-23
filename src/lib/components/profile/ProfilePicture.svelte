@@ -10,7 +10,7 @@
     {#if defaultPicture}
       <DefaultProfile />
     {:else}
-      <img src={imageUrl} alt="Profile Picture" />
+      <img src={imageUrl} alt="Profile" />
     {/if}
   </div>
 </div>

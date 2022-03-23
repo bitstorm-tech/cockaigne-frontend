@@ -22,6 +22,7 @@
 
     if (response.ok) {
       const body = await response.json();
+      $session; // workaround: if this is the first page loaded, we need to do an initial subscribe to the session
       session.update(() => {
         return {
           isAuthenticated: true,
@@ -36,6 +37,7 @@
       }
     } else {
       openModal = true;
+      loading = false;
     }
   }
 </script>

@@ -25,7 +25,7 @@
     <a href="/privacy" class="h-8 flex items-center gap-3"><TagIcon /> Schnäppchen</a>
     <a href="/map" class="h-8 flex items-center gap-3"><MapIcon /> Umgebungskarte</a>
     <a href="/test" class="h-8 flex items-center gap-3"><FireIcon /> Test</a>
-    <a on:click={logout} class="h-8 flex items-center gap-3"><LogoutIcon /> Logout</a>
+    <div on:click={logout} class="h-8 flex items-center gap-3"><LogoutIcon /> Logout</div>
   {:else}
     <a href="/" class="h-8 flex items-center gap-3"><LoginIcon /> Login</a>
   {/if}

@@ -11,7 +11,11 @@
   </label>
   <div class="btn-group">
     {#each buttons as button, i}
-      <button class="btn btn-sm btn-outline" class:btn-active={activeButton === i} on:click={() => (activeButton = i)}>
+      <button
+        class="btn btn-sm btn-outline grow"
+        class:btn-active={activeButton === i}
+        on:click={() => (activeButton = i)}
+      >
         {button}
       </button>
     {/each}

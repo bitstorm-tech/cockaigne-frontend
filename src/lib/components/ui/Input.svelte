@@ -10,7 +10,7 @@
   }
 </script>
 
-<div class="form-control">
+<div class="form-control w-full">
   <label class="label">
     <span class="label-text text-xs">{label}</span>
   </label>

@@ -15,7 +15,7 @@
   <Select label="Kategorien" />
   <ButtonGroup label="Laufzeit" buttons={runtimes} />
   <Input label="Start" type="datetime-local" bind:value={startDate} />
-  <div class="flex justify-around">
+  <div class="grid grid-cols-2 gap-4 mt-6">
     <Button>Speichern</Button>
     <Button outline href="/">Abbrechen</Button>
   </div>

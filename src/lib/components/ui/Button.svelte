@@ -9,7 +9,7 @@
 
 {#if href}
   <a {href}>
-    <button class="btn" class:btn-outline={outline} class:loading class:btn-sm={small} {type} {disabled}>
+    <button class="btn w-full" class:btn-outline={outline} class:loading class:btn-sm={small} {type} {disabled}>
       <slot />
     </button>
   </a>

@@ -16,7 +16,7 @@
   <div class="modal-box">
     <slot />
     <div class="modal-action">
-      <Button on:click={close}>Okidoki</Button>
+      <Button on:click={close}>OK</Button>
     </div>
   </div>
 </div>

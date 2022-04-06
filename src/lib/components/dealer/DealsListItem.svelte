@@ -4,14 +4,14 @@
 
   export let deal: Deal;
 
-  let showDetails = false;
+  export let showDetails = false;
 </script>
 
 <div class="flex gap-2 pr-2">
   <div
     class="flex flex-col bg-teal-500 grow rounded-r-xl justify-around text-center text-gray-200 text-xl cursor-pointer"
     class:h-14={!showDetails}
-    on:click={() => (showDetails = !showDetails)}
+    on:click
   >
     {deal.title}
     {#if showDetails}

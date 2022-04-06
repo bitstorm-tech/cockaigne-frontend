@@ -15,6 +15,8 @@
 
 <script lang="ts">
   import DealerHeader from "$lib/components/dealer/DealerHeader.svelte";
+  import Pictures from "$lib/components/dealer/Pictures.svelte";
+  import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
@@ -39,4 +41,10 @@
 </div>
 {#if activeTab === 0}
   <DealsList {deals} />
+{/if}
+{#if activeTab === 1}
+  <Pictures />
+{/if}
+{#if activeTab === 2}
+  <RatingsList />
 {/if}

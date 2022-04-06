@@ -5,8 +5,8 @@
   export let imageUrl = "http://daisyui.com/tailwind-css-component-profile-1@94w.png";
 </script>
 
-<div class="avatar cursor-pointer z-50 w-28 h-28">
-  <div class="rounded-full ring ring-primary ring-stone-600 ring-offset-1">
+<div class="avatar cursor-pointer z-50">
+  <div class="rounded-full ring-1 ring-primary ring-stone-600 ring-offset-1">
     {#if defaultPicture}
       <DefaultProfile />
     {:else}

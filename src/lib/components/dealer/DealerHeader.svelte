@@ -9,6 +9,6 @@
     <span>10123 Berlin</span>
   </div>
   <div class="-mt-6">
-    <ProfilePicture imageUrl="/images/aakenus-grill-profile.svg" />
+    <ProfilePicture imageUrl="/images/dummy/aakenus-grill-profile.svg" />
   </div>
 </div>

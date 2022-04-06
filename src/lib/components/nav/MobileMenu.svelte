@@ -16,7 +16,7 @@
         isAuthenticated: false
       };
     });
-    await goto("/");
+    goto("/").then();
   }
 </script>
 

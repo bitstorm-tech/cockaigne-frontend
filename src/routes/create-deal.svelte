@@ -43,9 +43,9 @@
     });
 
     if (response.ok) {
-      await goto("/");
+      goto("/").then();
     } else if (response.status === 403) {
-      await goto("/login");
+      goto("/login").then();
     } else {
       loading = false;
       openModal = true;

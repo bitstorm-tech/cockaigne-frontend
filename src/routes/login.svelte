@@ -31,9 +31,9 @@
       });
 
       if (body.dealer) {
-        await goto("/dealer");
+        goto("/dealer").then();
       } else {
-        await goto("/user");
+        goto("/user").then();
       }
     } else {
       openModal = true;

@@ -20,7 +20,7 @@
     });
 
     if (response.ok) {
-      await goto(dealer ? "/dealer" : "/user");
+      goto(dealer ? "/dealer" : "/user").then();
     } else {
       openModal = true;
     }

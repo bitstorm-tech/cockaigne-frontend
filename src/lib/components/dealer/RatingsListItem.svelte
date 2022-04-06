@@ -10,7 +10,7 @@
     <div>Name</div>
     <div>4 / 5</div>
   </div>
-  <div class="p-2 bg-base-100 border-b border-b-base-300 text-xs pt-6">
+  <div class="p-2 bg-base-100 text-xs pt-6">
     Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
     magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
   </div>

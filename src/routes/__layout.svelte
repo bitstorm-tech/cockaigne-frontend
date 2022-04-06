@@ -3,7 +3,5 @@
   import "../tailwind.css";
 </script>
 
-<div class="sticky z-50 top-0 w-screen bg-base-300">
-  <Navbar />
-</div>
+<Navbar />
 <slot />

@@ -11,7 +11,7 @@
   }
 </script>
 
-<nav class="flex justify-between py-2 px-4 md:px-52 items-center">
+<nav class="flex justify-between bg-base-300 py-2 px-4 md:px-52 items-center">
   <div class="flex items-center text-xl gap-2">
     <div class="w-8 h-8 cursor-pointer">
       {#if showMobileMenu}
@@ -22,12 +22,9 @@
     </div>
     <Link href="/"><img class="h-7" src="/images/logo-text.png" alt="Logo Text" /></Link>
   </div>
-  <!--  <div class="w-12 h-12">-->
-  <!--    <ProfilePicture />-->
-  <!--  </div>-->
 </nav>
 {#if showMobileMenu}
-  <div class="absolute w-screen z-50" on:click={toggleMobileMenu}>
+  <div class="absolute z-50 w-screen" on:click={toggleMobileMenu}>
     <MobileMenu />
   </div>
 {/if}

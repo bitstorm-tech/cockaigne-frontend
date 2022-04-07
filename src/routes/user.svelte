@@ -1,10 +1,10 @@
 <script lang="ts">
-  import DealsList from "$lib/components/deals/DealsList.svelte";
   import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import DealsList from "$lib/components/user/DealsList.svelte";
 
   let showTabIndex = 0;
 </script>

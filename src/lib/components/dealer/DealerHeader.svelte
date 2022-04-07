@@ -2,7 +2,6 @@
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import AddDocumentIcon from "$lib/components/ui/icons/AddDocumentIcon.svelte";
-  import { goto } from "$app/navigation";
 </script>
 
 <div class="flex flex-col">
@@ -17,7 +16,7 @@
     </div>
   </div>
   <div class="flex flex-row-reverse w-full pr-16 py-4">
-    <Button on:click={() => goto("/create-deal")}>
+    <Button href="/create-deal">
       <div class="h-7">
         <AddDocumentIcon />
       </div>

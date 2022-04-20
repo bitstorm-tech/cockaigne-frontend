@@ -14,7 +14,7 @@
 </script>
 
 <script lang="ts">
-  import DealerHeader from "$lib/components/dealer/DealerHeader.svelte";
+  import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import Pictures from "$lib/components/dealer/Pictures.svelte";
   import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
@@ -27,7 +27,13 @@
   export let deals: Deal[] = [];
 </script>
 
-<DealerHeader />
+<ProfileHeader
+  name="Aakenus Grill"
+  street="Bahnhofstr. 22"
+  city="10123 Berlin"
+  imageUrl="/images/dummy/aakenus-grill-profile.svg"
+  actionUrl="/create-deal"
+/>
 <div class="grid grid-cols-3 mt-4 mb-2">
   <div class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
     <FireIcon />

@@ -29,9 +29,10 @@ export async function post({ request }: RequestEvent) {
   }
 }
 
-export async function get({ request }: RequestEvent) {
+export async function get({ request, url }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
+    const allDeals = url.searchParams.get("all");
 
     if (!jwt) {
       return {
@@ -40,7 +41,8 @@ export async function get({ request }: RequestEvent) {
     }
 
     const dealCollection = await DbService.getDealCollection();
-    const cursor = await dealCollection.find({ owner: new ObjectId(jwt.sub) });
+    const filter = allDeals ? undefined : { owner: new ObjectId(jwt.sub) };
+    const cursor = await dealCollection.find(filter);
     const deals = await cursor.toArray();
     return {
       body: deals

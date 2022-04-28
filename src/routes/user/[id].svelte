@@ -1,12 +1,28 @@
+<script lang="ts" context="module">
+  export async function load({ fetch }) {
+    const response = await fetch("/api/deals?all=true");
+
+    if (response.ok) {
+      const deals = await response.json();
+      return {
+        props: {
+          deals
+        }
+      };
+    }
+  }
+</script>
+
 <script lang="ts">
+  import DealsList from "$lib/components/dealer/DealsList.svelte";
   import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
-  import DealsList from "$lib/components/user/DealsList.svelte";
 
+  export let deals;
   let showTabIndex = 0;
 </script>
 
@@ -17,7 +33,7 @@
   imageUrl="/images/dummy/user-profile.svg"
   actionUrl=""
 />
-<div class="tabs mt-6 max-h-8">
+<div class="tabs mt-6 max-h-8 mb-2">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon />
   </button>
@@ -29,7 +45,7 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList />
+  <DealsList {deals} isUser={true} />
 {:else if showTabIndex === 1}
   <FavoritesList />
 {:else}

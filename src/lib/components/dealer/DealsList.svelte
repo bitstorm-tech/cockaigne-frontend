@@ -3,11 +3,17 @@
   import { Deal } from "$lib/deal.model";
 
   export let deals: Deal[] = [];
+  export let isUser = false;
   let openDetail = -1;
 </script>
 
 <div class="flex flex-col gap-4">
   {#each deals as deal, i}
-    <DealsListItem {deal} showDetails={openDetail === i} on:click={() => (openDetail = openDetail === i ? -1 : i)} />
+    <DealsListItem
+      {deal}
+      {isUser}
+      showDetails={openDetail === i}
+      on:click={() => (openDetail = openDetail === i ? -1 : i)}
+    />
   {/each}
 </div>

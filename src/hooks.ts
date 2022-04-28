@@ -13,6 +13,7 @@ export async function getSession(event: RequestEvent) {
 
   return {
     isAuthenticated: !!jwt,
-    isDealer: jwt?.isDealer
+    isDealer: jwt?.isDealer,
+    id: jwt?.sub
   };
 }

@@ -19,7 +19,7 @@ export async function post({ request }: RequestEvent) {
       };
     }
 
-    const jwt = await createJwt(account._id.toString(), { isDealer: account.dealer });
+    const jwt = await createJwt(account._id.toString(), { isDealer: account.isDealer });
 
     return {
       status: 200,
@@ -27,7 +27,8 @@ export async function post({ request }: RequestEvent) {
         "set-cookie": [`jwt=${jwt}; SameSite=Lax; Path=/; HttpOnly`]
       },
       body: {
-        dealer: account.dealer
+        isDealer: account.isDealer,
+        id: account._id.toString()
       }
     };
   } catch (error) {

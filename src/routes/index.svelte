@@ -3,7 +3,7 @@
     if (session.isAuthenticated) {
       return {
         status: 302,
-        redirect: session.isDealer ? "/dealer" : "/user"
+        redirect: session.isDealer ? `/dealer/${session.id}` : `/user/${session.id}`
       };
     }
 

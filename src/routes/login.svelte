@@ -26,14 +26,15 @@
       session.update(() => {
         return {
           isAuthenticated: true,
-          isDealer: body.dealer
+          isDealer: body.dealer,
+          id: body.id
         };
       });
 
-      if (body.dealer) {
-        goto("/dealer").then();
+      if (body.isDealer) {
+        goto("/dealer/" + body.id).then();
       } else {
-        goto("/user").then();
+        goto("/user/" + body.id).then();
       }
     } else {
       openModal = true;

@@ -1,5 +1,6 @@
 import type { Account } from "$lib/account.model";
 import type { Deal } from "$lib/deal.model";
+import type { Like } from "$lib/like.model";
 import { Collection, MongoClient } from "mongodb";
 
 const MONGODB_USER = process.env.MONGODB_USER;
@@ -18,6 +19,11 @@ async function getAccountCollection(): Promise<Collection<Account>> {
 async function getDealCollection(): Promise<Collection<Deal>> {
   await client.connect();
   return client.db().collection<Deal>("deals");
+}
+
+async function getLikeCollection(): Promise<Collection<Like>> {
+  await client.connect();
+  return client.db().collection<Like>("likes");
 }
 
 export default { getAccountCollection, getDealCollection };

@@ -1,6 +1,5 @@
 <script lang="ts">
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
-  import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import { Deal } from "$lib/deal.model";
 
   export let deal: Deal;
@@ -18,5 +17,5 @@
       <DealListItemDetails {deal} {isUser} />
     {/if}
   </div>
-  <GearIcon />
+  <slot />
 </div>

@@ -1,5 +1,7 @@
 <script lang="ts">
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
+  import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
+  import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import { Deal } from "$lib/deal.model";
 
   export let deals: Deal[] = [];
@@ -14,6 +16,14 @@
       {isUser}
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
-    />
+    >
+      <div>
+        {#if isUser}
+          <HeartIcon outline />
+        {:else}
+          <GearIcon />
+        {/if}
+      </div>
+    </DealsListItem>
   {/each}
 </div>

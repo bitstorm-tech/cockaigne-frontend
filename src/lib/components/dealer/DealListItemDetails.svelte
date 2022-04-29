@@ -10,7 +10,6 @@
 
     if (response.ok) {
       const body = await response.json();
-      console.log("Body:", body);
       deal.likes = body.likes;
     }
   }
@@ -18,15 +17,17 @@
 
 <div class="flex flex-col justify-between h-32 bg-stone-400 rounded-br-xl text-xs p-2">
   {deal.description}
-  {#if !isUser}
-    <span class="mt-4 text-2xs">{deal.startDate}</span>
-  {:else}
+  {#if isUser}
     <div class="flex h-4 justify-between">
       <div class="flex gap-4">
-        <div class="flex gap-2" on:click={like}><ThumbUpIcon />{deal.likes}</div>
+        <div class="flex gap-2" on:click={like}>
+          <ThumbUpIcon />{deal.likes}
+        </div>
         <span class="whitespace-nowrap">Deal melden</span>
       </div>
       <a href="/dealer/{deal.owner.toString()}"><span class="whitespace-nowrap">zum Dealer</span></a>
     </div>
+  {:else}
+    <span class="mt-4 text-2xs">Start: {deal.startDate} / Dauer: {deal.duration}</span>
   {/if}
 </div>

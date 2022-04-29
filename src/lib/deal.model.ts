@@ -11,5 +11,5 @@ export interface Deal {
   duration: Duration;
   startDate: Date;
   category: Category;
-  likes: ObjectId[] | number; // id of users that liked or number of likes
+  likes?: ObjectId[] | number; // id of users that liked or number of likes
 }

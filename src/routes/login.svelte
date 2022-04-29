@@ -26,7 +26,7 @@
       session.update(() => {
         return {
           isAuthenticated: true,
-          isDealer: body.dealer,
+          isDealer: body.isDealer,
           id: body.id
         };
       });

@@ -12,7 +12,7 @@
     class="flex flex-col bg-teal-500 grow rounded-r-xl text-gray-200 text-xl cursor-pointer"
     class:h-14={!showDetails}
   >
-    <div class="pl-2" on:click>{deal.title}</div>
+    <div class="flex px-2 h-full items-center" on:click>{deal.title}</div>
     {#if showDetails}
       <DealListItemDetails {deal} {isUser} />
     {/if}

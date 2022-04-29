@@ -1,3 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" class="h-full" fill="none" viewBox="0 0 24 24" stroke="currentColor" on:click>
+<script lang="ts">
+  export let size = 1.5;
+  const style = `height: ${size}rem; width: ${size}rem`;
+</script>
+
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" {style} on:click>
   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 </svg>

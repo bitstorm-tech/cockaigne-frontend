@@ -61,7 +61,9 @@
   <Input label="Start" type="datetime-local" bind:value={startDate} />
   <div class="grid grid-cols-2 gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
-    <Button outline href="/">Abbrechen</Button>
+    <a href="/">
+      <Button outline>Abbrechen</Button>
+    </a>
   </div>
 </div>
 <Modal open={openModal} on:close={() => (openModal = false)}>

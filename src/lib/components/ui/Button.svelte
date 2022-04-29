@@ -2,19 +2,20 @@
   export let disabled = false;
   export let type = "";
   export let small = false;
-  export let href = "";
   export let loading = false;
   export let outline = false;
+  export let circle = false;
 </script>
 
-{#if href}
-  <a {href}>
-    <button class="btn w-full" class:btn-outline={outline} class:loading class:btn-sm={small} {type} {disabled}>
-      <slot />
-    </button>
-  </a>
-{:else}
-  <button class="btn" class:btn-outline={outline} class:loading class:btn-sm={small} {type} on:click {disabled}>
-    <slot />
-  </button>
-{/if}
+<button
+  class="btn"
+  class:loading
+  class:btn-outline={outline}
+  class:btn-sm={small}
+  class:btn-circle={circle}
+  {type}
+  {disabled}
+  on:click
+>
+  <slot />
+</button>

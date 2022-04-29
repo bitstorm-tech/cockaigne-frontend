@@ -21,7 +21,7 @@
     <div class="flex h-4 justify-between">
       <div class="flex gap-4">
         <div class="flex gap-2" on:click={like}>
-          <ThumbUpIcon />{deal.likes}
+          <ThumbUpIcon size="1" />{deal.likes}
         </div>
         <span class="whitespace-nowrap">Deal melden</span>
       </div>

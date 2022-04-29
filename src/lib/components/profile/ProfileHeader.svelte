@@ -21,9 +21,11 @@
       <div class="w-32 h-32 z-10">
         <ProfilePicture {imageUrl} />
       </div>
-      <Button href={actionUrl} outline>
-        <AddDocumentIcon />
-      </Button>
+      <a href={actionUrl}>
+        <Button outline>
+          <AddDocumentIcon />
+        </Button>
+      </a>
     </div>
   </div>
 </div>

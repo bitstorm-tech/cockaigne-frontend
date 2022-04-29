@@ -8,7 +8,7 @@
   export let isUser = false;
 </script>
 
-<div class="flex gap-2 pr-2">
+<div class="flex gap-2 pr-2 items-center">
   <div
     class="flex flex-col bg-teal-500 grow rounded-r-xl text-gray-200 text-xl cursor-pointer"
     class:h-14={!showDetails}
@@ -18,7 +18,5 @@
       <DealListItemDetails {deal} {isUser} />
     {/if}
   </div>
-  <div class="w-6">
-    <GearIcon />
-  </div>
+  <GearIcon />
 </div>

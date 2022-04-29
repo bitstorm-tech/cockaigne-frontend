@@ -17,15 +17,13 @@
       <span>{street}</span>
       <span>{city}</span>
     </div>
-    <div class="-mt-6 w-32 h-32 z-10">
-      <ProfilePicture {imageUrl} />
-    </div>
-  </div>
-  <div class="flex flex-row-reverse w-full pr-16 py-4">
-    <Button href={actionUrl}>
-      <div class="h-7">
-        <AddDocumentIcon />
+    <div class="flex flex-col items-center gap-2 -mt-6 ">
+      <div class="w-32 h-32 z-10">
+        <ProfilePicture {imageUrl} />
       </div>
-    </Button>
+      <Button href={actionUrl} outline>
+        <AddDocumentIcon />
+      </Button>
+    </div>
   </div>
 </div>

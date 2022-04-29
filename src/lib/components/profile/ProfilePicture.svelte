@@ -1,13 +1,12 @@
 <script>
   import DefaultProfile from "$lib/components/ui/icons/DefaultProfile.svelte";
 
-  export let defaultPicture = false;
-  export let imageUrl = "http://daisyui.com/tailwind-css-component-profile-1@94w.png";
+  export let imageUrl = "";
 </script>
 
 <div class="avatar cursor-pointer">
-  <div class="rounded-full ring-1 ring-primary ring-stone-600 ring-offset-1">
-    {#if defaultPicture}
+  <div class="rounded-full ring-1 ring-primary ring-stone-600 ring-offset-1 w-full h-full">
+    {#if imageUrl.length === 0}
       <DefaultProfile />
     {:else}
       <img src={imageUrl} alt="Profile" />

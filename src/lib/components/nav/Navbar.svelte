@@ -13,13 +13,11 @@
 
 <nav class="flex justify-between bg-base-300 py-2 px-4 md:px-52 items-center">
   <div class="flex items-center text-xl gap-2">
-    <div class="w-8 h-8 cursor-pointer">
-      {#if showMobileMenu}
-        <CrossIcon on:click={toggleMobileMenu} />
-      {:else}
-        <HamburgerIcon on:click={toggleMobileMenu} />
-      {/if}
-    </div>
+    {#if showMobileMenu}
+      <CrossIcon on:click={toggleMobileMenu} />
+    {:else}
+      <HamburgerIcon on:click={toggleMobileMenu} />
+    {/if}
     <Link href="/"><img class="h-7" src="/images/logo-text.png" alt="Logo Text" /></Link>
   </div>
 </nav>

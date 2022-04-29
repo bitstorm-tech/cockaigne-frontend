@@ -22,7 +22,7 @@
         <ProfilePicture {imageUrl} />
       </div>
       <a href={actionUrl}>
-        <Button outline>
+        <Button outline circle>
           <AddDocumentIcon />
         </Button>
       </a>

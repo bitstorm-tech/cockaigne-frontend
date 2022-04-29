@@ -16,7 +16,7 @@ export async function post({ request }: RequestEvent) {
 
     const deal: Deal = await request.json();
     deal.owner = new ObjectId(jwt.sub);
-    const dealCollection = await DbService.getDealCollection();
+    const dealCollection = await DbService.getDealsCollection();
     await dealCollection.insertOne(deal);
     return {
       status: 200
@@ -40,10 +40,17 @@ export async function get({ request, url }: RequestEvent) {
       };
     }
 
-    const dealCollection = await DbService.getDealCollection();
+    const dealCollection = await DbService.getDealsCollection();
     const filter = allDeals ? undefined : { owner: new ObjectId(jwt.sub) };
     const cursor = await dealCollection.find(filter);
     const deals = await cursor.toArray();
+    deals.forEach((deal) => {
+      if (Array.isArray(deal.likes)) {
+        deal.likes = deal.likes.length;
+      } else {
+        deal.likes = 0;
+      }
+    });
     return {
       body: deals
     };

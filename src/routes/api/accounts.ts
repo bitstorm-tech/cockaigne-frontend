@@ -5,7 +5,7 @@ import * as bcryptjs from "bcryptjs";
 
 export async function post({ request }: RequestEvent) {
   try {
-    const accounts = await DbService.getAccountCollection();
+    const accounts = await DbService.getAccountsCollection();
     const account: Account = await request.json();
     account.email = account.email.toLowerCase();
     console.debug("Create new account:", account.email);

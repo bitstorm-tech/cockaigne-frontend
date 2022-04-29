@@ -9,7 +9,7 @@ export async function post({ request }: RequestEvent) {
     const email = body.email.toLowerCase();
     const password = body.password;
 
-    const accounts = await DbService.getAccountCollection();
+    const accounts = await DbService.getAccountsCollection();
     const account = await accounts.findOne({ email });
     const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
 

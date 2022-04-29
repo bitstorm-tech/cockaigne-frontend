@@ -4,4 +4,6 @@
 </script>
 
 <Navbar />
-<slot />
+<div class="pb-6">
+  <slot />
+</div>

@@ -1,11 +1,11 @@
 import type { Account } from "$lib/account.model";
-import DbService from "$lib/db.service";
+import { getAccountsCollection } from "$lib/db.service";
 import type { RequestEvent } from "@sveltejs/kit/types/private";
 import * as bcryptjs from "bcryptjs";
 
 export async function post({ request }: RequestEvent) {
   try {
-    const accounts = await DbService.getAccountsCollection();
+    const accounts = await getAccountsCollection();
     const account: Account = await request.json();
     account.email = account.email.toLowerCase();
     console.debug("Create new account:", account.email);

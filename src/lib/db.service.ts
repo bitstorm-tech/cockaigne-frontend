@@ -10,14 +10,12 @@ const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
 const URL = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${MONGODB_DATABASE}`;
 const client = new MongoClient(URL);
 
-async function getAccountsCollection(): Promise<Collection<Account>> {
+export async function getAccountsCollection(): Promise<Collection<Account>> {
   await client.connect();
   return client.db().collection<Account>("accounts");
 }
 
-async function getDealsCollection(): Promise<Collection<Deal>> {
+export async function getDealsCollection(): Promise<Collection<Deal>> {
   await client.connect();
   return client.db().collection<Deal>("deals");
 }
-
-export default { getAccountsCollection, getDealsCollection };

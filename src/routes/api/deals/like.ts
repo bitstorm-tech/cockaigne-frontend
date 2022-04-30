@@ -1,4 +1,4 @@
-import DbService from "$lib/db.service";
+import { getDealsCollection } from "$lib/db.service";
 import type { Deal } from "$lib/deal.model";
 import { extractJwt } from "$lib/jwt.service";
 import { ObjectId } from "mongodb";
@@ -21,7 +21,7 @@ export async function post({ request, url }) {
       };
     }
 
-    const deals = await DbService.getDealsCollection();
+    const deals = await getDealsCollection();
     const likerId = new ObjectId(jwt.sub);
     const dealId = new ObjectId(id);
     const deal = await deals.findOne<Deal>({ _id: dealId });

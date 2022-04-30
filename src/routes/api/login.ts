@@ -1,4 +1,4 @@
-import DbService from "$lib/db.service";
+import { getAccountsCollection } from "$lib/db.service";
 import { createJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit/types/private";
 import * as bcryptjs from "bcryptjs";
@@ -9,7 +9,7 @@ export async function post({ request }: RequestEvent) {
     const email = body.email.toLowerCase();
     const password = body.password;
 
-    const accounts = await DbService.getAccountsCollection();
+    const accounts = await getAccountsCollection();
     const account = await accounts.findOne({ email });
     const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
 

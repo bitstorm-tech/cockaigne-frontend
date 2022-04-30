@@ -1,4 +1,4 @@
-import DbService from "$lib/db.service";
+import { getDealsCollection } from "$lib/db.service";
 import type { Deal } from "$lib/deal.model";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit/types/private";
@@ -16,7 +16,7 @@ export async function post({ request }: RequestEvent) {
 
     const deal: Deal = await request.json();
     deal.owner = new ObjectId(jwt.sub);
-    const dealCollection = await DbService.getDealsCollection();
+    const dealCollection = await getDealsCollection();
     await dealCollection.insertOne(deal);
     return {
       status: 200
@@ -40,7 +40,7 @@ export async function get({ request, url }: RequestEvent) {
       };
     }
 
-    const dealCollection = await DbService.getDealsCollection();
+    const dealCollection = await getDealsCollection();
     const filter = allDeals ? undefined : { owner: new ObjectId(jwt.sub) };
     const cursor = await dealCollection.find(filter);
     const deals = await cursor.toArray();

@@ -17,7 +17,7 @@
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     >
-      <div>
+      <div class="cursor-pointer">
         {#if isUser}
           <HeartIcon outline />
         {:else}

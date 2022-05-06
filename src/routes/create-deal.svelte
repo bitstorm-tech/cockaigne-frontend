@@ -59,7 +59,7 @@
   <Select label="Kategorien" options={categories} bind:value={category} />
   <ButtonGroup label="Laufzeit" options={runtimes} bind:value={duration} />
   <Input label="Start" type="datetime-local" bind:value={startDate} />
-  <div class="grid grid-cols-2 gap-4 mt-6">
+  <div class="flex justify-center gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
     <a href="/">
       <Button outline>Abbrechen</Button>

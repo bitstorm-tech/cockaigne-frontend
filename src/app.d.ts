@@ -10,7 +10,11 @@ declare global {
       jwt: JWTPayload;
     }
     // interface Platform {}
-    // interface Session {}
+    interface Session {
+      isAuthenticated: boolean;
+      isDealer: boolean;
+      id: string;
+    }
     // interface Stuff {}
   }
 }

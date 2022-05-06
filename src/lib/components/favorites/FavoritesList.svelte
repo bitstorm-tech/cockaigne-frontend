@@ -1,7 +1,10 @@
-<script>
-  import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+<script lang="ts">
+  import DealsList from "$lib/components/dealer/DealsList.svelte";
+  import type { Deal } from "$lib/deal.model";
+
+  export let favoriteDeals: Deal[] = [];
 </script>
 
 <ul class="h-full overflow-auto">
-  <StarIcon />
+  <DealsList deals={favoriteDeals} favoriteDeals={favoriteDeals.map((deal) => deal._id.toString())} on:favor />
 </ul>

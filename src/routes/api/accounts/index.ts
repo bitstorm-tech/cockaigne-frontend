@@ -1,7 +1,35 @@
 import type { Account } from "$lib/account.model";
 import { getAccountsCollection } from "$lib/db.service";
+import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit/types/private";
 import * as bcryptjs from "bcryptjs";
+import { ObjectId } from "mongodb";
+
+export async function get({ request }: RequestEvent) {
+  try {
+    const jwt = await extractJwt(request);
+
+    if (!jwt) {
+      console.warn("Can't get account -> no JWT present");
+      return {
+        status: 403
+      };
+    }
+
+    const accounts = await getAccountsCollection();
+    const account = await accounts.findOne({ _id: new ObjectId(jwt.sub) });
+
+    return {
+      status: 200,
+      body: account
+    };
+  } catch (error) {
+    console.error("Error during get account:", error);
+    return {
+      status: 500
+    };
+  }
+}
 
 export async function post({ request }: RequestEvent) {
   try {

@@ -1,19 +1,28 @@
 <script lang="ts" context="module">
   export async function load({ fetch }) {
-    const response = await fetch("/api/deals?all=true");
+    let response = await fetch("/api/deals?all=true");
+    const deals = await response.json();
+    response = await fetch("/api/accounts/");
+    const account = await response.json();
+    const favoriteDeals = deals.filter((deal) =>
+      account.favoriteDeals.some((favorite) => favorite.toString() === deal._id.toString())
+    );
 
-    if (response.ok) {
-      const deals = await response.json();
-      return {
-        props: {
-          deals
-        }
-      };
-    }
+    if (response)
+      if (response.ok) {
+        return {
+          props: {
+            deals,
+            favoriteDeals,
+            account
+          }
+        };
+      }
   }
 </script>
 
 <script lang="ts">
+  import type { Account } from "$lib/account.model";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
   import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
@@ -21,9 +30,32 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import type { Deal } from "$lib/deal.model";
 
-  export let deals;
+  export let deals: Deal[] = [];
+  export let favoriteDeals: Deal[] = [];
+  export let account: Account;
   let showTabIndex = 0;
+
+  function favor(event) {
+    const dealId = event.detail;
+    fetch("/api/accounts/favor-deal/" + dealId, { method: "post" });
+    const index = account.favoriteDeals.indexOf(dealId);
+
+    if (index > -1) {
+      account.favoriteDeals.splice(index, 1);
+      account.favoriteDeals = [...account.favoriteDeals];
+    } else {
+      account.favoriteDeals = [...account.favoriteDeals, dealId];
+    }
+    filterFavoriteDeals();
+  }
+
+  function filterFavoriteDeals() {
+    favoriteDeals = deals?.filter((deal) =>
+      account.favoriteDeals.some((favorite) => favorite.toString() === deal._id.toString())
+    );
+  }
 </script>
 
 <ProfileHeader
@@ -45,9 +77,9 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList {deals} isUser={true} />
+  <DealsList {deals} favoriteDeals={account.favoriteDeals} on:favor={favor} />
 {:else if showTabIndex === 1}
-  <FavoritesList />
+  <FavoritesList {favoriteDeals} on:favor={favor} />
 {:else}
   <HotList />
 {/if}

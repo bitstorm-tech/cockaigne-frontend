@@ -21,7 +21,7 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import { Deal } from "$lib/deal.model";
+  import type { Deal } from "../../lib/deal.model";
 
   let activeTab = 0;
   export let deals: Deal[] = [];
@@ -32,7 +32,7 @@
   street="Bahnhofstr. 22"
   city="10123 Berlin"
   imageUrl="/images/dummy/aakenus-grill-profile.svg"
-  actionUrl="/create-deal"
+  actionUrl="/deals/new"
 />
 <div class="grid grid-cols-3 mt-4 mb-2">
   <div class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>

@@ -3,7 +3,15 @@
   const style = `height: ${size}rem; width: ${size}rem`;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" {style}>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  fill="none"
+  viewBox="0 0 24 24"
+  stroke="currentColor"
+  stroke-width="2"
+  on:click
+  {style}
+>
   <path
     stroke-linecap="round"
     stroke-linejoin="round"

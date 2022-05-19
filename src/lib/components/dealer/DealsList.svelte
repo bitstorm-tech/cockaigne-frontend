@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import { session } from "$app/stores";
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
-  import { Deal } from "$lib/deal.model";
+  import type { Deal } from "$lib/deal.model";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
@@ -30,7 +31,7 @@
         {#if isUser}
           <HeartIcon outline={!favoriteDeals.includes(deal._id.toString())} on:click={() => favor(deal)} />
         {:else}
-          <GearIcon />
+          <GearIcon on:click={() => goto("/deals/" + deal._id.toString())} />
         {/if}
       </div>
     </DealsListItem>

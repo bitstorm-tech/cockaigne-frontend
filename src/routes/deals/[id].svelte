@@ -1,3 +1,20 @@
+<script lang="ts" context="module">
+  export async function load({ params, fetch }) {
+    if (params.id.toLowerCase() === "new") {
+      return {
+        props: {}
+      };
+    }
+
+    const response = await fetch(`/api/deals/${params.id}`);
+    const deal = await response.json();
+
+    return {
+      props: deal
+    };
+  }
+</script>
+
 <script lang="ts">
   import { goto } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
@@ -6,7 +23,7 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import { Category, Deal, Duration } from "$lib/deal.model";
+  import type { Category, Deal, Duration } from "$lib/deal.model";
 
   const runtimes = {
     "24h": "24 Stunden",
@@ -20,17 +37,19 @@
 
   let openModal = false;
   let loading = false;
-  let startDate = new Date().toISOString().substring(0, 16);
-  let title = "";
-  let description = "";
-  let duration: Duration = "24h";
-  let category: Category = "food";
+  export let _id: string;
+  export let startDate = new Date().toISOString().substring(0, 16);
+  export let title = "";
+  export let description = "";
+  export let duration: Duration = "24h";
+  export let category: Category = "food";
   $: disabled = title.length === 0 || description.length === 0;
 
   async function save() {
     loading = true;
     const deal: Deal = {
-      startDate: new Date(startDate),
+      _id,
+      startDate,
       title,
       description,
       duration,

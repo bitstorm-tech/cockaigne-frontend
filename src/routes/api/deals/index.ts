@@ -16,8 +16,15 @@ export async function post({ request }: RequestEvent) {
 
     const deal: Deal = await request.json();
     deal.owner = new ObjectId(jwt.sub);
-    const dealCollection = await getDealsCollection();
-    await dealCollection.insertOne(deal);
+    deal.startDate = deal.startDate.substring(0, 16);
+    const deals = await getDealsCollection();
+    if (deal._id) {
+      const _id = new ObjectId(deal._id);
+      delete deal._id;
+      await deals.updateOne({ _id }, { $set: deal });
+    } else {
+      await deals.insertOne(deal);
+    }
     return {
       status: 200
     };

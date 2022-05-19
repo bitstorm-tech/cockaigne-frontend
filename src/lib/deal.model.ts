@@ -4,12 +4,12 @@ export type Duration = "24h" | "48h";
 export type Category = "food" | "fashion" | "technic";
 
 export interface Deal {
-  _id?: ObjectId;
-  owner?: ObjectId;
+  _id?: string | ObjectId;
+  owner?: string | ObjectId;
   title: string;
   description: string;
   duration: Duration;
-  startDate: Date;
+  startDate: string;
   category: Category;
-  likes?: ObjectId[] | number; // id of users that liked or number of likes
+  likes?: string[] | ObjectId[] | number; // id of users that liked or number of likes
 }

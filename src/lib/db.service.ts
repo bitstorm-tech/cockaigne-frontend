@@ -9,13 +9,14 @@ const MONGODB_DATABASE = process.env.MONGODB_DATABASE;
 
 const URL = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_HOST}/${MONGODB_DATABASE}`;
 const client = new MongoClient(URL);
+const mongoDbConnectionPromise = client.connect();
 
 export async function getAccountsCollection(): Promise<Collection<Account>> {
-  await client.connect();
-  return client.db().collection<Account>("accounts");
+  const connection = await mongoDbConnectionPromise;
+  return connection.db().collection<Account>("accounts");
 }
 
 export async function getDealsCollection(): Promise<Collection<Deal>> {
-  await client.connect();
-  return client.db().collection<Deal>("deals");
+  const connection = await mongoDbConnectionPromise;
+  return connection.db().collection<Deal>("deals");
 }

@@ -1,9 +1,8 @@
 <script lang="ts">
   import ThumbUpIcon from "$lib/components/ui/icons/ThumbUpIcon.svelte";
-  import type { Deal } from "$lib/deal.model";
 
   export let isUser = false;
-  export let deal: Deal;
+  export let deal;
 
   async function like() {
     const response = await fetch("/api/deals/like?id=" + deal._id.toString(), { method: "post" });

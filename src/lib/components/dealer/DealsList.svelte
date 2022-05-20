@@ -4,17 +4,16 @@
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
-  import type { Deal } from "$lib/deal.model";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  export let deals: Deal[] = [];
+  export let deals = [];
   export let favoriteDeals: string[] = [];
   const isUser = !$session.isDealer;
   let openDetail = -1;
 
-  function favor(deal: Deal) {
+  function favor(deal) {
     dispatch("favor", deal._id.toString());
   }
 </script>

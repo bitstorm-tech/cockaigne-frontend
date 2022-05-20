@@ -23,7 +23,6 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import type { Category, Deal, Duration } from "$lib/deal.model";
 
   const runtimes = {
     "24h": "24 Stunden",
@@ -41,13 +40,13 @@
   export let startDate = new Date().toISOString().substring(0, 16);
   export let title = "";
   export let description = "";
-  export let duration: Duration = "24h";
-  export let category: Category = "food";
+  export let duration = "24h";
+  export let category = "food";
   $: disabled = title.length === 0 || description.length === 0;
 
   async function save() {
     loading = true;
-    const deal: Deal = {
+    const deal = {
       _id,
       startDate,
       title,

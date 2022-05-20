@@ -1,8 +1,7 @@
 <script lang="ts">
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import type { Deal } from "$lib/deal.model";
 
-  export let favoriteDeals: Deal[] = [];
+  export let favoriteDeals = [];
 </script>
 
 <ul class="h-full overflow-auto">

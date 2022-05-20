@@ -21,10 +21,9 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import type { Deal } from "../../lib/deal.model";
 
   let activeTab = 0;
-  export let deals: Deal[] = [];
+  export let deals = [];
 </script>
 
 <ProfileHeader

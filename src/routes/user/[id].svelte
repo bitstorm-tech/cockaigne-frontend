@@ -22,7 +22,6 @@
 </script>
 
 <script lang="ts">
-  import type { Account } from "$lib/account.model";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
   import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
@@ -30,11 +29,10 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
-  import type { Deal } from "$lib/deal.model";
 
-  export let deals: Deal[] = [];
-  export let favoriteDeals: Deal[] = [];
-  export let account: Account;
+  export let deals = [];
+  export let favoriteDeals = [];
+  export let account;
   let showTabIndex = 0;
 
   function favor(event) {

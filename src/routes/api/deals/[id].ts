@@ -1,9 +1,7 @@
-import { getDealsCollection } from "$lib/db.service";
-import type { Deal } from "$lib/deal.model";
 import { extractJwt } from "$lib/jwt.service";
-import { ObjectId } from "mongodb";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export async function get({ params, request }) {
+export async function get({ params, request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
@@ -12,27 +10,27 @@ export async function get({ params, request }) {
         status: 403
       };
     }
-    const deals = await getDealsCollection();
-    const deal = await deals.findOne<Deal>({ _id: new ObjectId(params.id) });
-
-    if (!deal) {
-      return {
-        status: 404
-      };
-    }
-
-    if (deal.owner.toString() !== jwt.sub) {
-      return {
-        status: 403
-      };
-    }
-
-    delete deal.owner;
-    delete deal.likes;
-
-    return {
-      body: deal
-    };
+    // const deals = await getDealsCollection();
+    // const deal = await deals.findOne<Deal>({ _id: new ObjectId(params.id) });
+    //
+    // if (!deal) {
+    //   return {
+    //     status: 404
+    //   };
+    // }
+    //
+    // if (deal.owner.toString() !== jwt.sub) {
+    //   return {
+    //     status: 403
+    //   };
+    // }
+    //
+    // delete deal.owner;
+    // delete deal.likes;
+    //
+    // return {
+    //   body: deal
+    // };
   } catch (error) {
     console.error("Can't get deal:", error);
     return {

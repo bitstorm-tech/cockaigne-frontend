@@ -1,7 +1,9 @@
-import { getAccountsCollection } from "$lib/db.service";
 import { createJwt } from "$lib/jwt.service";
-import type { RequestEvent } from "@sveltejs/kit/types/private";
+import { PrismaClient } from "@prisma/client/scripts/default-index";
+import type { RequestEvent } from "@sveltejs/kit";
 import * as bcryptjs from "bcryptjs";
+
+const prisma = new PrismaClient();
 
 export async function post({ request }: RequestEvent) {
   try {
@@ -9,8 +11,13 @@ export async function post({ request }: RequestEvent) {
     const email = body.email.toLowerCase();
     const password = body.password;
 
-    const accounts = await getAccountsCollection();
-    const account = await accounts.findOne({ email });
+    const account = await prisma.account.findUnique({
+      where: {
+        email
+      }
+    });
+    // const accounts = await getAccountsCollection();
+    // const account = await accounts.findOne({ email });
     const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
 
     if (!isPasswordValid) {

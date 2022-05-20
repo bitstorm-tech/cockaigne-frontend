@@ -4,8 +4,10 @@
     const deals = await response.json();
     response = await fetch("/api/accounts/");
     const account = await response.json();
-    const favoriteDeals = deals.filter((deal) =>
-      account.favoriteDeals.some((favorite) => favorite.toString() === deal._id.toString())
+    const favoriteDeals = deals.filter(
+      (deal) =>
+        // account.favorites.some((favorite) => favorite.toString() === deal._id.toString())
+        true
     );
 
     if (response)

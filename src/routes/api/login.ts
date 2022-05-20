@@ -1,9 +1,7 @@
 import { createJwt } from "$lib/jwt.service";
-import { PrismaClient } from "@prisma/client/scripts/default-index";
+import { prisma } from "$lib/prisma.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import * as bcryptjs from "bcryptjs";
-
-const prisma = new PrismaClient();
 
 export async function post({ request }: RequestEvent) {
   try {
@@ -11,13 +9,7 @@ export async function post({ request }: RequestEvent) {
     const email = body.email.toLowerCase();
     const password = body.password;
 
-    const account = await prisma.account.findUnique({
-      where: {
-        email
-      }
-    });
-    // const accounts = await getAccountsCollection();
-    // const account = await accounts.findOne({ email });
+    const account = await prisma.account.findFirst({ where: { email } });
     const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
 
     if (!isPasswordValid) {
@@ -26,7 +18,7 @@ export async function post({ request }: RequestEvent) {
       };
     }
 
-    const jwt = await createJwt(account._id.toString(), { isDealer: account.isDealer });
+    const jwt = await createJwt(account.id.toString(), { isDealer: account.dealer });
 
     return {
       status: 200,
@@ -34,8 +26,8 @@ export async function post({ request }: RequestEvent) {
         "set-cookie": [`jwt=${jwt}; SameSite=Lax; Path=/; HttpOnly`]
       },
       body: {
-        isDealer: account.isDealer,
-        id: account._id.toString()
+        isDealer: account.dealer,
+        id: account.id.toString()
       }
     };
   } catch (error) {

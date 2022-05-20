@@ -25,30 +25,30 @@
   import Textarea from "$lib/components/ui/Textarea.svelte";
 
   const runtimes = {
-    "24h": "24 Stunden",
-    "48h": "48 Stunden"
+    ONE_DAY: "24 Stunden",
+    TWO_DAYS: "48 Stunden"
   };
   const categories = {
-    food: "Essen & Trinken",
-    technic: "Technik",
-    fashion: "Mode"
+    FOOD: "Essen & Trinken",
+    TECH: "Technik",
+    FASHION: "Mode"
   };
 
   let openModal = false;
   let loading = false;
-  export let _id: string;
-  export let startDate = new Date().toISOString().substring(0, 16);
+  export let id: string;
+  export let start = new Date().toISOString().substring(0, 16);
   export let title = "";
   export let description = "";
-  export let duration = "24h";
-  export let category = "food";
+  export let duration = "ONE_DAY";
+  export let category = "FOOD";
   $: disabled = title.length === 0 || description.length === 0;
 
   async function save() {
     loading = true;
     const deal = {
-      _id,
-      startDate,
+      id,
+      start,
       title,
       description,
       duration,
@@ -76,7 +76,7 @@
   <Textarea label="Beschreibung" bind:value={description} />
   <Select label="Kategorien" options={categories} bind:value={category} />
   <ButtonGroup label="Laufzeit" options={runtimes} bind:value={duration} />
-  <Input label="Start" type="datetime-local" bind:value={startDate} />
+  <Input label="Start" type="datetime-local" bind:value={start} />
   <div class="flex justify-center gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
     <a href="/">

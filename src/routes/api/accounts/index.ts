@@ -1,4 +1,5 @@
 import { extractJwt } from "$lib/jwt.service";
+import { prisma } from "$lib/prisma.service";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function get({ request }: RequestEvent) {
@@ -12,13 +13,23 @@ export async function get({ request }: RequestEvent) {
       };
     }
 
-    // const accounts = await getAccountsCollection();
-    // const account = await accounts.findOne({ _id: new ObjectId(jwt.sub) });
-    //
-    // return {
-    //   status: 200,
-    //   body: account
-    // };
+    const account = await prisma.account.findUnique({
+      where: { id: +jwt.sub },
+      include: { favorites: true }
+    });
+
+    if (!account) {
+      return {
+        status: 404
+      };
+    }
+
+    delete account.password;
+
+    return {
+      status: 200,
+      body: account
+    };
   } catch (error) {
     console.error("Error during get account:", error);
     return {

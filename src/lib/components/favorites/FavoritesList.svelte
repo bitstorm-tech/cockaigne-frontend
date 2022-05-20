@@ -5,5 +5,5 @@
 </script>
 
 <ul class="h-full overflow-auto">
-  <DealsList deals={favoriteDeals} favoriteDeals={favoriteDeals.map((deal) => deal._id.toString())} on:favor />
+  <DealsList deals={favoriteDeals} favoriteDeals={favoriteDeals.map((deal) => deal.id.toString())} on:favor />
 </ul>

@@ -9,29 +9,39 @@ datasource db {
 }
 
 model Account {
-  id       Int     @id @default(autoincrement())
-  email    String
-  password String
-  dealer   Boolean @default(false)
-  Deal     Deal[]
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  dealer    Boolean    @default(false)
+  deals     Deal[]
+  favorites Favorite[]
 }
 
 model Deal {
-  id          Int      @id @default(autoincrement())
-  owner       Account  @relation(references: [id], fields: [accountId])
+  id          Int        @id @default(autoincrement())
+  owner       Account    @relation(references: [id], fields: [accountId])
+  accountId   Int
   title       String
   description String
-  category    Category @relation(references: [id], fields: [categoryId])
+  category    Category
   duration    Duration
   start       DateTime
-  accountId   Int
-  categoryId  Int
+  favorites   Favorite[]
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String
-  Deal Deal[]
+model Favorite {
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId Int
+  deal      Deal    @relation(fields: [dealId], references: [id])
+  dealId    Int
+
+  @@id([accountId, dealId])
+}
+
+enum Category {
+  FOOD
+  TECH
+  FASHION
 }
 
 enum Duration {

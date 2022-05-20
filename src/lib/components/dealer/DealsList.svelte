@@ -14,7 +14,7 @@
   let openDetail = -1;
 
   function favor(deal) {
-    dispatch("favor", deal._id.toString());
+    dispatch("favor", deal.id.toString());
   }
 </script>
 
@@ -28,9 +28,9 @@
     >
       <div class="cursor-pointer">
         {#if isUser}
-          <HeartIcon outline={!favoriteDeals.includes(deal._id.toString())} on:click={() => favor(deal)} />
+          <HeartIcon outline={!favoriteDeals.includes(deal.id.toString())} on:click={() => favor(deal)} />
         {:else}
-          <GearIcon on:click={() => goto("/deals/" + deal._id.toString())} />
+          <GearIcon on:click={() => goto("/deals/" + deal.id.toString())} />
         {/if}
       </div>
     </DealsListItem>

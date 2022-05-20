@@ -1,5 +1,6 @@
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
+import { prisma } from "../../../lib/prisma.service";
 
 export async function get({ params, request }: RequestEvent) {
   try {
@@ -10,27 +11,24 @@ export async function get({ params, request }: RequestEvent) {
         status: 403
       };
     }
-    // const deals = await getDealsCollection();
-    // const deal = await deals.findOne<Deal>({ _id: new ObjectId(params.id) });
-    //
-    // if (!deal) {
-    //   return {
-    //     status: 404
-    //   };
-    // }
-    //
-    // if (deal.owner.toString() !== jwt.sub) {
-    //   return {
-    //     status: 403
-    //   };
-    // }
-    //
-    // delete deal.owner;
-    // delete deal.likes;
-    //
-    // return {
-    //   body: deal
-    // };
+
+    const deal = await prisma.deal.findUnique({ where: { id: +params.id } });
+
+    if (!deal) {
+      return {
+        status: 404
+      };
+    }
+
+    if (deal.accountId !== +jwt.sub) {
+      return {
+        status: 403
+      };
+    }
+
+    return {
+      body: deal
+    };
   } catch (error) {
     console.error("Can't get deal:", error);
     return {

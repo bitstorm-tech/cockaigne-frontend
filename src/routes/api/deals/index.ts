@@ -1,5 +1,7 @@
 import { extractJwt } from "$lib/jwt.service";
+import type { Deal } from "@prisma/client";
 import type { RequestEvent } from "@sveltejs/kit";
+import { prisma } from "../../../lib/prisma.service";
 
 export async function post({ request }: RequestEvent) {
   try {
@@ -22,9 +24,20 @@ export async function post({ request }: RequestEvent) {
     // } else {
     //   await deals.insertOne(deal);
     // }
-    // return {
-    //   status: 200
-    // };
+
+    const deal: Deal = await request.json();
+    deal.accountId = +jwt.sub;
+    deal.start = new Date(deal.start);
+
+    await prisma.deal.upsert({
+      create: deal,
+      update: deal,
+      where: { id: deal.id || -1 }
+    });
+
+    return {
+      status: 200
+    };
   } catch (error) {
     console.error("Can't post deal:", error);
     return {
@@ -55,9 +68,12 @@ export async function get({ request, url }: RequestEvent) {
     //     deal.likes = 0;
     //   }
     // });
-    // return {
-    //   body: deals
-    // };
+
+    const deals = await prisma.deal.findMany();
+
+    return {
+      body: deals
+    };
   } catch (error) {
     console.error("Can't get deals:", error);
     return {

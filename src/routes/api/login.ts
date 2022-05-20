@@ -3,9 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import type { RequestEvent } from "@sveltejs/kit";
 import * as bcryptjs from "bcryptjs";
 
-const prisma = new PrismaClient();
-
 export async function post({ request }: RequestEvent) {
+  const prisma = new PrismaClient();
   try {
     const body = await request.json();
     const email = body.email.toLowerCase();

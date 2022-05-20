@@ -13,7 +13,7 @@ export async function post({ request }: RequestEvent) {
     const account = await prisma.account.findFirst({ where: { email } });
     const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
 
-    if (!isPasswordValid) {
+    if (!account || !isPasswordValid) {
       return {
         status: 403
       };

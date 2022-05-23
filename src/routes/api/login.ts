@@ -1,11 +1,10 @@
-import PrismaClient from "$lib/database/prisma";
+import { prisma } from "$lib/database/prisma";
 import { createJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import * as bcryptjs from "bcryptjs";
 
 export async function post({ request }: RequestEvent) {
   try {
-    const prisma = new PrismaClient();
     const body = await request.json();
     const email = body.email.toLowerCase();
     const password = body.password;

@@ -1,6 +1,8 @@
+import PrismaClient from "$lib/database/prisma";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
-import { prisma } from "../../../lib/prisma.service";
+
+const prisma = new PrismaClient();
 
 export async function get({ params, request }: RequestEvent) {
   try {

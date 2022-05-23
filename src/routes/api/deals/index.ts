@@ -1,5 +1,5 @@
+import PrismaClient from "$lib/database/prisma";
 import { extractJwt } from "$lib/jwt.service";
-import PrismaClient from "$lib/prisma.service";
 import type { Deal } from "@prisma/client";
 import type { RequestEvent } from "@sveltejs/kit";
 

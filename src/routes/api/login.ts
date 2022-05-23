@@ -1,5 +1,5 @@
+import PrismaClient from "$lib/database/prisma";
 import { createJwt } from "$lib/jwt.service";
-import PrismaClient from "$lib/prisma.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import * as bcryptjs from "bcryptjs";
 

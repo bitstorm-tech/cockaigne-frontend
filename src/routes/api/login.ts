@@ -10,7 +10,7 @@ export async function post({ request }: RequestEvent) {
     const password = body.password;
 
     const account = await prisma.account.findFirst({ where: { email } });
-    const isPasswordValid = bcryptjs.compareSync(password, account?.password || "");
+    const isPasswordValid = await bcryptjs.compare(password, account?.password || "");
 
     if (!account || !isPasswordValid) {
       return {

@@ -23,8 +23,8 @@ model Deal {
   accountId   Int
   title       String
   description String
-  category    Category
-  duration    Duration
+  category    String
+  duration    String
   start       DateTime
   favorites   Favorite[]
 }
@@ -36,15 +36,4 @@ model Favorite {
   dealId    Int
 
   @@id([accountId, dealId])
-}
-
-enum Category {
-  FOOD
-  TECH
-  FASHION
-}
-
-enum Duration {
-  ONE_DAY
-  TWO_DAYS
 }

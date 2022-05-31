@@ -1,6 +1,6 @@
-import { prisma } from "$lib/database/prisma";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
+import { findDealById } from "../../../lib/database/deal/deal.service";
 
 export async function get({ params, request }: RequestEvent) {
   try {
@@ -12,7 +12,8 @@ export async function get({ params, request }: RequestEvent) {
       };
     }
 
-    const deal = await prisma.deal.findUnique({ where: { id: +params.id } });
+    // const deal = await prisma.deal.findUnique({ where: { id: +params.id } });
+    const deal = await findDealById(+params.id);
 
     if (!deal) {
       return {

@@ -1,6 +1,6 @@
-import { prisma } from "$lib/database/prisma";
+import type { Deal } from "$lib/database/deal/deal.model";
+import { findAllDeals, upsertDeal } from "$lib/database/deal/deal.service";
 import { extractJwt } from "$lib/jwt.service";
-import type { Deal } from "@prisma/client";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function post({ request }: RequestEvent) {
@@ -29,11 +29,13 @@ export async function post({ request }: RequestEvent) {
     deal.accountId = +jwt.sub;
     deal.start = new Date(deal.start);
 
-    await prisma.deal.upsert({
-      create: deal,
-      update: deal,
-      where: { id: deal.id || -1 }
-    });
+    await upsertDeal(deal);
+
+    // await prisma.deal.upsert({
+    //   create: deal,
+    //   update: deal,
+    //   where: { id: deal.id || -1 }
+    // });
 
     return {
       status: 200
@@ -69,7 +71,7 @@ export async function get({ request, url }: RequestEvent) {
     //   }
     // });
 
-    const deals = await prisma.deal.findMany();
+    const deals = await findAllDeals();
 
     return {
       body: deals

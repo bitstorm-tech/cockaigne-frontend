@@ -1,6 +1,6 @@
-import { prisma } from "$lib/database/prisma";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
+import { findAccountById } from "../../../lib/database/account/account.service";
 
 export async function get({ request }: RequestEvent) {
   try {
@@ -13,10 +13,7 @@ export async function get({ request }: RequestEvent) {
       };
     }
 
-    const account = await prisma.account.findUnique({
-      where: { id: +jwt.sub },
-      include: { favorites: true }
-    });
+    const account = await findAccountById(+jwt.sub);
 
     if (!account) {
       return {
@@ -24,7 +21,7 @@ export async function get({ request }: RequestEvent) {
       };
     }
 
-    delete account.password;
+    account.password = "";
 
     return {
       status: 200,

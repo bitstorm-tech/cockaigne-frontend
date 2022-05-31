@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const pgClientPath = path.resolve(__dirname, "node_modules", "pg", "lib", "native", "client.js");
+const pgClientPath = path.resolve("node_modules", "pg", "lib", "native", "client.js");
 
 fs.readFile(pgClientPath, "utf8", function (err, data) {
   if (err) {

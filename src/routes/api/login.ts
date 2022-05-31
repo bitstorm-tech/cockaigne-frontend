@@ -10,8 +10,7 @@ export async function post({ request }: RequestEvent) {
     const password = body.password;
     const account = await findAccountByEmail(email);
 
-    if (result.rows.length !== 1) {
-      console.error("Expected exact one account for eMail (%s) but got :", email, result.rows.length);
+    if (!account) {
       return {
         status: 403
       };

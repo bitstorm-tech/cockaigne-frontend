@@ -12,7 +12,6 @@ export async function get({ params, request }: RequestEvent) {
       };
     }
 
-    // const deal = await prisma.deal.findUnique({ where: { id: +params.id } });
     const deal = await findDealById(+params.id);
 
     if (!deal) {
@@ -21,7 +20,7 @@ export async function get({ params, request }: RequestEvent) {
       };
     }
 
-    if (deal.accountId !== +jwt.sub) {
+    if (deal.account_id !== +jwt.sub) {
       return {
         status: 403
       };

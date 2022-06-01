@@ -15,7 +15,7 @@
       <button
         class="btn btn-sm btn-outline grow"
         class:btn-active={activeButton === key}
-        on:click={() => (activeButton = key)}
+        on:click={() => (activeButton = value = key)}
       >
         {options[key]}
       </button>

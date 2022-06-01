@@ -1,9 +1,9 @@
 export interface Deal {
   id: number;
-  accountId: number;
+  account_id: number;
   title: string;
   description: string;
   category: string;
-  duration: string;
+  duration: number;
   start: Date;
 }

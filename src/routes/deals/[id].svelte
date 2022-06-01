@@ -9,6 +9,9 @@
     const response = await fetch(`/api/deals/${params.id}`);
     const deal = await response.json();
 
+    deal.start = deal.start.substring(0, 16);
+    deal.duration = deal.duration.toString();
+
     return {
       props: deal
     };
@@ -25,8 +28,9 @@
   import Textarea from "$lib/components/ui/Textarea.svelte";
 
   const runtimes = {
-    ONE_DAY: "24 Stunden",
-    TWO_DAYS: "48 Stunden"
+    "24": "24 Stunden",
+    "48": "48 Stunden",
+    "72": "72 Stunden"
   };
   const categories = {
     FOOD: "Essen & Trinken",
@@ -40,9 +44,10 @@
   export let start = new Date().toISOString().substring(0, 16);
   export let title = "";
   export let description = "";
-  export let duration = "ONE_DAY";
+  export let duration = "24";
   export let category = "FOOD";
   $: disabled = title.length === 0 || description.length === 0;
+  $: costs = 1 + duration / 24;
 
   async function save() {
     loading = true;
@@ -77,6 +82,7 @@
   <Select label="Kategorien" options={categories} bind:value={category} />
   <ButtonGroup label="Laufzeit" options={runtimes} bind:value={duration} />
   <Input label="Start" type="datetime-local" bind:value={start} />
+  <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
     <a href="/">

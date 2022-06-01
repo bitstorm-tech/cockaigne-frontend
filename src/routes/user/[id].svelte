@@ -52,9 +52,7 @@
   }
 
   function filterFavoriteDeals() {
-    favoriteDeals = deals?.filter((deal) =>
-      account.favoriteDeals.some((favorite) => favorite.toString() === deal._id.toString())
-    );
+    favoriteDeals = deals?.filter((deal) => account.favoriteDeals.some((favorite) => favorite.toString() === deal.id));
   }
 </script>
 

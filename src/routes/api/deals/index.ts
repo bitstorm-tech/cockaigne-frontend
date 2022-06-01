@@ -26,7 +26,7 @@ export async function post({ request }: RequestEvent) {
     // }
 
     const deal: Deal = await request.json();
-    deal.accountId = +jwt.sub;
+    deal.account_id = +jwt.sub;
     deal.start = new Date(deal.start);
 
     await upsertDeal(deal);

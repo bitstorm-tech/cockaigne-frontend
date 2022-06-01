@@ -6,7 +6,7 @@ export async function findAccountByEmail(email: string): Promise<Account | undef
 
   if (result.rows.length !== 1) {
     console.error("Expected exact one account for eMail (%s) but got :", email, result.rows.length);
-    return null;
+    return;
   }
 
   return result.rows[0];
@@ -17,7 +17,7 @@ export async function findAccountById(id: number): Promise<Account | undefined> 
 
   if (result.rows.length !== 1) {
     console.error("Expected exact one account for id (%s) but got :", id, result.rows.length);
-    return null;
+    return;
   }
 
   return result.rows[0];

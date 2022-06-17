@@ -1,12 +1,21 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   export let label: string;
   export let id = label?.toLowerCase();
   export let type = "text";
   export let placeholder = "";
   export let value = "";
 
+  const disaptch = createEventDispatcher();
+
   function setValue(event) {
     value = event.target.value;
+  }
+
+  function keydown(event: KeyboardEvent) {
+    if (event.code === "Enter") {
+      disaptch("enter");
+    }
   }
 </script>
 
@@ -20,6 +29,7 @@
     {type}
     {placeholder}
     on:input={setValue}
+    on:keydown={keydown}
     {value}
   />
 </div>

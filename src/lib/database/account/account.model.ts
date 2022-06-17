@@ -3,4 +3,6 @@ export interface Account {
   email: string;
   password: string;
   dealer: boolean;
+  likes_deal_id?: number[];
+  favorites_deal_id?: number[];
 }

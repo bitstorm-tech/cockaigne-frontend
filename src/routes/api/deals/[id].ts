@@ -6,7 +6,7 @@ export async function get({ params, request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       return {
         status: 403
       };

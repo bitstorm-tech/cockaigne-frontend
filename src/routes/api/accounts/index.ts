@@ -6,7 +6,7 @@ export async function get({ request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       console.warn("Can't get account -> no JWT present");
       return {
         status: 403

@@ -1,6 +1,6 @@
 <script lang="ts">
   import ThumbUpIcon from "$lib/components/ui/icons/ThumbUpIcon.svelte";
-  import type { Deal } from "../../database/deal/deal.model";
+  import type { Deal } from "$lib/database/deal/deal.model";
 
   export let isUser = false;
   export let deal: Deal;
@@ -9,8 +9,7 @@
     const response = await fetch("/api/deals/like?id=" + deal.id, { method: "post" });
 
     if (response.ok) {
-      const body = await response.json();
-      // deal.likes = body.likes;
+      deal.likes = +(await response.text());
     }
   }
 </script>
@@ -28,6 +27,6 @@
       <a href="/dealer/{deal.account_id}"><span class="whitespace-nowrap">zum Dealer</span></a>
     </div>
   {:else}
-    <span class="mt-4 text-2xs">Start: {deal.start} / Dauer: {deal.duration}</span>
+    <span class="mt-4 text-2xs">Start: {deal.start} / Dauer: {deal.duration} Stunden</span>
   {/if}
 </div>

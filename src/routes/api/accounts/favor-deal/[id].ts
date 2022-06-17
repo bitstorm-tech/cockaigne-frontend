@@ -5,7 +5,7 @@ export async function post({ request, params }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       console.warn("Can't patch account (toggle favorite deal) -> no JWT present");
       return {
         status: 403

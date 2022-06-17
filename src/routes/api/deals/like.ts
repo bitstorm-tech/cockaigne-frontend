@@ -1,44 +1,48 @@
+import {
+  deleteLikeById,
+  findLikeByAccountIdAndDealId,
+  getLikeCountByDealId,
+  insertLike
+} from "$lib/database/like/like.service";
 import { extractJwt } from "$lib/jwt.service";
+import type { RequestEvent } from "@sveltejs/kit";
 
-export async function post({ request, url }) {
+export async function post({ request, url }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       return {
         status: 403
       };
     }
 
-    const id = url.searchParams.get("id");
-    if (!id) {
-      console.warn("Can't like deal -> missing deal id");
+    const accountId = +jwt.sub;
+    const dealIdString = url.searchParams.get("id");
+
+    if (!dealIdString) {
+      console.warn("Can't like/unlike deal without deal id");
       return {
         status: 400
       };
     }
 
-    // const deals = await getDealsCollection();
-    // const likerId = new ObjectId(jwt.sub);
-    // const dealId = new ObjectId(id);
-    // const deal = await deals.findOne<Deal>({ _id: dealId });
-    // const likes = deal.likes as ObjectId[];
-    // const alreadyLiked = likes.some((objectId) => objectId.equals(likerId));
-    // let likesCount = likes.length;
-    //
-    // if (alreadyLiked) {
-    //   likesCount -= 1;
-    //   await deals.updateOne({ _id: dealId }, { $pull: { likes: likerId } });
-    // } else {
-    //   likesCount += 1;
-    //   await deals.updateOne({ _id: dealId }, { $push: { likes: likerId } });
-    // }
-    //
-    // deal.likes = likesCount;
-    // return {
-    //   status: 200,
-    //   body: deal
-    // };
+    const dealId = +dealIdString;
+
+    const like = await findLikeByAccountIdAndDealId(accountId, dealId);
+
+    if (like) {
+      await deleteLikeById(like.id);
+    } else {
+      await insertLike(accountId, dealId);
+    }
+
+    const likeCount = await getLikeCountByDealId(dealId);
+
+    return {
+      status: 200,
+      body: likeCount
+    };
   } catch (error) {
     console.error("Can't post like:", error);
     return {

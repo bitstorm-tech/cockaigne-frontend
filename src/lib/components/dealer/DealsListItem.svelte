@@ -1,7 +1,8 @@
 <script lang="ts">
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
 
-  export let deal;
+  export let deal: Deal;
   export let showDetails = false;
   export let isUser = false;
 </script>

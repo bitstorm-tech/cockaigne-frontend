@@ -7,35 +7,17 @@ export async function post({ request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       return {
         status: 403
       };
     }
-
-    // const deal: Deal = await request.json();
-    // deal.owner = new ObjectId(jwt.sub);
-    // deal.startDate = deal.startDate.substring(0, 16);
-    // const deals = await getDealsCollection();
-    // if (deal._id) {
-    //   const _id = new ObjectId(deal._id);
-    //   delete deal._id;
-    //   await deals.updateOne({ _id }, { $set: deal });
-    // } else {
-    //   await deals.insertOne(deal);
-    // }
 
     const deal: Deal = await request.json();
     deal.account_id = +jwt.sub;
     deal.start = new Date(deal.start);
 
     await upsertDeal(deal);
-
-    // await prisma.deal.upsert({
-    //   create: deal,
-    //   update: deal,
-    //   where: { id: deal.id || -1 }
-    // });
 
     return {
       status: 200
@@ -53,23 +35,11 @@ export async function get({ request, url }: RequestEvent) {
     const jwt = await extractJwt(request);
     const allDeals = url.searchParams.get("all");
 
-    if (!jwt) {
+    if (!jwt || !jwt.sub) {
       return {
         status: 403
       };
     }
-
-    // const dealCollection = await getDealsCollection();
-    // const filter = allDeals ? undefined : { owner: new ObjectId(jwt.sub) };
-    // const cursor = await dealCollection.find(filter);
-    // const deals = await cursor.toArray();
-    // deals.forEach((deal) => {
-    //   if (Array.isArray(deal.likes)) {
-    //     deal.likes = deal.likes.length;
-    //   } else {
-    //     deal.likes = 0;
-    //   }
-    // });
 
     const deals = await findAllDeals();
 

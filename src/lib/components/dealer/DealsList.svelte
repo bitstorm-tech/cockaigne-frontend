@@ -4,17 +4,22 @@
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
   import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
-  export let deals = [];
-  export let favoriteDeals: string[] = [];
+  export let deals: Deal[] = [];
+  export let favoriteDeals: Deal[] = [];
   const isUser = !$session.isDealer;
   let openDetail = -1;
 
-  function favor(deal) {
-    dispatch("favor", deal.id.toString());
+  function favor(deal: Deal) {
+    dispatch("favor", deal);
+  }
+
+  function isFavorite(dealId: number): boolean {
+    return !!favoriteDeals.find((fav) => fav.id === dealId);
   }
 </script>
 
@@ -28,7 +33,7 @@
     >
       <div class="cursor-pointer">
         {#if isUser}
-          <HeartIcon outline={!favoriteDeals.includes(deal.id.toString())} on:click={() => favor(deal)} />
+          <HeartIcon outline={!isFavorite(deal.id)} on:click={() => favor(deal)} />
         {:else}
           <GearIcon on:click={() => goto("/deals/" + deal.id.toString())} />
         {/if}

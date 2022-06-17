@@ -1,25 +1,21 @@
 <script lang="ts" context="module">
-  export async function load({ fetch }) {
+  export async function load({ fetch }: LoadEvent) {
     let response = await fetch("/api/deals?all=true");
     const deals = await response.json();
     response = await fetch("/api/accounts/");
     const account = await response.json();
-    const favoriteDeals = deals.filter(
-      (deal) =>
-        // account.favorites.some((favorite) => favorite.toString() === deal._id.toString())
-        true
-    );
+    response = await fetch("/api/favorites");
+    const favoriteDeals = await response.json();
 
-    if (response)
-      if (response.ok) {
-        return {
-          props: {
-            deals,
-            favoriteDeals,
-            account
-          }
-        };
-      }
+    if (response.ok) {
+      return {
+        props: {
+          deals,
+          favoriteDeals,
+          account
+        }
+      };
+    }
   }
 </script>
 
@@ -31,28 +27,32 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import type { Account } from "$lib/database/account/account.model";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import type { LoadEvent } from "@sveltejs/kit";
+  import _ from "lodash";
 
-  export let deals = [];
-  export let favoriteDeals = [];
-  export let account;
+  export let deals: Deal[] = [];
+  export let favoriteDeals: Deal[] = [];
+  export let account: Account;
   let showTabIndex = 0;
 
   function favor(event) {
-    const dealId = event.detail;
-    fetch("/api/accounts/favor-deal/" + dealId, { method: "post" });
-    const index = account.favoriteDeals.indexOf(dealId);
+    const deal: Deal = event.detail;
+    const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
+    fetch("/api/favorites", {
+      method: favoriteDealIndex >= 0 ? "delete" : "post",
+      body: `${deal.id}`
+    });
 
-    if (index > -1) {
-      account.favoriteDeals.splice(index, 1);
-      account.favoriteDeals = [...account.favoriteDeals];
+    if (favoriteDealIndex >= 0) {
+      _.remove(favoriteDeals, (fav) => fav.id === deal.id);
+      favoriteDeals = [...favoriteDeals];
     } else {
-      account.favoriteDeals = [...account.favoriteDeals, dealId];
+      favoriteDeals = [...favoriteDeals, deal];
     }
-    filterFavoriteDeals();
-  }
 
-  function filterFavoriteDeals() {
-    favoriteDeals = deals?.filter((deal) => account.favoriteDeals.some((favorite) => favorite.toString() === deal.id));
+    deals = [...deals];
   }
 </script>
 
@@ -75,7 +75,7 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList {deals} favoriteDeals={account.favoriteDeals} on:favor={favor} />
+  <DealsList {deals} {favoriteDeals} on:favor={favor} />
 {:else if showTabIndex === 1}
   <FavoritesList {favoriteDeals} on:favor={favor} />
 {:else}

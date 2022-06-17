@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   export async function load({ fetch }: LoadEvent) {
-    let response = await fetch("/api/deals?all=true");
+    let response = await fetch("/api/deals");
     const deals = await response.json();
     response = await fetch("/api/accounts/");
     const account = await response.json();

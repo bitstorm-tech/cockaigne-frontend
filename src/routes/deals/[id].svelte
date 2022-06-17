@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  export async function load({ params, fetch }) {
+  export async function load({ params, fetch }: LoadEvent) {
     if (params.id.toLowerCase() === "new") {
       return {
         props: {}
@@ -26,6 +26,7 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
+  import type { LoadEvent } from "@sveltejs/kit";
 
   const runtimes = {
     "24": "24 Stunden",
@@ -47,7 +48,7 @@
   export let duration = "24";
   export let category = "FOOD";
   $: disabled = title.length === 0 || description.length === 0;
-  $: costs = 1 + duration / 24;
+  $: costs = 1 + +duration / 24;
 
   async function save() {
     loading = true;
@@ -85,7 +86,7 @@
   <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
-    <a href="/">
+    <a href="/deals/overview">
       <Button outline>Abbrechen</Button>
     </a>
   </div>

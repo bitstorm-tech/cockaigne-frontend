@@ -30,10 +30,9 @@ export async function post({ request }: RequestEvent) {
   }
 }
 
-export async function get({ request, url }: RequestEvent) {
+export async function get({ request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
-    const allDeals = url.searchParams.get("all");
 
     if (!jwt || !jwt.sub) {
       return {

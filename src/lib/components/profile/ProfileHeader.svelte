@@ -1,7 +1,7 @@
 <script lang="ts">
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import AddDocumentIcon from "$lib/components/ui/icons/AddDocumentIcon.svelte";
+  import FireIcon from "../ui/icons/FireIcon.svelte";
 
   export let name = "";
   export let street = "";
@@ -23,7 +23,7 @@
       </div>
       <a href={actionUrl}>
         <Button outline circle>
-          <AddDocumentIcon />
+          <FireIcon />
         </Button>
       </a>
     </div>

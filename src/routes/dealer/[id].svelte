@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  export async function load({ fetch }) {
+  export async function load({ fetch }: LoadEvent) {
     const response = await fetch("/api/deals");
 
     if (response.ok) {
@@ -14,16 +14,18 @@
 </script>
 
 <script lang="ts">
-  import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
+  import DealsList from "$lib/components/dealer/DealsList.svelte";
   import Pictures from "$lib/components/dealer/Pictures.svelte";
   import RatingsList from "$lib/components/dealer/RatingsList.svelte";
+  import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
-  import DealsList from "$lib/components/dealer/DealsList.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import type { LoadEvent } from "@sveltejs/kit";
 
   let activeTab = 0;
-  export let deals = [];
+  export let deals: Deal[] = [];
 </script>
 
 <ProfileHeader
@@ -31,7 +33,7 @@
   street="Bahnhofstr. 22"
   city="10123 Berlin"
   imageUrl="/images/dummy/aakenus-grill-profile.svg"
-  actionUrl="/deals/new"
+  actionUrl="/deals/overview"
 />
 <div class="grid grid-cols-3 mt-4 mb-2">
   <div class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>

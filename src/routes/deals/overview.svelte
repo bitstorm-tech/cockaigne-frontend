@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
   let showTabIndex = 0;
 </script>
 
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
-    <Button><a href="/deals/new">Deal erstellen</a></Button>
+    <Button on:click={() => goto("/deals/new")}>Deal erstellen</Button>
     <Button outline>Vorlagen</Button>
   </div>
 </div>

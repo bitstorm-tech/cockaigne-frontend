@@ -50,4 +50,4 @@
   <Button on:click={login} {loading} {disabled}>Einloggen</Button>
   <span class="text-xs mt-6">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
 </div>
-<Modal open={openModal} on:close={() => (openModal = false)}>E-Mail und/oder Passwort falsch!</Modal>
+<Modal bind:open={openModal}>E-Mail und/oder Passwort falsch!</Modal>

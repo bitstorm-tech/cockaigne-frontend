@@ -5,6 +5,6 @@ export interface Deal {
   description: string;
   category: string;
   duration: number;
-  start: Date;
+  start: string;
   likes?: number;
 }

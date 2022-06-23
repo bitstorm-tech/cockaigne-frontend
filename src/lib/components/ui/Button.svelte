@@ -5,6 +5,7 @@
   export let loading = false;
   export let outline = false;
   export let circle = false;
+  export let error = false;
 </script>
 
 <button
@@ -13,6 +14,7 @@
   class:btn-outline={outline}
   class:btn-sm={small}
   class:btn-circle={circle}
+  class:btn-error={error}
   {type}
   {disabled}
   on:click

@@ -13,19 +13,24 @@
     deal.duration = deal.duration.toString();
 
     return {
-      props: deal
+      props: {
+        deal
+      }
     };
   }
 </script>
 
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
+  import DateTimeInput from "$lib/components/ui/DateTimeInput.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
   import type { LoadEvent } from "@sveltejs/kit";
 
   const runtimes = {
@@ -39,27 +44,25 @@
     FASHION: "Mode"
   };
 
-  let openModal = false;
+  let openErrorModal = false;
+  let openDeleteModal = false;
   let loading = false;
-  export let id: string;
-  export let start = new Date().toISOString().substring(0, 16);
-  export let title = "";
-  export let description = "";
-  export let duration = "24";
-  export let category = "FOOD";
-  $: disabled = title.length === 0 || description.length === 0;
-  $: costs = 1 + +duration / 24;
+
+  export let deal: Deal = {
+    id: -1,
+    account_id: -1,
+    start: new Date().toISOString().substring(0, 16),
+    title: "",
+    description: "",
+    duration: 24,
+    category: "FOOD"
+  };
+
+  $: disabled = deal.title.length === 0 || deal.description.length === 0;
+  $: costs = 1 + deal.duration / 24;
 
   async function save() {
     loading = true;
-    const deal = {
-      id,
-      start,
-      title,
-      description,
-      duration,
-      category
-    };
 
     const response = await fetch("/api/deals", {
       method: "post",
@@ -72,25 +75,40 @@
       goto("/login").then();
     } else {
       loading = false;
-      openModal = true;
+      openErrorModal = true;
+    }
+  }
+
+  async function del() {
+    const response = await fetch(`/api/deals/${deal.id}`, { method: "delete" });
+
+    if (response.ok) {
+      goto("/").then();
+    } else if (response.status === 403) {
+      goto("/login").then();
+    } else {
+      loading = false;
+      openErrorModal = true;
     }
   }
 </script>
 
 <div class="flex flex-col gap-4 p-4">
-  <Input label="Titel" bind:value={title} />
-  <Textarea label="Beschreibung" bind:value={description} />
-  <Select label="Kategorien" options={categories} bind:value={category} />
-  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={duration} />
-  <Input label="Start" type="datetime-local" bind:value={start} />
+  <Input label="Titel" bind:value={deal.title} />
+  <Textarea label="Beschreibung" bind:value={deal.description} />
+  <Select label="Kategorien" options={categories} bind:value={deal.category} />
+  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} />
+  <DateTimeInput label="Start" bind:value={deal.start} />
   <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
     <Button on:click={save} {disabled} {loading}>Speichern</Button>
+    {#if deal.id > 0}
+      <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
+    {/if}
     <a href="/deals/overview">
       <Button outline>Abbrechen</Button>
     </a>
   </div>
 </div>
-<Modal open={openModal} on:close={() => (openModal = false)}>
-  Ups, da ging was schief. Konnte den Deal leider nicht speichern!
-</Modal>
+<Modal bind:open={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Modal>
+<ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />

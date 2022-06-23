@@ -25,6 +25,12 @@ export async function findDealById(id: number): Promise<Deal | undefined> {
   return result.rows[0];
 }
 
+export async function findDealsByOwnerId(id: number): Promise<Deal[]> {
+  const result = await pool.query<Deal>("SELECT * FROM deal WHERE account_id = $1", [id]);
+
+  return result.rows;
+}
+
 export async function findFavoriteDealsByAccountId(id: number): Promise<Deal[]> {
   const result = await pool.query<Deal>(
     "SELECT d.* FROM deal d, favorite f WHERE d.id = f.deal_id AND f.account_id = $1",
@@ -35,15 +41,21 @@ export async function findFavoriteDealsByAccountId(id: number): Promise<Deal[]> 
 }
 
 export async function upsertDeal(deal: Deal) {
-  const query = deal.id
+  const doUpdate = deal?.id > 0;
+  const query = doUpdate
     ? "UPDATE deal SET account_id = $2, title = $3, description = $4, category = $5, duration = $6, start = $7 WHERE id = $1"
     : "INSERT INTO deal (account_id, title, description, category, duration, start) VALUES ($1, $2, $3, $4, $5, $6)";
 
   const values = [deal.account_id, deal.title, deal.description, deal.category, deal.duration, deal.start];
 
-  if (deal.id) {
+  if (doUpdate) {
     values.unshift(deal.id);
   }
 
   await pool.query<Deal>(query, values);
+}
+
+export async function deleteDealById(id: number) {
+  const query = "DELETE FROM deal WHERE id = $1";
+  await pool.query(query, [id]);
 }

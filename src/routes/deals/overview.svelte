@@ -1,6 +1,27 @@
+<script lang="ts" context="module">
+  export async function load({ fetch }: LoadEvent) {
+    const response = await fetch("/api/deals?filter=own");
+
+    if (response.ok) {
+      const deals = await response.json();
+      return {
+        props: {
+          deals
+        }
+      };
+    }
+  }
+</script>
+
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import DealsList from "$lib/components/dealer/DealsList.svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import type { LoadEvent } from "@sveltejs/kit";
+
+  export let deals: Deal[] = [];
+
   let showTabIndex = 0;
 </script>
 
@@ -21,3 +42,10 @@
     Abgelaufen
   </button>
 </div>
+{#if showTabIndex === 0}
+  <DealsList {deals} />
+{:else if showTabIndex === 1}
+  <DealsList {deals} />
+{:else}
+  <DealsList {deals} />
+{/if}

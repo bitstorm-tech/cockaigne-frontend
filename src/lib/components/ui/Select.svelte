@@ -1,7 +1,7 @@
 <script lang="ts">
   export let label: string;
-  export let options: Record<unknown, unknown>;
-  export let value;
+  export let options: Record<string | number, unknown>;
+  export let value: string | number;
 </script>
 
 <div class="form-control">

@@ -35,4 +35,4 @@
   <Button on:click={register} {disabled}>Registrieren</Button>
   <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>
-<Modal open={openModal} on:close={() => (openModal = false)}>E-Mail wurde bereits registriert!</Modal>
+<Modal bind:open={openModal}>E-Mail wurde bereits registriert!</Modal>

@@ -5,6 +5,7 @@
   export let type = "text";
   export let placeholder = "";
   export let value = "";
+  export let disabled = false;
 
   const disaptch = createEventDispatcher();
 
@@ -28,8 +29,9 @@
     {id}
     {type}
     {placeholder}
+    {value}
+    {disabled}
     on:input={setValue}
     on:keydown={keydown}
-    {value}
   />
 </div>

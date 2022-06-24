@@ -31,6 +31,8 @@
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { getNowAsIsoString } from "$lib/date.service";
+  import { getDealState } from "$lib/deal.service";
   import type { LoadEvent } from "@sveltejs/kit";
 
   const runtimes = {
@@ -51,14 +53,16 @@
   export let deal: Deal = {
     id: -1,
     account_id: -1,
-    start: new Date().toISOString().substring(0, 16),
+    start: getNowAsIsoString(),
     title: "",
     description: "",
     duration: "24",
     category: "FOOD"
   };
 
-  $: disabled = deal.title.length === 0 || deal.description.length === 0;
+  const disabled = ["active", "past"].includes(getDealState(deal));
+
+  $: disableSave = deal.title.length === 0 || deal.description.length === 0;
   $: costs = 1 + +deal.duration / 24;
 
   async function save() {
@@ -94,15 +98,15 @@
 </script>
 
 <div class="flex flex-col gap-4 p-4">
-  <Input label="Titel" bind:value={deal.title} />
-  <Textarea label="Beschreibung" bind:value={deal.description} />
-  <Select label="Kategorien" options={categories} bind:value={deal.category} />
-  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} />
-  <DateTimeInput label="Start" bind:value={deal.start} />
+  <Input label="Titel" bind:value={deal.title} {disabled} />
+  <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
+  <Select label="Kategorien" options={categories} bind:value={deal.category} {disabled} />
+  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+  <DateTimeInput label="Start" bind:value={deal.start} {disabled} />
   <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
-    <Button on:click={save} {disabled} {loading}>Speichern</Button>
-    {#if deal.id > 0}
+    <Button on:click={save} disabled={disableSave || disabled} {loading}>Speichern</Button>
+    {#if deal.id > 0 && !disabled}
       <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
     {/if}
     <a href="/deals/overview">

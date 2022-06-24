@@ -18,9 +18,12 @@
   import DealsList from "$lib/components/dealer/DealsList.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { sortDealsByState } from "$lib/deal.service";
   import type { LoadEvent } from "@sveltejs/kit";
 
   export let deals: Deal[] = [];
+
+  $: sortedDeals = sortDealsByState(deals);
 
   let showTabIndex = 0;
 </script>
@@ -43,9 +46,9 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList {deals} />
+  <DealsList deals={sortedDeals.active} />
 {:else if showTabIndex === 1}
-  <DealsList {deals} />
+  <DealsList deals={sortedDeals.future} />
 {:else}
-  <DealsList {deals} />
+  <DealsList deals={sortedDeals.past} />
 {/if}

@@ -4,7 +4,7 @@ export interface Deal {
   title: string;
   description: string;
   category: string;
-  duration: number;
+  duration: string;
   start: string;
   likes?: number;
 }

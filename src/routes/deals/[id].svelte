@@ -54,12 +54,12 @@
     start: new Date().toISOString().substring(0, 16),
     title: "",
     description: "",
-    duration: 24,
+    duration: "24",
     category: "FOOD"
   };
 
   $: disabled = deal.title.length === 0 || deal.description.length === 0;
-  $: costs = 1 + deal.duration / 24;
+  $: costs = 1 + +deal.duration / 24;
 
   async function save() {
     loading = true;

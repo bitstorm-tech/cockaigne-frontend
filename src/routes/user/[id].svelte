@@ -37,7 +37,7 @@
   export let account: Account;
   let showTabIndex = 0;
 
-  function favor(event) {
+  function favor(event: CustomEvent<Deal>) {
     const deal: Deal = event.detail;
     const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
     fetch("/api/favorites", {

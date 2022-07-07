@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+  import { LoadEvent } from "@sveltejs/kit";
+
   export async function load({ fetch }: LoadEvent) {
     const response = await fetch("/api/deals");
 
@@ -22,7 +24,6 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
-  import type { LoadEvent } from "@sveltejs/kit";
 
   let activeTab = 0;
   export let deals: Deal[] = [];
@@ -48,10 +49,8 @@
 </div>
 {#if activeTab === 0}
   <DealsList {deals} />
-{/if}
-{#if activeTab === 1}
+{:else if activeTab === 1}
   <Pictures />
-{/if}
-{#if activeTab === 2}
+{:else}
   <RatingsList />
 {/if}

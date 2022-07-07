@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+  import { LoadEvent } from "@sveltejs/kit";
+
   export async function load({ fetch }: LoadEvent) {
     const response = await fetch("/api/deals?filter=own");
 
@@ -19,7 +21,6 @@
   import Button from "$lib/components/ui/Button.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.service";
-  import type { LoadEvent } from "@sveltejs/kit";
 
   export let deals: Deal[] = [];
 
@@ -31,7 +32,7 @@
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
     <Button on:click={() => goto("/deals/new")}>Deal erstellen</Button>
-    <Button outline>Vorlagen</Button>
+    <Button on:click={() => goto("/deals/templates")} outline>Vorlagen</Button>
   </div>
 </div>
 <div class="tabs mt-6 max-h-8 mb-2">

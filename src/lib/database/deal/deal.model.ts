@@ -6,5 +6,6 @@ export interface Deal {
   category: string;
   duration: string;
   start: string;
+  template: boolean;
   likes?: number;
 }

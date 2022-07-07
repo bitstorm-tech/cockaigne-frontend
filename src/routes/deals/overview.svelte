@@ -1,5 +1,5 @@
 <script lang="ts" context="module">
-  import { LoadEvent } from "@sveltejs/kit";
+  import type { LoadEvent } from "@sveltejs/kit";
 
   export async function load({ fetch }: LoadEvent) {
     const response = await fetch("/api/deals?filter=own");

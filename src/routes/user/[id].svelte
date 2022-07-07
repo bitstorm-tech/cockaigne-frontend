@@ -1,4 +1,6 @@
 <script lang="ts" context="module">
+  import type { LoadEvent } from "@sveltejs/kit";
+
   export async function load({ fetch }: LoadEvent) {
     let response = await fetch("/api/deals");
     const deals = await response.json();
@@ -29,7 +31,6 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
-  import type { LoadEvent } from "@sveltejs/kit";
   import _ from "lodash";
 
   export let deals: Deal[] = [];

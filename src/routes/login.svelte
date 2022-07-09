@@ -46,8 +46,8 @@
 <div class="flex flex-col gap-3 mx-auto mt-10 h-full w-5/6 lg:w-1/3">
   <h1>Einloggen</h1>
   <Input label="E-Mail" type="email" bind:value={email} />
-  <Input label="Password" type="password" bind:value={password} />
+  <Input label="Password" type="password" bind:value={password} on:enter={login} />
   <Button on:click={login} {loading} {disabled}>Einloggen</Button>
   <span class="text-xs mt-6">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
 </div>
-<Modal open={openModal} on:close={() => (openModal = false)}>E-Mail und/oder Passwort falsch!</Modal>
+<Modal bind:open={openModal}>E-Mail und/oder Passwort falsch!</Modal>

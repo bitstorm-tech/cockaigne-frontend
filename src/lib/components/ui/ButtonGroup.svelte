@@ -1,7 +1,8 @@
 <script lang="ts">
-  export let options: Record<unknown, unknown>;
+  export let options: Record<string, string | number>;
   export let label: string;
-  export let value: string;
+  export let value: string | number;
+  export let disabled = false;
 
   let activeButton = value;
 </script>
@@ -16,6 +17,7 @@
         class="btn btn-sm btn-outline grow"
         class:btn-active={activeButton === key}
         on:click={() => (activeButton = value = key)}
+        {disabled}
       >
         {options[key]}
       </button>

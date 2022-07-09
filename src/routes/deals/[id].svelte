@@ -1,5 +1,7 @@
 <script lang="ts" context="module">
-  export async function load({ params, fetch }) {
+  import type { LoadEvent } from "@sveltejs/kit";
+
+  export async function load({ params, fetch }: LoadEvent) {
     if (params.id.toLowerCase() === "new") {
       return {
         props: {}
@@ -13,19 +15,27 @@
     deal.duration = deal.duration.toString();
 
     return {
-      props: deal
+      props: {
+        deal
+      }
     };
   }
 </script>
 
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
+  import Checkbox from "$lib/components/ui/Checkbox.svelte";
+  import DateTimeInput from "$lib/components/ui/DateTimeInput.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import { getNowAsIsoString } from "$lib/date.service";
+  import { getDealState } from "$lib/deal.service";
 
   const runtimes = {
     "24": "24 Stunden",
@@ -38,27 +48,36 @@
     FASHION: "Mode"
   };
 
-  let openModal = false;
+  let openErrorModal = false;
+  let openDeleteModal = false;
+  let createTemplate = false;
   let loading = false;
-  export let id: string;
-  export let start = new Date().toISOString().substring(0, 16);
-  export let title = "";
-  export let description = "";
-  export let duration = "24";
-  export let category = "FOOD";
-  $: disabled = title.length === 0 || description.length === 0;
-  $: costs = 1 + duration / 24;
+
+  export let deal: Deal = {
+    id: -1,
+    account_id: -1,
+    start: getNowAsIsoString(),
+    title: "",
+    description: "",
+    duration: "24",
+    template: false,
+    category: "FOOD"
+  };
+
+  const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
+
+  $: disableSave = deal.title.length === 0 || deal.description.length === 0;
+  $: costs = 1 + +deal.duration / 24;
 
   async function save() {
     loading = true;
-    const deal = {
-      id,
-      start,
-      title,
-      description,
-      duration,
-      category
-    };
+
+    if (deal.template) {
+      deal.template = false;
+      deal.id = -1;
+    } else {
+      deal.template = createTemplate;
+    }
 
     const response = await fetch("/api/deals", {
       method: "post",
@@ -71,25 +90,47 @@
       goto("/login").then();
     } else {
       loading = false;
-      openModal = true;
+      openErrorModal = true;
+    }
+  }
+
+  async function del() {
+    const response = await fetch(`/api/deals/${deal.id}`, { method: "delete" });
+
+    if (response.ok) {
+      goto("/").then();
+    } else if (response.status === 403) {
+      goto("/login").then();
+    } else {
+      loading = false;
+      openErrorModal = true;
     }
   }
 </script>
 
 <div class="flex flex-col gap-4 p-4">
-  <Input label="Titel" bind:value={title} />
-  <Textarea label="Beschreibung" bind:value={description} />
-  <Select label="Kategorien" options={categories} bind:value={category} />
-  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={duration} />
-  <Input label="Start" type="datetime-local" bind:value={start} />
+  <Input label="Titel" bind:value={deal.title} {disabled} />
+  <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
+  <Select label="Kategorien" options={categories} bind:value={deal.category} {disabled} />
+  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+  <DateTimeInput label="Start" bind:value={deal.start} {disabled} />
   <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
-    <Button on:click={save} {disabled} {loading}>Speichern</Button>
-    <a href="/">
+    <Button on:click={save} disabled={disableSave || disabled} {loading}>
+      {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
+    </Button>
+    {#if deal.id > 0 && !disabled}
+      <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
+    {/if}
+    <a href="/deals/overview">
       <Button outline>Abbrechen</Button>
     </a>
   </div>
+  {#if !deal.template}
+    <div class="flex justify-center">
+      <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />
+    </div>
+  {/if}
 </div>
-<Modal open={openModal} on:close={() => (openModal = false)}>
-  Ups, da ging was schief. Konnte den Deal leider nicht speichern!
-</Modal>
+<Modal bind:open={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Modal>
+<ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />

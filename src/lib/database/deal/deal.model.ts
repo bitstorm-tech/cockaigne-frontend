@@ -4,7 +4,8 @@ export interface Deal {
   title: string;
   description: string;
   category: string;
-  duration: number;
-  start: Date;
+  duration: string;
+  start: string;
+  template: boolean;
   likes?: number;
 }

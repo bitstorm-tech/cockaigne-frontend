@@ -3,6 +3,7 @@
   export let id = label?.toLowerCase();
   export let placeholder = "";
   export let value = "";
+  export let disabled = false;
 </script>
 
 <div class="form-control">
@@ -13,6 +14,7 @@
     {id}
     class="textarea textarea-bordered h-40 focus:border-primary focus:outline-none"
     {placeholder}
+    {disabled}
     bind:value
   />
 </div>

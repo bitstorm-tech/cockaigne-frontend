@@ -1,5 +1,5 @@
 import type { Deal } from "$lib/database/deal/deal.model";
-import { findAllDeals, upsertDeal } from "$lib/database/deal/deal.service";
+import { findAllDeals, findDealsByOwnerId, upsertDeal } from "$lib/database/deal/deal.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 
@@ -15,7 +15,6 @@ export async function post({ request }: RequestEvent) {
 
     const deal: Deal = await request.json();
     deal.account_id = +jwt.sub;
-    deal.start = new Date(deal.start);
 
     await upsertDeal(deal);
 
@@ -33,7 +32,6 @@ export async function post({ request }: RequestEvent) {
 export async function get({ request, url }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
-    const allDeals = url.searchParams.get("all");
 
     if (!jwt || !jwt.sub) {
       return {
@@ -41,7 +39,9 @@ export async function get({ request, url }: RequestEvent) {
       };
     }
 
-    const deals = await findAllDeals();
+    const filter = url.searchParams.get("filter")?.toLowerCase() || "";
+
+    const deals = filter.includes("own") ? await findDealsByOwnerId(+jwt.sub) : await findAllDeals();
 
     return {
       body: deals

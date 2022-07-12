@@ -1,7 +1,14 @@
 <script lang="ts" context="module">
   import type { LoadEvent } from "@sveltejs/kit";
 
-  export async function load({ fetch }: LoadEvent) {
+  export async function load({ fetch, session }: LoadEvent) {
+    if (!session.isAuthenticated) {
+      return {
+        status: 301,
+        redirect: "/"
+      };
+    }
+
     let response = await fetch("/api/deals");
     const deals = await response.json();
     response = await fetch("/api/accounts/");

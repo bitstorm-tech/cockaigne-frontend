@@ -1,11 +1,12 @@
 <script lang="ts">
-  import AddPictureButton from "$lib/components/pictures/AddPictureButton.svelte";
+  import AddPictureButton from "$lib/components/dealer/pictures/AddPictureButton.svelte";
+  import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
 
   export let pictures: string[] = [];
   let showToast = false;
 
-  export async function savePicture(event) {
+  async function savePicture(event: CustomEvent<File>) {
     showToast = true;
     const formData = new FormData();
     formData.append("file", event.detail);
@@ -17,13 +18,15 @@
     }
     showToast = false;
   }
+
+  async function deletePicture(url: string) {
+    alert("Delete picture:" + url);
+  }
 </script>
 
 <div class="flex flex-wrap">
   {#each pictures as picture}
-    <div class="p-0.5 w-1/3">
-      <img class="h-60 object-cover" src={picture} alt="Dealer Impression" />
-    </div>
+    <Picture url={picture} on:delete={() => deletePicture(picture)} />
   {/each}
 </div>
 <div class="sticky bottom-3 pr-3 w-full flex justify-end">

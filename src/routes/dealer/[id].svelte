@@ -1,7 +1,14 @@
 <script lang="ts" context="module">
   import type { LoadEvent } from "@sveltejs/kit";
 
-  export async function load({ fetch }: LoadEvent) {
+  export async function load({ fetch, session }: LoadEvent) {
+    if (!session.isAuthenticated) {
+      return {
+        status: 301,
+        redirect: "/"
+      };
+    }
+
     const response = await fetch("/api/deals");
     const responsePictures = await fetch("/api/pictures");
 
@@ -20,7 +27,7 @@
 
 <script lang="ts">
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import Pictures from "$lib/components/dealer/Pictures.svelte";
+  import Pictures from "$lib/components/dealer/pictures/Pictures.svelte";
   import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";

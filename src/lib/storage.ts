@@ -1,6 +1,6 @@
 import AWS from "aws-sdk";
 
-const bucket = process.env.DO_SPACES_BUCKET;
+const bucket = process.env.DO_SPACES_BUCKET as string;
 const baseUrl = process.env.DO_SPACES_BASE_URL;
 const endpoint = process.env.DO_SPACES_ENDPOINT as string;
 
@@ -11,8 +11,8 @@ const s3 = new AWS.S3({
 });
 
 export async function getPictureUrls(accountId: number): Promise<string[]> {
-  const objects = await s3.listObjects({ Bucket: bucket, Prefix: accountId }).promise();
-  return objects.Contents.map((object) => object.Key);
+  const objects = await s3.listObjects({ Bucket: bucket, Prefix: accountId.toString() }).promise();
+  return objects.Contents?.map((object) => `${baseUrl}/${object.Key}`) || [];
 }
 
 export async function savePicture(file: File, accountId: number): Promise<string> {
@@ -32,5 +32,5 @@ export async function savePicture(file: File, accountId: number): Promise<string
     })
     .promise();
 
-  return key;
+  return `${baseUrl}/${key}`;
 }

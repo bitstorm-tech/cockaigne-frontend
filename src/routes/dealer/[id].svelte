@@ -3,12 +3,15 @@
 
   export async function load({ fetch }: LoadEvent) {
     const response = await fetch("/api/deals");
+    const responsePictures = await fetch("/api/pictures");
 
-    if (response.ok) {
+    if (response.ok && responsePictures.ok) {
       const deals = await response.json();
+      const pictures = await responsePictures.json();
       return {
         props: {
-          deals
+          deals,
+          pictures
         }
       };
     }
@@ -27,6 +30,7 @@
 
   let activeTab = 0;
   export let deals: Deal[] = [];
+  export let pictures: string[] = [];
 </script>
 
 <ProfileHeader
@@ -50,7 +54,7 @@
 {#if activeTab === 0}
   <DealsList {deals} />
 {:else if activeTab === 1}
-  <Pictures />
+  <Pictures {pictures} />
 {:else}
   <RatingsList />
 {/if}

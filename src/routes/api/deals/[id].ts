@@ -68,7 +68,7 @@ export async function del({ params, request }: RequestEvent) {
       status: 200
     };
   } catch (error) {
-    console.error("Can't get deal:", error);
+    console.error("Can't delete deal:", error);
     return {
       status: 500
     };

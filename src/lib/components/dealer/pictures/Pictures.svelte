@@ -4,10 +4,10 @@
   import Toast from "$lib/components/ui/Toast.svelte";
 
   export let pictures: string[] = [];
-  let showToast = false;
+  let toastText = "";
 
   async function savePicture(event: CustomEvent<File>) {
-    showToast = true;
+    toastText = "Speichere Bild ...";
     const formData = new FormData();
     formData.append("file", event.detail);
 
@@ -16,11 +16,16 @@
       const picture = await response.text();
       pictures = [...pictures, picture];
     }
-    showToast = false;
+    toastText = "";
   }
 
   async function deletePicture(url: string) {
-    alert("Delete picture:" + url);
+    toastText = "Lösche Bild ...";
+    const tokens = url.split("/");
+    const filename = tokens.pop();
+    await fetch(`/api/pictures/${filename}`, { method: "delete" });
+    pictures = pictures.filter((pictureUrl) => pictureUrl !== url);
+    toastText = "";
   }
 </script>
 
@@ -32,8 +37,8 @@
 <div class="sticky bottom-3 pr-3 w-full flex justify-end">
   <AddPictureButton on:select={savePicture} />
 </div>
-{#if showToast}
+{#if toastText.length > 0}
   <div class="mx-3 sticky bottom-3">
-    <Toast>Speichere Bild ...</Toast>
+    <Toast>{toastText}</Toast>
   </div>
 {/if}

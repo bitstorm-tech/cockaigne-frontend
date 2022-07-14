@@ -18,7 +18,7 @@ export async function post({ request }: RequestEvent) {
 
     const isPasswordValid = await bcryptjs.compare(password, account?.password || "");
 
-    if (!account || !isPasswordValid) {
+    if (!account.id || !isPasswordValid) {
       return {
         status: 403
       };

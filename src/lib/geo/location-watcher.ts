@@ -1,7 +1,5 @@
 export default class LocationWatcher {
-  watcherId: number;
-
-  constructor(private callback: (position: GeolocationPosition) => void) {}
+  constructor(private callback: (position: GeolocationPosition) => void, private watcherId?: number) {}
 
   startWatching() {
     if (this.callback) {

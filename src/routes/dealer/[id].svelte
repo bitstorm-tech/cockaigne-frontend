@@ -40,7 +40,7 @@
   export let deals: Deal[] = [];
   export let pictures: string[] = [];
 
-  deals = sortDealsByState(deals).active;
+  $: activeDeals = sortDealsByState(deals).active;
 </script>
 
 <ProfileHeader
@@ -62,7 +62,7 @@
   </div>
 </div>
 {#if activeTab === 0}
-  <DealsList {deals} />
+  <DealsList deals={activeDeals} />
 {:else if activeTab === 1}
   <Pictures {pictures} />
 {:else}

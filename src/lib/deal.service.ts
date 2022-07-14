@@ -4,7 +4,7 @@ export type DealState = "past" | "future" | "active";
 
 export function getDealState(deal: Deal): DealState {
   const start = new Date(deal.start).getTime();
-  const end = start + +deal.duration * 60 * 1000;
+  const end = start + +deal.duration * 60 * 60 * 1000;
   const now = new Date().getTime();
 
   if (now < start) {

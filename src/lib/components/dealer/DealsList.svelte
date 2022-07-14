@@ -4,6 +4,7 @@
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { createEventDispatcher } from "svelte";
 
@@ -25,7 +26,9 @@
 
 <div class="flex flex-col gap-4">
   {#if deals.length === 0}
-    <span class="text-opacity-30 text-gray-200 m-auto pt-10"> Du hast keine aktiven Deals. Worauf wartest du? </span>
+    <p class="text-opacity-30 text-gray-200 m-auto pt-10 flex flex-col">
+      Du hast keine aktiven Deals. Worauf wartest du? <Link href="/deals/new" underline>Deal erstellen!</Link>
+    </p>
   {/if}
   {#each deals as deal, i}
     <DealsListItem

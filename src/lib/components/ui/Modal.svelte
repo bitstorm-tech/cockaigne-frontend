@@ -1,7 +1,7 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
 
-  export let buttons: { text: string; callback: () => {}; outline: boolean }[] = [];
+  export let buttons: { text: string; callback: () => void; outline?: boolean }[] = [];
   export let open = false;
 </script>
 

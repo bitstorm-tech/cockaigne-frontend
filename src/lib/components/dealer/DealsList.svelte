@@ -24,6 +24,9 @@
 </script>
 
 <div class="flex flex-col gap-4">
+  {#if deals.length === 0}
+    <span class="text-opacity-30 text-gray-200 m-auto pt-10"> Du hast keine aktiven Deals. Worauf wartest du? </span>
+  {/if}
   {#each deals as deal, i}
     <DealsListItem
       {deal}

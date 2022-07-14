@@ -9,7 +9,7 @@
       };
     }
 
-    const response = await fetch("/api/deals");
+    const response = await fetch("/api/deals?filter=own");
     const responsePictures = await fetch("/api/pictures");
 
     if (response.ok && responsePictures.ok) {
@@ -34,10 +34,13 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { sortDealsByState } from "$lib/deal.service";
 
   let activeTab = 0;
   export let deals: Deal[] = [];
   export let pictures: string[] = [];
+
+  deals = sortDealsByState(deals).active;
 </script>
 
 <ProfileHeader

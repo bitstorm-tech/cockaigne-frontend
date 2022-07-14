@@ -37,13 +37,15 @@
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     >
-      <div class="cursor-pointer">
-        {#if isUser}
-          <HeartIcon outline={!isFavorite(deal.id)} on:click={() => favor(deal)} />
-        {:else}
-          <GearIcon on:click={() => goto("/deals/" + deal.id.toString())} />
-        {/if}
-      </div>
+      {#if isUser}
+        <div class="cursor-pointer" on:click={() => favor(deal)}>
+          <HeartIcon outline={!isFavorite(deal.id)} />
+        </div>
+      {:else}
+        <div class="cursor-pointer" on:click={() => goto("/deals/" + deal.id.toString())}>
+          <GearIcon />
+        </div>
+      {/if}
     </DealsListItem>
   {/each}
 </div>

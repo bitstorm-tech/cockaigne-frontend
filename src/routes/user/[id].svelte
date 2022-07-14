@@ -36,13 +36,11 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
-  import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
   import _ from "lodash";
 
   export let deals: Deal[] = [];
   export let favoriteDeals: Deal[] = [];
-  export let account: Account;
   let showTabIndex = 0;
 
   function favor(event: CustomEvent<Deal>) {

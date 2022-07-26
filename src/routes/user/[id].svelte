@@ -30,7 +30,6 @@
 
 <script lang="ts">
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import FavoritesList from "$lib/components/favorites/FavoritesList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
@@ -38,12 +37,16 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import _ from "lodash";
+  import FavoriteDealsList from "$lib/components/user/FavoriteDealsList.svelte";
+  import { sortDealsByState } from "$lib/deal.service";
 
   export let deals: Deal[] = [];
   export let favoriteDeals: Deal[] = [];
   let showTabIndex = 0;
 
-  function favor(event: CustomEvent<Deal>) {
+  $: activeDeals = sortDealsByState(deals).active;
+
+  function toggleFavorite(event: CustomEvent<Deal>) {
     const deal: Deal = event.detail;
     const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
     fetch("/api/favorites", {
@@ -81,9 +84,11 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList {deals} {favoriteDeals} on:favor={favor} />
+  <DealsList deals={activeDeals} {favoriteDeals} on:favor={toggleFavorite} />
 {:else if showTabIndex === 1}
-  <FavoritesList {favoriteDeals} on:favor={favor} />
+  <div class="h-full overflow-auto">
+    <FavoriteDealsList {favoriteDeals} on:disfavor={toggleFavorite} />
+  </div>
 {:else}
   <HotList />
 {/if}

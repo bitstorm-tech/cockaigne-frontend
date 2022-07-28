@@ -2,6 +2,6 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
 </script>
 
-<ul class="h-full overflow-auto">
-  <FireIcon />
-</ul>
+<div class="h-full overflow-auto pt-10 flex justify-center">
+  <FireIcon size={6} />
+</div>

@@ -15,7 +15,7 @@
 
 <div class="flex flex-col gap-4">
   {#if favoriteDeals.length === 0}
-    <p class="text-opacity-30 text-gray-200 m-auto pt-10 flex flex-col">
+    <p class="text-opacity-30 text-gray-200 pt-10 text-center">
       Du hast noch keine favorisierten Deals. Worauf wartest du?
     </p>
   {/if}

@@ -29,7 +29,6 @@
 </script>
 
 <script lang="ts">
-  import DealsList from "$lib/components/dealer/DealsList.svelte";
   import HotList from "$lib/components/hot/HotList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
@@ -37,8 +36,9 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import _ from "lodash";
-  import FavoriteDealsList from "$lib/components/user/FavoriteDealsList.svelte";
+  import UserFavoriteDealsList from "$lib/components/user/UserFavoriteDealsList.svelte";
   import { sortDealsByState } from "$lib/deal.service";
+  import UserDealsList from "$lib/components/user/UserDealsList.svelte";
 
   export let deals: Deal[] = [];
   export let favoriteDeals: Deal[] = [];
@@ -84,10 +84,12 @@
   </button>
 </div>
 {#if showTabIndex === 0}
-  <DealsList deals={activeDeals} {favoriteDeals} on:favor={toggleFavorite} />
+  <div class="h-full overflow-auto">
+    <UserDealsList deals={activeDeals} {favoriteDeals} on:favor={toggleFavorite} />
+  </div>
 {:else if showTabIndex === 1}
   <div class="h-full overflow-auto">
-    <FavoriteDealsList {favoriteDeals} on:disfavor={toggleFavorite} />
+    <UserFavoriteDealsList {favoriteDeals} on:disfavor={toggleFavorite} />
   </div>
 {:else}
   <HotList />

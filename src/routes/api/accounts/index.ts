@@ -1,9 +1,9 @@
 import type { Account } from "$lib/database/account/account.model";
+import { findAccountByEmail, findAccountById, insertAccount } from "$lib/database/account/account.service";
 import type { Point } from "$lib/geo/geo.types";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
-import { findAccountByEmail, findAccountById, insertAccount } from "../../../lib/database/account/account.service";
 
 export async function get({ request }: RequestEvent) {
   try {

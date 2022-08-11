@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+
   export let label: string;
   export let id = label?.toLowerCase();
   export let type = "text";
@@ -7,7 +8,7 @@
   export let value = "";
   export let disabled = false;
 
-  const disaptch = createEventDispatcher();
+  const dispatch = createEventDispatcher();
 
   function setValue(event) {
     value = event.target.value;
@@ -15,7 +16,7 @@
 
   function keydown(event: KeyboardEvent) {
     if (event.code === "Enter") {
-      disaptch("enter");
+      dispatch("enter");
     }
   }
 </script>

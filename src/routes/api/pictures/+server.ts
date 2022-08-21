@@ -1,0 +1,41 @@
+import { extractJwt } from "$lib/jwt.service";
+import { getPictureUrls, savePicture } from "$lib/storage";
+import type { RequestEvent } from "@sveltejs/kit";
+import { errorResponse, response, unauthorizedResponse } from "../../../lib/http.service";
+
+export async function GET({ request }: RequestEvent) {
+  try {
+    const jwt = await extractJwt(request);
+
+    if (!jwt || !jwt.sub) {
+      return unauthorizedResponse();
+    }
+
+    const pictureUrls = await getPictureUrls(+jwt.sub);
+
+    return response(pictureUrls);
+  } catch (error) {
+    console.error("Can't get pictures:", error);
+    return errorResponse();
+  }
+}
+
+export async function POST({ request }: RequestEvent) {
+  try {
+    const jwt = await extractJwt(request);
+
+    if (!jwt || !jwt.sub) {
+      return unauthorizedResponse();
+    }
+
+    const formData = await request.formData();
+    const file = formData.get("file") as File;
+
+    const pictureUrl = await savePicture(file, +jwt.sub);
+
+    return response(pictureUrl);
+  } catch (error) {
+    console.error("Can't post picture:", error);
+    return errorResponse();
+  }
+}

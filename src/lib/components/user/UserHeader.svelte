@@ -12,7 +12,7 @@
   <div class="flex justify-around">
     <div class="flex flex-col pt-2 gap-2">
       <span class="text-2xl">{name}</span>
-      <span class="text-sm"><b>Dein Standort</b></span>
+      <span class="text-sm"><b>Dein Standort</b> <a href="/map">(ändern)</a></span>
       <span class="flex gap-2"><LocationIcon size="1" /><i class="text-xs">{street}, {city}</i></span>
     </div>
     <div class="flex flex-col items-center gap-2 -mt-6 ">

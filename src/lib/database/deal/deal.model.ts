@@ -1,3 +1,5 @@
+import { getNowAsIsoString } from "../../date.service";
+
 export interface Deal {
   id: number;
   account_id: number;
@@ -8,4 +10,17 @@ export interface Deal {
   start: string;
   template: boolean;
   likes?: number;
+}
+
+export function newDeal(): Deal {
+  return {
+    id: -1,
+    account_id: -1,
+    start: getNowAsIsoString(),
+    title: "",
+    description: "",
+    duration: "24",
+    template: false,
+    category: "FOOD"
+  };
 }

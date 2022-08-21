@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { session } from "$app/stores";
+  import { page } from "$app/stores";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
 
   export let deal: Deal;
   export let showDetails = false;
 
-  const isUser = !$session.isDealer;
+  const isUser = !$page.data.user.isDealer;
 </script>
 
 <div class="flex gap-2 pr-2 items-center">

@@ -15,16 +15,17 @@ export async function extractJwt(requestOrResponse: Request | Response): Promise
   try {
     const headerKey = requestOrResponse instanceof Request ? "cookie" : "set-cookie";
     const cookie = requestOrResponse.headers.get(headerKey);
-    const jwtString = cookie
-      ?.split(";")
-      ?.find((token) => token.trim().startsWith("jwt="))
-      ?.split("=")[1];
+    const jwtString =
+      cookie
+        ?.split(";")
+        ?.find((token) => token.trim().startsWith("jwt="))
+        ?.split("=")[1] || "";
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET);
     const jwt = await jose.jwtVerify(jwtString, secret);
 
     return jwt?.payload;
   } catch (error) {
-    console.error("[jwt.service.ts] JWT verification failed:", error.toString());
+    console.error("[jwt.service.ts] JWT verification failed:", error);
   }
 }

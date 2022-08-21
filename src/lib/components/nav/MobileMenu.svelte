@@ -4,24 +4,18 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
-  import { session } from "$app/stores";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
 
   async function logout() {
     await fetch("/api/logout");
-    session.update((oldSession) => {
-      return {
-        ...oldSession,
-        isAuthenticated: false
-      };
-    });
     goto("/").then();
   }
 </script>
 
 <div class="flex flex-col gap-8 p-4 z-50 bg-base-300">
-  {#if $session.isAuthenticated}
+  {#if $page.data.user.isAuthenticated}
     <a href="/privacy" class="h-8 flex items-center gap-3"><TagIcon /> Schnäppchen</a>
     <a href="/map" class="h-8 flex items-center gap-3"><MapIcon /> Umgebungskarte</a>
     <a href="/test" class="h-8 flex items-center gap-3"><FireIcon /> Test</a>

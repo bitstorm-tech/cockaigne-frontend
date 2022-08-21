@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { session } from "$app/stores";
+  import { page } from "$app/stores";
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
@@ -12,7 +12,7 @@
 
   export let deals: Deal[] = [];
   export let favoriteDeals: Deal[] = [];
-  const isUser = !$session.isDealer;
+  const isUser = !$page.data.user.isDealer;
   let openDetail = -1;
 
   function favor(deal: Deal) {

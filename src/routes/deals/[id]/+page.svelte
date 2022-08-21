@@ -1,16 +1,16 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import ConfirmDeleteDealModal from "../../../lib/components/dealer/ConfirmDeleteDealModal.svelte";
-  import Button from "../../../lib/components/ui/Button.svelte";
-  import ButtonGroup from "../../../lib/components/ui/ButtonGroup.svelte";
-  import Checkbox from "../../../lib/components/ui/Checkbox.svelte";
-  import DateTimeInput from "../../../lib/components/ui/DateTimeInput.svelte";
-  import Input from "../../../lib/components/ui/Input.svelte";
-  import Modal from "../../../lib/components/ui/Modal.svelte";
-  import Select from "../../../lib/components/ui/Select.svelte";
-  import Textarea from "../../../lib/components/ui/Textarea.svelte";
-  import type { Deal } from "../../../lib/database/deal/deal.model";
-  import { getDealState } from "../../../lib/deal.service";
+  import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
+  import Checkbox from "$lib/components/ui/Checkbox.svelte";
+  import DateTimeInput from "$lib/components/ui/DateTimeInput.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import Modal from "$lib/components/ui/Modal.svelte";
+  import Select from "$lib/components/ui/Select.svelte";
+  import Textarea from "$lib/components/ui/Textarea.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import { getDealState } from "$lib/deal.service";
 
   export let data;
 

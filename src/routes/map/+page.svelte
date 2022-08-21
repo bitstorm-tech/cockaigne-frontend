@@ -1,11 +1,11 @@
 <script lang="ts">
   import { browser } from "$app/env";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Checkbox from "$lib/components/ui/Checkbox.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import LocationWatcher from "$lib/geo/location-watcher";
   import "leaflet/dist/leaflet.css";
   import { onMount } from "svelte";
-  import Button from "../../lib/components/ui/Button.svelte";
-  import Checkbox from "../../lib/components/ui/Checkbox.svelte";
-  import Input from "../../lib/components/ui/Input.svelte";
-  import LocationWatcher from "../../lib/geo/location-watcher";
 
   let mapReady = true;
   let useCurrentLocation = false;

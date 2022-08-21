@@ -1,8 +1,8 @@
+import { findAccountByEmail } from "$lib/database/account/account.service";
+import { errorResponse, forbiddenResponse } from "$lib/http.service";
+import { createJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
-import * as bcryptjs from "bcryptjs";
-import { findAccountByEmail } from "../../../lib/database/account/account.service";
-import { errorResponse, forbiddenResponse } from "../../../lib/http.service";
-import { createJwt } from "../../../lib/jwt.service";
+import bcryptjs from "bcryptjs";
 
 export async function POST({ request }: RequestEvent) {
   try {

@@ -1,7 +1,7 @@
+import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import { getPictureUrls, savePicture } from "$lib/storage";
 import type { RequestEvent } from "@sveltejs/kit";
-import { errorResponse, response, unauthorizedResponse } from "../../../lib/http.service";
 
 export async function GET({ request }: RequestEvent) {
   try {

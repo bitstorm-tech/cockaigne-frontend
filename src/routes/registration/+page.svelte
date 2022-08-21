@@ -1,11 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Button from "../../lib/components/ui/Button.svelte";
-  import Checkbox from "../../lib/components/ui/Checkbox.svelte";
-  import Input from "../../lib/components/ui/Input.svelte";
-  import Link from "../../lib/components/ui/Link.svelte";
-  import Modal from "../../lib/components/ui/Modal.svelte";
-  import type { Account } from "../../lib/database/account/account.model";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Checkbox from "$lib/components/ui/Checkbox.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
+  import Modal from "$lib/components/ui/Modal.svelte";
+  import type { Account } from "$lib/database/account/account.model";
 
   const account = {} as Account;
   let openModal = false;

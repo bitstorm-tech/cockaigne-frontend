@@ -1,5 +1,5 @@
+import { redirectToLogin } from "$lib/http.service";
 import type { LoadEvent } from "@sveltejs/kit";
-import { redirectToLogin } from "../../../lib/http.service";
 
 export async function load({ fetch }: LoadEvent) {
   const responseDeals = await fetch("/api/deals?filter=own");

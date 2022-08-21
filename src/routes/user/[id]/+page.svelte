@@ -1,14 +1,14 @@
 <script lang="ts">
+  import HotList from "$lib/components/hot/HotList.svelte";
+  import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
+  import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
+  import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import UserDealsList from "$lib/components/user/UserDealsList.svelte";
+  import UserFavoriteDealsList from "$lib/components/user/UserFavoriteDealsList.svelte";
+  import UserHeader from "$lib/components/user/UserHeader.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import { sortDealsByState } from "$lib/deal.service";
   import _ from "lodash";
-  import HotList from "../../../lib/components/hot/HotList.svelte";
-  import FireIcon from "../../../lib/components/ui/icons/FireIcon.svelte";
-  import HeartIcon from "../../../lib/components/ui/icons/HeartIcon.svelte";
-  import StarIcon from "../../../lib/components/ui/icons/StarIcon.svelte";
-  import UserDealsList from "../../../lib/components/user/UserDealsList.svelte";
-  import UserFavoriteDealsList from "../../../lib/components/user/UserFavoriteDealsList.svelte";
-  import UserHeader from "../../../lib/components/user/UserHeader.svelte";
-  import type { Deal } from "../../../lib/database/deal/deal.model";
-  import { sortDealsByState } from "../../../lib/deal.service";
 
   export let data;
   let deals: Deal[] = data.deals;

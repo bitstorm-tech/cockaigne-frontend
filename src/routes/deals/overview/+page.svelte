@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import DealsList from "../../../lib/components/dealer/DealsList.svelte";
-  import Button from "../../../lib/components/ui/Button.svelte";
-  import type { Deal } from "../../../lib/database/deal/deal.model";
-  import { sortDealsByState } from "../../../lib/deal.service";
+  import DealsList from "$lib/components/dealer/DealsList.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
+  import { sortDealsByState } from "$lib/deal.service";
 
   export let data;
   const deals: Deal[] = data.deals;

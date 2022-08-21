@@ -4,9 +4,9 @@ import {
   getLikeCountByDealId,
   insertLike
 } from "$lib/database/like/like.service";
+import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
-import { errorResponse, response, unauthorizedResponse } from "../../../../lib/http.service";
 
 export async function POST({ request, url }: RequestEvent) {
   try {

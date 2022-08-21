@@ -1,16 +1,10 @@
 import type { Account } from "$lib/database/account/account.model";
 import { findAccountByEmail, findAccountById, insertAccount } from "$lib/database/account/account.service";
 import type { Point } from "$lib/geo/geo.types";
+import { errorResponse, forbiddenResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
-import {
-  errorResponse,
-  forbiddenResponse,
-  notFoundResponse,
-  response,
-  unauthorizedResponse
-} from "../../../lib/http.service";
 
 export async function GET({ request }: RequestEvent) {
   try {

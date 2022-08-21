@@ -1,9 +1,9 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import Button from "../../lib/components/ui/Button.svelte";
-  import Input from "../../lib/components/ui/Input.svelte";
-  import Link from "../../lib/components/ui/Link.svelte";
-  import Modal from "../../lib/components/ui/Modal.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
+  import Modal from "$lib/components/ui/Modal.svelte";
 
   let email = "";
   let password = "";

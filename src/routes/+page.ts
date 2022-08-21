@@ -1,5 +1,5 @@
+import { redirectTo, redirectToLogin } from "$lib/http.service";
 import type { LoadEvent } from "@sveltejs/kit";
-import { redirectTo, redirectToLogin } from "../lib/http.service";
 
 export async function load({ parent }: LoadEvent) {
   const { user } = await parent();

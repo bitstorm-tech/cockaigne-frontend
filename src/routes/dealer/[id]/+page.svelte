@@ -7,8 +7,8 @@
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.service";
-  import type { Deal } from "../../../lib/database/deal/deal.model";
 
   export let data;
   let activeTab = 0;

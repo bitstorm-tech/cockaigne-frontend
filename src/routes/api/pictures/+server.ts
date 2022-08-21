@@ -3,15 +3,10 @@ import { extractJwt } from "$lib/jwt.service";
 import { getPictureUrls, savePicture } from "$lib/storage";
 import type { RequestEvent } from "@sveltejs/kit";
 
-export async function GET({ request }: RequestEvent) {
+export async function GET({ url }: RequestEvent) {
   try {
-    const jwt = await extractJwt(request);
-
-    if (!jwt || !jwt.sub) {
-      return unauthorizedResponse();
-    }
-
-    const pictureUrls = await getPictureUrls(+jwt.sub);
+    const dealer = url.searchParams.get("dealer") || -1;
+    const pictureUrls = await getPictureUrls(+dealer);
 
     return response(pictureUrls);
   } catch (error) {

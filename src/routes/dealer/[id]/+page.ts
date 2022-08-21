@@ -1,9 +1,10 @@
 import { redirectToLogin } from "$lib/http.service";
 import type { LoadEvent } from "@sveltejs/kit";
 
-export async function load({ fetch }: LoadEvent) {
-  const responseDeals = await fetch("/api/deals?filter=own");
-  const responsePictures = await fetch("/api/pictures");
+export async function load({ fetch, params }: LoadEvent) {
+  const id = params.id;
+  const responseDeals = await fetch("/api/deals?dealer=" + id);
+  const responsePictures = await fetch("/api/pictures?dealer=" + id);
 
   if (responseDeals.ok && responsePictures.ok) {
     const deals = await responseDeals.json();

@@ -26,6 +26,6 @@ export async function extractJwt(requestOrResponse: Request | Response): Promise
 
     return jwt?.payload;
   } catch (error) {
-    console.error("[jwt.service.ts] JWT verification failed:", error);
+    console.error("[jwt.service.ts] JWT verification failed");
   }
 }

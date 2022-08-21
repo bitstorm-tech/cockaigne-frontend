@@ -24,17 +24,10 @@ export async function POST({ request }: RequestEvent) {
   }
 }
 
-export async function GET({ request, url }: RequestEvent) {
+export async function GET({ url }: RequestEvent) {
   try {
-    const jwt = await extractJwt(request);
-
-    if (!jwt || !jwt.sub) {
-      return unauthorizedResponse();
-    }
-
-    const filter = url.searchParams.get("filter")?.toLowerCase() || "";
-
-    const deals = filter.includes("own") ? await findDealsByOwnerId(+jwt.sub) : await findAllDeals();
+    const dealer = url.searchParams.get("dealer")?.toLowerCase();
+    const deals = dealer ? await findDealsByOwnerId(+dealer) : await findAllDeals();
 
     return response(deals);
   } catch (error) {

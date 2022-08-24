@@ -16,6 +16,9 @@ export default ({ mode }) => {
     process.env.JWT_SECRET = env.VITE_JWT_SECRET;
   }
   return defineConfig({
-    plugins: [sveltekit()]
+    plugins: [sveltekit()],
+    server: {
+      port: 3000
+    }
   });
 };

@@ -1,0 +1,33 @@
+INSERT INTO "account" (email, password, dealer)
+VALUES ('user', '$2a$10$EctccvH3y7zRWOkgkRS5VeUpjshqwqVV7KbWpCHl8N4ahfQBGi8l2', false),
+       ('dealer', '$2a$10$t2.y674TNhoWlypS/FJqx.HRvskvQQ3uHF5jYthJAB4yDobnK9/42', true);
+
+INSERT INTO deal (account_id, title, description, "category", "duration", "start", "template", created)
+VALUES (${dealer_id}, 'Jetzt!', 'Läuft gerade ...', 'TECH', 72, '2022-06-24 20:06:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Hamburger Hill',
+        'Super leckere Jumbo-Hamburger mit einer deftigen Portion Pommes. Wenn ihr zwei Burger bestellt, bekommt ihr die Pommes um sonst! Ja, echt jetzt!!',
+        'FOOD', 72, '2026-12-24 19:00:00+01', false, '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Template123', 'jakdlfs', 'FOOD', 24, '2022-07-08 04:42:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Template123', 'jakdlfs', 'FOOD', 24, '2022-07-08 04:42:00+02', true,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Vorlage nun echt', 'Vorlage Beschreibung!!!', 'FOOD', 72, '2022-06-29 21:53:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Template123 neu1', 'jakdlfs', 'FOOD', 72, '2022-07-08 02:42:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Template123 neu2', 'jakdlfs', 'FOOD', 24, '2022-07-08 02:42:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, '111', '222', 'FOOD', 72, '2022-07-17 10:00:00+02', false, '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Weber intensiv Grillkurs Berlin ', 'Test', 'FOOD', 48, '2022-07-15 04:36:00+02', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Weber intensiv Grillkurs Berlin ', 'Test', 'FOOD', 48, '2022-07-15 04:36:00+02', true,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Deal-A', 'NEU', 'FASHION', 24, '2022-07-17 11:00:00+02', false, '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Deal-A', 'NEU', 'FASHION', 24, '2022-07-17 11:00:00+02', true, '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, '123', '00000', 'FOOD', 24, '2022-07-23 13:04:00+02', false, '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Ist geplant für weit in der Zukunft', '...immer noch nicht...', 'TECH', 72,
+        '2030-01-01 14:37:00+01', false,
+        '2022-08-24 22:46:16.282267'),
+       (${dealer_id}, 'Läuft gerade', '...und zwar jetzt!', 'FOOD', 72, '2022-08-21 13:01:00+02', false,
+        '2022-08-24 22:46:16.282267');

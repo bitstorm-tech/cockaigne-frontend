@@ -27,7 +27,7 @@ export async function findAccountById(id: number): Promise<Account | undefined> 
 
 export async function insertAccount(account: Account, location?: Point): Promise<number | undefined> {
   const query = account.dealer
-    ? "INSERT INTO account (email, password, dealer, companyname, street, housenumber, city, zip, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, ST_POINT($10, $11)) RETURNING id"
+    ? "INSERT INTO account (email, password, dealer, company_name, street, house_number, city, zip, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, ST_POINT($10, $11)) RETURNING id"
     : "INSERT INTO account (email, password, dealer) VALUES ($1, $2, $3) RETURNING id";
 
   const values = account.dealer

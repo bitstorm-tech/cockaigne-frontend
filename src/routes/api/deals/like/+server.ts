@@ -29,7 +29,7 @@ export async function POST({ request, url }: RequestEvent) {
     const like = await findLikeByAccountIdAndDealId(accountId, dealId);
 
     if (like) {
-      await deleteLikeById(like.id);
+      await deleteLikeById(accountId, dealId);
     } else {
       await insertLike(accountId, dealId);
     }

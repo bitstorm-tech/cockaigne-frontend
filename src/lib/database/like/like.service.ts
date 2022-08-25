@@ -22,9 +22,9 @@ export async function findLikeByAccountIdAndDealId(accountId: number, dealId: nu
   return result.rows[0];
 }
 
-export async function deleteLikeById(id: number) {
-  const query = `DELETE FROM "like" WHERE id = $1`;
-  const values = [id];
+export async function deleteLikeById(accountId: number, dealId: number) {
+  const query = `DELETE FROM "like" WHERE account_id = $1 AND deal_id = $2`;
+  const values = [accountId, dealId];
 
   await pool.query(query, values);
 }

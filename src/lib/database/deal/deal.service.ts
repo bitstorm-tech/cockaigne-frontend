@@ -1,4 +1,5 @@
 import pool from "$lib/database/pg";
+import type { Dealer } from "../dealer/dealer.model";
 import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal } from "./deal.model";
 
@@ -34,9 +35,17 @@ export async function findDealsByOwnerId(id: number): Promise<Deal[]> {
 
 export async function findFavoriteDealsByAccountId(id: number): Promise<Deal[]> {
   const result = await pool.query<Deal>(
-    "SELECT d.* FROM deal d, favorite f WHERE d.id = f.deal_id AND f.account_id = $1",
+    "SELECT d.* FROM deal d, favorite_deal f WHERE d.id = f.deal_id AND f.account_id = $1",
     [id]
   );
+
+  return result.rows;
+}
+
+export async function findFavoriteDealersByAccountId(id: number): Promise<Dealer[]> {
+  const query =
+    "SELECT a.id, a.company_name FROM account a, favorite_dealer f WHERE a.id = f.dealer_id AND f.account_id = $1";
+  const result = await pool.query<Dealer>(query, [id]);
 
   return result.rows;
 }

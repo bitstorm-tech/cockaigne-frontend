@@ -38,7 +38,7 @@ CREATE TABLE favorite_deal
 CREATE TABLE favorite_dealer
 (
     account_id integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    dealer_id  integer NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    dealer_id  integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "favorite_dealer_pkey" UNIQUE (account_id, dealer_id)
 );
 

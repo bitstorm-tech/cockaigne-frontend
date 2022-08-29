@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
+  import { onDestroy, onMount } from "svelte";
 
   let watchId: number;
   let address: string;

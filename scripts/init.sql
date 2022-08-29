@@ -1,18 +1,19 @@
 CREATE TABLE IF NOT EXISTS account
 (
-    id           integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    email        text      NOT NULL,
-    "password"   text      NOT NULL,
-    dealer       bool      NOT NULL DEFAULT false,
-    street       text      NULL,
-    company_name text      NULL,
-    house_number text      NULL,
-    city         text      NULL,
-    zip          integer   NULL,
-    phone        text      NULL,
-    created      timestamp NULL,
-    last_login   timestamp NULL,
-    "location"   geometry  NULL
+    id                   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    email                text      NOT NULL,
+    "password"           text      NOT NULL,
+    dealer               bool      NOT NULL DEFAULT false,
+    street               text      NULL,
+    company_name         text      NULL,
+    house_number         text      NULL,
+    city                 text      NULL,
+    zip                  integer   NULL,
+    phone                text      NULL,
+    created              timestamp NULL,
+    last_login           timestamp NULL,
+    use_current_location bool      NULL     DEFAULT false,
+    "location"           geometry  NULL
 );
 
 CREATE TABLE deal

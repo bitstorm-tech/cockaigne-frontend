@@ -7,6 +7,7 @@
   import Toast from "$lib/components/ui/Toast.svelte";
 
   export let pictures: string[] = [];
+
   let toastText = "";
   let openDeleteModal = false;
   let openZoomModal = false;

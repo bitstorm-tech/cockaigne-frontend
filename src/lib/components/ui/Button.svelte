@@ -19,5 +19,5 @@
   {disabled}
   on:click
 >
-  <slot />
+  {#if !loading}<slot />{/if}
 </button>

@@ -1,6 +1,8 @@
-import { browser } from "$app/env";
+import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
 import { redirect } from "@sveltejs/kit";
+import type { Account } from "./database/account/account.model";
+import { createJwt } from "./jwt.service";
 
 export function response(bodyData?: unknown, status = 200): Response {
   const body = bodyData ? JSON.stringify(bodyData) : null;
@@ -29,6 +31,19 @@ export function errorResponse(text = ""): Response {
   return new Response(null, options);
 }
 
+export async function jwtCookieResponse(account: Account): Promise<Response> {
+  if (!account.id) {
+    console.error("[http.service.ts] Can't create jwtCookieResponse -> no account ID available");
+    return response();
+  }
+
+  const jwt = await createJwt(account.id.toString(), { isDealer: account.dealer });
+  const headers = new Headers();
+  headers.append("set-cookie", `jwt=${jwt}; SameSite=Lax; Path=/; HttpOnly`);
+
+  return new Response(account.id.toString(), { headers });
+}
+
 export function redirectToLogin() {
   if (browser) {
     goto("/login").then();
@@ -39,7 +54,6 @@ export function redirectToLogin() {
 
 export function redirectTo(url: string, status = 302) {
   if (browser) {
-    console.log("GOTO:", url);
     goto(url).then();
   } else {
     throw redirect(status, url);

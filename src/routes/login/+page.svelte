@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { goto, invalidate } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
@@ -20,20 +20,13 @@
     });
 
     if (response.ok) {
+      await invalidate(); // needed to update $page.data.user with actual user data
       const body = await response.json();
-      // $session; // workaround: if this is the first page loaded, we need to do an initial subscribe to the session
-      // session.update(() => {
-      //   return {
-      //     isAuthenticated: true,
-      //     isDealer: body.isDealer,
-      //     id: body.id
-      //   };
-      // });
 
       if (body.isDealer) {
         goto("/dealer/" + body.id).then();
       } else {
-        goto("/user/" + body.id).then();
+        goto("/user/").then();
       }
     } else {
       openModal = true;

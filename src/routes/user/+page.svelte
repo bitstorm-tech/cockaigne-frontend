@@ -6,6 +6,7 @@
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import UserFavoriteDealsList from "$lib/components/user/UserFavoriteDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
+  import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByState } from "$lib/deal.service";
@@ -15,6 +16,7 @@
   let deals: Deal[] = data?.deals;
   let favoriteDeals: Deal[] = data?.favoriteDeals;
   let favoriteDealers: Dealer[] = data?.favoriteDealers;
+  let account: Account = data?.account;
   let showTabIndex = 0;
 
   $: activeDeals = sortDealsByState(deals).active;
@@ -39,7 +41,7 @@
 </script>
 
 <UserHeader
-  name="Jane Doe"
+  name={account.email}
   street="Oxford Way"
   city="Beverly Hills, Los Angeles"
   imageUrl="/images/dummy/user-profile.svg"

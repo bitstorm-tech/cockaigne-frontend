@@ -15,17 +15,17 @@
     "postinstall": "node scripts/fix-pg-native.js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.157.0",
+    "@aws-sdk/client-s3": "3.159.0",
     "bcryptjs": "2.4.3",
     "daisyui": "2.24.0",
-    "jose": "4.9.0",
+    "jose": "4.9.1",
     "leaflet": "1.8.0",
     "lodash": "4.17.21",
     "pg": "8.8.0"
   },
   "devDependencies": {
-    "@sveltejs/adapter-vercel": "1.0.0-next.68",
-    "@sveltejs/kit": "1.0.0-next.442",
+    "@sveltejs/adapter-vercel": "1.0.0-next.71",
+    "@sveltejs/kit": "1.0.0-next.448",
     "@types/bcryptjs": "2.4.2",
     "@types/leaflet": "1.7.11",
     "@types/lodash": "4.14.184",
@@ -41,7 +41,7 @@
     "prettier": "2.7.1",
     "prettier-plugin-svelte": "2.7.0",
     "svelte": "3.49.0",
-    "svelte-check": "2.8.1",
+    "svelte-check": "2.9.0",
     "svelte-preprocess": "4.10.7",
     "tailwindcss": "3.1.8",
     "tslib": "2.4.0",

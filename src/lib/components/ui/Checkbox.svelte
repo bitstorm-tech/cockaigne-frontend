@@ -7,7 +7,7 @@
 
 <div class="inline-flex">
   <label class="label cursor-pointer gap-2 px-0">
-    <input {id} class="checkbox" type="checkbox" bind:checked {disabled} />
+    <input {id} class="checkbox" type="checkbox" bind:checked {disabled} on:change />
     <span class="label-text">{label}</span>
   </label>
 </div>

@@ -1,7 +1,14 @@
 import type { Account } from "$lib/database/account/account.model";
 import { findAccountByEmail, findAccountById, insertAccount } from "$lib/database/account/account.service";
-import type { Point } from "$lib/geo/geo.types";
-import { errorResponse, forbiddenResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.service";
+import type { Position } from "$lib/geo/geo.types";
+import {
+  errorResponse,
+  forbiddenResponse,
+  jwtCookieResponse,
+  notFoundResponse,
+  response,
+  unauthorizedResponse
+} from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
@@ -41,7 +48,7 @@ export async function POST({ request }: RequestEvent) {
       return forbiddenResponse();
     }
 
-    const point = {} as Point;
+    const position = {} as Position;
     if (account.dealer) {
       const geoResponse = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&street=${account.houseNumber} ${account.street}&city=${account.city}&postalcode=${account.zip}`
@@ -50,20 +57,42 @@ export async function POST({ request }: RequestEvent) {
       const geoInformation = await geoResponse.json();
 
       if (geoInformation.length === 0) {
+        console.error(
+          "Can't find location for address:",
+          account.street,
+          account.houseNumber,
+          account.zip,
+          account.city
+        );
         // TODO proper handling
         return response(null, 400);
       }
 
-      point.x = geoInformation[0].lon;
-      point.y = geoInformation[0].lat;
+      position.latitude = geoInformation[0].lat;
+      position.longitude = geoInformation[0].lon;
     }
 
     account.password = bcryptjs.hashSync(account.password);
+    account.id = await insertAccount(account, position);
 
-    const id = await insertAccount(account, point);
-    return response(id);
+    return await jwtCookieResponse(account);
   } catch (error) {
     console.error("Error during post account:", error);
+    return errorResponse();
+  }
+}
+
+export async function PATCH({ request }: RequestEvent) {
+  try {
+    const jwt = await extractJwt(request);
+
+    if (!jwt || !jwt.sub) {
+      return unauthorizedResponse();
+    }
+
+    return response();
+  } catch (error) {
+    console.log("Can't patch account:", error);
     return errorResponse();
   }
 }

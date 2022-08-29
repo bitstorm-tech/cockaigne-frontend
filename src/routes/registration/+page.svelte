@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
+  import { goto, invalidate } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
@@ -19,8 +19,9 @@
     });
 
     if (response.ok) {
+      await invalidate();
       const id = await response.text();
-      goto(account.dealer ? `/dealer/${id}` : `/user/${id}`).then();
+      goto(account.dealer ? `/dealer/${id}` : "/user/").then();
     } else {
       openModal = true;
     }

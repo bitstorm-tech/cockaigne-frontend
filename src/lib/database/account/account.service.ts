@@ -1,5 +1,5 @@
 import pool from "$lib/database/pg";
-import type { Point } from "../../geo/geo.types";
+import type { Position } from "../../geo/geo.types";
 import type { Account } from "./account.model";
 
 export async function findAccountByEmail(email: string): Promise<Account | undefined> {
@@ -25,7 +25,7 @@ export async function findAccountById(id: number): Promise<Account | undefined> 
   return result.rows[0];
 }
 
-export async function insertAccount(account: Account, location?: Point): Promise<number | undefined> {
+export async function insertAccount(account: Account, position?: Position): Promise<number | undefined> {
   const query = account.dealer
     ? "INSERT INTO account (email, password, dealer, company_name, street, house_number, city, zip, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, ST_POINT($10, $11)) RETURNING id"
     : "INSERT INTO account (email, password, dealer) VALUES ($1, $2, $3) RETURNING id";
@@ -41,8 +41,8 @@ export async function insertAccount(account: Account, location?: Point): Promise
         account.city,
         account.zip,
         account.phone,
-        location?.x,
-        location?.y
+        position?.longitude,
+        position?.latitude
       ]
     : [account.email, account.password, account.dealer];
 

@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { browser } from "$app/env";
+  import { browser } from "$app/environment";
   import Button from "$lib/components/ui/Button.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
+  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import Input from "$lib/components/ui/Input.svelte";
+  import { getAddress } from "$lib/geo/address.service";
   import LocationWatcher from "$lib/geo/location-watcher";
   import "leaflet/dist/leaflet.css";
   import { onMount } from "svelte";
 
-  let mapReady = true;
   let useCurrentLocation = false;
   let address = "";
   let L;
   let map;
+  let searchCurrentAddress = false;
+  let latitude: number;
+  let longitude: number;
 
   onMount(async () => {
     if (!browser) {
@@ -20,12 +24,12 @@
 
     L = await import("leaflet");
     const position = await LocationWatcher.getPosition();
-    const longitude = position.coords.longitude;
-    const latitude = position.coords.latitude;
-    map = L.map("map").setView([latitude, longitude], 20);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-      .addTo(map)
-      .on("load", () => (mapReady = true));
+    latitude = position.coords.latitude;
+    longitude = position.coords.longitude;
+    if (!map || !L) {
+      map = L.map("map").setView([latitude, longitude], 19);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    }
   });
 
   async function search() {
@@ -34,42 +38,60 @@
 
     if (response.ok) {
       const addresses = await response.json();
-      console.log(addresses);
       if (addresses.length === 0) {
         return;
       }
 
-      const longitude = addresses[0].lon;
-      const latitude = addresses[0].lat;
-      map?.setView([latitude, longitude], 20);
+      latitude = addresses[0].lat;
+      longitude = addresses[0].lon;
+      jumpToCurrentLocation();
     }
   }
 
-  async function searchCurrentLocation() {
+  async function searchCurrentLocation(event) {
+    useCurrentLocation = event.target.checked;
+    address = "";
+
     if (useCurrentLocation) {
-      console.log("---");
+      searchCurrentAddress = true;
       const position = await LocationWatcher.getPosition();
-      const longitude = position.coords.longitude;
-      const latitude = position.coords.latitude;
-      map?.setView([latitude, longitude], 20);
+      latitude = position.coords.latitude;
+      longitude = position.coords.longitude;
+      address = await getAddress(latitude, longitude);
+      jumpToCurrentLocation();
+      searchCurrentAddress = false;
     }
+  }
+
+  function jumpToCurrentLocation() {
+    map?.flyTo([latitude, longitude], 17, { duration: 1.5 });
   }
 </script>
 
 <div class="flex flex-col m-2">
-  {useCurrentLocation}
-  <div on:click={searchCurrentLocation}>
-    <Checkbox label="Aktuellen Standort verwenden" bind:checked={useCurrentLocation} />
+  <div class="flex gap-2 items-end">
+    <Input label="Adresse" bind:value={address} on:enter={search} disabled={useCurrentLocation} />
+    <Button on:click={search} disabled={useCurrentLocation}>Suchen</Button>
   </div>
-  {#if !useCurrentLocation}
-    <div class="flex gap-2 items-end">
-      <Input label="Adresse" bind:value={address} on:enter={search} />
-      <Button on:click={search}>Suchen</Button>
+  <div class="flex gap-2 justify-between items-center">
+    <Checkbox label="Aktuellen Standort verwenden" on:change={searchCurrentLocation} />
+    <Button small on:click={jumpToCurrentLocation} disabled={address.length === 0}
+      >Zu aktuellem Standort springen</Button
+    >
+  </div>
+</div>
+
+<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">
+  {#if !map}
+    <div class="flex justify-center content-center gap-2 mt-16">
+      <h2>Lade Karte</h2>
+      <LoadingSpinner />
+    </div>
+  {/if}
+  {#if searchCurrentAddress}
+    <div class="flex gap-4 justify-center content-center relative z-[1000] top-1/3 text-xl bg-gray-500 py-6 opacity-75">
+      <span>Ermittele aktuellen Standort</span>
+      <LoadingSpinner />
     </div>
   {/if}
 </div>
-{#if mapReady}
-  <hr id="map" class="w-screen h-[calc(100vh-6rem)] m-auto z-0" />
-{:else}
-  <h1>Karte wird geladen ...</h1>
-{/if}

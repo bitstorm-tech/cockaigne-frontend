@@ -8,10 +8,10 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher();
-
   export let deals: Deal[] = [];
   export let favoriteDeals: Deal[] = [];
+
+  const dispatch = createEventDispatcher();
   const isUser = !$page.data.user.isDealer;
   let openDetail = -1;
 

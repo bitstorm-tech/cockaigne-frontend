@@ -6,14 +6,14 @@
   import Input from "$lib/components/ui/Input.svelte";
   import { getAddress } from "$lib/geo/address.service";
   import LocationWatcher from "$lib/geo/location-watcher";
-  import "leaflet/dist/leaflet.css";
+  import { MapService } from "$lib/map.service";
   import { onMount } from "svelte";
 
   let useCurrentLocation = false;
   let address = "";
-  let L;
-  let map;
+  let mapService: MapService;
   let searchCurrentAddress = false;
+  let searchRadius = 1;
   let latitude: number;
   let longitude: number;
 
@@ -22,13 +22,11 @@
       return;
     }
 
-    L = await import("leaflet");
     const position = await LocationWatcher.getPosition();
-    latitude = position.coords.latitude;
-    longitude = position.coords.longitude;
-    if (!map || !L) {
-      map = L.map("map").setView([latitude, longitude], 19);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    const location = [position.coords.longitude, position.coords.latitude];
+
+    if (!mapService) {
+      mapService = new MapService("map", location);
     }
   });
 
@@ -42,9 +40,9 @@
         return;
       }
 
-      latitude = addresses[0].lat;
-      longitude = addresses[0].lon;
-      jumpToCurrentLocation();
+      latitude = +addresses[0].lat;
+      longitude = +addresses[0].lon;
+      mapService.jumpToLocation([longitude, latitude]);
     }
   }
 
@@ -58,13 +56,17 @@
       latitude = position.coords.latitude;
       longitude = position.coords.longitude;
       address = await getAddress(latitude, longitude);
-      jumpToCurrentLocation();
+      mapService.jumpToLocation([longitude, latitude]);
       searchCurrentAddress = false;
     }
   }
 
   function jumpToCurrentLocation() {
-    map?.flyTo([latitude, longitude], 17, { duration: 1.5 });
+    mapService.jumpToCurrentLocation();
+  }
+
+  function changeSearchRadius() {
+    mapService.setRadius(searchRadius);
   }
 </script>
 
@@ -79,10 +81,19 @@
       >Zu aktuellem Standort springen</Button
     >
   </div>
+  <input
+    class="range"
+    type="range"
+    min="1"
+    max="10"
+    step="0.5"
+    bind:value={searchRadius}
+    on:input={changeSearchRadius}
+  />
 </div>
 
-<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">
-  {#if !map}
+<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-14rem)] m-auto z-0">
+  {#if !mapService}
     <div class="flex justify-center content-center gap-2 mt-16">
       <h2>Lade Karte</h2>
       <LoadingSpinner />

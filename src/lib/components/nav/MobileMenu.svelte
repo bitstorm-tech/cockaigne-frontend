@@ -5,13 +5,13 @@
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
-  import { goto, invalidate } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
 
   async function logout() {
     await fetch("/api/logout");
     await goto("/login");
-    await invalidate();
+    await invalidateAll();
   }
 </script>
 

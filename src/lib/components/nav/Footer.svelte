@@ -1,17 +1,17 @@
 <script>
-  import HomeIcon from "../ui/icons/HomeIcon.svelte";
-  import MapIcon from "../ui/icons/MapIcon.svelte";
-  import TagIcon from "../ui/icons/TagIcon.svelte";
+  import HomeIcon from "$lib/components/ui/icons/HomeIcon.svelte";
+  import MapIcon from "$lib/components/ui/icons/MapIcon.svelte";
+  import TagIcon from "$lib/components/ui/icons/TagIcon.svelte";
 </script>
 
-<footer class="flex justify-between py-2 px-6 md:px-52 rounded-t-xl border-t-2 max-h-min">
-  <div class="h-8 w-8">
+<footer class="btm-nav btm-nav-sm">
+  <a href="/">
     <HomeIcon />
-  </div>
-  <div class="h-8 w-8">
+  </a>
+  <button>
     <TagIcon />
-  </div>
-  <div class="h-8 w-8">
+  </button>
+  <a href="/map">
     <MapIcon />
-  </div>
+  </a>
 </footer>

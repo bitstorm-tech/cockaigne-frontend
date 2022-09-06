@@ -50,6 +50,6 @@
     <Input label="Telefon" type="tel" bind:value={account.phone} />
   {/if}
   <Button on:click={register} {disabled}>Registrieren</Button>
-  <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/static">Hier einloggen!</Link></span>
+  <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>
 <Modal bind:open={openModal}>E-Mail wurde bereits registriert!</Modal>

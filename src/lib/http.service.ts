@@ -1,5 +1,3 @@
-import { browser } from "$app/environment";
-import { goto } from "$app/navigation";
 import { redirect } from "@sveltejs/kit";
 import type { Account } from "./database/account/account.model";
 import { createJwt } from "./jwt.service";
@@ -45,17 +43,34 @@ export async function jwtCookieResponse(account: Account): Promise<Response> {
 }
 
 export function redirectToLogin() {
-  if (browser) {
-    goto("/login").then();
-  } else {
-    throw redirect(302, "/login");
-  }
+  throw redirect(302, "/login");
 }
 
 export function redirectTo(url: string, status = 302) {
-  if (browser) {
-    goto(url).then();
-  } else {
-    throw redirect(status, url);
-  }
+  throw redirect(status, url);
+}
+
+export async function GET(url: string): Promise<Response> {
+  return await fetch(url);
+}
+
+export async function PUT(url: string, body: unknown): Promise<Response> {
+  return await fetch(url, {
+    method: "PUT",
+    body: JSON.stringify(body)
+  });
+}
+
+export async function POST(url: string, body: unknown): Promise<Response> {
+  return await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body)
+  });
+}
+
+export async function DELETE(url: string, body: unknown): Promise<Response> {
+  return await fetch(url, {
+    method: "DELETE",
+    body: JSON.stringify(body)
+  });
 }

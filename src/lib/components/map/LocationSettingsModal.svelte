@@ -3,19 +3,38 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
+  import type { AccountUpdateOptions } from "$lib/database/account/account.model";
   import { getAddress } from "$lib/geo/address.service.js";
   import LocationWatcher from "$lib/geo/location-watcher.js";
+  import { PUT } from "$lib/http.service";
   import { MapService } from "$lib/map.service.js";
+  import _ from "lodash";
 
   export let mapService: MapService;
   export let open = false;
 
   let latitude: number;
   let longitude: number;
-  let enableClick = true;
+  let enableClickOnMap = true;
   let useCurrentLocation = false;
   let address = "";
   let searchCurrentAddress = false;
+
+  const saveUseCurrentLocation = _.debounce(() => {
+    const update: AccountUpdateOptions = {
+      use_current_location: useCurrentLocation
+    };
+
+    PUT("/api/accounts", update);
+  }, 2000);
+
+  const saveUseClickOnMap = _.debounce(() => {
+    const update: AccountUpdateOptions = {
+      use_click_on_map: enableClickOnMap
+    };
+
+    PUT("/api/accounts", update);
+  }, 2000);
 
   async function search() {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}`;
@@ -36,7 +55,8 @@
   async function searchCurrentLocation(event) {
     useCurrentLocation = event.target.checked;
     address = "";
-    enableClick = false;
+    enableClickOnMap = false;
+    saveUseCurrentLocation();
 
     if (useCurrentLocation) {
       searchCurrentAddress = true;
@@ -49,8 +69,9 @@
     }
   }
 
-  function changeEnableClick() {
-    mapService.setEnableClick(enableClick);
+  function changeEnableClickOnMap() {
+    mapService.setEnableClick(enableClickOnMap);
+    saveUseClickOnMap();
   }
 </script>
 
@@ -61,6 +82,6 @@
       <Button on:click={search} disabled={useCurrentLocation}>Suchen</Button>
     </div>
     <Checkbox label="Aktuellen Standort verwenden" on:change={searchCurrentLocation} />
-    <Checkbox label="Standort per Click wählen" bind:checked={enableClick} on:change={changeEnableClick} />
+    <Checkbox label="Standort per Click wählen" bind:checked={enableClickOnMap} on:change={changeEnableClickOnMap} />
   </div>
 </Modal>

@@ -34,7 +34,7 @@
 <div class="grid grid-cols-3 gap-2 m-3">
   <Button on:click={() => (showLocationSettingsModal = true)}>Standort Einstellungen</Button>
   <Button on:click={() => (showDealFilterModal = true)}>Deal Filter</Button>
-  <Button on:click={jumpToCurrentLocation}>Zu aktuellem Standort springen</Button>
+  <Button on:click={jumpToCurrentLocation}>Zum Standort springen</Button>
 </div>
 <div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-9rem)] m-auto z-0">
   {#if !mapService}

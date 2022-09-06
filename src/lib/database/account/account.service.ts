@@ -1,6 +1,6 @@
 import pool from "$lib/database/pg";
 import type { Position } from "../../geo/geo.types";
-import type { Account } from "./account.model";
+import type { Account, AccountUpdateOptions } from "./account.model";
 
 export async function findAccountByEmail(email: string): Promise<Account | undefined> {
   const query = "SELECT * FROM Account WHERE email ilike $1";
@@ -49,4 +49,15 @@ export async function insertAccount(account: Account, position?: Position): Prom
   const result = await pool.query<Account>(query, values);
 
   return result.rows[0].id;
+}
+
+export async function updateAccount(id: number, update: AccountUpdateOptions) {
+  const values = Object.values(update);
+  const setCondition = Object.keys(update)
+    .map((key, index) => `${key} = $${index + 2}`)
+    .join(", ");
+
+  const query = `UPDATE account SET ${setCondition} WHERE id = $1`;
+
+  await pool.query(query, [id, ...values]);
 }

@@ -2,14 +2,25 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
-  import { MapService } from "../../map.service";
+  import type { AccountUpdateOptions } from "$lib/database/account/account.model";
+  import { PUT } from "$lib/http.service";
+  import { MapService } from "$lib/map.service";
+  import _ from "lodash";
 
   export let open = false;
   export let mapService: MapService;
   let searchRadius = mapService?.getRadius() || 100;
+  const saveRadius = _.debounce(() => {
+    const update: AccountUpdateOptions = {
+      search_radius: searchRadius
+    };
+
+    PUT("/api/accounts", update);
+  }, 2000);
 
   function changeSearchRadius() {
     mapService.setRadius(searchRadius);
+    saveRadius();
   }
 </script>
 

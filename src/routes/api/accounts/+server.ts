@@ -1,5 +1,10 @@
 import type { Account } from "$lib/database/account/account.model";
-import { findAccountByEmail, findAccountById, insertAccount } from "$lib/database/account/account.service";
+import {
+  findAccountByEmail,
+  findAccountById,
+  insertAccount,
+  updateAccount
+} from "$lib/database/account/account.service";
 import type { Position } from "$lib/geo/geo.types";
 import {
   errorResponse,
@@ -82,13 +87,16 @@ export async function POST({ request }: RequestEvent) {
   }
 }
 
-export async function PATCH({ request }: RequestEvent) {
+export async function PUT({ request }: RequestEvent) {
   try {
     const jwt = await extractJwt(request);
 
     if (!jwt || !jwt.sub) {
       return unauthorizedResponse();
     }
+
+    const update = await request.json();
+    await updateAccount(+jwt.sub, update);
 
     return response();
   } catch (error) {

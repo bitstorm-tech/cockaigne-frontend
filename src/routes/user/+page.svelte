@@ -10,7 +10,7 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByState } from "$lib/deal.service";
-  import { updateUserStore } from "$lib/user.store";
+  import { UserService } from "$lib/user.service";
   import _ from "lodash";
 
   export let data;
@@ -20,12 +20,9 @@
   let account: Account = data?.account;
   let showTabIndex = 0;
 
-  updateUserStore({
-    id: account.id,
-    isAuthenticated: true,
-    isDealer: account.dealer,
-    radius: account.search_radius
-  });
+  UserService.saveSearchRadius(account.search_radius, false);
+  UserService.saveUseClickOnMap(account.use_click_on_map, false);
+  UserService.saveUseCurrentLocation(account.use_current_location, false);
 
   $: activeDeals = sortDealsByState(deals).active;
 

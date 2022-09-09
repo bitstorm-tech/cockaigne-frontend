@@ -6,6 +6,7 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import LocationWatcher from "$lib/geo/location-watcher";
   import { MapService } from "$lib/map.service";
+  import { UserService } from "$lib/user.service";
   import { onMount } from "svelte";
 
   let mapService: MapService;
@@ -22,7 +23,7 @@
     const location = [position.coords.longitude, position.coords.latitude];
 
     if (!mapService) {
-      mapService = new MapService("map", location, 100);
+      mapService = new MapService("map", location, UserService.getSearchRadius());
     }
   });
 

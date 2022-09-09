@@ -11,6 +11,7 @@ export interface Account {
   phone?: string;
   search_radius?: number;
   use_current_location?: boolean;
+  use_click_on_map?: boolean;
   likes_deal_id?: number[];
   favorites_deal_id?: number[];
 }

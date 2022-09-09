@@ -2,10 +2,13 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
+  import type { Category } from "$lib/database/category/category.model";
   import { MapService } from "$lib/map.service";
+  import { UserService } from "$lib/user.service";
   import _ from "lodash";
-  import { UserService } from "../../user.service";
 
+  export let categories: Category[] = [];
+  export let selectedCategories = UserService.getCategories();
   export let open = false;
   export let mapService: MapService;
   let searchRadius = UserService.getSearchRadius();
@@ -16,6 +19,10 @@
   function changeSearchRadius() {
     mapService.setRadius(searchRadius);
     saveRadius();
+  }
+
+  function toggleCategory(categoryId: number) {
+    UserService.toggleCategories(categoryId);
   }
 </script>
 
@@ -30,7 +37,12 @@
       on:input={changeSearchRadius}
     />
     <hr class="my-4" />
-    <Checkbox label="Aktuellen Standort verwenden" />
-    <Checkbox label="Standort per Click wählen" />
+    {#each categories as category}
+      <Checkbox
+        label={category.name}
+        on:change={() => toggleCategory(+category.id)}
+        checked={selectedCategories.includes(+category.id)}
+      />
+    {/each}
   </div>
 </Modal>

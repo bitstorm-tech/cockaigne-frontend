@@ -50,3 +50,27 @@ CREATE TABLE "like"
     deal_id    integer NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "like_pkey" UNIQUE (account_id, deal_id)
 );
+
+CREATE TABLE category
+(
+    id   bigint PRIMARY KEY,
+    name text NOT NULL
+);
+
+INSERT INTO category (id, name)
+VALUES (1, 'Elektronik & Technik'),
+       (2, 'Unterhaltung & Gaming'),
+       (3, 'Lebensmittel & Haushalt'),
+       (4, 'Fashion, Schmuck & Lifestyle'),
+       (5, 'Beauty, Wellness & Gesundheit'),
+       (6, 'Family & Kids'),
+       (7, 'Home & Living'),
+       (8, 'Baumarkt & Garten'),
+       (9, 'Auto, Fahhrad & Motorrad'),
+       (10, 'Gastronomie, Bars & Cafes'),
+       (11, 'Kultur & Freizeit'),
+       (12, 'Sport & Outdoor'),
+       (13, 'Reisen, Hotels & Übernachtungen'),
+       (14, 'Dienstleistungen & Finanzen'),
+       (15, 'Floristik'),
+       (16, 'Sonstiges');

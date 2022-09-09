@@ -9,6 +9,8 @@
   import { UserService } from "$lib/user.service";
   import { onMount } from "svelte";
 
+  export let data;
+
   let mapService: MapService;
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
@@ -53,4 +55,4 @@
 </div>
 
 <LocationSettingsModal {mapService} bind:open={showLocationSettingsModal} />
-<DealFilterModal {mapService} bind:open={showDealFilterModal} />
+<DealFilterModal {mapService} categories={data.categories} bind:open={showDealFilterModal} />

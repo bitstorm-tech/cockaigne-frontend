@@ -1,16 +1,16 @@
 export interface Account {
   id?: number;
   email: string;
-  password: string;
+  password?: string;
   dealer: boolean;
-  companyName?: string;
+  company_name?: string;
   street?: string;
-  houseNumber?: string;
+  house_number?: string;
   city?: string;
   zip?: number;
   phone?: string;
-  searchRadius?: number;
-  useCurrentLocation?: boolean;
+  search_radius?: number;
+  use_current_location?: boolean;
   likes_deal_id?: number[];
   favorites_deal_id?: number[];
 }

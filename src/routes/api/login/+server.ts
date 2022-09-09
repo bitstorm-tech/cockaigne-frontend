@@ -25,7 +25,8 @@ export async function POST({ request }: RequestEvent) {
 
     const headers = new Headers();
     headers.append("set-cookie", `jwt=${jwt}; SameSite=Lax; Path=/; HttpOnly`);
-    const responseBody = JSON.stringify({ isDealer: account.dealer, id: account.id.toString() });
+    delete account.password;
+    const responseBody = JSON.stringify(account);
     const responseOptions = { headers };
 
     return new Response(responseBody, responseOptions);

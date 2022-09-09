@@ -10,6 +10,7 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByState } from "$lib/deal.service";
+  import { updateUserStore } from "$lib/user.store";
   import _ from "lodash";
 
   export let data;
@@ -18,6 +19,13 @@
   let favoriteDealers: Dealer[] = data?.favoriteDealers;
   let account: Account = data?.account;
   let showTabIndex = 0;
+
+  updateUserStore({
+    id: account.id,
+    isAuthenticated: true,
+    isDealer: account.dealer,
+    radius: account.search_radius
+  });
 
   $: activeDeals = sortDealsByState(deals).active;
 

@@ -56,7 +56,7 @@ export async function POST({ request }: RequestEvent) {
     const position = {} as Position;
     if (account.dealer) {
       const geoResponse = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&street=${account.houseNumber} ${account.street}&city=${account.city}&postalcode=${account.zip}`
+        `https://nominatim.openstreetmap.org/search?format=json&street=${account.house_number} ${account.street}&city=${account.city}&postalcode=${account.zip}`
       );
 
       const geoInformation = await geoResponse.json();
@@ -65,7 +65,7 @@ export async function POST({ request }: RequestEvent) {
         console.error(
           "Can't find location for address:",
           account.street,
-          account.houseNumber,
+          account.house_number,
           account.zip,
           account.city
         );
@@ -75,6 +75,11 @@ export async function POST({ request }: RequestEvent) {
 
       position.latitude = geoInformation[0].lat;
       position.longitude = geoInformation[0].lon;
+    }
+
+    if (!account.password) {
+      console.warn("Can't create account without password");
+      return response(null, 400);
     }
 
     account.password = bcryptjs.hashSync(account.password);

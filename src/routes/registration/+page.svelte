@@ -34,12 +34,12 @@
   <Input label="E-Mail" type="email" bind:value={account.email} />
   <Input label="Passwort" type="password" bind:value={account.password} />
   {#if account.dealer}
-    <Input label="Firmenname" type="text" bind:value={account.companyName} />
+    <Input label="Firmenname" type="text" bind:value={account.company_name} />
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">
         <Input label="Straße" type="text" bind:value={account.street} />
       </div>
-      <Input label="Hausnummer" type="text" bind:value={account.houseNumber} />
+      <Input label="Hausnummer" type="text" bind:value={account.house_number} />
     </div>
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">

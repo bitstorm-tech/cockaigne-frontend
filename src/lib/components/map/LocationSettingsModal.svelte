@@ -4,27 +4,24 @@
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import { getAddress } from "$lib/geo/address.service.js";
-  import LocationWatcher from "$lib/geo/location-watcher.js";
-  import { MapService } from "$lib/map.service.js";
   import _ from "lodash";
-  import { UserService } from "../../user.service";
+  import { onDestroy } from "svelte";
+  import { addressToString } from "../../geo/address.service";
+  import type { Position } from "../../geo/geo.types";
+  import LocationService from "../../geo/location.service.js";
+  import { locationStore, StoreService, useCurrentLocationStore } from "../../store.service";
 
-  export let mapService: MapService;
   export let open = false;
-
-  let latitude: number;
-  let longitude: number;
-  let useClickOnMap = UserService.getUseClickOnMap();
-  let useCurrentLocation = UserService.getUseCurrentLocation();
   let address = "";
-  let searchCurrentAddress = false;
+
+  const unsubscribe = locationStore.subscribe(async (position: Position) => {
+    address = addressToString(await getAddress(position));
+  });
+
+  onDestroy(unsubscribe);
 
   const saveUseCurrentLocation = _.debounce(() => {
-    UserService.saveUseCurrentLocation(useCurrentLocation);
-  }, 2000);
-
-  const saveUseClickOnMap = _.debounce(() => {
-    UserService.saveUseClickOnMap(useClickOnMap);
+    StoreService.saveUseCurrentLocation($useCurrentLocationStore);
   }, 2000);
 
   async function search() {
@@ -37,42 +34,32 @@
         return;
       }
 
-      latitude = +addresses[0].lat;
-      longitude = +addresses[0].lon;
-      mapService.jumpToLocation([longitude, latitude]);
+      const position: Position = {
+        latitude: +addresses[0].lat,
+        longitude: +addresses[0].lon
+      };
+
+      StoreService.saveLocation(position);
     }
   }
 
   async function searchCurrentLocation(event) {
-    useCurrentLocation = event.target.checked;
-    address = "";
-    useClickOnMap = false;
+    useCurrentLocationStore.set(event.target.checked);
     saveUseCurrentLocation();
-
-    if (useCurrentLocation) {
-      searchCurrentAddress = true;
-      const position = await LocationWatcher.getPosition();
-      latitude = position.coords.latitude;
-      longitude = position.coords.longitude;
-      address = await getAddress(latitude, longitude);
-      mapService.jumpToLocation([longitude, latitude]);
-      searchCurrentAddress = false;
-    }
-  }
-
-  function changeEnableClickOnMap() {
-    mapService.setEnableClick(useClickOnMap);
-    saveUseClickOnMap();
+    $useCurrentLocationStore ? LocationService.startWatching() : LocationService.stopWatching();
   }
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col m-2">
+  <div class="flex flex-col m-2 gap-2">
     <div class="flex gap-2 items-end">
-      <Input label="Adresse" bind:value={address} on:enter={search} disabled={useCurrentLocation} />
-      <Button on:click={search} disabled={useCurrentLocation}>Suchen</Button>
+      <Input label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} />
+      <Button on:click={search} disabled={$useCurrentLocationStore}>Suchen</Button>
     </div>
-    <Checkbox label="Aktuellen Standort verwenden" on:change={searchCurrentLocation} />
-    <Checkbox label="Standort per Click wählen" bind:checked={useClickOnMap} on:change={changeEnableClickOnMap} />
+    <Checkbox
+      label="Aktuellen Standort verwenden"
+      bind:checked={$useCurrentLocationStore}
+      on:change={searchCurrentLocation}
+    />
   </div>
 </Modal>

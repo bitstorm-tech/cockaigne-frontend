@@ -1,17 +1,42 @@
-export async function getAddress(latitude: number, longitude: number): Promise<string | undefined> {
+import type { Position } from "./geo.types";
+
+export interface Address {
+  street: string;
+  city: string;
+  postcode: number;
+  country: string;
+}
+
+export async function getAddress(position: Position): Promise<Address | undefined> {
+  const { longitude, latitude } = position;
   const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-  const response = await fetch(url);
+  try {
+    const response = await fetch(url);
 
-  if (response.ok) {
-    const address = await response.json();
-    if (!address) {
-      return;
+    if (response.ok) {
+      const address = await response.json();
+      if (!address) {
+        return;
+      }
+
+      const { road, house_number, city, postcode, country } = address.address;
+
+      return {
+        street: `${road || ""} ${house_number || ""}`.trim(),
+        city: city || "",
+        postcode: postcode || "",
+        country: country || ""
+      };
     }
-
-    const { road, house_number, city, postcode, country } = address.address;
-
-    return `${road} ${house_number}, ${postcode} ${city}, ${country}`;
+  } catch (error) {
+    console.log("Error while getting address from nominatim:", error);
   }
+}
 
-  return;
+export function addressToString(address: Address): string {
+  return address ? `${address.street}, ${address.postcode} ${address.city}, ${address.country}` : "Keine Adresse";
+}
+
+export function addressToShortString(address: Address): string {
+  return address ? `${address.street}, ${address.city}` : "Keine Adresse";
 }

@@ -1,7 +1,7 @@
-import { GET } from "$lib/http.service";
+import type { LoadEvent } from "@sveltejs/kit";
 
-export async function load() {
-  const response = await GET("/api/categories");
+export async function load({ fetch }: LoadEvent) {
+  const response = await fetch("/api/categories");
 
   if (response.ok) {
     const categories = await response.json();

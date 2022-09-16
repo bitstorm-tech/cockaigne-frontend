@@ -5,8 +5,6 @@
   export let street = "";
   export let city = "";
   export let imageUrl = "";
-  export let actionUrl = "";
-  // const isDealer = $session.isDealer;
 </script>
 
 <div class="flex flex-col">
@@ -21,13 +19,6 @@
         <ProfilePicture {imageUrl} />
       </div>
       <slot />
-      <!--{#if isDealer}-->
-      <!--  <a href={actionUrl}>-->
-      <!--    <Button outline circle>-->
-      <!--      <FireIcon />-->
-      <!--    </Button>-->
-      <!--  </a>-->
-      <!--{/if}-->
     </div>
   </div>
 </div>

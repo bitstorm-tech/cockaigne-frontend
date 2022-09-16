@@ -4,10 +4,11 @@
   import LocationSettingsModal from "$lib/components/map/LocationSettingsModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
-  import LocationWatcher from "$lib/geo/location-watcher";
+  import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
-  import { UserService } from "$lib/user.service";
-  import { onMount } from "svelte";
+  import { locationStore, useCurrentLocationStore } from "$lib/store.service";
+  import { onDestroy, onMount } from "svelte";
+  import { addressToShortString, getAddress } from "../../lib/geo/address.service";
 
   export let data;
 
@@ -15,19 +16,31 @@
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
   let showDealFilterModal = false;
+  let address = "";
 
   onMount(async () => {
     if (!browser) {
       return;
     }
 
-    const position = await LocationWatcher.getPosition();
-    const location = [position.coords.longitude, position.coords.latitude];
+    mapService = new MapService("map");
 
-    if (!mapService) {
-      mapService = new MapService("map", location, UserService.getSearchRadius());
+    if ($useCurrentLocationStore) {
+      mapService.jumpToLocation($locationStore);
     }
+    address = addressToShortString(await getAddress($locationStore));
   });
+
+  const unsubscribe = locationStore.subscribe(async (position: Position) => {
+    if (!mapService) {
+      return;
+    }
+
+    mapService.jumpToLocation(position);
+    address = addressToShortString(await getAddress(position));
+  });
+
+  onDestroy(unsubscribe);
 
   function jumpToCurrentLocation() {
     mapService.jumpToCurrentLocation();
@@ -39,7 +52,8 @@
   <Button on:click={() => (showDealFilterModal = true)}>Deal Filter</Button>
   <Button on:click={jumpToCurrentLocation}>Zum Standort springen</Button>
 </div>
-<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-9rem)] m-auto z-0">
+<span class="p-3 text-2xs">Standort: {address}</span>
+<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">
   {#if !mapService}
     <div class="flex justify-center content-center gap-2 mt-16">
       <h2>Lade Karte</h2>
@@ -54,5 +68,5 @@
   {/if}
 </div>
 
-<LocationSettingsModal {mapService} bind:open={showLocationSettingsModal} />
+<LocationSettingsModal bind:open={showLocationSettingsModal} />
 <DealFilterModal {mapService} categories={data.categories} bind:open={showDealFilterModal} />

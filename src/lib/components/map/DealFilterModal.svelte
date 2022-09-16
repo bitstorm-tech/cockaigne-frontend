@@ -4,16 +4,16 @@
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import type { Category } from "$lib/database/category/category.model";
   import { MapService } from "$lib/map.service";
-  import { UserService } from "$lib/user.service";
   import _ from "lodash";
+  import { StoreService } from "../../store.service";
 
   export let categories: Category[] = [];
-  export let selectedCategories = UserService.getCategories();
+  export let selectedCategories = StoreService.getCategories();
   export let open = false;
   export let mapService: MapService;
-  let searchRadius = UserService.getSearchRadius();
+  let searchRadius = StoreService.getSearchRadius();
   const saveRadius = _.debounce(() => {
-    UserService.saveSearchRadius(searchRadius);
+    StoreService.saveSearchRadius(searchRadius);
   }, 2000);
 
   function changeSearchRadius() {
@@ -22,12 +22,12 @@
   }
 
   function toggleCategory(categoryId: number) {
-    UserService.toggleCategories(categoryId);
+    StoreService.toggleCategories(categoryId);
   }
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col m-2">
+  <div class="flex flex-col m-2 h-[50vh]">
     <RangeSelect
       label="Suche im Umkreis von {searchRadius} m"
       min={100}

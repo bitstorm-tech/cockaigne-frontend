@@ -10,8 +10,10 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByState } from "$lib/deal.service";
-  import { UserService } from "$lib/user.service";
+  import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import _ from "lodash";
+  import { onMount } from "svelte";
+  import { locationStore } from "../../lib/store.service";
 
   export let data;
   let deals: Deal[] = data?.deals;
@@ -19,12 +21,13 @@
   let favoriteDealers: Dealer[] = data?.favoriteDealers;
   let account: Account = data?.account;
   let showTabIndex = 0;
-
-  UserService.saveSearchRadius(account.search_radius, false);
-  UserService.saveUseClickOnMap(account.use_click_on_map, false);
-  UserService.saveUseCurrentLocation(account.use_current_location, false);
+  let address = "";
 
   $: activeDeals = sortDealsByState(deals).active;
+
+  onMount(async () => {
+    address = addressToShortString(await getAddress($locationStore));
+  });
 
   function toggleFavorite(event: CustomEvent<Deal>) {
     const deal: Deal = event.detail;
@@ -45,12 +48,7 @@
   }
 </script>
 
-<UserHeader
-  name={account.email}
-  street="Oxford Way"
-  city="Beverly Hills, Los Angeles"
-  imageUrl="/images/dummy/user-profile.svg"
-/>
+<UserHeader name={account.email} {address} imageUrl="/images/dummy/user-profile.svg" />
 <div class="tabs mt-6 max-h-8 mb-2">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon />

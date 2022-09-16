@@ -9,23 +9,32 @@ import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, Stroke, Style } from "ol/style";
+import type { Position } from "./geo/geo.types";
+import { fromOpenLayersCoordinate, munichPosition, toOpenLayersCoordinate } from "./geo/geo.types";
+import LocationService from "./geo/location.service";
+import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
 
 export class MapService {
   private map: Map;
-  private currentLocation: Coordinate;
   private view = new View({
-    zoom: 18,
+    zoom: 16,
     maxZoom: 20
   });
   private readonly circle: Circle;
   private readonly centerPoint: Circle;
+  private useCurrentLocation = false;
+  private center = toOpenLayersCoordinate(munichPosition);
+  private searchRadius = 100;
 
-  constructor(htmlElementId: string, center: number[], private searchRadius: number, private enableClick = true) {
+  constructor(htmlElementId: string) {
     useGeographic();
-    this.view.setCenter(center);
-    this.currentLocation = center;
-    this.centerPoint = new Circle(center, this.transformRadius(2));
-    this.circle = new Circle(center, this.transformRadius(searchRadius));
+    useCurrentLocationStore.subscribe((useCurrentLocation) => (this.useCurrentLocation = useCurrentLocation));
+    searchRadiusStore.subscribe((radius) => (this.searchRadius = radius));
+
+    this.view.setCenter(this.center);
+    this.centerPoint = new Circle(this.center, this.transformRadius(2));
+
+    this.circle = new Circle(this.center, this.transformRadius(this.searchRadius));
 
     this.map = new Map({
       target: htmlElementId,
@@ -52,41 +61,36 @@ export class MapService {
     });
 
     this.map.on("click", (event) => {
-      if (!this.enableClick) {
+      if (this.useCurrentLocation) {
         return;
       }
 
       this.moveCircle(event.coordinate);
-      this.currentLocation = event.coordinate;
+      this.saveCenter(event.coordinate);
+      LocationService.setPosition(fromOpenLayersCoordinate(event.coordinate));
     });
+
+    locationStore.subscribe((position) => this.jumpToLocation(position));
   }
 
-  jumpToLocation(center: Coordinate) {
-    this.currentLocation = center;
-    this.view.animate({ center }, { zoom: 18 });
-    this.moveCircle();
+  jumpToLocation(position: Position) {
+    const center = toOpenLayersCoordinate(position);
+    this.view.animate({ center }, { duration: 500 });
+    this.moveCircle(center);
   }
 
   jumpToCurrentLocation() {
-    this.view.animate({ center: this.currentLocation }, { zoom: 18 });
+    this.view.animate({ center: this.center }, { duration: 500 });
     this.moveCircle();
   }
 
   setRadius(radius: number) {
-    this.searchRadius = radius;
     this.circle.setRadius(this.transformRadius(radius));
-  }
-
-  getRadius(): number {
-    return this.searchRadius;
-  }
-
-  setEnableClick(enableClick: boolean) {
-    this.enableClick = enableClick;
+    StoreService.saveSearchRadius(radius);
   }
 
   private moveCircle(location?: Coordinate) {
-    const newCoordinates = location ? location : this.currentLocation;
+    const newCoordinates = location ? location : this.center;
     this.circle.setCenter(newCoordinates);
     this.centerPoint.setCenter(newCoordinates);
   }
@@ -101,5 +105,10 @@ export class MapService {
     // console.log("units", projection.getUnits());
 
     return radius / 143000;
+  }
+
+  private saveCenter(coordinate: Coordinate) {
+    const position = fromOpenLayersCoordinate(coordinate);
+    LocationService.setPosition(position);
   }
 }

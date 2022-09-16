@@ -50,27 +50,23 @@ export function redirectTo(url: string, status = 302) {
   throw redirect(status, url);
 }
 
-export async function GET(url: string): Promise<Response> {
-  return await fetch(url);
-}
-
-export async function PUT(url: string, body: unknown): Promise<Response> {
-  return await fetch(url, {
+export function PUT(body: unknown) {
+  return {
     method: "PUT",
     body: JSON.stringify(body)
-  });
+  };
 }
 
-export async function POST(url: string, body: unknown): Promise<Response> {
-  return await fetch(url, {
+export async function POST(body: unknown) {
+  return {
     method: "POST",
     body: JSON.stringify(body)
-  });
+  };
 }
 
-export async function DELETE(url: string, body: unknown): Promise<Response> {
-  return await fetch(url, {
+export async function DELETE(body: unknown) {
+  return {
     method: "DELETE",
     body: JSON.stringify(body)
-  });
+  };
 }

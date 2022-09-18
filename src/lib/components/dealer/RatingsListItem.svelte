@@ -1,5 +1,9 @@
-<script>
+<script lang="ts">
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
+  import RatingStars from "$lib/components/ui/RatingStars.svelte";
+  import type { Rating } from "../../database/rating/rating.model";
+
+  export let rating: Rating;
 
   function randomNumber() {
     return Math.random() * Math.random() * 1000000;
@@ -12,10 +16,9 @@
       <ProfilePicture imageUrl="https://api.lorem.space/image/face?hash={randomNumber()}" />
     </div>
     <div>Name</div>
-    <div>4 / 5</div>
+    <RatingStars stars={rating.stars} showLabel={false} disabled={true} />
   </div>
   <div class="p-2 bg-base-100 text-xs pt-6">
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
-    magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+    {rating.rating_text}
   </div>
 </div>

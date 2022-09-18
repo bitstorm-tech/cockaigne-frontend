@@ -17,7 +17,7 @@
 {#if $page.data.user.isAuthenticated}
   <Navbar />
 {/if}
-<div class="pb-6">
+<div class="mb-16">
   <slot />
 </div>
 {#if $page.data.user.isAuthenticated}

@@ -10,26 +10,22 @@ export interface Address {
 export async function getAddress(position: Position): Promise<Address | undefined> {
   const { longitude, latitude } = position;
   const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-  try {
-    const response = await fetch(url);
+  const response = await fetch(url);
 
-    if (response.ok) {
-      const address = await response.json();
-      if (!address) {
-        return;
-      }
-
-      const { road, house_number, city, postcode, country } = address.address;
-
-      return {
-        street: `${road || ""} ${house_number || ""}`.trim(),
-        city: city || "",
-        postcode: postcode || "",
-        country: country || ""
-      };
+  if (response.ok) {
+    const address = await response.json();
+    if (!address) {
+      return;
     }
-  } catch (error) {
-    console.log("Error while getting address from nominatim:", error);
+
+    const { road, house_number, city, postcode, country } = address.address;
+
+    return {
+      street: `${road || ""} ${house_number || ""}`.trim(),
+      city: city || "",
+      postcode: postcode || "",
+      country: country || ""
+    };
   }
 }
 

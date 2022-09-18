@@ -57,14 +57,14 @@ export function PUT(body: unknown) {
   };
 }
 
-export async function POST(body: unknown) {
+export function POST(body: unknown) {
   return {
     method: "POST",
     body: JSON.stringify(body)
   };
 }
 
-export async function DELETE(body: unknown) {
+export function DELETE(body: unknown) {
   return {
     method: "DELETE",
     body: JSON.stringify(body)

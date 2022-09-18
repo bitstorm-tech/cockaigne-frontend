@@ -10,11 +10,11 @@ CREATE TABLE IF NOT EXISTS account
     city                 text      NULL,
     zip                  integer   NULL,
     phone                text      NULL,
-    created              timestamp NULL,
     last_login           timestamp NULL,
     use_current_location bool      NULL     DEFAULT false,
     search_radius        integer   NULL,
-    "location"           geometry  NULL
+    "location"           geometry  NULL,
+    created              timestamp NOT NULL DEFAULT now()
 );
 
 CREATE TABLE deal
@@ -27,33 +27,46 @@ CREATE TABLE deal
     "duration"  integer   NOT NULL,
     "start"     timestamp NOT NULL,
     "template"  bool      NOT NULL DEFAULT false,
-    created     timestamp NULL     DEFAULT now()
+    created     timestamp NOT NULL DEFAULT now()
+);
+
+CREATE TABLE dealer_rating
+(
+    account_id  integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    dealer_id   integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    stars       integer   NOT NULL,
+    rating_text text      NULL,
+    created     timestamp NOT NULL DEFAULT now(),
+    CONSTRAINT "dealer_rating_pkey" UNIQUE (account_id, dealer_id)
 );
 
 CREATE TABLE favorite_deal
 (
-    account_id integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    deal_id    integer NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    account_id integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    deal_id    integer   NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    created    timestamp NOT NULL DEFAULT now(),
     CONSTRAINT "favorite_deal_pkey" UNIQUE (account_id, deal_id)
 );
 
 CREATE TABLE favorite_dealer
 (
-    account_id integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    dealer_id  integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    account_id integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    dealer_id  integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    created    timestamp NOT NULL DEFAULT now(),
     CONSTRAINT "favorite_dealer_pkey" UNIQUE (account_id, dealer_id)
 );
 
 CREATE TABLE "like"
 (
-    account_id integer NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    deal_id    integer NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    account_id integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    deal_id    integer   NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    created    timestamp NOT NULL DEFAULT now(),
     CONSTRAINT "like_pkey" UNIQUE (account_id, deal_id)
 );
 
 CREATE TABLE category
 (
-    id   bigint PRIMARY KEY,
+    id   integer PRIMARY KEY,
     name text NOT NULL
 );
 

@@ -74,5 +74,5 @@
 {:else if activeTab === 1}
   <DealsList deals={activeDeals} />
 {:else}
-  <RatingsList {dealerId} userId={$page.data.user.id} />
+  <RatingsList {dealerId} userId={$page.data.user.id} isDealer={$page.data.user.isDealer} />
 {/if}

@@ -4,6 +4,7 @@
   import ConfirmDeletePictureModal from "$lib/components/dealer/pictures/ConfirmDeletePictureModal.svelte";
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
+  import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
 
   export let pictures: string[] = [];
@@ -47,6 +48,9 @@
   }
 </script>
 
+{#if pictures.length === 0}
+  <EmptyContent>Füge ein paar Bilder hinzu und mach deine Seite noch schöner!</EmptyContent>
+{/if}
 <div class="flex flex-wrap">
   {#each pictures as picture}
     <Picture url={picture} on:delete={() => onDelete(picture)} on:zoom={() => onZoom(picture)} />

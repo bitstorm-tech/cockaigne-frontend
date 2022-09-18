@@ -23,7 +23,7 @@
       await invalidateAll(); // needed to update $page.data.user with actual user data
       const body = await response.json();
 
-      if (body.isDealer) {
+      if (body.dealer) {
         goto("/dealer/" + body.id).then();
       } else {
         goto("/user/").then();

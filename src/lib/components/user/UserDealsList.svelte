@@ -1,5 +1,6 @@
 <script lang="ts">
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
+  import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
@@ -22,10 +23,13 @@
 
 <div class="flex flex-col gap-4">
   {#if deals.length === 0}
-    <div class="text-opacity-30 text-gray-200 pt-10 text-center">
-      Aktuell gibt es leider keine Deals in deiner Nähe :( <Link href="/deals/new" underline>Filter anpassen</Link> oder
-      <Link href="/deals/new" underline>Standort ändern</Link>!
-    </div>
+    <EmptyContent>
+      <p>Aktuell gibt es leider keine Deals in deiner Nähe :(</p>
+      <p>
+        <Link href="/deals/new" underline>Filter anpassen</Link> oder
+        <Link href="/deals/new" underline>Standort ändern</Link>!
+      </p>
+    </EmptyContent>
   {/if}
   {#each deals as deal, i}
     <DealsListItem {deal} showDetails={openDetail === i} on:click={() => (openDetail = openDetail === i ? -1 : i)}>

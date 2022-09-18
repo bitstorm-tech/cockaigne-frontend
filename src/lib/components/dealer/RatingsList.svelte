@@ -10,6 +10,7 @@
   export let showRatingButton = false;
   export let dealerId: number;
   export let userId: number;
+  export let isDealer = false;
   let newRating: Rating;
   let openModal = false;
 
@@ -21,7 +22,7 @@
     }
 
     const ratings = await result.json();
-    showRatingButton = !ratings.some((rating: Rating) => +rating.account_id === +userId);
+    showRatingButton = !isDealer && !ratings.some((rating: Rating) => +rating.account_id === +userId);
 
     return ratings;
   }
@@ -56,9 +57,11 @@
     </span>
   {:then ratings}
     {#if ratings.length === 0}
-      <span class="mt-10 grid grid-cols-1">
+      {#if isDealer}
+        <EmptyContent>Leider hat dich noch niemand bewertet :(</EmptyContent>
+      {:else}
         <EmptyContent>Sei der erste der eine Bewertung schreibt!</EmptyContent>
-      </span>
+      {/if}
     {:else}
       <span class="m-2">Durchschnitt: {calcAverageRating(ratings)}</span>
       {#if newRating}
@@ -69,12 +72,10 @@
       {/each}
     {/if}
   {:catch error}
-    <span class="mt-10 grid grid-cols-1">
-      <EmptyContent>
-        <p>Ups, da ist leider etwas schief gelaufen :(</p>
-        <p>Bitte versuche es später nochmal</p>
-      </EmptyContent>
-    </span>
+    <EmptyContent>
+      <p>Ups, da ist leider etwas schief gelaufen :(</p>
+      <p>Bitte versuche es später nochmal</p>
+    </EmptyContent>
   {/await}
 </div>
 <RatingModal bind:open={openModal} on:create={saveNewRating} />

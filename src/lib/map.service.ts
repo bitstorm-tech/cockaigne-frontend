@@ -9,13 +9,16 @@ import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, Stroke, Style } from "ol/style";
+import { get } from "svelte/store";
+import type { Deal } from "./database/deal/deal.model";
 import type { Position } from "./geo/geo.types";
-import { fromOpenLayersCoordinate, munichPosition, toOpenLayersCoordinate } from "./geo/geo.types";
+import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
 import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
 
 export class MapService {
   private map: Map;
+  private dealLayerSource = new VectorSource();
   private view = new View({
     zoom: 16,
     maxZoom: 20
@@ -23,7 +26,6 @@ export class MapService {
   private readonly circle: Circle;
   private readonly centerPoint: Circle;
   private useCurrentLocation = false;
-  private center = toOpenLayersCoordinate(munichPosition);
   private searchRadius = 100;
 
   constructor(htmlElementId: string) {
@@ -31,16 +33,30 @@ export class MapService {
     useCurrentLocationStore.subscribe((useCurrentLocation) => (this.useCurrentLocation = useCurrentLocation));
     searchRadiusStore.subscribe((radius) => (this.searchRadius = radius));
 
-    this.view.setCenter(this.center);
-    this.centerPoint = new Circle(this.center, this.transformRadius(2));
+    const center = toOpenLayersCoordinate(get(locationStore));
 
-    this.circle = new Circle(this.center, this.transformRadius(this.searchRadius));
+    this.view.setCenter(center);
+    this.centerPoint = new Circle(center, this.transformRadius(2));
+
+    this.circle = new Circle(center, this.transformRadius(this.searchRadius));
 
     this.map = new Map({
       target: htmlElementId,
       layers: [
         new TileLayer({
           source: new OSM()
+        }),
+        new VectorLayer({
+          source: this.dealLayerSource,
+          style: new Style({
+            stroke: new Stroke({
+              color: "red",
+              width: 3
+            }),
+            fill: new Fill({
+              color: "red"
+            })
+          })
         }),
         new VectorLayer({
           source: new VectorSource({
@@ -75,12 +91,12 @@ export class MapService {
 
   jumpToLocation(position: Position) {
     const center = toOpenLayersCoordinate(position);
-    this.view.animate({ center }, { duration: 500 });
     this.moveCircle(center);
   }
 
   jumpToCurrentLocation() {
-    this.view.animate({ center: this.center }, { duration: 500 });
+    const center = toOpenLayersCoordinate(get(locationStore));
+    this.view.setCenter(center);
     this.moveCircle();
   }
 
@@ -89,8 +105,19 @@ export class MapService {
     StoreService.saveSearchRadius(radius);
   }
 
+  setDeals(deals: Deal[]) {
+    this.dealLayerSource.clear(true);
+    deals.map((deal) => {
+      const coordinate = this.parseWKT(deal.location as string);
+      if (coordinate) {
+        this.dealLayerSource.addFeature(new Feature(new Circle(coordinate, this.transformRadius(1))));
+      }
+    });
+  }
+
   private moveCircle(location?: Coordinate) {
-    const newCoordinates = location ? location : this.center;
+    const center = toOpenLayersCoordinate(get(locationStore));
+    const newCoordinates = location ? location : center;
     this.circle.setCenter(newCoordinates);
     this.centerPoint.setCenter(newCoordinates);
   }
@@ -104,7 +131,11 @@ export class MapService {
     // console.log("projection, pointResolution, transformedRadius = ", projection, pointResolution, transformedRadius);
     // console.log("units", projection.getUnits());
 
-    return radius / 143000;
+    return radius / 149500;
+  }
+
+  private parseWKT(wkt: string): number[] | undefined {
+    return wkt.match(/[+-]?\d+(\.\d+)?/g)?.map((value) => parseFloat(value));
   }
 
   private saveCenter(coordinate: Coordinate) {

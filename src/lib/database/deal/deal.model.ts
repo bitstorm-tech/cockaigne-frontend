@@ -1,4 +1,5 @@
 import { getNowAsIsoString } from "../../date.service";
+import type { Position } from "../../geo/geo.types";
 
 export interface Deal {
   id: number;
@@ -10,6 +11,7 @@ export interface Deal {
   start: string;
   template: boolean;
   likes?: number;
+  location?: Position | string;
 }
 
 export function newDeal(): Deal {
@@ -23,4 +25,9 @@ export function newDeal(): Deal {
     template: false,
     category: "FOOD"
   };
+}
+
+export interface DealFilter {
+  location: Position;
+  radius: number;
 }

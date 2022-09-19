@@ -1,7 +1,7 @@
 import pool from "$lib/database/pg";
 import type { Dealer } from "../dealer/dealer.model";
 import { getLikeCountByDealId } from "../like/like.service";
-import type { Deal } from "./deal.model";
+import type { Deal, DealFilter } from "./deal.model";
 
 export async function findAllDeals(): Promise<Deal[]> {
   const result = await pool.query<Deal>("SELECT * FROM Deal WHERE template = false");
@@ -13,6 +13,15 @@ export async function findAllDeals(): Promise<Deal[]> {
   }
 
   return deals;
+}
+
+export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
+  const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
+  const buffer = `ST_BUFFER(${point}, ${filter.radius})::geometry`;
+  const query = `SELECT d.*, ST_ASTEXT(a.location) AS location FROM deal d, account a WHERE a.id = d.account_id AND ST_WITHIN(a.location, ${buffer})`;
+  const result = await pool.query<Deal>(query);
+
+  return result.rows;
 }
 
 export async function findDealById(id: number): Promise<Deal | undefined> {

@@ -15,6 +15,7 @@ import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
 import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
+import { dealsStore } from "./stores/deals.store";
 
 export class MapService {
   private map: Map;
@@ -25,20 +26,22 @@ export class MapService {
   });
   private readonly circle: Circle;
   private readonly centerPoint: Circle;
-  private useCurrentLocation = false;
-  private searchRadius = 100;
 
   constructor(htmlElementId: string) {
     useGeographic();
-    useCurrentLocationStore.subscribe((useCurrentLocation) => (this.useCurrentLocation = useCurrentLocation));
-    searchRadiusStore.subscribe((radius) => (this.searchRadius = radius));
-
+    searchRadiusStore.subscribe(async (radius) => {
+      const location = get(locationStore);
+      await dealsStore.filterDeals(location, radius / 2);
+    });
+    dealsStore.subscribe((deals) => this.setDeals(deals));
     const center = toOpenLayersCoordinate(get(locationStore));
 
     this.view.setCenter(center);
+
     this.centerPoint = new Circle(center, this.transformRadius(2));
 
-    this.circle = new Circle(center, this.transformRadius(this.searchRadius));
+    const searchRadius = get(searchRadiusStore);
+    this.circle = new Circle(center, this.transformRadius(searchRadius));
 
     this.map = new Map({
       target: htmlElementId,
@@ -77,7 +80,9 @@ export class MapService {
     });
 
     this.map.on("click", (event) => {
-      if (this.useCurrentLocation) {
+      const useCurrentLocation = get(useCurrentLocationStore);
+
+      if (useCurrentLocation) {
         return;
       }
 
@@ -86,7 +91,11 @@ export class MapService {
       LocationService.setPosition(fromOpenLayersCoordinate(event.coordinate));
     });
 
-    locationStore.subscribe((position) => this.jumpToLocation(position));
+    locationStore.subscribe(async (position) => {
+      const radius = get(searchRadiusStore);
+      this.jumpToLocation(position);
+      await dealsStore.filterDeals(position, radius / 2);
+    });
   }
 
   jumpToLocation(position: Position) {
@@ -105,7 +114,7 @@ export class MapService {
     StoreService.saveSearchRadius(radius);
   }
 
-  setDeals(deals: Deal[]) {
+  private setDeals(deals: Deal[]) {
     this.dealLayerSource.clear(true);
     deals.map((deal) => {
       const coordinate = this.parseWKT(deal.location as string);

@@ -26,8 +26,8 @@
     <EmptyContent>
       <p>Aktuell gibt es leider keine Deals in deiner Nähe :(</p>
       <p>
-        <Link href="/deals/new" underline>Filter anpassen</Link> oder
-        <Link href="/deals/new" underline>Standort ändern</Link>!
+        <Link href="/map" underline>Filter anpassen</Link> oder
+        <Link href="/map" underline>Standort ändern</Link>!
       </p>
     </EmptyContent>
   {/if}

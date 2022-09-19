@@ -51,10 +51,10 @@
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col m-2 gap-2">
-    <div class="flex gap-2 items-end">
+  <div class="flex flex-col m-2">
+    <div class="grid grid-rows-2 gap-2">
       <Input label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} />
-      <Button on:click={search} disabled={$useCurrentLocationStore}>Suchen</Button>
+      <Button small on:click={search} disabled={$useCurrentLocationStore}>Suchen</Button>
     </div>
     <Checkbox
       label="Aktuellen Standort verwenden"

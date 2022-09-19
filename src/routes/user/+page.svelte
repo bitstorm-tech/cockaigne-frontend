@@ -9,11 +9,11 @@
   import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
-  import { sortDealsByState } from "$lib/deal.service";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import _ from "lodash";
   import { onMount } from "svelte";
-  import { locationStore } from "../../lib/store.service";
+  import { locationStore, searchRadiusStore } from "../../lib/store.service";
+  import { dealsStore } from "../../lib/stores/deals.store";
 
   export let data;
   let deals: Deal[] = data?.deals;
@@ -23,10 +23,9 @@
   let showTabIndex = 0;
   let address = "";
 
-  $: activeDeals = sortDealsByState(deals).active;
-
   onMount(async () => {
     address = addressToShortString(await getAddress($locationStore));
+    await dealsStore.filterDeals($locationStore, $searchRadiusStore / 2);
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {
@@ -62,7 +61,7 @@
 </div>
 {#if showTabIndex === 0}
   <div class="h-full overflow-auto">
-    <UserDealsList deals={activeDeals} {favoriteDeals} on:favor={toggleFavorite} />
+    <UserDealsList deals={$dealsStore} {favoriteDeals} on:favor={toggleFavorite} />
   </div>
 {:else if showTabIndex === 1}
   <div class="h-full overflow-auto">

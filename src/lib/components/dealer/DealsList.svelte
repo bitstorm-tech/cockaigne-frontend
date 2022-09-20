@@ -33,12 +33,7 @@
     </EmptyContent>
   {/if}
   {#each deals as deal, i}
-    <DealsListItem
-      {deal}
-      {isUser}
-      showDetails={openDetail === i}
-      on:click={() => (openDetail = openDetail === i ? -1 : i)}
-    >
+    <DealsListItem {deal} showDetails={openDetail === i} on:click={() => (openDetail = openDetail === i ? -1 : i)}>
       {#if isUser}
         <div class="cursor-pointer" on:click={() => favor(deal)}>
           <HeartIcon outline={!isFavorite(deal.id)} />

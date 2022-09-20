@@ -12,8 +12,8 @@
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import _ from "lodash";
   import { onMount } from "svelte";
-  import { locationStore, searchRadiusStore } from "../../lib/store.service";
   import { dealStore } from "../../lib/database/deal/deal.store";
+  import { locationStore, searchRadiusStore } from "../../lib/store.service";
 
   export let data;
   let deals: Deal[] = data?.deals;
@@ -25,7 +25,7 @@
 
   onMount(async () => {
     address = addressToShortString(await getAddress($locationStore));
-    await dealsStore.filterDeals($locationStore, $searchRadiusStore / 2);
+    await dealStore.loadFiltered($locationStore, $searchRadiusStore / 2);
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {

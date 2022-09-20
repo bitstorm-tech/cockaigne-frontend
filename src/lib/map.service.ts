@@ -31,7 +31,7 @@ export class MapService {
     useGeographic();
     searchRadiusStore.subscribe(async (radius) => {
       const location = get(locationStore);
-      await dealStore.filterDeals(location, radius / 2);
+      await dealStore.loadFiltered(location, radius / 2);
     });
     dealStore.subscribe((deals) => this.setDeals(deals));
     const center = toOpenLayersCoordinate(get(locationStore));
@@ -94,7 +94,7 @@ export class MapService {
     locationStore.subscribe(async (position) => {
       const radius = get(searchRadiusStore);
       this.jumpToLocation(position);
-      await dealStore.filterDeals(position, radius / 2);
+      await dealStore.loadFiltered(position, radius / 2);
     });
   }
 

@@ -23,7 +23,7 @@ CREATE TABLE deal
     account_id  integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     title       text      NOT NULL,
     description text      NOT NULL,
-    "category"  text      NOT NULL,
+    "category"  integer   NOT NULL REFERENCES category (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     "duration"  integer   NOT NULL,
     "start"     timestamp NOT NULL,
     "template"  bool      NOT NULL DEFAULT false,

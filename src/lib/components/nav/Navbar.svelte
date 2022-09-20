@@ -20,7 +20,7 @@
         <HamburgerIcon on:click={toggleMobileMenu} />
       {/if}
     </div>
-    <Link href="/"><img class="h-7" src="/images/logo-text.png" alt="Logo Text" /></Link>
+    <Link href="/"><img class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
   </div>
 </nav>
 {#if showMobileMenu}

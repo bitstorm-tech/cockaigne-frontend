@@ -1,5 +1,6 @@
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
+import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
@@ -8,13 +9,14 @@ import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
-import { Fill, Stroke, Style } from "ol/style";
+import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
 import type { Deal } from "./database/deal/deal.model";
 import { dealStore } from "./database/deal/deal.store";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
+import { getIconPathById } from "./icon-mapping";
 import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
 
 export class MapService {
@@ -119,7 +121,8 @@ export class MapService {
     deals.map((deal) => {
       const coordinate = this.parseWKT(deal.location as string);
       if (coordinate) {
-        this.dealLayerSource.addFeature(new Feature(new Circle(coordinate, this.transformRadius(1))));
+        const icon = this.createIcon(deal, coordinate);
+        this.dealLayerSource.addFeature(icon);
       }
     });
   }
@@ -145,6 +148,23 @@ export class MapService {
 
   private parseWKT(wkt: string): number[] | undefined {
     return wkt.match(/[+-]?\d+(\.\d+)?/g)?.map((value) => parseFloat(value));
+  }
+
+  private createIcon(deal: Deal, coordinate: Coordinate): Feature {
+    const feature = new Feature({
+      geometry: new Point(coordinate)
+    });
+
+    const style = new Style({
+      image: new Icon({
+        src: getIconPathById(deal.category),
+        scale: 0.08
+      })
+    });
+
+    feature.setStyle(style);
+
+    return feature;
   }
 
   private saveCenter(coordinate: Coordinate) {

@@ -42,7 +42,7 @@
   imageUrl="/images/dummy/aakenus-grill-profile.svg"
 >
   {#if $page.data.user.isDealer}
-    <a href="/deals/overview">
+    <a href={"/deals/overview/" + dealerId}>
       <Button outline circle>
         <FireIcon />
       </Button>

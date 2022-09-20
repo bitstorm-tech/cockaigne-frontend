@@ -20,6 +20,7 @@ export const dealStore = {
     );
 
     if (!response.ok) {
+      console.error("Can't fetch filtered deals:", response.status, response.statusText);
       return;
     }
 

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
@@ -9,21 +10,21 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
+  import type { Category } from "$lib/database/category/category.model";
+  import { categoryStore } from "$lib/database/category/category.store";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { getDealState } from "$lib/deal.service";
 
   export let data;
+  $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
 
   const runtimes = {
     "24": "24 Stunden",
     "48": "48 Stunden",
     "72": "72 Stunden"
   };
-  const categories = {
-    FOOD: "Essen & Trinken",
-    TECH: "Technik",
-    FASHION: "Mode"
-  };
+
+  categoryStore.load();
 
   let openErrorModal = false;
   let openDeleteModal = false;
@@ -79,7 +80,7 @@
 <div class="flex flex-col gap-4 p-4">
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
-  <Select label="Kategorien" options={categories} bind:value={deal.category} {disabled} />
+  <Select label="Kategorie" options={categories} bind:value={deal.category} {disabled} />
   <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
   <DateTimeInput label="Start" bind:value={deal.start} {disabled} />
   <div class="text-xs">Kosten: {costs} €</div>
@@ -90,7 +91,7 @@
     {#if deal.id > 0 && !disabled}
       <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
     {/if}
-    <a href="/deals/overview">
+    <a href={"/deals/overview/" + $page.data.user.id}>
       <Button outline>Abbrechen</Button>
     </a>
   </div>

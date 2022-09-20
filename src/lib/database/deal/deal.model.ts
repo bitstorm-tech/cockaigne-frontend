@@ -6,7 +6,7 @@ export interface Deal {
   account_id: number;
   title: string;
   description: string;
-  category: string;
+  category: number;
   duration: string;
   start: string;
   template: boolean;
@@ -23,7 +23,7 @@ export function newDeal(): Deal {
     description: "",
     duration: "24",
     template: false,
-    category: "FOOD"
+    category: 1
   };
 }
 

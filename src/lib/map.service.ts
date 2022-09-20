@@ -11,11 +11,11 @@ import VectorSource from "ol/source/Vector";
 import { Fill, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
 import type { Deal } from "./database/deal/deal.model";
+import { dealStore } from "./database/deal/deal.store";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
 import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
-import { dealsStore } from "./stores/deals.store";
 
 export class MapService {
   private map: Map;
@@ -31,9 +31,9 @@ export class MapService {
     useGeographic();
     searchRadiusStore.subscribe(async (radius) => {
       const location = get(locationStore);
-      await dealsStore.filterDeals(location, radius / 2);
+      await dealStore.filterDeals(location, radius / 2);
     });
-    dealsStore.subscribe((deals) => this.setDeals(deals));
+    dealStore.subscribe((deals) => this.setDeals(deals));
     const center = toOpenLayersCoordinate(get(locationStore));
 
     this.view.setCenter(center);
@@ -94,7 +94,7 @@ export class MapService {
     locationStore.subscribe(async (position) => {
       const radius = get(searchRadiusStore);
       this.jumpToLocation(position);
-      await dealsStore.filterDeals(position, radius / 2);
+      await dealStore.filterDeals(position, radius / 2);
     });
   }
 

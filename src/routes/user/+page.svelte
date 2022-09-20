@@ -13,7 +13,7 @@
   import _ from "lodash";
   import { onMount } from "svelte";
   import { locationStore, searchRadiusStore } from "../../lib/store.service";
-  import { dealsStore } from "../../lib/stores/deals.store";
+  import { dealStore } from "../../lib/database/deal/deal.store";
 
   export let data;
   let deals: Deal[] = data?.deals;
@@ -61,7 +61,7 @@
 </div>
 {#if showTabIndex === 0}
   <div class="h-full overflow-auto">
-    <UserDealsList deals={$dealsStore} {favoriteDeals} on:favor={toggleFavorite} />
+    <UserDealsList deals={$dealStore} {favoriteDeals} on:favor={toggleFavorite} />
   </div>
 {:else if showTabIndex === 1}
   <div class="h-full overflow-auto">

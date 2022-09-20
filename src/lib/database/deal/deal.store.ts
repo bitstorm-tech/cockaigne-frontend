@@ -1,11 +1,11 @@
 import { writable } from "svelte/store";
-import type { Deal } from "../database/deal/deal.model";
-import type { Position } from "../geo/geo.types";
-import { POST } from "../http.service";
+import type { Position } from "../../geo/geo.types";
+import { POST } from "../../http.service";
+import type { Deal } from "./deal.model";
 
 const { subscribe, set, update } = writable<Deal[]>([]);
 
-export const dealsStore = {
+export const dealStore = {
   subscribe,
   set,
   update,

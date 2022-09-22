@@ -25,7 +25,7 @@
 
   onMount(async () => {
     address = addressToShortString(await getAddress($locationStore));
-    await dealStore.loadFiltered($locationStore, $searchRadiusStore / 2);
+    await dealStore.load($locationStore, $searchRadiusStore / 2);
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS account
     last_login           timestamp             NULL,
     use_current_location bool                  NULL     DEFAULT false,
     search_radius        integer               NULL,
+    selected_categories  integer[]             NULL,
     "location"           geometry(point, 4326) NULL,
     created              timestamp             NOT NULL DEFAULT now()
 );

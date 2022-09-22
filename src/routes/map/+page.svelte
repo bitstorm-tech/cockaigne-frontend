@@ -16,7 +16,7 @@
   let mapService: MapService;
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
-  let showDealFilterModal = false;
+  let showDealFilterModal = data.showDealFilterModal;
   let address = "";
 
   onMount(async () => {

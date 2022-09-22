@@ -10,7 +10,7 @@ export const dealStore = {
   set,
   update,
 
-  loadFiltered: async function (location: Position, radius: number) {
+  load: async function (location: Position, radius: number) {
     const response = await fetch(
       "/api/deals/filter",
       POST({

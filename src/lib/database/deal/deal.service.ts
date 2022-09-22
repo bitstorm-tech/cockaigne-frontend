@@ -19,12 +19,15 @@ export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
   const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
   const buffer = `ST_BUFFER(${point}, ${filter.radius})::geometry`;
   const isActive = `now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
-  const query = `SELECT d.*, ST_ASTEXT(a.location) AS location 
-  FROM deal d, account a 
-  WHERE a.id = d.account_id 
-  AND d.template = false 
-  AND ST_WITHIN(a.location, ${buffer})
-  AND ${isActive}`;
+  const categories = filter.categories?.length > 0 ? `AND d.category in (${filter.categories.join(",")})` : "";
+
+  const query = `SELECT d.*, ST_ASTEXT(a.location) AS location
+                 FROM deal d,
+                      account a
+                 WHERE a.id = d.account_id
+                   AND d.template = false
+                   AND ST_WITHIN(a.location, ${buffer})
+                   AND ${isActive} ${categories}`;
 
   const result = await pool.query<Deal>(query);
 

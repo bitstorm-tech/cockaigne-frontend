@@ -12,6 +12,7 @@
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import _ from "lodash";
   import { onMount } from "svelte";
+  import { selectedCategoriesStore } from "../../lib/database/category/category.store";
   import { dealStore } from "../../lib/database/deal/deal.store";
   import { locationStore, searchRadiusStore } from "../../lib/store.service";
 
@@ -25,7 +26,7 @@
 
   onMount(async () => {
     address = addressToShortString(await getAddress($locationStore));
-    await dealStore.load($locationStore, $searchRadiusStore / 2);
+    await dealStore.load($locationStore, $searchRadiusStore / 2, $selectedCategoriesStore);
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {

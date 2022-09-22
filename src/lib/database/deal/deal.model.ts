@@ -30,4 +30,5 @@ export function newDeal(): Deal {
 export interface DealFilter {
   location: Position;
   radius: number;
+  categories: number[];
 }

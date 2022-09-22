@@ -11,6 +11,7 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
+import { selectedCategoriesStore } from "./database/category/category.store";
 import type { Deal } from "./database/deal/deal.model";
 import { dealStore } from "./database/deal/deal.store";
 import type { Position } from "./geo/geo.types";
@@ -33,7 +34,8 @@ export class MapService {
     useGeographic();
     searchRadiusStore.subscribe(async (radius) => {
       const location = get(locationStore);
-      await dealStore.load(location, radius / 2);
+      const selectedCategories = get(selectedCategoriesStore);
+      await dealStore.load(location, radius / 2, selectedCategories);
     });
     dealStore.subscribe((deals) => this.setDeals(deals));
     const center = toOpenLayersCoordinate(get(locationStore));
@@ -95,8 +97,13 @@ export class MapService {
 
     locationStore.subscribe(async (position) => {
       const radius = get(searchRadiusStore);
+      const selectedCategories = get(selectedCategoriesStore);
       this.jumpToLocation(position);
-      await dealStore.load(position, radius / 2);
+      await dealStore.load(position, radius / 2, selectedCategories);
+    });
+
+    selectedCategoriesStore.subscribe(async (selectedCategories) => {
+      await dealStore.load(get(locationStore), get(searchRadiusStore) / 2, selectedCategories);
     });
   }
 

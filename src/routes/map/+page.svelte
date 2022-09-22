@@ -8,6 +8,7 @@
   import { MapService } from "$lib/map.service";
   import { locationStore, searchRadiusStore, useCurrentLocationStore } from "$lib/store.service";
   import { onDestroy, onMount } from "svelte";
+  import { selectedCategoriesStore } from "../../lib/database/category/category.store";
   import { addressToShortString, getAddress } from "../../lib/geo/address.service";
   import { POST } from "../../lib/http.service";
 
@@ -44,7 +45,8 @@
       "/api/deals/filter",
       POST({
         location: position,
-        radius: $searchRadiusStore / 2
+        radius: $searchRadiusStore / 2,
+        categories: $selectedCategoriesStore
       })
     );
 

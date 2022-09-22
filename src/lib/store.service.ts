@@ -1,5 +1,4 @@
 import { browser } from "$app/environment";
-import _ from "lodash";
 import { writable } from "svelte/store";
 import type { AccountUpdateOptions } from "./database/account/account.model";
 import type { Position } from "./geo/geo.types";
@@ -10,7 +9,6 @@ const KEY_PREFIX = "ckn.";
 const KEYS = {
   searchRadius: KEY_PREFIX + "searchRadius",
   useCurrentLocation: KEY_PREFIX + "useCurrentLocation",
-  categories: KEY_PREFIX + "categories",
   location: KEY_PREFIX + "location"
 };
 
@@ -61,23 +59,6 @@ export class StoreService {
 
   static getUseCurrentLocation(): boolean {
     return this.getFromLocalStorage(KEYS.useCurrentLocation, "false") === "true";
-  }
-
-  static getCategories(): number[] {
-    const categories = this.getFromLocalStorage(KEYS.categories);
-    return categories.split(",").map((category) => +category);
-  }
-
-  static toggleCategories(category: number) {
-    const categories = StoreService.getCategories();
-
-    if (categories.includes(category)) {
-      _.remove(categories, (c) => c === category);
-    } else {
-      categories.push(category);
-    }
-
-    this.setToLocalStorage(KEYS.categories, categories.join(","));
   }
 
   static saveLocation(position: Position) {

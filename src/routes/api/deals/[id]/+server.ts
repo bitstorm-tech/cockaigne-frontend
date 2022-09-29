@@ -18,7 +18,7 @@ export async function GET({ params, request }: RequestEvent) {
       return notFoundResponse();
     }
 
-    if (deal.account_id !== +jwt.sub) {
+    if (deal.dealer_id !== +jwt.sub) {
       return forbiddenResponse();
     }
 
@@ -44,7 +44,7 @@ export async function DELETE({ params, request }: RequestEvent) {
       return notFoundResponse();
     }
 
-    if (deal.account_id !== +jwt.sub) {
+    if (deal.dealer_id !== +jwt.sub) {
       return forbiddenResponse();
     }
 

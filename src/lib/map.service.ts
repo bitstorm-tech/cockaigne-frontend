@@ -164,7 +164,7 @@ export class MapService {
 
     const style = new Style({
       image: new Icon({
-        src: getIconPathById(deal.category),
+        src: getIconPathById(deal.category_id),
         scale: 0.08
       })
     });

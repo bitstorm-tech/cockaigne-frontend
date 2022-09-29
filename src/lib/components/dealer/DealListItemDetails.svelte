@@ -24,7 +24,7 @@
         </div>
         <span class="whitespace-nowrap">Deal melden</span>
       </div>
-      <a href="/dealer/{deal.account_id}"><span class="whitespace-nowrap">zum Dealer</span></a>
+      <a href="/dealer/{deal.dealer_id}"><span class="whitespace-nowrap">zum Dealer</span></a>
     </div>
   {:else}
     <span class="mt-4 text-2xs">Start: {deal.start} / Dauer: {deal.duration} Stunden</span>

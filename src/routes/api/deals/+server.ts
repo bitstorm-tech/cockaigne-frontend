@@ -1,5 +1,5 @@
 import type { Deal } from "$lib/database/deal/deal.model";
-import { findAllDeals, findDealsByOwnerId, upsertDeal } from "$lib/database/deal/deal.service";
+import { findAllDeals, findDealsByDealerId, upsertDeal } from "$lib/database/deal/deal.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -13,7 +13,7 @@ export async function POST({ request }: RequestEvent) {
     }
 
     const deal: Deal = await request.json();
-    deal.account_id = +jwt.sub;
+    deal.dealer_id = +jwt.sub;
 
     await upsertDeal(deal);
 
@@ -27,7 +27,7 @@ export async function POST({ request }: RequestEvent) {
 export async function GET({ url }: RequestEvent) {
   try {
     const dealer = url.searchParams.get("dealer")?.toLowerCase();
-    const deals = dealer ? await findDealsByOwnerId(+dealer) : await findAllDeals();
+    const deals = dealer ? await findDealsByDealerId(+dealer) : await findAllDeals();
 
     return response(deals);
   } catch (error) {

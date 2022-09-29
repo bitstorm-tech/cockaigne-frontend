@@ -15,19 +15,19 @@
     "postinstall": "node scripts/fix-pg-native.js"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.180.0",
+    "@aws-sdk/client-s3": "3.181.0",
     "bcryptjs": "2.4.3",
     "daisyui": "2.31.0",
-    "jose": "4.9.3",
+    "jose": "4.10.0",
     "lodash": "4.17.21",
     "ol": "^7.1.0",
     "pg": "8.8.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "1.0.0-next.77",
-    "@sveltejs/kit": "1.0.0-next.504",
+    "@sveltejs/kit": "1.0.0-next.505",
     "@types/bcryptjs": "2.4.2",
-    "@types/lodash": "4.14.185",
+    "@types/lodash": "4.14.186",
     "@types/node": "18.7.23",
     "@types/pg": "8.6.5",
     "@typescript-eslint/eslint-plugin": "5.38.1",
@@ -44,7 +44,7 @@
     "svelte-preprocess": "4.10.7",
     "tailwindcss": "3.1.8",
     "tslib": "2.4.0",
-    "typescript": "4.8.3",
-    "vercel": "28.4.3"
+    "typescript": "4.8.4",
+    "vercel": "28.4.5"
   }
 }

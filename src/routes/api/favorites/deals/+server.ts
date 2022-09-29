@@ -1,5 +1,4 @@
-import { findFavoriteDealsByAccountId } from "$lib/database/deal/deal.service";
-import { deleteFavoriteDeal, insertFavoriteDeal } from "$lib/database/favorite/favorite.service";
+import { deleteHotDeal, findHotDealsByUserId, insertHotDeal } from "$lib/database/deal/deal.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -12,7 +11,7 @@ export async function GET({ request }: RequestEvent) {
       return unauthorizedResponse();
     }
 
-    const favoriteDeals = await findFavoriteDealsByAccountId(+jwt.sub);
+    const favoriteDeals = await findHotDealsByUserId(+jwt.sub);
 
     return response(favoriteDeals);
   } catch (error) {
@@ -30,7 +29,7 @@ export async function POST({ request }: RequestEvent) {
     }
 
     const dealId = await request.text();
-    await insertFavoriteDeal(+jwt.sub, +dealId);
+    await insertHotDeal(+jwt.sub, +dealId);
 
     return response();
   } catch (error) {
@@ -48,7 +47,7 @@ export async function DELETE({ request }: RequestEvent) {
     }
 
     const dealId = await request.text();
-    await deleteFavoriteDeal(+jwt.sub, +dealId);
+    await deleteHotDeal(+jwt.sub, +dealId);
 
     return response();
   } catch (error) {

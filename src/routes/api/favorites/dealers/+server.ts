@@ -1,4 +1,4 @@
-import { findFavoriteDealersByAccountId } from "$lib/database/deal/deal.service";
+import { findFavoriteDealersByUserId } from "$lib/database/dealer/dealer.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -11,7 +11,7 @@ export async function GET({ request }: RequestEvent) {
       return unauthorizedResponse();
     }
 
-    const favoriteDealers = await findFavoriteDealersByAccountId(+jwt.sub);
+    const favoriteDealers = await findFavoriteDealersByUserId(+jwt.sub);
 
     return response(favoriteDealers);
   } catch (error) {

@@ -1,6 +1,6 @@
 import {
   deleteLikeById,
-  findLikeByAccountIdAndDealId,
+  findLikeByUserIdAndDealId,
   getLikeCountByDealId,
   insertLike
 } from "$lib/database/like/like.service";
@@ -26,7 +26,7 @@ export async function POST({ request, url }: RequestEvent) {
 
     const dealId = +dealIdString;
 
-    const like = await findLikeByAccountIdAndDealId(accountId, dealId);
+    const like = await findLikeByUserIdAndDealId(accountId, dealId);
 
     if (like) {
       await deleteLikeById(accountId, dealId);

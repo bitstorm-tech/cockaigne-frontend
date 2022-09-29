@@ -3,10 +3,10 @@ import type { Position } from "../../geo/geo.types";
 
 export interface Deal {
   id: number;
-  account_id: number;
+  dealer_id: number;
   title: string;
   description: string;
-  category: number;
+  category_id: number;
   duration: string;
   start: string;
   template: boolean;
@@ -17,18 +17,18 @@ export interface Deal {
 export function newDeal(): Deal {
   return {
     id: -1,
-    account_id: -1,
+    dealer_id: -1,
     start: getNowAsIsoString(),
     title: "",
     description: "",
     duration: "24",
     template: false,
-    category: 1
+    category_id: 1
   };
 }
 
 export interface DealFilter {
   location: Position;
   radius: number;
-  categories: number[];
+  categoryIds: number[];
 }

@@ -46,7 +46,7 @@
       POST({
         location: position,
         radius: $searchRadiusStore / 2,
-        categories: $selectedCategoriesStore
+        categoryIds: $selectedCategoriesStore
       })
     );
 

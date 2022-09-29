@@ -32,7 +32,7 @@
   function toggleFavorite(event: CustomEvent<Deal>) {
     const deal: Deal = event.detail;
     const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
-    fetch("/api/favorites", {
+    fetch("/api/favorites/deals", {
       method: favoriteDealIndex >= 0 ? "delete" : "post",
       body: `${deal.id}`
     });

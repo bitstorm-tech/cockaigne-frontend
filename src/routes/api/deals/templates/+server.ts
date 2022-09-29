@@ -1,4 +1,4 @@
-import { findTemplateDealsByAccountId } from "$lib/database/deal/deal.service";
+import { findTemplateDealsByDealerId } from "$lib/database/deal/deal.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -11,7 +11,7 @@ export async function GET({ request }: RequestEvent) {
       return unauthorizedResponse();
     }
 
-    const templateDeals = await findTemplateDealsByAccountId(+jwt.sub);
+    const templateDeals = await findTemplateDealsByDealerId(+jwt.sub);
 
     return response(templateDeals);
   } catch (error) {

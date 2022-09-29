@@ -80,7 +80,7 @@
 <div class="flex flex-col gap-4 p-4">
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
-  <Select label="Kategorie" options={categories} bind:value={deal.category} {disabled} />
+  <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
   <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
   <DateTimeInput label="Start" bind:value={deal.start} {disabled} />
   <div class="text-xs">Kosten: {costs} €</div>

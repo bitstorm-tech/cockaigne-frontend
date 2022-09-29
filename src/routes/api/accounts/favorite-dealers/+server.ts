@@ -1,4 +1,4 @@
-import { findFavoriteDealersByAccountId } from "$lib/database/favorite/favorite.service";
+import { findFavoriteDealersByUserId } from "$lib/database/dealer/dealer.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
@@ -14,7 +14,7 @@ export async function GET({ request }: RequestEvent) {
 
     const accountId = +jwt.sub;
 
-    const favoriteDealers = await findFavoriteDealersByAccountId(+accountId);
+    const favoriteDealers = await findFavoriteDealersByUserId(+accountId);
     return response(favoriteDealers);
   } catch (error) {
     console.error("Can't get favorite dealers:", error);

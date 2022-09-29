@@ -1,5 +1,4 @@
 import pool from "$lib/database/pg";
-import type { Dealer } from "../dealer/dealer.model";
 import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal, DealFilter } from "./deal.model";
 
@@ -19,12 +18,12 @@ export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
   const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
   const buffer = `ST_BUFFER(${point}, ${filter.radius})::geometry`;
   const isActive = `now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
-  const categories = filter.categories?.length > 0 ? `AND d.category in (${filter.categories.join(",")})` : "";
+  const categories = filter.categoryIds?.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
 
   const query = `SELECT d.*, ST_ASTEXT(a.location) AS location
                  FROM deal d,
                       account a
-                 WHERE a.id = d.account_id
+                 WHERE a.id = d.dealer_id
                    AND d.template = false
                    AND ST_WITHIN(a.location, ${buffer})
                    AND ${isActive} ${categories}`;
@@ -45,33 +44,25 @@ export async function findDealById(id: number): Promise<Deal | undefined> {
   return result.rows[0];
 }
 
-export async function findDealsByOwnerId(id: number): Promise<Deal[]> {
-  const query = "SELECT * FROM deal WHERE account_id = $1 AND template = false";
-  const result = await pool.query<Deal>(query, [id]);
+export async function findDealsByDealerId(dealerId: number): Promise<Deal[]> {
+  const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template = false";
+  const result = await pool.query<Deal>(query, [dealerId]);
 
   return result.rows;
 }
 
-export async function findFavoriteDealsByAccountId(id: number): Promise<Deal[]> {
+export async function findHotDealsByUserId(userId: number): Promise<Deal[]> {
   const result = await pool.query<Deal>(
-    "SELECT d.* FROM deal d, favorite_deal f WHERE d.id = f.deal_id AND f.account_id = $1",
-    [id]
+    "SELECT d.* FROM deal d, hot_deal h WHERE d.id = h.deal_id AND h.user_id = $1",
+    [userId]
   );
 
   return result.rows;
 }
 
-export async function findFavoriteDealersByAccountId(id: number): Promise<Dealer[]> {
-  const query =
-    "SELECT a.id, a.company_name FROM account a, favorite_dealer f WHERE a.id = f.dealer_id AND f.account_id = $1";
-  const result = await pool.query<Dealer>(query, [id]);
-
-  return result.rows;
-}
-
-export async function findTemplateDealsByAccountId(id: number): Promise<Deal[]> {
-  const query = "SELECT * FROM deal WHERE account_id = $1 AND template is true";
-  const result = await pool.query<Deal>(query, [id]);
+export async function findTemplateDealsByDealerId(dealerId: number): Promise<Deal[]> {
+  const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template is true";
+  const result = await pool.query<Deal>(query, [dealerId]);
 
   return result.rows;
 }
@@ -79,10 +70,10 @@ export async function findTemplateDealsByAccountId(id: number): Promise<Deal[]> 
 export async function upsertDeal(deal: Deal) {
   const doUpdate = deal?.id > 0;
   const query = doUpdate
-    ? "UPDATE deal SET account_id = $1, title = $2, description = $3, category = $4, duration = $5, start = $6, template = $7 WHERE id = $8"
-    : "INSERT INTO deal (account_id, title, description, category, duration, start, template) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+    ? "UPDATE deal SET dealer_id = $1, title = $2, description = $3, category_id = $4, duration = $5, start = $6, template = $7 WHERE id = $8"
+    : "INSERT INTO deal (dealer_id, title, description, category_id, duration, start, template) VALUES ($1, $2, $3, $4, $5, $6, $7)";
 
-  const values = [deal.account_id, deal.title, deal.description, deal.category, deal.duration, deal.start, false];
+  const values = [deal.dealer_id, deal.title, deal.description, deal.category_id, deal.duration, deal.start, false];
 
   if (doUpdate) {
     values.push(deal.id);
@@ -98,4 +89,16 @@ export async function upsertDeal(deal: Deal) {
 export async function deleteDealById(id: number) {
   const query = "DELETE FROM deal WHERE id = $1";
   await pool.query(query, [id]);
+}
+
+export async function insertHotDeal(userId: number, dealId: number) {
+  const query = "INSERT INTO hot_deal (user_id, deal_id) VALUES ($1, $2)";
+  const values = [userId, dealId];
+  await pool.query(query, values);
+}
+
+export async function deleteHotDeal(userId: number, dealId: number) {
+  const query = "DELETE FROM hot_deal WHERE user_id = $1 AND deal_id = $2";
+  const values = [userId, dealId];
+  await pool.query(query, values);
 }

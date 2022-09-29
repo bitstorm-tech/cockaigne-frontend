@@ -1,30 +1,30 @@
 import pool from "$lib/database/pg";
 import type { Deal } from "../deal/deal.model";
 
-export async function insertLike(accountId: number, dealId: number) {
-  const query = `INSERT INTO "like" (account_id, deal_id) VALUES ($1, $2)`;
-  const values = [accountId, dealId];
+export async function insertLike(userId: number, dealId: number) {
+  const query = `INSERT INTO "like" (user_id, deal_id) VALUES ($1, $2)`;
+  const values = [userId, dealId];
 
   await pool.query(query, values);
 }
 
-export async function findLikeByAccountIdAndDealId(accountId: number, dealId: number): Promise<Deal | undefined> {
-  const query = `SELECT * FROM "like" WHERE account_id = $1 AND deal_id = $2`;
-  const values = [accountId, dealId];
+export async function findLikeByUserIdAndDealId(userId: number, dealId: number): Promise<Deal | undefined> {
+  const query = `SELECT * FROM "like" WHERE user_id = $1 AND deal_id = $2`;
+  const values = [userId, dealId];
 
   const result = await pool.query<Deal>(query, values);
 
   if (result.rows.length === 0) {
-    console.log("No like found for account_id=%s and deal_id=%s", accountId, dealId);
+    console.log("No like found for account_id=%s and deal_id=%s", userId, dealId);
     return;
   }
 
   return result.rows[0];
 }
 
-export async function deleteLikeById(accountId: number, dealId: number) {
-  const query = `DELETE FROM "like" WHERE account_id = $1 AND deal_id = $2`;
-  const values = [accountId, dealId];
+export async function deleteLikeById(userId: number, dealId: number) {
+  const query = `DELETE FROM "like" WHERE user_id = $1 AND deal_id = $2`;
+  const values = [userId, dealId];
 
   await pool.query(query, values);
 }

@@ -12,11 +12,13 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.service";
+  import type { Account } from "../../../lib/database/account/account.model";
 
   export let data;
   let activeTab = 0;
   const dealerId = +data?.dealerId;
   const deals: Deal[] = data?.deals;
+  const account: Account = data?.account;
   const pictures: string[] = data?.pictures;
   let favoriteDealers: number[] = data?.favoriteDealers;
   let loadingFavorite = false;
@@ -36,9 +38,9 @@
 </script>
 
 <ProfileHeader
-  name="Aakenus Grill"
-  street="Bahnhofstr. 22"
-  city="10123 Berlin"
+  name={account.company_name}
+  street={`${account.street} ${account.house_number}`}
+  city={`${account.zip} ${account.city}`}
   imageUrl="/images/dummy/aakenus-grill-profile.svg"
 >
   {#if $page.data.user.isDealer}

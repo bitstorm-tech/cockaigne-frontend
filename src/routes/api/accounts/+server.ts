@@ -33,7 +33,7 @@ export async function GET({ request }: RequestEvent) {
       return notFoundResponse();
     }
 
-    account.password = "";
+    delete account.password;
 
     return response(account);
   } catch (error) {

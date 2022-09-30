@@ -6,17 +6,17 @@
   import Link from "$lib/components/ui/Link.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import type { Account } from "$lib/database/account/account.model";
+  import { POST } from "../../lib/http.service";
 
   const account = {} as Account;
   let openModal = false;
+  let loading = false;
 
   $: disabled = account.email?.length === 0 || account.password?.length === 0;
 
   async function register() {
-    const response = await fetch("/api/accounts", {
-      method: "post",
-      body: JSON.stringify(account)
-    });
+    loading = true;
+    const response = await fetch("/api/accounts", POST(account));
 
     if (response.ok) {
       await invalidateAll();
@@ -25,6 +25,7 @@
     } else {
       openModal = true;
     }
+    loading = false;
   }
 </script>
 
@@ -32,6 +33,9 @@
   <h1>Registrieren</h1>
   <Checkbox label="Ich bin ein Dealer" bind:checked={account.dealer} />
   <Input label="E-Mail" type="email" bind:value={account.email} />
+  {#if !account.dealer}
+    <Input label="Benutzername" type="text" bind:value={account.username} />
+  {/if}
   <Input label="Passwort" type="password" bind:value={account.password} />
   {#if account.dealer}
     <Input label="Firmenname" type="text" bind:value={account.company_name} />
@@ -49,7 +53,7 @@
     </div>
     <Input label="Telefon" type="tel" bind:value={account.phone} />
   {/if}
-  <Button on:click={register} {disabled}>Registrieren</Button>
+  <Button on:click={register} {loading} {disabled}>Registrieren</Button>
   <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>
 <Modal bind:open={openModal}>E-Mail wurde bereits registriert!</Modal>

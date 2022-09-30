@@ -48,7 +48,7 @@
   }
 </script>
 
-<UserHeader name={account.email} {address} imageUrl="/images/dummy/user-profile.svg" />
+<UserHeader name={account.username} {address} imageUrl="/images/dummy/user-profile.svg" />
 <div class="tabs mt-6 max-h-8 mb-2">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon />

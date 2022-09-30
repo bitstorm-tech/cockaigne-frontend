@@ -3,6 +3,7 @@ export interface Account {
   email: string;
   password?: string;
   dealer: boolean;
+  username?: string;
   company_name?: string;
   street?: string;
   house_number?: string;

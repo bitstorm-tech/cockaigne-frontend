@@ -1,11 +1,12 @@
-CREATE TABLE IF NOT EXISTS account
+CREATE TABLE IF NOT EXISTS account2
 (
     id                   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     email                text                  NOT NULL,
     "password"           text                  NOT NULL,
     dealer               bool                  NOT NULL DEFAULT false,
     street               text                  NULL,
-    company_name         text                  NULL,
+    username             text                  NULL unique,
+    company_name         text                  NULL unique,
     house_number         text                  NULL,
     city                 text                  NULL,
     zip                  integer               NULL,

@@ -25,9 +25,8 @@ export async function POST({ request }: RequestEvent) {
 
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    const name = formData.get("name")?.toString();
 
-    const pictureUrl = await savePicture(file, +jwt.sub, name);
+    const pictureUrl = await savePicture(file, +jwt.sub);
 
     return response(pictureUrl, 200, false);
   } catch (error) {

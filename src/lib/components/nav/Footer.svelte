@@ -4,7 +4,7 @@
   import TagIcon from "$lib/components/ui/icons/TagIcon.svelte";
 </script>
 
-<footer class="btm-nav btm-nav-sm">
+<footer class="btm-nav btm-nav-sm bg-base-300 border-t-[0.01rem]">
   <a href="/">
     <HomeIcon />
   </a>

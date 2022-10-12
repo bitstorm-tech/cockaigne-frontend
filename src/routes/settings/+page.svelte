@@ -11,12 +11,15 @@
   let newUsername = account.username;
   let newProfileImage: File;
   let errorMessage = "";
+  let loading = false;
 
   $: disableSave = (newUsername.length === 0 || account.username === newUsername) && !newProfileImage;
 
   async function save() {
+    loading = true;
     await saveUsername();
     await saveProfileImage();
+    loading = false;
   }
 
   async function saveUsername() {
@@ -72,7 +75,7 @@
   <Input label="Benutzername" bind:value={newUsername} />
   <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild wählen" />
   <div class="flex justify-between">
-    <Button on:click={save} disabled={disableSave}>Speichern</Button>
+    <Button on:click={save} disabled={disableSave} {loading}>Speichern</Button>
     <a href="/"><Button outline>Abbrechen</Button></a>
   </div>
 </section>

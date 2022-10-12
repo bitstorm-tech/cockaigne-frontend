@@ -25,10 +25,11 @@ export async function POST({ request }: RequestEvent) {
 
     const formData = await request.formData();
     const file = formData.get("file") as File;
+    const name = formData.get("name")?.toString();
 
-    const pictureUrl = await savePicture(file, +jwt.sub);
+    const pictureUrl = await savePicture(file, +jwt.sub, name);
 
-    return response(pictureUrl);
+    return response(pictureUrl, 200, false);
   } catch (error) {
     console.error("Can't post picture:", error);
     return errorResponse();

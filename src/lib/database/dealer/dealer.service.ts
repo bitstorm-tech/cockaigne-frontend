@@ -26,7 +26,7 @@ export async function toggleFavoriteDealer(userId: number, dealerId: number): Pr
   const query = "SELECT EXISTS(SELECT * FROM favorite_dealer WHERE user_id = $1 AND dealer_id = $2)";
   const result = await pool.query(query, [userId, dealerId]);
 
-  const isFavorite = +result.rows[0].exists > 0;
+  const isFavorite = +result.rows[0].exists;
 
   const insertOrDeleteFavoriteDealer = isFavorite ? deleteFavoriteDealer : insertFavoriteDealer;
   await insertOrDeleteFavoriteDealer(userId, dealerId);

@@ -10,14 +10,12 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
-  import _ from "lodash";
   import { onMount } from "svelte";
   import { selectedCategoriesStore } from "../../lib/database/category/category.store";
   import { dealStore } from "../../lib/database/deal/deal.store";
   import { locationStore, searchRadiusStore } from "../../lib/store.service";
 
   export let data;
-  let deals: Deal[] = data?.deals;
   let favoriteDeals: Deal[] = data?.favoriteDeals;
   let favoriteDealers: Dealer[] = data?.favoriteDealers;
   let account: Account = data?.account;
@@ -30,25 +28,25 @@
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {
-    const deal: Deal = event.detail;
-    const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
-    fetch("/api/favorites/deals", {
-      method: favoriteDealIndex >= 0 ? "delete" : "post",
-      body: `${deal.id}`
-    });
-
-    if (favoriteDealIndex >= 0) {
-      _.remove(favoriteDeals, (fav) => fav.id === deal.id);
-      favoriteDeals = [...favoriteDeals];
-    } else {
-      favoriteDeals = [...favoriteDeals, deal];
-    }
-
-    deals = [...deals];
+    // const deal: Deal = event.detail;
+    // const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
+    // fetch("/api/favorites/deals", {
+    //   method: favoriteDealIndex >= 0 ? "delete" : "post",
+    //   body: `${deal.id}`
+    // });
+    //
+    // if (favoriteDealIndex >= 0) {
+    //   _.remove(favoriteDeals, (fav) => fav.id === deal.id);
+    //   favoriteDeals = [...favoriteDeals];
+    // } else {
+    //   favoriteDeals = [...favoriteDeals, deal];
+    // }
+    //
+    // deals = [...deals];
   }
 </script>
 
-<UserHeader name={account.username} {address} imageUrl="/images/dummy/user-profile.svg" />
+<UserHeader name={account.username} {address} imageUrl={account.profile_image} />
 <div class="tabs mt-6 max-h-8 mb-2">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon />

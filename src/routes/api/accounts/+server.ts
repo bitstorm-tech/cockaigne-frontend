@@ -1,9 +1,10 @@
-import type { Account } from "$lib/database/account/account.model";
+import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
 import {
   findAccountByEmail,
   findAccountById,
   insertAccount,
-  updateAccount
+  updateAccount,
+  usernameExists
 } from "$lib/database/account/account.service";
 import type { Position } from "$lib/geo/geo.types";
 import {
@@ -12,9 +13,11 @@ import {
   jwtCookieResponse,
   notFoundResponse,
   response,
-  unauthorizedResponse
+  unauthorizedResponse,
+  usernameAlreadyExistsResponse
 } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
+import { getProfileImageURL } from "$lib/storage";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
 
@@ -32,6 +35,8 @@ export async function GET({ request }: RequestEvent) {
     if (!account) {
       return notFoundResponse();
     }
+
+    account.profile_image = await getProfileImageURL(+jwt.sub);
 
     delete account.password;
 
@@ -55,10 +60,8 @@ export async function POST({ request }: RequestEvent) {
 
     const position = {} as Position;
     if (account.dealer) {
-      const geoResponse = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&street=${account.house_number} ${account.street}&city=${account.city}&postalcode=${account.zip}`
-      );
-
+      const query = `format=json&street=${account.house_number} ${account.street}&city=${account.city}&postalcode=${account.zip}`;
+      const geoResponse = await fetch(`https://nominatim.openstreetmap.org/search?${query}`);
       const geoInformation = await geoResponse.json();
 
       if (geoInformation.length === 0) {
@@ -100,7 +103,12 @@ export async function PUT({ request }: RequestEvent) {
       return unauthorizedResponse();
     }
 
-    const update = await request.json();
+    const update: AccountUpdateOptions = await request.json();
+
+    if (update.username && (await usernameExists(update.username))) {
+      return usernameAlreadyExistsResponse();
+    }
+
     await updateAccount(+jwt.sub, update);
 
     return response();

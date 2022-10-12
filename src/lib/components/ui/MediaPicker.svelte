@@ -1,13 +1,13 @@
 <script lang="ts">
-  import Button from './Button.svelte';
-  import { createEventDispatcher } from 'svelte';
+  import { createEventDispatcher } from "svelte";
+  import Button from "./Button.svelte";
 
+  export let imagePreview;
   const dispatch = createEventDispatcher();
   let fileInput;
-  let imagePreview;
 
   function pictureSelected(event) {
-    const file = event.srcElement.files[0];
+    const file = event.target.files[0] as File;
 
     if (!file) {
       return;
@@ -15,7 +15,7 @@
 
     const URL = window.URL || window.webkitURL;
     imagePreview = URL.createObjectURL(file);
-    dispatch('fileSelected', { file });
+    dispatch("fileSelected", file);
   }
 </script>
 

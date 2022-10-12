@@ -2,10 +2,22 @@ import { redirect } from "@sveltejs/kit";
 import type { Account } from "./database/account/account.model";
 import { createJwt } from "./jwt.service";
 
-export function response(bodyData?: unknown, status = 200): Response {
-  const body = bodyData ? JSON.stringify(bodyData) : null;
+export function response(bodyData?: unknown, status = 200, stringify = true): Response {
+  const body = bodyData ? (stringify ? JSON.stringify(bodyData) : bodyData.toString()) : null;
   const options = { status };
   return new Response(body, options);
+}
+
+function badRequestResponse(errorMessage: string, errorCode: number): Response {
+  const error = {
+    message: errorMessage,
+    code: errorCode
+  };
+  return new Response(JSON.stringify(error), { status: 400 });
+}
+
+export function usernameAlreadyExistsResponse(): Response {
+  return badRequestResponse("Der Benutzername wird bereits verwendet", 1);
 }
 
 export function unauthorizedResponse(): Response {

@@ -3,7 +3,7 @@
   import PlusIcon from "$lib/components/ui/icons/PlusIcon.svelte";
   import { createEventDispatcher } from "svelte";
 
-  export let file: File;
+  let file: File;
   let fileInput: HTMLInputElement;
   const dispatch = createEventDispatcher();
 

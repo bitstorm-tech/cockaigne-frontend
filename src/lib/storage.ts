@@ -18,14 +18,14 @@ const s3 = new S3Client({
 
 export async function getPictureUrls(accountId: number): Promise<string[]> {
   const command = new ListObjectsCommand({ Bucket: bucket, Prefix: accountId.toString() });
-  const objects = await s3.send(command);
-  return objects.Contents?.map((object) => `${baseUrl}/${object.Key}`) || [];
+  const response = await s3.send(command);
+  return response.Contents?.map((object) => `${baseUrl}/${object.Key}`) || [];
 }
 
-export async function savePicture(file: File, accountId: number): Promise<string> {
-  const timestamp = new Date().getTime();
+export async function savePicture(file: File, accountId: number, name?: string): Promise<string> {
+  const timestamp = new Date().getTime().toString();
   const fileExtension = file.name.split(".").pop();
-  const filename = `${timestamp}.${fileExtension}`;
+  const filename = (name ? name : timestamp) + "." + fileExtension;
   const key = `${accountId}/${filename}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -46,4 +46,12 @@ export async function deletePicture(accountId: number, fileName: string) {
   const key = `${accountId}/${fileName}`;
   const command = new DeleteObjectCommand({ Bucket: bucket, Key: key });
   await s3.send(command);
+}
+
+export async function getProfileImageURL(accountId: number): Promise<string> {
+  const prefix = `${accountId}/profile`;
+  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: prefix });
+  const response = await s3.send(command);
+  const profileImage = response.Contents?.at(0)?.Key;
+  return profileImage ? `${baseUrl}/${profileImage}` : "/images/anonym-profile.png";
 }

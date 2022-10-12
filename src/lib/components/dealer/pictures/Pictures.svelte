@@ -57,7 +57,7 @@
   {/each}
 </div>
 {#if $page.data.user.isDealer}
-  <div class="sticky bottom-3 pr-3 w-full flex justify-end">
+  <div class="sticky bottom-3 pr-3 pb-9 w-full flex justify-end">
     <AddPictureButton on:select={savePicture} />
   </div>
 {/if}

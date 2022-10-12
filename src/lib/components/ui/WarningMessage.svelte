@@ -1,13 +1,26 @@
 <script lang="ts">
+  import Button from "$lib/components/ui/Button.svelte";
+  import { createEventDispatcher } from "svelte";
   import WarningIcon from "./icons/WarningIcon.svelte";
-  import { blur } from "svelte/transition";
+
+  const dispatch = createEventDispatcher();
 
   export let show = false;
+
+  function confirm() {
+    show = false;
+    dispatch("confirm");
+  }
 </script>
 
 {#if show}
-  <div class="flex border border-primary p-4 space-x-4" in:blur={{ duration: 500 }}>
-    <WarningIcon size={6} />
-    <span><slot /> </span>
+  <div class="toast toast-center toast-middle in:blur={{ duration: 500 }}">
+    <div class="alert alert-error">
+      <div class="flex">
+        <WarningIcon size={6} />
+        <p><slot /></p>
+      </div>
+      <Button on:click={confirm}>OK</Button>
+    </div>
   </div>
 {/if}

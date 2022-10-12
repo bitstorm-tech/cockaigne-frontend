@@ -13,6 +13,13 @@ export async function findAccountByEmail(email: string): Promise<Account | undef
   return result.rows[0];
 }
 
+export async function usernameExists(username: string): Promise<boolean> {
+  const query = "SELECT EXISTS(SELECT * FROM account WHERE username ILIKE $1)";
+  const result = await pool.query(query, [username]);
+
+  return result.rows[0].exists;
+}
+
 export async function findAccountById(id: number): Promise<Account | undefined> {
   const query = "SELECT * FROM Account WHERE id = $1";
   const result = await pool.query<Account>(query, [id]);

@@ -1,12 +1,12 @@
-CREATE TABLE IF NOT EXISTS account2
+CREATE TABLE IF NOT EXISTS account
 (
     id                   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     email                text                  NOT NULL,
     "password"           text                  NOT NULL,
     dealer               bool                  NOT NULL DEFAULT false,
     street               text                  NULL,
-    username             text                  NULL unique,
-    company_name         text                  NULL unique,
+    username             text                  NULL,
+    company_name         text                  NULL,
     house_number         text                  NULL,
     city                 text                  NULL,
     zip                  integer               NULL,
@@ -18,6 +18,11 @@ CREATE TABLE IF NOT EXISTS account2
     "location"           geometry(point, 4326) NULL,
     created              timestamp             NOT NULL DEFAULT now()
 );
+
+CREATE UNIQUE INDEX account_username_idx ON account (LOWER(username));
+CREATE UNIQUE INDEX account_company_name_idx ON account (LOWER(company_name));
+CREATE UNIQUE INDEX account_email_idx ON account (LOWER(email));
+CREATE INDEX account_location_idx ON account USING GIST (location);
 
 CREATE TABLE deal
 (

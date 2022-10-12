@@ -10,7 +10,7 @@ export async function findRatingsByDealerId(dealerId: number): Promise<Rating[]>
 
 export async function insertRating(rating: Rating): Promise<Rating | undefined> {
   const query =
-    "INSERT INTO dealer_rating (account_id, dealer_id, stars, rating_text) VALUES ($1, $2, $3, $4) RETURNING *";
+    "INSERT INTO dealer_rating (user_id, dealer_id, stars, rating_text) VALUES ($1, $2, $3, $4) RETURNING *";
   const values = [rating.account_id, rating.dealer_id, rating.stars, rating.rating_text];
   const result = await pool.query<Rating>(query, values);
 
@@ -18,8 +18,8 @@ export async function insertRating(rating: Rating): Promise<Rating | undefined> 
 }
 
 export async function alreadyRated(accountId: number, dealerId: number): Promise<boolean> {
-  const query = "SELECT EXISTS(SELECT * FROM dealer_rating WHERE account_id = $1 AND dealer_id = $2)";
+  const query = "SELECT EXISTS(SELECT * FROM dealer_rating WHERE user_id = $1 AND dealer_id = $2)";
   const result = await pool.query(query, [accountId, dealerId]);
 
-  return result.rows[0].exists > 0;
+  return result.rows[0].exists;
 }

@@ -42,10 +42,26 @@ export async function savePicture(file: File, accountId: number, name?: string):
   return `${baseUrl}/${key}`;
 }
 
+export async function saveProfilePicture(file: File, accountId: number): Promise<string> {
+  await emptyFolder(accountId);
+  return await savePicture(file, accountId, "profile");
+}
+
 export async function deletePicture(accountId: number, fileName: string) {
   const key = `${accountId}/${fileName}`;
   const command = new DeleteObjectCommand({ Bucket: bucket, Key: key });
   await s3.send(command);
+}
+
+export async function emptyFolder(accountId: number) {
+  const prefix = accountId + "/";
+  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: prefix });
+  const response = await s3.send(command);
+
+  for (const object of response.Contents || []) {
+    const command = new DeleteObjectCommand({ Bucket: bucket, Key: object.Key });
+    await s3.send(command);
+  }
 }
 
 export async function getProfileImageURL(accountId: number): Promise<string> {

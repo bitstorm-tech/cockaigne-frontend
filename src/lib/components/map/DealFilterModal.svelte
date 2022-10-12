@@ -41,7 +41,7 @@
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col m-2">
+  <div class="flex flex-col m-2 max-h-[60vh]">
     <RangeSelect
       label="Suche im Umkreis von {searchRadius} m"
       min={100}

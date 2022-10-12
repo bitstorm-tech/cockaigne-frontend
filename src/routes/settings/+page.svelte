@@ -73,10 +73,10 @@
 
 <section class="flex flex-col p-10 gap-4">
   <Input label="Benutzername" bind:value={newUsername} />
-  <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild wählen" />
+  <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild ändern" />
   <div class="flex justify-between">
     <Button on:click={save} disabled={disableSave} {loading}>Speichern</Button>
-    <a href="/"><Button outline>Abbrechen</Button></a>
+    <a href="/"><Button outline>Zurück</Button></a>
   </div>
 </section>
 <WarningMessage show={errorMessage.length > 0} on:confirm={confirmError}>

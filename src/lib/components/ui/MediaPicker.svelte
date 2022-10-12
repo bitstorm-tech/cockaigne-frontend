@@ -3,6 +3,7 @@
   import Button from "./Button.svelte";
 
   export let imagePreview;
+  export let buttonText = "Bild auswählen";
   const dispatch = createEventDispatcher();
   let fileInput;
 
@@ -19,7 +20,7 @@
   }
 </script>
 
-<Button on:click={() => fileInput.click()}>Bild auswählen</Button>
+<Button on:click={() => fileInput.click()}>{buttonText}</Button>
 <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
 {#if imagePreview}
   <img src={imagePreview} alt="Gewähltes Bild" class="w-screen md:w-2/3 self-center" />

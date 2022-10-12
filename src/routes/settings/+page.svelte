@@ -46,11 +46,11 @@
 
     const formData = new FormData();
     formData.append("file", newProfileImage);
-    formData.append("name", "profile");
-    const response = await fetch("/api/pictures", { method: "post", body: formData });
+    const response = await fetch("/api/pictures/profile", { method: "post", body: formData });
 
     if (response.ok) {
       account.profile_image = await response.text();
+      newProfileImage = undefined;
       return;
     }
 
@@ -70,8 +70,7 @@
 
 <section class="flex flex-col p-10 gap-4">
   <Input label="Benutzername" bind:value={newUsername} />
-  {account.profile_image}
-  <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} />
+  <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild wählen" />
   <div class="flex justify-between">
     <Button on:click={save} disabled={disableSave}>Speichern</Button>
     <a href="/"><Button outline>Abbrechen</Button></a>

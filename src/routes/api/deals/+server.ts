@@ -1,6 +1,6 @@
 import type { Deal } from "$lib/database/deal/deal.model";
 import { findDealsByDealerId, upsertDeal } from "$lib/database/deal/deal.service";
-import { badRequestResponse, errorResponse, response, unauthorizedResponse } from "$lib/http.service";
+import { errorResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 
@@ -29,7 +29,7 @@ export async function GET({ url }: RequestEvent) {
     const dealerId = url.searchParams.get("dealer");
 
     if (!dealerId) {
-      return badRequestResponse();
+      return notFoundResponse();
     }
 
     const deals = await findDealsByDealerId(+dealerId);

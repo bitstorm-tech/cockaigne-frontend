@@ -8,7 +8,7 @@ export function response(bodyData?: unknown, status = 200, stringify = true): Re
   return new Response(body, options);
 }
 
-function badRequestResponse(errorMessage: string, errorCode: number): Response {
+export function badRequestResponse(errorMessage: string, errorCode: number): Response {
   const error = {
     message: errorMessage,
     code: errorCode

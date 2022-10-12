@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
@@ -74,9 +75,9 @@
 <section class="flex flex-col p-10 gap-4">
   <Input label="Benutzername" bind:value={newUsername} />
   <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild ändern" />
-  <div class="flex justify-between">
+  <div class="grid grid-cols-2 gap-4">
     <Button on:click={save} disabled={disableSave} {loading}>Speichern</Button>
-    <a href="/"><Button outline>Zurück</Button></a>
+    <Button on:click={() => goto("/")} outline>Zurück</Button>
   </div>
 </section>
 <WarningMessage show={errorMessage.length > 0} on:confirm={confirmError}>

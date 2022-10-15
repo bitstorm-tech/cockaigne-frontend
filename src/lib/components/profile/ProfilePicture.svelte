@@ -5,7 +5,7 @@
 </script>
 
 <div class="avatar cursor-pointer">
-  <div class="rounded-full ring-1 ring-primary ring-stone-600 ring-offset-1 w-full h-full">
+  <div class="rounded-full ring-2 ring-primary ring-[#556368] w-full h-full">
     {#if imageUrl.length === 0}
       <DefaultProfile />
     {:else}

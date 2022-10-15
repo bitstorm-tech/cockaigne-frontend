@@ -1,21 +1,31 @@
 <script lang="ts">
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
+  import DealsBadge from "$lib/components/user/DealsBadge.svelte";
+  import FavoriteDealerBadge from "$lib/components/user/FavoriteDealerBadge.svelte";
+  import HotsBadge from "$lib/components/user/HotsBadge.svelte";
 
   export let name = "";
   export let address = "";
   export let imageUrl = "";
 </script>
 
-<div class="flex justify-around">
-  <div class="flex justify-around">
-    <div class="flex flex-col pt-2 gap-2">
+<div class="flex justify-between text-[#dbdce6]">
+  <div class="flex justify-between w-full">
+    <div class="flex flex-col pt-2 gap-4 m-4">
+      <div class="flex justify-between text-[#69828c] fill-current">
+        <DealsBadge number={56} />
+        <FavoriteDealerBadge number={23} />
+        <HotsBadge number={74} />
+      </div>
       <span class="text-2xl">{name}</span>
-      <span class="text-sm"><b>Dein Standort</b> <a href="/map">(ändern)</a></span>
-      <span class="flex gap-2"><LocationIcon size="1" /><i class="text-xs">{address}</i></span>
+      <span class="flex flex-col gap-2 text-sm">
+        <b>Dein Standort</b>
+        <span class="flex gap-1"><LocationIcon size="1" /><i class="text-xs">{address}</i></span>
+      </span>
     </div>
-    <div class="flex flex-col items-center gap-2 -mt-6 ">
-      <div class="w-20 h-20 z-10">
+    <div class="flex flex-col -mt-6 mr-14">
+      <div class="w-24 h-24 z-10">
         <ProfilePicture {imageUrl} />
       </div>
     </div>

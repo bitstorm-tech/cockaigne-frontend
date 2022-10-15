@@ -46,7 +46,13 @@
   }
 </script>
 
-<UserHeader name={account.username} {address} imageUrl={account.profile_image} />
+<UserHeader
+  name={account.username}
+  {address}
+  imageUrl={account.profile_image}
+  favoriteDealers={favoriteDealers?.length}
+  hotDeals={favoriteDeals.length}
+/>
 <div class="tabs mt-6 max-h-8 mb-2">
   <div on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />

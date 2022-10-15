@@ -8,15 +8,18 @@
   export let name = "";
   export let address = "";
   export let imageUrl = "";
+  export let favoriteDealers = 0;
+  export let hotDeals = 0;
+  export let deals = 0;
 </script>
 
 <div class="flex justify-between text-[#dbdce6]">
   <div class="flex justify-between w-full">
     <div class="flex flex-col pt-2 gap-4 m-4">
       <div class="flex justify-between text-[#69828c] fill-current">
-        <DealsBadge number={56} />
-        <FavoriteDealerBadge number={23} />
-        <HotsBadge number={74} />
+        <DealsBadge number={deals} />
+        <HotsBadge number={hotDeals} />
+        <FavoriteDealerBadge number={favoriteDealers} />
       </div>
       <span class="text-2xl">{name}</span>
       <span class="flex flex-col gap-2 text-sm">

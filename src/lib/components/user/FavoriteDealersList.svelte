@@ -20,11 +20,11 @@
     </EmptyContent>
   {/if}
   {#each dealers as dealer}
-    <div class="flex justify-between p-3 w-full text-gray-200 bg-teal-500">
-      <a href={`/dealer/${dealer.id}`}>{dealer.company_name}</a>
-      <div class="cursor-pointer" on:click={() => unfavorite(dealer.id)}>
-        <HeartIcon outline />
+    <a href={`/dealer/${dealer.id}`} class="flex justify-between p-3 w-full bg-[#2c363a] text-[#b2b2b2]">
+      <p>{dealer.company_name}</p>
+      <div class="cursor-pointer" on:click|preventDefault={() => unfavorite(dealer.id)}>
+        <HeartIcon />
       </div>
-    </div>
+    </a>
   {/each}
 </div>

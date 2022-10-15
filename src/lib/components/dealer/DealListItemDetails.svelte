@@ -14,17 +14,15 @@
   }
 </script>
 
-<div class="flex flex-col justify-between h-32 bg-stone-400 rounded-br-xl text-xs p-2">
+<div class="flex flex-col justify-between h-32 bg-[#323e42] text-xs p-2">
   {deal.description}
   {#if isUser}
     <div class="flex h-4 justify-between">
       <div class="flex gap-4">
         <div class="flex gap-2" on:click={like}>
-          <ThumbUpIcon size="1" />{deal.likes}
+          <ThumbUpIcon size="1" />
         </div>
-        <span class="whitespace-nowrap">Deal melden</span>
       </div>
-      <a href="/dealer/{deal.dealer_id}"><span class="whitespace-nowrap">zum Dealer</span></a>
     </div>
   {:else}
     <span class="mt-4 text-2xs">Start: {deal.start} / Dauer: {deal.duration} Stunden</span>

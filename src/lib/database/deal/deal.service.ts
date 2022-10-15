@@ -20,7 +20,7 @@ export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
   const isActive = `now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
   const categories = filter.categoryIds?.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
 
-  const query = `SELECT d.*, ST_ASTEXT(a.location) AS location
+  const query = `SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
                  FROM deal d,
                       account a
                  WHERE a.id = d.dealer_id

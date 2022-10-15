@@ -9,7 +9,7 @@
 </script>
 
 <button
-  class="btn"
+  class="btn btn-primary"
   class:loading
   class:btn-outline={outline}
   class:btn-sm={small}

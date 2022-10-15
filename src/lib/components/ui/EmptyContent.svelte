@@ -1,3 +1,3 @@
-<span class="text-opacity-30 text-gray-200 grid grid-cols-1 place-items-center mt-16">
+<span class="text-center text-opacity-30 text-gray-200 grid grid-cols-1 place-items-center mt-16 mx-4">
   <slot />
 </span>

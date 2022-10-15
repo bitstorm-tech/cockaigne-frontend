@@ -1,7 +1,7 @@
+import type { DealFilter } from "$lib/database/deal/deal.model";
+import { findDealsByFilter } from "$lib/database/deal/deal.service";
+import { errorResponse, response } from "$lib/http.service";
 import type { RequestEvent } from "@sveltejs/kit";
-import type { DealFilter } from "../../../../lib/database/deal/deal.model";
-import { findDealsByFilter } from "../../../../lib/database/deal/deal.service";
-import { errorResponse, response } from "../../../../lib/http.service";
 
 export async function POST({ request }: RequestEvent) {
   try {

@@ -48,14 +48,14 @@
 
 <UserHeader name={account.username} {address} imageUrl={account.profile_image} />
 <div class="tabs mt-6 max-h-8 mb-2">
-  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+  <div on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
-  </button>
+  </div>
   <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
-    <HeartIcon outline={showTabIndex !== 1} />
+    <FireIcon outline={showTabIndex !== 1} />
   </button>
   <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
-    <FireIcon outline={showTabIndex !== 2} />
+    <HeartIcon outline={showTabIndex !== 2} />
   </button>
 </div>
 {#if showTabIndex === 0}

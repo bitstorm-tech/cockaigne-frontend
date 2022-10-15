@@ -3,7 +3,7 @@
   const style = `height: ${size}rem; width: ${size}rem`;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.35 28.35" stroke="currentColor" {style} on:click>
+<svg viewBox="0 0 28.35 28.35" fill="currentColor" {style} on:click>
   <path
     d="M20.75,1.54c3.34,0,6.06,2.72,6.06,6.06v13.15c0,3.34-2.72,6.06-6.06,6.06H7.6c-3.34,0-6.06-2.72-6.06-6.06
 		V7.6c0-3.34,2.72-6.06,6.06-6.06H20.75 M20.75,0.54H7.6c-3.9,0-7.06,3.16-7.06,7.06v13.15c0,3.9,3.16,7.06,7.06,7.06h13.15

@@ -4,6 +4,7 @@ import type { Position } from "../../geo/geo.types";
 export interface Deal {
   id: number;
   dealer_id: number;
+  company_name?: string;
   title: string;
   description: string;
   category_id: number;

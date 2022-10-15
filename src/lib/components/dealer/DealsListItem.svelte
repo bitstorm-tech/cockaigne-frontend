@@ -2,19 +2,41 @@
   import { page } from "$app/stores";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { Categories } from "../../categories";
+  import CrossIcon from "../ui/icons/CrossIcon.svelte";
 
   export let deal: Deal;
   export let showDetails = false;
+  export let showCompanyName = true;
+
+  const category = Categories[deal?.category_id] || { icon: CrossIcon, color: "fuchsia" };
 
   const isUser = !$page.data.user.isDealer;
 </script>
 
-<div class="flex gap-2 pr-2 items-center">
-  <div class="flex flex-col bg-teal-500 grow rounded-r-xl text-gray-200 cursor-pointer" class:h-12={!showDetails}>
-    <div class="flex px-2 h-full items-center" on:click>{deal.title}</div>
+<div class="flex gap-2 items-center" on:click>
+  <div class="flex flex-col grow cursor-pointer">
+    {#if showCompanyName}
+      <div class="flex justify-between px-2 py-0.5 bg-[#232b2e]">
+        <a href="/dealer/{deal.dealer_id}" class="flex items-center text-[#b2b2b2]">
+          {deal.company_name}
+        </a>
+        <a href="/dealer/{deal.dealer_id}" class="text-[#617780]">>></a>
+      </div>
+    {/if}
+    <div class="flex justify-between bg-[#2c363a] items-center">
+      <div class="flex gap-2 items-center">
+        <div class="m-2 rounded" style="background: {category.color}">
+          <svelte:component this={category.icon} size="2.8" />
+        </div>
+        <div class="text-[#fff4eb]">{deal.title}</div>
+      </div>
+      <div class="mr-3" on:click|stopPropagation style="color: {category.color}">
+        <slot name="right-action" />
+      </div>
+    </div>
     {#if showDetails}
       <DealListItemDetails {deal} {isUser} />
     {/if}
   </div>
-  <slot />
 </div>

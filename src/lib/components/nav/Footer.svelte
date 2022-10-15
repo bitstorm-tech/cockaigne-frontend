@@ -4,13 +4,13 @@
   import TagIcon from "$lib/components/ui/icons/TagIcon.svelte";
 </script>
 
-<footer class="btm-nav btm-nav-sm bg-base-300 border-t-[0.01rem]">
+<footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
   <a href="/">
     <HomeIcon />
   </a>
-  <button>
+  <a href="/">
     <TagIcon />
-  </button>
+  </a>
   <a href="/map">
     <MapIcon />
   </a>

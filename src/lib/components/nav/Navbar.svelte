@@ -12,13 +12,13 @@
   }
 </script>
 
-<nav class="flex bg-base-300 py-2 px-4 md:px-52 items-center border-b-[0.01rem] border-[#556368]">
+<nav class="flex py-2 px-4 md:px-52 items-center border-b-[0.01rem] border-[#556368]">
   <div class="flex justify-between items-center text-xl w-full">
     <div class="flex gap-6">
       <Link href="/"><img class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
       <MemberStatus />
     </div>
-    <div class="cursor-pointer">
+    <div class="cursor-pointer text-[#69828c]">
       {#if showMobileMenu}
         <CrossIcon on:click={toggleMobileMenu} />
       {:else}

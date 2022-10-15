@@ -15,7 +15,9 @@
 
 <div class="flex flex-col gap-2 justify-center h-full overflow-auto">
   {#if dealers.length === 0}
-    <EmptyContent>Du hast noch keine favorisierten Dealer?!</EmptyContent>
+    <EmptyContent>
+      <p>Du hast noch keine favorisierten Dealer?!</p>
+    </EmptyContent>
   {/if}
   {#each dealers as dealer}
     <div class="flex justify-between p-3 w-full text-gray-200 bg-teal-500">

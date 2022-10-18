@@ -4,6 +4,7 @@
   import CrossIcon from "$lib/components/ui/icons/CrossIcon.svelte";
   import MenuIcon from "$lib/components/ui/icons/MenuIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
+  import { blur } from "svelte/transition";
 
   let showMobileMenu = false;
 
@@ -28,7 +29,12 @@
   </div>
 </nav>
 {#if showMobileMenu}
-  <div class="absolute z-50 w-screen" on:click={toggleMobileMenu}>
+  <div
+    class="absolute z-50 w-screen"
+    on:click={toggleMobileMenu}
+    in:blur={{ duration: 250 }}
+    out:blur={{ duration: 250 }}
+  >
     <MobileMenu />
   </div>
 {/if}

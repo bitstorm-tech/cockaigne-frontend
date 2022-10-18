@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { Categories } from "../../categories";
@@ -31,7 +32,7 @@
         </div>
         <div class="text-[#fff4eb]">{deal.title}</div>
       </div>
-      <div class="mr-3" on:click|stopPropagation style="color: {category.color}">
+      <div class="mr-3" on:click|preventDefault style="color: {category.color}">
         <slot name="right-action" />
       </div>
     </div>

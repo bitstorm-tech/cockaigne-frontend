@@ -3,6 +3,7 @@
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
   import LocationService from "$lib/geo/location.service";
+  import { blur } from "svelte/transition";
   import { locationStore, StoreService, useCurrentLocationStore } from "../lib/store.service";
   import "../tailwind.css";
 
@@ -17,9 +18,11 @@
 {#if $page.data.user.isAuthenticated}
   <Navbar />
 {/if}
-<div class="mb-16">
-  <slot />
-</div>
+{#key $page.url}
+  <div class="mb-16" in:blur={{ duration: 350 }}>
+    <slot />
+  </div>
+{/key}
 {#if $page.data.user.isAuthenticated}
   <Footer />
 {/if}

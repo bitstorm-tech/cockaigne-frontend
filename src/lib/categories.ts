@@ -1,4 +1,4 @@
-import ElektronikTechnikIcon from "$lib/components/ui/icons/sections/ElektronikTechnikIcon.svelte";
+import ElektronikTechnikIcon from "$lib/components/ui/icons/categories/ElektronikTechnikIcon.svelte";
 
 export const Categories = {
   1: {

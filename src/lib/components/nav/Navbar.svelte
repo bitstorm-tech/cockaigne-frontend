@@ -30,7 +30,7 @@
 </nav>
 {#if showMobileMenu}
   <div
-    class="absolute z-50 w-screen"
+    class="absolute z-50 w-screen border-b-[0.01rem] border-[#556368]"
     on:click={toggleMobileMenu}
     in:blur={{ duration: 250 }}
     out:blur={{ duration: 250 }}

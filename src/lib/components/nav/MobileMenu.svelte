@@ -1,5 +1,4 @@
 <script>
-  import MapIcon from "$lib/components/ui/icons/MapIcon.svelte";
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
@@ -16,7 +15,6 @@
 
 <div class="flex flex-col gap-8 p-4 z-50 bg-base-300">
   {#if $page.data.user.isAuthenticated}
-    <a href="/map" class="h-8 flex items-center gap-3"><MapIcon /> Umgebungskarte</a>
     <a href="/settings" class="h-8 flex items-center gap-3"><GearIcon /> Einstellungen</a>
     <div on:click={logout} class="h-8 flex items-center gap-3 cursor-pointer"><LogoutIcon /> Logout</div>
   {:else}

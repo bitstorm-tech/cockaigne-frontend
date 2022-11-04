@@ -41,7 +41,7 @@
   name={account.company_name}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
-  imageUrl="/images/dummy/aakenus-grill-profile.svg"
+  imageUrl="/images/anonym-profile-dealer.png"
 >
   {#if $page.data.user.isDealer}
     <a href={"/deals/overview/" + dealerId}>

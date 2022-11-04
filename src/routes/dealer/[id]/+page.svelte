@@ -62,19 +62,19 @@
 
 <div class="grid grid-cols-3 mt-4 mb-2">
   <div class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
-    <PhotoIcon />
+    <FireIcon />
   </div>
   <div class="tab tab-bordered" class:tab-active={activeTab === 1} on:click={() => (activeTab = 1)}>
-    <FireIcon />
+    <PhotoIcon />
   </div>
   <div class="tab tab-bordered" class:tab-active={activeTab === 2} on:click={() => (activeTab = 2)}>
     <StarIcon />
   </div>
 </div>
 {#if activeTab === 0}
-  <Pictures {pictures} />
-{:else if activeTab === 1}
   <DealsList deals={activeDeals} />
+{:else if activeTab === 1}
+  <Pictures {pictures} />
 {:else}
   <RatingsList {dealerId} userId={$page.data.user.id} isDealer={$page.data.user.isDealer} />
 {/if}

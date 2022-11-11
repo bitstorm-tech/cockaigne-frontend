@@ -59,6 +59,7 @@
     </Button>
   {/if}
 </ProfileHeader>
+<Button>Test</Button>
 
 <div class="grid grid-cols-3 mt-4 mb-2">
   <div class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>

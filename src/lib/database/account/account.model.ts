@@ -4,6 +4,8 @@ export interface Account {
   password?: string;
   dealer: boolean;
   username?: string;
+  gender?: string;
+  age?: number;
   company_name?: string;
   street?: string;
   house_number?: string;

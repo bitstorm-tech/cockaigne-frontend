@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto, invalidateAll } from "$app/navigation";
   import Button from "$lib/components/ui/Button.svelte";
+  import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
@@ -12,7 +13,20 @@
   let openModal = false;
   let loading = false;
 
-  $: disabled = account.email?.length === 0 || account.password?.length === 0;
+  const gender = {
+    m: "Mann",
+    f: "Frau"
+  };
+
+  const age = {
+    1: "Bis 16",
+    2: "17-24",
+    3: "25-36",
+    4: "37-45",
+    5: "46+"
+  };
+
+  $: disabled = account.email?.length === 0 || account.password?.length === 0 || !account.age || !account.gender;
 
   async function register() {
     loading = true;
@@ -52,6 +66,9 @@
       <Input label="PLZ" type="number" bind:value={account.zip} />
     </div>
     <Input label="Telefon" type="tel" bind:value={account.phone} />
+  {:else}
+    <ButtonGroup label="Geschlecht" options={gender} bind:value={account.gender} />
+    <ButtonGroup label="Alter" options={age} bind:value={account.age} />
   {/if}
   <Button on:click={register} {loading} {disabled}>Registrieren</Button>
   <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>

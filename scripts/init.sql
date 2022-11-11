@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS account
     dealer               bool                  NOT NULL DEFAULT false,
     street               text                  NULL,
     username             text                  NULL,
+    age                  integer               NULL,
+    gender               text                  NULL,
     company_name         text                  NULL,
     house_number         text                  NULL,
     city                 text                  NULL,

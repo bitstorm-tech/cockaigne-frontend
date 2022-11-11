@@ -1,5 +1,5 @@
-import { getNowAsIsoString } from "../../date.service";
-import type { Position } from "../../geo/geo.types";
+import { getDateAsIsoString } from "$lib/date-time.utils";
+import type { Position } from "$lib/geo/geo.types";
 
 export interface Deal {
   id: number;
@@ -9,7 +9,7 @@ export interface Deal {
   description: string;
   category_id: number;
   duration: string;
-  start: string;
+  start: string | number;
   template: boolean;
   likes?: number;
   location?: Position | string;
@@ -19,7 +19,7 @@ export function newDeal(): Deal {
   return {
     id: -1,
     dealer_id: -1,
-    start: getNowAsIsoString(),
+    start: getDateAsIsoString(new Date(), 60),
     title: "",
     description: "",
     duration: "24",

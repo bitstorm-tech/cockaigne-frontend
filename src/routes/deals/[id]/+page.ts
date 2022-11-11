@@ -9,7 +9,6 @@ export async function load({ params, fetch }: LoadEvent) {
   const response = await fetch(`/api/deals/${params.id}`);
   const deal = await response.json();
 
-  deal.start = deal.start.substring(0, 16);
   deal.duration = deal.duration.toString();
 
   return {

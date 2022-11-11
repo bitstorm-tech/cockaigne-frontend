@@ -1,4 +1,5 @@
 import pool from "$lib/database/pg";
+import { enrichStartTimestampWithTimezone } from "$lib/deal.service";
 import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal, DealFilter } from "./deal.model";
 
@@ -41,14 +42,14 @@ export async function findDealById(id: number): Promise<Deal | undefined> {
     return;
   }
 
-  return result.rows[0];
+  return enrichStartTimestampWithTimezone(result.rows[0]);
 }
 
 export async function findDealsByDealerId(dealerId: number): Promise<Deal[]> {
   const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template = false";
   const result = await pool.query<Deal>(query, [dealerId]);
 
-  return result.rows;
+  return result.rows.map(enrichStartTimestampWithTimezone);
 }
 
 export async function findHotDealsByUserId(userId: number): Promise<Deal[]> {
@@ -57,21 +58,21 @@ export async function findHotDealsByUserId(userId: number): Promise<Deal[]> {
     [userId]
   );
 
-  return result.rows;
+  return result.rows.map(enrichStartTimestampWithTimezone);
 }
 
 export async function findTemplateDealsByDealerId(dealerId: number): Promise<Deal[]> {
   const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template is true";
   const result = await pool.query<Deal>(query, [dealerId]);
 
-  return result.rows;
+  return result.rows.map(enrichStartTimestampWithTimezone);
 }
 
 export async function upsertDeal(deal: Deal) {
   const doUpdate = deal?.id > 0;
   const query = doUpdate
-    ? "UPDATE deal SET dealer_id = $1, title = $2, description = $3, category_id = $4, duration = $5, start = $6, template = $7 WHERE id = $8"
-    : "INSERT INTO deal (dealer_id, title, description, category_id, duration, start, template) VALUES ($1, $2, $3, $4, $5, $6, $7)";
+    ? "UPDATE deal SET dealer_id = $1, title = $2, description = $3, category_id = $4, duration = $5, start = to_timestamp($6), template = $7 WHERE id = $8"
+    : "INSERT INTO deal (dealer_id, title, description, category_id, duration, start, template) VALUES ($1, $2, $3, $4, $5, to_timestamp($6), $7)";
 
   const values = [deal.dealer_id, deal.title, deal.description, deal.category_id, deal.duration, deal.start, false];
 

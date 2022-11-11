@@ -1,4 +1,5 @@
 import type { Deal } from "$lib/database/deal/deal.model";
+import { convertToTimeZonedDateString } from "$lib/date-time.utils";
 
 export type DealState = "past" | "future" | "active";
 
@@ -37,4 +38,11 @@ export function sortDealsByState(deals: Deal[]): SortedDeals {
   }
 
   return sortedDeals;
+}
+
+export function enrichStartTimestampWithTimezone(deal: Deal): Deal {
+  return {
+    ...deal,
+    start: convertToTimeZonedDateString(deal.start)
+  };
 }

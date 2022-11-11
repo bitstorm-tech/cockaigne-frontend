@@ -12,7 +12,7 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.service";
-  import type { Account } from "../../../lib/database/account/account.model";
+  import type { Account } from "$lib/database/account/account.model";
 
   export let data;
   let activeTab = 0;

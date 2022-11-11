@@ -12,7 +12,6 @@ export default class LocationService {
           longitude: geolocationPosition.coords.longitude,
           latitude: geolocationPosition.coords.latitude
         };
-        console.log("[LocationWatcher] new postion:", position);
         this.setPosition(position);
       });
     }

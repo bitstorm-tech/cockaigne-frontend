@@ -1,10 +1,12 @@
 <script lang="ts">
+  import Button from "$lib/components/ui/Button.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import type { Category } from "$lib/database/category/category.model";
-  import { MapService } from "$lib/map.service";
+  import type { MapService } from "$lib/map.service";
   import { debounce, union, without } from "lodash";
+  import { get } from "svelte/store";
   import { selectedCategoriesStore } from "../../database/category/category.store";
   import { StoreService } from "../../store.service";
 
@@ -38,18 +40,35 @@
 
     saveSelectedCategories();
   }
+
+  function toggleAllCategories() {
+    const selectedCategories = get(selectedCategoriesStore);
+
+    if (selectedCategories.length > 0) {
+      selectedCategoriesStore.update(() => []);
+    } else {
+      selectedCategoriesStore.update(() => {
+        return categories.map((category) => +category.id);
+      });
+    }
+
+    saveSelectedCategories();
+  }
 </script>
 
 <Modal bind:open>
   <div class="flex flex-col m-2 max-h-[60vh]">
-    <RangeSelect
-      label="Suche im Umkreis von {searchRadius} m"
-      min={100}
-      max={1000}
-      step={100}
-      bind:value={searchRadius}
-      on:input={changeSearchRadius}
-    />
+    <div class="flex flex-col gap-3">
+      <RangeSelect
+        label="Suche im Umkreis von {searchRadius} m"
+        min={500}
+        max={15000}
+        step={500}
+        bind:value={searchRadius}
+        on:input={changeSearchRadius}
+      />
+      <Button small on:click={toggleAllCategories}>Alle Filter aktivieren / deaktivieren</Button>
+    </div>
     <hr class="my-4" />
     <div class="flex flex-wrap gap-x-4 overflow-auto">
       {#each categories as category}

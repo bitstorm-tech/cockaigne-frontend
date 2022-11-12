@@ -1,5 +1,6 @@
 import { addMinutes } from "date-fns";
-import { formatInTimeZone, utcToZonedTime } from "date-fns-tz";
+import formatInTimeZone from "date-fns-tz/formatInTimeZone";
+import utcToZonedTime from "date-fns-tz/utcToZonedTime";
 
 export function getDateAsIsoString(date = new Date(), offsetInMinutes = 0, timezone = "Europe/Berlin"): string {
   const offsettedDate = addMinutes(date, offsetInMinutes);

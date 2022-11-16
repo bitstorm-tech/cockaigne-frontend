@@ -4,7 +4,7 @@
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import { getAddress } from "$lib/geo/address.service.js";
-  import _ from "lodash";
+  import { debounce } from "lodash";
   import { onDestroy } from "svelte";
   import { addressToString } from "../../geo/address.service";
   import type { Position } from "../../geo/geo.types";
@@ -20,7 +20,7 @@
 
   onDestroy(unsubscribe);
 
-  const saveUseCurrentLocation = _.debounce(() => {
+  const saveUseCurrentLocation = debounce(() => {
     StoreService.saveUseCurrentLocation($useCurrentLocationStore);
   }, 2000);
 

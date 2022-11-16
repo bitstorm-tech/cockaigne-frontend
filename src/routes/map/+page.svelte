@@ -6,11 +6,9 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
-  import { locationStore, searchRadiusStore, useCurrentLocationStore } from "$lib/store.service";
+  import { locationStore, useCurrentLocationStore } from "$lib/store.service";
   import { onDestroy, onMount } from "svelte";
-  import { selectedCategoriesStore } from "../../lib/database/category/category.store";
   import { addressToShortString, getAddress } from "../../lib/geo/address.service";
-  import { POST } from "../../lib/http.service";
 
   export let data;
 
@@ -40,22 +38,6 @@
 
     mapService.jumpToLocation(position);
     address = addressToShortString(await getAddress(position));
-
-    const response = await fetch(
-      "/api/deals/filter",
-      POST({
-        location: position,
-        radius: $searchRadiusStore / 2,
-        categoryIds: $selectedCategoriesStore
-      })
-    );
-
-    if (!response.ok) {
-      return;
-    }
-
-    const deals = await response.json();
-    mapService.setDeals(deals);
   });
 
   onDestroy(unsubscribe);

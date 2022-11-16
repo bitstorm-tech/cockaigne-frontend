@@ -1,5 +1,8 @@
+import { getDealsByFilter } from "$lib/deal.service";
+import { debounce } from "lodash";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
+import type { Extent } from "ol/extent";
 import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
 import TileLayer from "ol/layer/Tile";
@@ -12,7 +15,7 @@ import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
 import { selectedCategoriesStore } from "./database/category/category.store";
-import type { Deal } from "./database/deal/deal.model";
+import type { Deal, DealFilter } from "./database/deal/deal.model";
 import { dealStore } from "./database/deal/deal.store";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
@@ -30,6 +33,16 @@ export class MapService {
   private readonly circle: Circle;
   private readonly centerPoint: Circle;
 
+  private updateDeals = debounce(async (extent: Extent) => {
+    const filter: DealFilter = {
+      categoryIds: get(selectedCategoriesStore),
+      extent
+    };
+
+    const deals = await getDealsByFilter(filter);
+    this.setDeals(deals);
+  }, 1000);
+
   constructor(htmlElementId: string) {
     useGeographic();
     searchRadiusStore.subscribe(async (radius) => {
@@ -37,7 +50,6 @@ export class MapService {
       const selectedCategories = get(selectedCategoriesStore);
       await dealStore.load(location, radius / 2, selectedCategories);
     });
-    dealStore.subscribe((deals) => this.setDeals(deals));
     const center = toOpenLayersCoordinate(get(locationStore));
 
     this.view.setCenter(center);
@@ -93,6 +105,11 @@ export class MapService {
       this.moveCircle(event.coordinate);
       this.saveCenter(event.coordinate);
       LocationService.setPosition(fromOpenLayersCoordinate(event.coordinate));
+    });
+
+    this.map.on("moveend", () => {
+      const extend = this.map.getView().calculateExtent(this.map.getSize());
+      this.updateDeals(extend);
     });
 
     locationStore.subscribe(async (position) => {

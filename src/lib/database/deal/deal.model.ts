@@ -1,5 +1,6 @@
 import { getDateAsIsoString } from "$lib/date-time.utils";
 import type { Position } from "$lib/geo/geo.types";
+import type { Extent } from "ol/extent";
 
 export interface Deal {
   id: number;
@@ -29,7 +30,8 @@ export function newDeal(): Deal {
 }
 
 export interface DealFilter {
-  location: Position;
-  radius: number;
+  location?: Position;
+  radius?: number;
+  extent?: Extent;
   categoryIds: number[];
 }

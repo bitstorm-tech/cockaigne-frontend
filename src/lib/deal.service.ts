@@ -1,5 +1,6 @@
-import type { Deal } from "$lib/database/deal/deal.model";
+import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
 import { convertToTimeZonedDateString } from "$lib/date-time.utils";
+import { POST } from "$lib/http.service";
 
 export type DealState = "past" | "future" | "active";
 
@@ -45,4 +46,15 @@ export function enrichStartTimestampWithTimezone(deal: Deal): Deal {
     ...deal,
     start: convertToTimeZonedDateString(deal.start)
   };
+}
+
+export async function getDealsByFilter(filter: DealFilter): Promise<Deal[]> {
+  const response = await fetch("/api/deals/filter", POST(filter));
+
+  if (!response.ok) {
+    console.error("Can't fetch filtered deals:", response.status, response.statusText);
+    return [];
+  }
+
+  return await response.json();
 }

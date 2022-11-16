@@ -3,6 +3,16 @@ import { enrichStartTimestampWithTimezone } from "$lib/deal.service";
 import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal, DealFilter } from "./deal.model";
 
+const FILTER_BASE_QUERY = `
+SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
+FROM deal d, account a
+WHERE a.id = d.dealer_id
+  AND d.template = false
+  AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
+  AND ST_WITHIN(a.location, #extent)
+  #category_ids
+`;
+
 export async function findAllDeals(): Promise<Deal[]> {
   const result = await pool.query<Deal>("SELECT * FROM Deal WHERE template = false");
   const deals: Deal[] = [];
@@ -16,22 +26,33 @@ export async function findAllDeals(): Promise<Deal[]> {
 }
 
 export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
-  const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
-  const buffer = `ST_BUFFER(${point}, ${filter.radius})::geometry`;
-  const isActive = `now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
+  const extent = createExtentCondition(filter);
   const categories = filter.categoryIds?.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
 
-  const query = `SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
-                 FROM deal d,
-                      account a
-                 WHERE a.id = d.dealer_id
-                   AND d.template = false
-                   AND ST_WITHIN(a.location, ${buffer})
-                   AND ${isActive} ${categories}`;
+  if (!extent) {
+    return [];
+  }
+
+  const query = FILTER_BASE_QUERY.replace("#extent", extent).replace("#category_ids", categories);
 
   const result = await pool.query<Deal>(query);
 
   return result.rows;
+}
+
+function createExtentCondition(filter: DealFilter): string | undefined {
+  if (filter.location && filter.radius) {
+    const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
+    return `ST_BUFFER(${point}, ${filter.radius})::geometry`;
+  }
+
+  if (filter.extent) {
+    const pointMin = `ST_POINT(${filter.extent[0]}, ${filter.extent[1]})::geography::geometry`;
+    const pointMax = `ST_POINT(${filter.extent[2]}, ${filter.extent[3]})::geography::geometry`;
+    return `ST_ENVELOPE(ST_MAKELINE(${pointMin}, ${pointMax}))::geometry`;
+  }
+
+  console.warn("Can't create extent statement: neither location/radius nor extent is given");
 }
 
 export async function findDealById(id: number): Promise<Deal | undefined> {

@@ -19,7 +19,7 @@
   <Navbar />
 {/if}
 {#key $page.url}
-  <div class="mb-16" in:blur={{ duration: 350 }}>
+  <div class="pb-16" in:blur={{ duration: 350 }}>
     <slot />
   </div>
 {/key}

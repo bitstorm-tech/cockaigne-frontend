@@ -3,19 +3,22 @@
   import DealFilterModal from "$lib/components/map/DealFilterModal.svelte";
   import LocationSettingsModal from "$lib/components/map/LocationSettingsModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import CurrentLocationIcon from "$lib/components/ui/icons/CurrentLocationIcon.svelte";
+  import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
+  import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
   import { locationStore, useCurrentLocationStore } from "$lib/store.service";
   import { onDestroy, onMount } from "svelte";
-  import { addressToShortString, getAddress } from "../../lib/geo/address.service";
 
   export let data;
 
   let mapService: MapService;
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
-  let showDealFilterModal = data.showDealFilterModal;
+  let showDealFilterModal = data?.showDealFilterModal;
   let address = "";
 
   onMount(async () => {
@@ -47,10 +50,10 @@
   }
 </script>
 
-<div class="grid grid-cols-3 gap-2 m-3">
-  <Button on:click={() => (showLocationSettingsModal = true)}>Standort Einstellungen</Button>
-  <Button on:click={() => (showDealFilterModal = true)}>Deal Filter</Button>
-  <Button on:click={jumpToCurrentLocation}>Zum Standort springen</Button>
+<div class="flex justify-center gap-2 m-3">
+  <Button on:click={() => (showLocationSettingsModal = true)} outline><GearIcon /></Button>
+  <Button on:click={() => (showDealFilterModal = true)} outline><FilterIcon /></Button>
+  <Button on:click={jumpToCurrentLocation} outline><CurrentLocationIcon /></Button>
 </div>
 <span class="p-3 text-2xs">Standort: {address}</span>
 <div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">

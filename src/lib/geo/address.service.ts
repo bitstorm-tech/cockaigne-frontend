@@ -33,6 +33,6 @@ export function addressToString(address: Address): string {
   return address ? `${address.street}, ${address.postcode} ${address.city}, ${address.country}` : "Keine Adresse";
 }
 
-export function addressToShortString(address: Address): string {
+export function addressToShortString(address: Address | undefined): string {
   return address ? `${address.street}, ${address.city}` : "Keine Adresse";
 }

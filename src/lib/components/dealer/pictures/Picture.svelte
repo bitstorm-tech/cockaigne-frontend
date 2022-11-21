@@ -11,13 +11,13 @@
 
 <div class="p-0.5 w-1/3 relative">
   {#if $page.data.user.isDealer}
-    <div class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("delete")}>
+    <button class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("delete")}>
       <TrashIcon />
-    </div>
+    </button>
   {:else}
-    <div class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("zoom")}>
+    <button class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("zoom")}>
       <ZoomIcon />
-    </div>
+    </button>
   {/if}
   <img class="h-60 object-cover" src={url} alt="Dealer Impression" />
 </div>

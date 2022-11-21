@@ -24,9 +24,9 @@
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     >
-      <div slot="right-action" class="cursor-pointer" on:click={() => goto("/deals/" + deal.id.toString())}>
+      <button slot="right-action" on:click={() => goto("/deals/" + deal.id.toString())}>
         <GearIcon />
-      </div>
+      </button>
     </DealsListItem>
   {/each}
 </div>

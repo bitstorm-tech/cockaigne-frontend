@@ -54,9 +54,9 @@
   hotDeals={favoriteDeals.length}
 />
 <div class="tabs mt-6 max-h-8 mb-2">
-  <div on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
-  </div>
+  </button>
   <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
     <FireIcon outline={showTabIndex !== 1} />
   </button>

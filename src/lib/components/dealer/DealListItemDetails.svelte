@@ -19,9 +19,9 @@
   {#if isUser}
     <div class="flex h-4 justify-between">
       <div class="flex gap-4">
-        <div class="flex gap-2" on:click={like}>
+        <button class="flex gap-2" on:click={like}>
           <ThumbUpIcon size="1" />
-        </div>
+        </button>
       </div>
     </div>
   {:else}

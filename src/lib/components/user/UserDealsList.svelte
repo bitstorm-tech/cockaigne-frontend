@@ -33,9 +33,9 @@
   {/if}
   {#each deals as deal, i}
     <DealsListItem {deal} showDetails={openDetail === i} on:click={() => (openDetail = openDetail === i ? -1 : i)}>
-      <div slot="right-action" class="cursor-pointer" on:click={() => favor(deal)}>
+      <button slot="right-action" class="cursor-pointer" on:click={() => favor(deal)}>
         <FireIcon outline={!isFavorite(deal.id)} />
-      </div>
+      </button>
     </DealsListItem>
   {/each}
 </div>

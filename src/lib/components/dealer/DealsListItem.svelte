@@ -1,9 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { goto } from "$app/navigation";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
-  import { Categories } from "../../categories";
+  import { Categories } from "$lib/categories";
   import CrossIcon from "../ui/icons/CrossIcon.svelte";
 
   export let deal: Deal;
@@ -15,7 +14,7 @@
   const isUser = !$page.data.user.isDealer;
 </script>
 
-<div class="flex gap-2 items-center" on:click>
+<div class="flex gap-2 items-center" on:click on:keypress>
   <div class="flex flex-col grow cursor-pointer">
     {#if showCompanyName}
       <div class="flex justify-between px-2 py-0.5 bg-[#232b2e]">
@@ -32,9 +31,9 @@
         </div>
         <div class="text-[#fff4eb]">{deal.title}</div>
       </div>
-      <div class="mr-3" on:click|preventDefault style="color: {category.color}">
+      <button class="mr-3" on:click|preventDefault style="color: {category.color}">
         <slot name="right-action" />
-      </div>
+      </button>
     </div>
     {#if showDetails}
       <DealListItemDetails {deal} {isUser} />

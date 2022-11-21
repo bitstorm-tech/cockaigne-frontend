@@ -3,7 +3,7 @@
   const style = `height: ${size}rem; width: ${size}rem`;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 141.732 141.732" fill="currentColor" on:click on:keypress {style}>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 141.732 141.732" fill="currentColor" {style}>
   <rect
     width="86.133"
     height="100.267"

@@ -22,9 +22,9 @@
   {#each dealers as dealer}
     <a href={`/dealer/${dealer.id}`} class="flex justify-between p-3 w-full bg-[#2c363a] text-[#b2b2b2]">
       <p>{dealer.company_name}</p>
-      <div class="cursor-pointer" on:click|preventDefault={() => unfavorite(dealer.id)}>
+      <button class="cursor-pointer" on:click|preventDefault={() => unfavorite(dealer.id)}>
         <HeartIcon />
-      </div>
+      </button>
     </a>
   {/each}
 </div>

@@ -16,7 +16,7 @@
 <div class="flex flex-col gap-8 p-4 z-50 bg-base-300">
   {#if $page.data.user.isAuthenticated}
     <a href="/settings" class="h-8 flex items-center gap-3"><GearIcon /> Einstellungen</a>
-    <div on:click={logout} class="h-8 flex items-center gap-3 cursor-pointer"><LogoutIcon /> Logout</div>
+    <button on:click={logout} class="h-8 flex items-center gap-3 cursor-pointer"><LogoutIcon /> Logout</button>
   {:else}
     <a href="/" class="h-8 flex items-center gap-3"><LoginIcon /> Login</a>
   {/if}

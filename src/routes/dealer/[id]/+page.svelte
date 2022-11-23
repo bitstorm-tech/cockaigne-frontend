@@ -6,7 +6,6 @@
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import DealIcon from "$lib/components/ui/icons/DealIcon.svelte";
-  import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
@@ -45,10 +44,8 @@
   imageUrl="/images/anonym-profile-dealer.png"
 >
   {#if $page.data.user.isDealer}
-    <a href="/deals/new">
-      <Button outline circle>
-        <FireIcon />
-      </Button>
+    <a href="/deals/new" class="mt-4">
+      <Button warning small>Deal</Button>
     </a>
   {:else}
     <Button on:click={toggleFavor} circle>

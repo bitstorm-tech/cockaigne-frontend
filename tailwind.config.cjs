@@ -13,7 +13,8 @@ module.exports = {
           "base-300": "#1b2123",
           "base-100": "#1b2123",
           primary: "#2c363a",
-          "--btn-text-case": "normal"
+          "--btn-text-case": "normal",
+          warning: "#751b37"
         }
       }
     ]

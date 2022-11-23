@@ -6,11 +6,15 @@
   export let outline = false;
   export let circle = false;
   export let error = false;
+  export let warning = false;
 </script>
 
 <button
-  class="btn btn-primary"
+  class="btn"
   class:loading
+  class:btn-primary={!warning}
+  class:btn-warning={warning}
+  class:text-gray-200={warning}
   class:btn-outline={outline}
   class:btn-sm={small}
   class:btn-circle={circle}
@@ -19,5 +23,7 @@
   {disabled}
   on:click
 >
-  {#if !loading}<slot />{/if}
+  {#if !loading}
+    <slot />
+  {/if}
 </button>

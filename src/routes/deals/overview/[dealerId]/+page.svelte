@@ -6,7 +6,7 @@
   import { sortDealsByState } from "$lib/deal.service";
 
   export let data;
-  const deals: Deal[] = data.deals;
+  const deals: Deal[] = data?.deals;
 
   $: sortedDeals = sortDealsByState(deals);
 
@@ -15,7 +15,7 @@
 
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
-    <Button on:click={() => goto("/deals/new")}>Deal erstellen</Button>
+    <Button warning on:click={() => goto("/deals/new")}>Deal erstellen</Button>
     <Button on:click={() => goto("/deals/templates")} outline>Vorlagen</Button>
   </div>
 </div>

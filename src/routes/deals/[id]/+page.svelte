@@ -13,7 +13,12 @@
   import type { Category } from "$lib/database/category/category.model";
   import { categoryStore } from "$lib/database/category/category.store";
   import type { Deal } from "$lib/database/deal/deal.model";
-  import { getDateAsIsoString } from "$lib/date-time.utils";
+  import {
+    dateToUnixTimestamp,
+    extractTimeFromDateTimeString,
+    getDateAsIsoString,
+    getDateTimeAsIsoString
+  } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.service";
   import { POST } from "$lib/http.service";
 
@@ -32,6 +37,10 @@
   let openDeleteModal = false;
   let createTemplate = false;
   let startDealImmediately = false;
+  let individuallyTime = false;
+  let individualStartDateTime = getDateTimeAsIsoString(new Date(), 60);
+  let individualEndDate = getDateAsIsoString(new Date(), 25 * 60);
+  let costs = 1;
   let loading = false;
 
   export let deal: Deal = data;
@@ -39,7 +48,7 @@
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
   $: disableSave = deal.title.length === 0 || deal.description.length === 0;
-  $: costs = 1 + +deal.duration / 24;
+  $: calculateCosts(), deal.duration, individualStartDateTime, individualEndDate, individuallyTime;
 
   async function save() {
     loading = true;
@@ -51,7 +60,12 @@
       deal.template = createTemplate;
     }
 
-    deal.start = new Date(deal.start).getTime() / 1000;
+    if (individuallyTime) {
+      deal.start = dateToUnixTimestamp(individualStartDateTime);
+      deal.duration = getDuration();
+    } else {
+      deal.start = dateToUnixTimestamp(deal.start);
+    }
     const response = await fetch("/api/deals", POST(deal));
 
     if (response.ok) {
@@ -62,6 +76,22 @@
       loading = false;
       openErrorModal = true;
     }
+  }
+
+  function getDuration(): number {
+    if (individuallyTime) {
+      const startTimestamp = dateToUnixTimestamp(individualStartDateTime);
+      const endTime = extractTimeFromDateTimeString(individualStartDateTime);
+      const endTimestamp = dateToUnixTimestamp(individualEndDate, endTime);
+      return (endTimestamp - startTimestamp) / (60 * 60);
+    }
+
+    return +deal.duration;
+  }
+
+  function calculateCosts() {
+    console.log("Duration:", getDuration());
+    costs = getDuration() / 24;
   }
 
   async function del() {
@@ -77,9 +107,9 @@
     }
   }
 
-  function setStartDate(event: any) {
+  function setStartDate(event: unknown) {
     if (event.target.checked) {
-      deal.start = getDateAsIsoString();
+      deal.start = getDateTimeAsIsoString();
     }
   }
 </script>
@@ -88,12 +118,24 @@
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
-  <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
-  <DateTimeInput label="Start" bind:value={deal.start} disabled={disabled || startDealImmediately} />
-  <Checkbox label="Deal sofort starten" bind:checked={startDealImmediately} on:change={setStartDate} />
+  <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} />
+  {#if individuallyTime}
+    <div class="flex gap-3">
+      <DateTimeInput label="Start" bind:value={individualStartDateTime} />
+      <Input type="date" label="Ende" bind:value={individualEndDate} />
+    </div>
+  {:else}
+    <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+    <div class="flex items-end gap-4">
+      <DateTimeInput label="Start" bind:value={deal.start} disabled={disabled || startDealImmediately} />
+      <div class="w-52">
+        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} on:change={setStartDate} />
+      </div>
+    </div>
+  {/if}
   <div class="text-xs">Kosten: {costs} €</div>
   <div class="flex justify-center gap-4 mt-6">
-    <Button on:click={save} disabled={disableSave || disabled} {loading}>
+    <Button warning on:click={save} disabled={disableSave || disabled} {loading}>
       {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
     </Button>
     {#if deal.id > 0 && !disabled}

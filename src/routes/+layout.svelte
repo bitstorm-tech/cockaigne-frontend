@@ -3,7 +3,6 @@
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
   import LocationService from "$lib/geo/location.service";
-  import { blur } from "svelte/transition";
   import { locationStore, StoreService, useCurrentLocationStore } from "../lib/store.service";
   import "../tailwind.css";
 
@@ -19,7 +18,7 @@
   <Navbar />
 {/if}
 {#key $page.url}
-  <div class="pb-16" in:blur={{ duration: 350 }}>
+  <div class="pb-16">
     <slot />
   </div>
 {/key}

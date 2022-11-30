@@ -61,10 +61,10 @@
     }
 
     if (individuallyTime) {
-      deal.start = individualStartDateTime;
+      deal.start = dateToUnixTimestamp(individualStartDateTime);
       deal.duration = getDuration();
     } else {
-      deal.start = deal.start;
+      deal.start = dateToUnixTimestamp(deal.start);
     }
     const response = await fetch("/api/deals", POST(deal));
 

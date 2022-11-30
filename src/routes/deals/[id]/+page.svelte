@@ -23,6 +23,8 @@
   import { POST } from "$lib/http.service";
 
   export let data;
+  export let deal: Deal = data;
+
   $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
 
   const runtimes = {
@@ -37,13 +39,14 @@
   let openDeleteModal = false;
   let createTemplate = false;
   let startDealImmediately = false;
-  let individuallyTime = +data?.duration > 72;
-  let individualStartDateTime = getDateTimeAsIsoString(new Date(), 60);
-  let individualEndDate = getDateAsIsoString(new Date(), 25 * 60);
+  let individuallyTime = +deal.duration > 72;
+  let individualStartDateTime = deal.id > -1 ? deal.start : getDateTimeAsIsoString(new Date(), 60);
+  let individualEndDate =
+    deal.id > -1
+      ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
+      : getDateAsIsoString(new Date(), 25 * 60);
   let costs = 1;
   let loading = false;
-
-  export let deal: Deal = data;
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
@@ -81,7 +84,7 @@
   function getDuration(): number {
     if (individuallyTime) {
       const startTimestamp = dateToUnixTimestamp(individualStartDateTime);
-      const endTime = extractTimeFromDateTimeString(individualStartDateTime);
+      const endTime = extractTimeFromDateTimeString(individualStartDateTime as string);
       const endTimestamp = dateToUnixTimestamp(individualEndDate, endTime);
       return (endTimestamp - startTimestamp) / (60 * 60);
     }
@@ -117,11 +120,11 @@
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
-  <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} />
+  <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
   {#if individuallyTime}
     <div class="flex gap-3">
-      <DateTimeInput label="Start" bind:value={individualStartDateTime} />
-      <Input type="date" label="Ende" bind:value={individualEndDate} />
+      <DateTimeInput label="Start" bind:value={individualStartDateTime} {disabled} />
+      <Input type="date" label="Ende" bind:value={individualEndDate} {disabled} />
     </div>
   {:else}
     <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />

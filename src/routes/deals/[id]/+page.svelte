@@ -1,6 +1,5 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
   import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
@@ -135,23 +134,25 @@
       </div>
     </div>
   {/if}
-  <div class="text-xs">Kosten: {costs} €</div>
-  <div class="flex justify-center gap-4 mt-6">
-    <Button warning on:click={save} disabled={disableSave || disabled} {loading}>
-      {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
-    </Button>
-    {#if deal.id > 0 && !disabled}
-      <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
-    {/if}
-    <a href={"/deals/overview/" + $page.data.user.id}>
-      <Button outline>Abbrechen</Button>
-    </a>
-  </div>
-  {#if !deal.template}
-    <div class="flex justify-center">
-      <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />
+  <div class="grid grid-cols-2 pt-16">
+    <div class="flex flex-col justify-center">
+      <div class="text-lg">Kosten: {costs} €</div>
     </div>
-  {/if}
+    <div class="flex flex-col gap-3">
+      <Button warning on:click={save} disabled={disableSave || disabled} {loading}>
+        {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
+      </Button>
+      {#if deal.id > 0 && !disabled}
+        <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
+      {/if}
+      <Button outline small on:click={() => goto("/")}>Abbrechen</Button>
+      {#if !deal.template}
+        <div class="flex justify-center">
+          <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />
+        </div>
+      {/if}
+    </div>
+  </div>
 </div>
 <Modal bind:open={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Modal>
 <ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />

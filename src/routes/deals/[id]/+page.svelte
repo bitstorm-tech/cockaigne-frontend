@@ -37,7 +37,7 @@
   let openDeleteModal = false;
   let createTemplate = false;
   let startDealImmediately = false;
-  let individuallyTime = false;
+  let individuallyTime = +data?.duration > 72;
   let individualStartDateTime = getDateTimeAsIsoString(new Date(), 60);
   let individualEndDate = getDateAsIsoString(new Date(), 25 * 60);
   let costs = 1;
@@ -61,10 +61,10 @@
     }
 
     if (individuallyTime) {
-      deal.start = dateToUnixTimestamp(individualStartDateTime);
+      deal.start = individualStartDateTime;
       deal.duration = getDuration();
     } else {
-      deal.start = dateToUnixTimestamp(deal.start);
+      deal.start = deal.start;
     }
     const response = await fetch("/api/deals", POST(deal));
 
@@ -90,7 +90,6 @@
   }
 
   function calculateCosts() {
-    console.log("Duration:", getDuration());
     costs = getDuration() / 24;
   }
 

@@ -4,13 +4,14 @@ import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal, DealFilter } from "./deal.model";
 
 const FILTER_BASE_QUERY = `
-SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
-FROM deal d, account a
-WHERE a.id = d.dealer_id
-  AND d.template = false
-  AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
-  AND ST_WITHIN(a.location, #extent)
-  #category_ids
+  SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
+  FROM deal d,
+       account a
+  WHERE a.id = d.dealer_id
+    AND d.template = false
+    AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
+    AND ST_WITHIN(a.location, #extent)
+    #category_ids
 `;
 
 export async function findAllDeals(): Promise<Deal[]> {
@@ -92,8 +93,8 @@ export async function findTemplateDealsByDealerId(dealerId: number): Promise<Dea
 export async function upsertDeal(deal: Deal) {
   const doUpdate = deal?.id > 0;
   const query = doUpdate
-    ? "UPDATE deal SET dealer_id = $1, title = $2, description = $3, category_id = $4, duration = $5, start = to_timestamp($6), template = $7 WHERE id = $8"
-    : "INSERT INTO deal (dealer_id, title, description, category_id, duration, start, template) VALUES ($1, $2, $3, $4, $5, to_timestamp($6), $7)";
+    ? "UPDATE deal SET dealer_id = $1, title = $2, description = $3, category_id = $4, duration = $5, start = $6, template = $7 WHERE id = $8"
+    : "INSERT INTO deal (dealer_id, title, description, category_id, duration, start, template) VALUES ($1, $2, $3, $4, $5, $6, $7)";
 
   const values = [deal.dealer_id, deal.title, deal.description, deal.category_id, deal.duration, deal.start, false];
 

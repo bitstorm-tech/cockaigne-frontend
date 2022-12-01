@@ -121,7 +121,7 @@
   <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
   <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
   {#if individuallyTime}
-    <div class="flex gap-3">
+    <div class="flex flex-col gap-3">
       <DateTimeInput label="Start" bind:value={individualStartDateTime} {disabled} />
       <Input type="date" label="Ende" bind:value={individualEndDate} {disabled} />
     </div>
@@ -130,13 +130,13 @@
     <div class="flex items-end gap-4">
       <DateTimeInput label="Start" bind:value={deal.start} disabled={disabled || startDealImmediately} />
       <div class="w-52">
-        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} on:change={setStartDate} />
+        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} on:change={setStartDate} {disabled} />
       </div>
     </div>
   {/if}
   <div class="grid grid-cols-2 pt-16">
     <div class="flex flex-col justify-center">
-      <div class="text-lg">Kosten: {costs} €</div>
+      <div class="text-lg font-bold">Kosten: {costs} €</div>
     </div>
     <div class="flex flex-col gap-3">
       <Button warning on:click={save} disabled={disableSave || disabled} {loading}>

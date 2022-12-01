@@ -45,7 +45,7 @@
 >
   {#if $page.data.user.isDealer}
     <a href="/deals/new" class="mt-4">
-      <Button warning small>Deal</Button>
+      <Button warning>Deal erstellen</Button>
     </a>
   {:else}
     <Button on:click={toggleFavor} circle>

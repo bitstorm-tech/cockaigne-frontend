@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { page } from "$app/stores";
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
+  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import LocationService from "$lib/geo/location.service";
-  import { locationStore, StoreService, useCurrentLocationStore } from "../lib/store.service";
+  import { locationStore, StoreService, useCurrentLocationStore } from "$lib/store.service";
   import "../tailwind.css";
 
   StoreService.init();
@@ -12,16 +14,30 @@
   } else {
     LocationService.setPosition($locationStore);
   }
+
+  let loading = false;
+
+  beforeNavigate(() => {
+    loading = true;
+  });
+  afterNavigate(() => {
+    loading = false;
+  });
 </script>
 
 {#if $page.data.user.isAuthenticated}
   <Navbar />
 {/if}
-{#key $page.url}
+{#if loading}
+  <div class="flex gap-3 h-screen pt-56 px-14">
+    <LoadingSpinner size="5" />
+    <p>Lade Deals und alles was sonst noch so dazu gehört ...</p>
+  </div>
+{:else}
   <div class="pb-16">
     <slot />
   </div>
-{/key}
+{/if}
 {#if $page.data.user.isAuthenticated}
   <Footer />
 {/if}

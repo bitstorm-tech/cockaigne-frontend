@@ -7,6 +7,7 @@
   export let placeholder = "";
   export let value = "";
   export let disabled = false;
+  export let min = "";
 
   const dispatch = createEventDispatcher();
 
@@ -31,6 +32,7 @@
     {type}
     {placeholder}
     {value}
+    {min}
     {disabled}
     on:input={setValue}
     on:keydown={keydown}

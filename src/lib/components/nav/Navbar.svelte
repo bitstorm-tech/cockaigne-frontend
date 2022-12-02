@@ -21,9 +21,13 @@
     </div>
     <div class="cursor-pointer text-[#69828c]">
       {#if showMobileMenu}
-        <button on:click={toggleMobileMenu}><CrossIcon /></button>
+        <button on:click={toggleMobileMenu}>
+          <CrossIcon />
+        </button>
       {:else}
-        <button on:click={toggleMobileMenu}><MenuIcon /></button>
+        <button on:click={toggleMobileMenu}>
+          <MenuIcon />
+        </button>
       {/if}
     </div>
   </div>
@@ -33,8 +37,7 @@
     class="absolute z-50 w-screen border-b-[0.01rem] border-[#556368]"
     on:click={toggleMobileMenu}
     on:keypress={toggleMobileMenu}
-    in:blur={{ duration: 250 }}
-    out:blur={{ duration: 250 }}
+    transition:blur
   >
     <MobileMenu />
   </div>

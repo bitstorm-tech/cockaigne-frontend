@@ -4,7 +4,6 @@
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
-  import DateTimeInput from "$lib/components/ui/DateTimeInput.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Select from "$lib/components/ui/Select.svelte";
@@ -32,6 +31,8 @@
     "72": "72 Stunden"
   };
 
+  const nowDateTimeString = getDateTimeAsIsoString();
+
   categoryStore.load();
 
   let openErrorModal = false;
@@ -44,7 +45,7 @@
     deal.id > -1
       ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
       : getDateAsIsoString(new Date(), 25 * 60);
-  let costs = 1;
+  let costs = "4,99";
   let loading = false;
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
@@ -92,7 +93,7 @@
   }
 
   function calculateCosts() {
-    costs = getDuration() / 24;
+    costs = (4.99 * (getDuration() / 24)).toFixed(2).replace(".", ",");
   }
 
   async function del() {
@@ -122,15 +123,31 @@
   <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
   {#if individuallyTime}
     <div class="flex flex-col gap-3">
-      <DateTimeInput label="Start" bind:value={individualStartDateTime} {disabled} />
+      <Input
+        type="datetime-local"
+        min={nowDateTimeString}
+        label="Start"
+        bind:value={individualStartDateTime}
+        {disabled}
+      />
       <Input type="date" label="Ende" bind:value={individualEndDate} {disabled} />
     </div>
   {:else}
     <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
     <div class="flex items-end gap-4">
-      <DateTimeInput label="Start" bind:value={deal.start} disabled={disabled || startDealImmediately} />
+      {#if startDealImmediately}
+        <p class="text-xs">Dein Deal startet sofort wenn du auf "Erstellen" klickst!</p>
+      {:else}
+        <Input
+          type="datetime-local"
+          min="2022-12-02T14:27"
+          label="Start"
+          bind:value={deal.start}
+          disabled={disabled || startDealImmediately}
+        />
+      {/if}
       <div class="w-52">
-        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} on:change={setStartDate} {disabled} />
+        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} {disabled} />
       </div>
     </div>
   {/if}

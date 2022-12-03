@@ -3,7 +3,6 @@
   export let type = "";
   export let small = false;
   export let loading = false;
-  export let outline = false;
   export let circle = false;
   export let error = false;
   export let warning = false;
@@ -15,7 +14,6 @@
   class:btn-primary={!warning}
   class:btn-warning={warning}
   class:text-gray-200={warning}
-  class:btn-outline={outline}
   class:btn-sm={small}
   class:btn-circle={circle}
   class:btn-error={error}

@@ -10,11 +10,11 @@
   export let data;
   let account: Account = data.account;
   let newUsername = account.username;
-  let newProfileImage: File;
+  let newProfileImage: File | undefined;
   let errorMessage = "";
   let loading = false;
 
-  $: disableSave = (newUsername.length === 0 || account.username === newUsername) && !newProfileImage;
+  $: disableSave = (newUsername?.length === 0 || account.username === newUsername) && !newProfileImage;
 
   async function save() {
     loading = true;
@@ -24,7 +24,7 @@
   }
 
   async function saveUsername() {
-    if (newUsername.toLowerCase() === account.username.toLowerCase()) {
+    if (newUsername?.toLowerCase() === account.username?.toLowerCase()) {
       return;
     }
 
@@ -77,7 +77,7 @@
   <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild ändern" />
   <div class="grid grid-cols-2 gap-4">
     <Button on:click={save} disabled={disableSave} {loading}>Speichern</Button>
-    <Button on:click={() => goto("/")} outline>Zurück</Button>
+    <Button on:click={() => goto("/")}>Zurück</Button>
   </div>
 </section>
 <WarningMessage show={errorMessage.length > 0} on:confirm={confirmError}>

@@ -160,9 +160,9 @@
         {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
       </Button>
       {#if deal.id > 0 && !disabled}
-        <Button outline error on:click={() => (openDeleteModal = true)}>Löschen</Button>
+        <Button error on:click={() => (openDeleteModal = true)}>Löschen</Button>
       {/if}
-      <Button outline small on:click={() => goto("/")}>Abbrechen</Button>
+      <Button small on:click={() => goto("/")}>Abbrechen</Button>
       {#if !deal.template}
         <div class="flex justify-center">
           <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />

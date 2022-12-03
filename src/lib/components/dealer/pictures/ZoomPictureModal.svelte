@@ -8,7 +8,7 @@
     open = false;
   }
 
-  const buttons = [{ text: "Schön!", callback: close, outline: true }];
+  const buttons = [{ text: "Schön!", callback: close }];
 </script>
 
 <Modal bind:open {buttons}>

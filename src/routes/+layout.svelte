@@ -32,7 +32,7 @@
 {#if loading}
   <div class="flex items-center gap-3 pt-36 px-14">
     <LoadingSpinner size="5" />
-    <p>Lade Deals und alles was sonst noch so dazu gehört ...</p>
+    <p>Lade Dinge ...</p>
   </div>
 {:else}
   <div class="pb-16" in:blur>

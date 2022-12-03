@@ -16,7 +16,7 @@
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
     <Button warning on:click={() => goto("/deals/new")}>Deal erstellen</Button>
-    <Button on:click={() => goto("/deals/templates")} outline>Vorlagen</Button>
+    <Button on:click={() => goto("/deals/templates")}>Vorlagen</Button>
   </div>
 </div>
 <div class="tabs mt-6 max-h-8 mb-2">

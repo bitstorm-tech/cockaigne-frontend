@@ -10,7 +10,7 @@
   const dispatch = createEventDispatcher();
 
   const buttons = [
-    { text: "Abbrechen", callback: cancel, outline: true },
+    { text: "Abbrechen", callback: cancel },
     { text: "Bewerten", callback: ratingCreated }
   ];
 

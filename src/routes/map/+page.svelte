@@ -51,9 +51,15 @@
 </script>
 
 <div class="flex justify-center gap-2 m-3">
-  <Button on:click={() => (showLocationSettingsModal = true)} outline><GearIcon /></Button>
-  <Button on:click={() => (showDealFilterModal = true)} outline><FilterIcon /></Button>
-  <Button on:click={jumpToCurrentLocation} outline><CurrentLocationIcon /></Button>
+  <Button on:click={() => (showLocationSettingsModal = true)}>
+    <GearIcon />
+  </Button>
+  <Button on:click={() => (showDealFilterModal = true)}>
+    <FilterIcon />
+  </Button>
+  <Button on:click={jumpToCurrentLocation}>
+    <CurrentLocationIcon />
+  </Button>
 </div>
 <span class="p-3 text-2xs">Standort: {address}</span>
 <div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">

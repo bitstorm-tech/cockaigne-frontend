@@ -1,8 +1,9 @@
 <script lang="ts">
   import Modal from "$lib/components/ui/Modal.svelte";
+
   export let open = false;
   export let url = "";
-  export let deleteFunction = () => {};
+  export let deleteFunction;
 
   function del() {
     deleteFunction();
@@ -15,7 +16,7 @@
 
   const buttons = [
     { text: "Ja", callback: del },
-    { text: "Nein", callback: close, outline: true }
+    { text: "Nein", callback: close }
   ];
 </script>
 

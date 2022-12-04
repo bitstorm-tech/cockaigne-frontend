@@ -67,7 +67,8 @@
       deal.start = dateToUnixTimestamp(individualStartDateTime);
       deal.duration = getDuration();
     } else {
-      deal.start = dateToUnixTimestamp(deal.start);
+      const startDatetimeString = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
+      deal.start = dateToUnixTimestamp(startDatetimeString);
     }
     const response = await fetch("/api/deals", POST(deal));
 
@@ -106,12 +107,6 @@
     } else {
       loading = false;
       openErrorModal = true;
-    }
-  }
-
-  function setStartDate(event: unknown) {
-    if (event.target.checked) {
-      deal.start = getDateTimeAsIsoString();
     }
   }
 </script>

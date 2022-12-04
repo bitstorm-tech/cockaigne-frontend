@@ -71,7 +71,7 @@ export async function findDealsByDealerId(dealerId: number): Promise<Deal[]> {
   const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template = false";
   const result = await pool.query<Deal>(query, [dealerId]);
 
-  return result.rows.map(enrichStartTimestampWithTimezone);
+  return result.rows; //.map(enrichStartTimestampWithTimezone);
 }
 
 export async function findHotDealsByUserId(userId: number): Promise<Deal[]> {

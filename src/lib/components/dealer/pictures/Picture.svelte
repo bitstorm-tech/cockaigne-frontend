@@ -1,23 +1,26 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import TrashIcon from "$lib/components/ui/icons/TrashIcon.svelte";
   import ZoomIcon from "$lib/components/ui/icons/ZoomIcon.svelte";
   import { createEventDispatcher } from "svelte";
 
   export let url: string;
+  export let showZoom = false;
+  export let showDelete = false;
+  export let fixedHeight = true;
 
   const dispatch = createEventDispatcher();
 </script>
 
-<div class="p-0.5 w-1/3 relative">
-  {#if $page.data.user.isDealer}
+<div class="relative">
+  {#if showDelete}
     <button class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("delete")}>
       <TrashIcon />
     </button>
-  {:else}
+  {/if}
+  {#if showZoom}
     <button class="absolute p-1 text-red-600 cursor-pointer" on:click={() => dispatch("zoom")}>
       <ZoomIcon />
     </button>
   {/if}
-  <img class="h-60 object-cover" src={url} alt="Dealer Impression" />
+  <img class:h-60={fixedHeight} class="object-cover" src={url} alt="Dealer Impression" />
 </div>

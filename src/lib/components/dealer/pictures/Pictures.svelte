@@ -51,9 +51,15 @@
 {#if pictures.length === 0}
   <EmptyContent>Füge ein paar Bilder hinzu und mach deine Seite noch schöner!</EmptyContent>
 {/if}
-<div class="flex flex-wrap">
+<div class="grid grid-cols-3 gap-2">
   {#each pictures as picture}
-    <Picture url={picture} on:delete={() => onDelete(picture)} on:zoom={() => onZoom(picture)} />
+    <Picture
+      url={picture}
+      showDelete={$page.data.user.isDealer}
+      showZoom={!$page.data.user.isDealer}
+      on:delete={() => onDelete(picture)}
+      on:zoom={() => onZoom(picture)}
+    />
   {/each}
 </div>
 {#if $page.data.user.isDealer}

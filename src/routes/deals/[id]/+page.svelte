@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
+  import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
@@ -26,9 +27,9 @@
   $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
 
   const runtimes = {
-    "24": "24 Stunden",
-    "48": "48 Stunden",
-    "72": "72 Stunden"
+    "24": "1 Tag",
+    "48": "2 Tage",
+    "72": "3 Tage"
   };
 
   const nowDateTimeString = getDateTimeAsIsoString();
@@ -46,6 +47,9 @@
       ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
       : getDateAsIsoString(new Date(), 25 * 60);
   let costs = "4,99";
+  let images: File[] = [];
+  let imagePreviews: string[] = [];
+  let fileInput;
   let loading = false;
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
@@ -109,12 +113,39 @@
       openErrorModal = true;
     }
   }
+
+  function pictureSelected(event) {
+    const file = event.target.files[0] as File;
+
+    if (!file) {
+      return;
+    }
+
+    const URL = window.URL || window.webkitURL;
+    imagePreviews = [...imagePreviews, URL.createObjectURL(file)];
+    images.push(file);
+  }
+
+  function deletePicture(index: number) {
+    imagePreviews.splice(index, 1);
+    imagePreviews = [...imagePreviews];
+    images.splice(index);
+  }
 </script>
 
 <div class="flex flex-col gap-4 p-4">
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
+  <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
+    Bild hinzufügen ({imagePreviews.length} / 3)
+  </Button>
+  <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
+  <div class="grid grid-cols-3 gap-2">
+    {#each imagePreviews as imagePreview, index}
+      <Picture url={imagePreview} showDelete={true} fixedHeight={false} on:delete={() => deletePicture(index)} />
+    {/each}
+  </div>
   <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
   {#if individuallyTime}
     <div class="flex flex-col gap-3">

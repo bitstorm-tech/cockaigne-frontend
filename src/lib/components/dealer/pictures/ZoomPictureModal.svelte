@@ -1,11 +1,22 @@
 <script lang="ts">
+  import Button from "$lib/components/ui/Button.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
 
   export let open = false;
-  export let url = "";
+  export let index = 0;
+  export let imageUrls: string[] = [];
+  export let title = "Bilder";
 
   function close() {
     open = false;
+  }
+
+  function next() {
+    index = index === imageUrls.length - 1 ? 0 : ++index;
+  }
+
+  function previous() {
+    index = index === 0 ? imageUrls.length - 1 : --index;
   }
 
   const buttons = [{ text: "Schön!", callback: close }];
@@ -13,6 +24,11 @@
 
 <Modal bind:open {buttons}>
   <div class="flex flex-col gap-3">
-    <img src={url} alt="Dealer Impression to delete" />
+    <div class="flex items-center">
+      <Button on:click={previous} circle>&lt;</Button>
+      <p class="grow text-center">{title}</p>
+      <Button on:click={next} circle>&gt;</Button>
+    </div>
+    <img src={imageUrls[index]} alt="Dealer shop impression" />
   </div>
 </Modal>

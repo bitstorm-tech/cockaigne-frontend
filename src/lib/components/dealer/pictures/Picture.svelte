@@ -7,6 +7,7 @@
   export let showZoom = false;
   export let showDelete = false;
   export let fixedHeight = true;
+  export let smallHeight = false;
 
   const dispatch = createEventDispatcher();
 </script>
@@ -22,5 +23,5 @@
       <ZoomIcon />
     </button>
   {/if}
-  <img class:h-60={fixedHeight} class="object-cover" src={url} alt="Dealer Impression" />
+  <img class:h-60={fixedHeight} class:h-36={smallHeight} class="object-cover" src={url} alt="Dealer Impression" />
 </div>

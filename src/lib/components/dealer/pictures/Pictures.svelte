@@ -8,12 +8,13 @@
   import Toast from "$lib/components/ui/Toast.svelte";
 
   export let pictures: string[] = [];
+  export let companyName = "";
 
   let toastText = "";
   let openDeleteModal = false;
   let openZoomModal = false;
   let deletePictureUrl: string;
-  let zoomPictureUrl: string;
+  let zoomImageIndex = 0;
 
   async function savePicture(event: CustomEvent<File>) {
     toastText = "Speichere Bild ...";
@@ -42,8 +43,8 @@
     openDeleteModal = true;
   }
 
-  function onZoom(url: string) {
-    zoomPictureUrl = url;
+  function onZoom(index: number) {
+    zoomImageIndex = index;
     openZoomModal = true;
   }
 </script>
@@ -52,13 +53,13 @@
   <EmptyContent>Füge ein paar Bilder hinzu und mach deine Seite noch schöner!</EmptyContent>
 {/if}
 <div class="grid grid-cols-3 gap-2">
-  {#each pictures as picture}
+  {#each pictures as picture, index}
     <Picture
       url={picture}
       showDelete={$page.data.user.isDealer}
       showZoom={!$page.data.user.isDealer}
       on:delete={() => onDelete(picture)}
-      on:zoom={() => onZoom(picture)}
+      on:zoom={() => onZoom(index)}
     />
   {/each}
 </div>
@@ -73,4 +74,4 @@
   </div>
 {/if}
 <ConfirmDeletePictureModal bind:open={openDeleteModal} url={deletePictureUrl} deleteFunction={deletePictureCallback} />
-<ZoomPictureModal bind:open={openZoomModal} url={zoomPictureUrl} />
+<ZoomPictureModal bind:open={openZoomModal} imageUrls={pictures} index={zoomImageIndex} title={companyName} />

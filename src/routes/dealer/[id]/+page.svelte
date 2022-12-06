@@ -48,7 +48,7 @@
       <Button warning>Deal erstellen</Button>
     </a>
   {:else}
-    <Button on:click={toggleFavor} circle>
+    <Button on:click={toggleFavor} circle warning>
       {#if loadingFavorite}
         <LoadingSpinner />
       {:else}
@@ -72,7 +72,7 @@
 {#if activeTab === 0}
   <DealsList deals={activeDeals} />
 {:else if activeTab === 1}
-  <Pictures {pictures} />
+  <Pictures {pictures} companyName={account.company_name} />
 {:else}
   <RatingsList {dealerId} userId={$page.data.user.id} isDealer={$page.data.user.isDealer} />
 {/if}

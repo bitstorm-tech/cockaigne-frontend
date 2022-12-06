@@ -14,8 +14,8 @@
   const isUser = !$page.data.user.isDealer;
 </script>
 
-<div class="flex gap-2 items-center" on:click on:keypress>
-  <div class="flex flex-col grow cursor-pointer">
+<div class="flex gap-2 items-center">
+  <div class="flex flex-col grow">
     {#if showCompanyName}
       <div class="flex justify-between px-2 py-0.5 bg-[#232b2e]">
         <a href="/dealer/{deal.dealer_id}" class="flex items-center text-[#b2b2b2]">
@@ -24,7 +24,7 @@
         <a href="/dealer/{deal.dealer_id}" class="text-[#617780]">>></a>
       </div>
     {/if}
-    <div class="flex justify-between bg-[#2c363a] items-center">
+    <button class="flex justify-between bg-[#2c363a] items-center" on:click>
       <div class="flex gap-2 items-center">
         <div class="m-2 rounded" style="background: {category.color}">
           <svelte:component this={category.icon} size="2.8" />
@@ -34,7 +34,7 @@
       <button class="mr-3" on:click|preventDefault style="color: {category.color}">
         <slot name="right-action" />
       </button>
-    </div>
+    </button>
     {#if showDetails}
       <DealListItemDetails {deal} {isUser} />
     {/if}

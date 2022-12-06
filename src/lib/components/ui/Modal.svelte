@@ -5,7 +5,7 @@
   export let open = false;
 </script>
 
-<div class="modal" class:modal-open={open}>
+<div class="modal backdrop-blur-sm" class:modal-open={open}>
   <div class="modal-box">
     <slot />
     <div class="modal-action">

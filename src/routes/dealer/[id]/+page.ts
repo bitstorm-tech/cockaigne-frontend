@@ -5,7 +5,7 @@ import type { LoadEvent } from "@sveltejs/kit";
 export async function load({ fetch, params }: LoadEvent) {
   const id = params.id;
   const responseDeals = await fetch("/api/deals?dealer=" + id);
-  const responsePictures = await fetch("/api/pictures?dealer=" + id);
+  const responsePictures = await fetch("/api/images?dealer=" + id);
   const responseFavoriteDealers = await fetch("/api/accounts/favorite-dealers");
   const responseAccount = await fetch("/api/accounts/" + id);
 

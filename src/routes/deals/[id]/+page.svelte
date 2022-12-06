@@ -19,6 +19,7 @@
     getDateTimeAsIsoString
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.service";
+  import { fileToBase64 } from "$lib/file.utils";
   import { POST } from "$lib/http.service";
 
   export let data;
@@ -74,7 +75,19 @@
       const startDatetimeString = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
       deal.start = dateToUnixTimestamp(startDatetimeString);
     }
-    const response = await fetch("/api/deals", POST(deal));
+
+    const imagesAsBase64: string[] = [];
+    for (const image of images) {
+      const base64 = (await fileToBase64(image)) as string;
+      imagesAsBase64.push(base64);
+    }
+
+    const data = {
+      deal,
+      imagesAsBase64
+    };
+
+    const response = await fetch("/api/deals", POST(data));
 
     if (response.ok) {
       goto("/").then();

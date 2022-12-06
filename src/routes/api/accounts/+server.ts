@@ -17,7 +17,7 @@ import {
   usernameAlreadyExistsResponse
 } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
-import { getProfileImageURL } from "$lib/storage";
+import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
 

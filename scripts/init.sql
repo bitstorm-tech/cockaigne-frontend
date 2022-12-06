@@ -1,13 +1,3 @@
-CREATE TABLE IF NOT EXISTS image
-(
-    id         integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    created    timestamp NOT NULL DEFAULT now(),
-    account_id integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    deal_id    integer REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
-    name       text      NOT NULL,
-    place      integer
-);
-
 CREATE TABLE IF NOT EXISTS account
 (
     id                   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

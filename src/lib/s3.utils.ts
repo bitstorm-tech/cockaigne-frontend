@@ -22,11 +22,17 @@ export async function getPictureUrls(accountId: number): Promise<string[]> {
   return response.Contents?.map((object) => `${baseUrl}/${object.Key}`) || [];
 }
 
-export async function savePicture(file: File, accountId: number, name?: string): Promise<string> {
+export async function savePicture(
+  file: File,
+  accountId: number,
+  filename?: string,
+  additionalPath?: string
+): Promise<string> {
   const timestamp = new Date().getTime().toString();
   const fileExtension = file.name.split(".").pop();
-  const filename = (name ? name : timestamp) + "." + fileExtension;
-  const key = `${accountId}/${filename}`;
+  filename = (filename ? filename : timestamp) + "." + fileExtension;
+  additionalPath = additionalPath ? `/${additionalPath}` : "";
+  const key = `${accountId}${additionalPath}/${filename}`.replace("//", "/");
   const buffer = Buffer.from(await file.arrayBuffer());
 
   const command = new PutObjectCommand({
@@ -42,9 +48,47 @@ export async function savePicture(file: File, accountId: number, name?: string):
   return `${baseUrl}/${key}`;
 }
 
+export async function savePictureBase64(
+  base64: string,
+  accountId: number,
+  filename?: string,
+  additionalPath?: string
+): Promise<string> {
+  const [fileType, data] = base64.replace("data:", "").replace("base64,", "").split(";");
+  const timestamp = new Date().getTime().toString();
+  const fileExtension = fileType.split("/")[1];
+  filename = (filename ? filename : timestamp) + "." + fileExtension;
+  additionalPath = additionalPath ? `/${additionalPath}` : "";
+  const key = `${accountId}${additionalPath}/${filename}`.replace("//", "/");
+  const buffer = Buffer.from(data, "base64");
+
+  const command = new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    ContentType: fileType,
+    ContentEncoding: "base64",
+    ACL: "public-read",
+    Body: buffer
+  });
+
+  await s3.send(command);
+
+  return `${baseUrl}/${key}`;
+}
+
 export async function saveProfilePicture(file: File, accountId: number): Promise<string> {
   await emptyFolder(accountId);
   return await savePicture(file, accountId, "profile");
+}
+
+export async function saveDealImage(
+  base64: string,
+  filename: string,
+  accountId: number,
+  dealId: number
+): Promise<string> {
+  const additionalPath = `deals/${dealId}`;
+  return await savePictureBase64(base64, accountId, filename, additionalPath);
 }
 
 export async function deletePicture(accountId: number, fileName: string) {

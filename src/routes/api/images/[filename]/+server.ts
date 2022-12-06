@@ -1,6 +1,6 @@
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
-import { deletePicture } from "$lib/storage";
+import { deletePicture } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function DELETE({ request, params }: RequestEvent) {

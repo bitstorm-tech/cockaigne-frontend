@@ -50,7 +50,7 @@
 
     const formData = new FormData();
     formData.append("file", newProfileImage);
-    const response = await fetch("/api/pictures/profile", { method: "post", body: formData });
+    const response = await fetch("/api/images/profile", { method: "post", body: formData });
 
     if (response.ok) {
       account.profile_image = await response.text();

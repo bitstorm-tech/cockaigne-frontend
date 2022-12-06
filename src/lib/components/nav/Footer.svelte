@@ -7,7 +7,7 @@
 </script>
 
 {#if $page.data.user.isDealer}
-  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
+  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c] h-12">
     <a href="/">
       <HomeIcon />
     </a>
@@ -16,7 +16,7 @@
     </a>
   </footer>
 {:else}
-  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
+  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c] h-12">
     <a href="/">
       <HomeIcon />
     </a>

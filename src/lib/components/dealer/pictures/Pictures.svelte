@@ -20,7 +20,7 @@
     const formData = new FormData();
     formData.append("file", event.detail);
 
-    const response = await fetch("/api/pictures", { method: "post", body: formData });
+    const response = await fetch("/api/images", { method: "post", body: formData });
     if (response.ok) {
       const picture = await response.text();
       pictures = [...pictures, picture];
@@ -32,7 +32,7 @@
     toastText = "Lösche Bild ...";
     const tokens = deletePictureUrl.split("/");
     const filename = tokens.pop();
-    await fetch(`/api/pictures/${filename}`, { method: "delete" });
+    await fetch(`/api/images/${filename}`, { method: "delete" });
     pictures = pictures.filter((pictureUrl) => pictureUrl !== deletePictureUrl);
     toastText = "";
   }

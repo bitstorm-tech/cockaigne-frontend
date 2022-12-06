@@ -50,7 +50,7 @@
   }
 </script>
 
-<div class="flex justify-center gap-2 m-3">
+<div class="grid grid-cols-3 gap-2 m-3">
   <Button on:click={() => (showLocationSettingsModal = true)}>
     <GearIcon />
   </Button>

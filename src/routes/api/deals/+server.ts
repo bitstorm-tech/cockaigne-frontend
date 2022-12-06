@@ -2,7 +2,7 @@ import type { Deal } from "$lib/database/deal/deal.model";
 import { findDealsByDealerId, upsertDeal } from "$lib/database/deal/deal.service";
 import { errorResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
-import { saveDealImage } from "$lib/s3.utils";
+import { getImageUrls, saveDealImage } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function POST({ request }: RequestEvent) {
@@ -40,6 +40,9 @@ export async function GET({ url }: RequestEvent) {
     }
 
     const deals = await findDealsByDealerId(+dealerId);
+    for (const deal of deals) {
+      deal.imageUrls = await getImageUrls(deal.dealer_id, deal.id);
+    }
 
     return response(deals);
   } catch (error) {

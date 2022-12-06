@@ -14,6 +14,7 @@ export interface Deal {
   template: boolean;
   likes?: number;
   location?: Position | string;
+  imageUrls?: string[];
 }
 
 export function newDeal(): Deal {

@@ -1,12 +1,12 @@
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
-import { getPictureUrls, savePicture } from "$lib/s3.utils";
+import { getImageUrls, savePicture } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function GET({ url }: RequestEvent) {
   try {
     const dealer = url.searchParams.get("dealer") || -1;
-    const pictureUrls = await getPictureUrls(+dealer);
+    const pictureUrls = await getImageUrls(+dealer);
 
     return response(pictureUrls);
   } catch (error) {

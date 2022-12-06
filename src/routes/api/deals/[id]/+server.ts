@@ -1,6 +1,7 @@
 import { deleteDealById, findDealById } from "$lib/database/deal/deal.service";
 import { errorResponse, forbiddenResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
+import { getImageUrls } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function GET({ params, request }: RequestEvent) {
@@ -21,6 +22,8 @@ export async function GET({ params, request }: RequestEvent) {
     if (deal.dealer_id !== +jwt.sub) {
       return forbiddenResponse();
     }
+
+    deal.imageUrls = await getImageUrls(deal.dealer_id, deal.id);
 
     return response(deal);
   } catch (error) {

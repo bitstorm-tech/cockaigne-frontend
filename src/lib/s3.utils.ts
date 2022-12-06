@@ -16,10 +16,14 @@ const s3 = new S3Client({
   }
 });
 
-export async function getPictureUrls(accountId: number): Promise<string[]> {
-  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: accountId.toString() });
+export async function getImageUrls(accountId: number, dealId?: number): Promise<string[]> {
+  const prefix = dealId ? `${accountId}/deals/${dealId}` : `${accountId}/shop`;
+  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: prefix });
   const response = await s3.send(command);
-  return response.Contents?.map((object) => `${baseUrl}/${object.Key}`) || [];
+  return (
+    response.Contents?.filter((object) => object.Size && object.Size > 0).map((object) => `${baseUrl}/${object.Key}`) ||
+    []
+  );
 }
 
 export async function savePicture(

@@ -14,8 +14,13 @@
   }
 </script>
 
-<div class="flex flex-col justify-between h-32 bg-[#323e42] text-xs p-2">
+<div class="flex flex-col justify-between bg-[#323e42] text-xs p-2">
   {deal.description}
+  <div class="grid grid-cols-3 gap-1 pt-6">
+    {#each deal.imageUrls as imageUrl}
+      <img src={imageUrl} alt="Deal" />
+    {/each}
+  </div>
   {#if isUser}
     <div class="flex h-4 justify-between">
       <div class="flex gap-4">

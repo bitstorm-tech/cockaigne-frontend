@@ -26,7 +26,7 @@
   <div class="flex flex-col gap-3">
     <div class="flex items-center">
       <Button on:click={previous} circle>&lt;</Button>
-      <p class="grow text-center">{title}</p>
+      <p class="grow text-center">{title} ({index + 1}/{imageUrls.length})</p>
       <Button on:click={next} circle>&gt;</Button>
     </div>
     <img src={imageUrls[index]} alt="Dealer shop impression" />

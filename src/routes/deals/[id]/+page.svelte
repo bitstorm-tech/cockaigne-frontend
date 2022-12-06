@@ -150,14 +150,22 @@
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
-  <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
-    Bild hinzufügen ({imagePreviews.length} / 3)
-  </Button>
-  <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
+  {#if deal.id < 0}
+    <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
+      Bild hinzufügen ({imagePreviews.length} / 3)
+    </Button>
+    <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
+  {/if}
   <div class="grid grid-cols-3 gap-2">
-    {#each imagePreviews as imagePreview, index}
-      <Picture url={imagePreview} showDelete={true} fixedHeight={false} on:delete={() => deletePicture(index)} />
-    {/each}
+    {#if deal.id > 0}
+      {#each deal.imageUrls as imageUrl}
+        <Picture url={imageUrl} fixedHeight={false} />
+      {/each}
+    {:else}
+      {#each imagePreviews as imagePreview, index}
+        <Picture url={imagePreview} showDelete={true} fixedHeight={false} on:delete={() => deletePicture(index)} />
+      {/each}
+    {/if}
   </div>
   <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
   {#if individuallyTime}

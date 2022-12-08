@@ -7,11 +7,13 @@
   import Link from "$lib/components/ui/Link.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import type { Account } from "$lib/database/account/account.model";
-  import { POST } from "../../lib/http.service";
+  import type { RequestError } from "$lib/http.service";
+  import { POST } from "$lib/http.service";
 
   const account = {} as Account;
   let openModal = false;
   let loading = false;
+  let errorMessage = "Da ging leider etwas schief :(";
 
   const gender = {
     m: "Mann",
@@ -26,7 +28,18 @@
     5: "46+"
   };
 
-  $: disabled = account.email?.length === 0 || account.password?.length === 0 || !account.age || !account.gender;
+  $: disabled =
+    account.email?.length === 0 ||
+    account.password?.length === 0 ||
+    (account.dealer && !account.company_name) ||
+    (account.dealer && !account.street) ||
+    (account.dealer && !account.house_number) ||
+    (account.dealer && !account.city) ||
+    (account.dealer && !account.zip) ||
+    (account.dealer && !account.phone) ||
+    (!account.dealer && !account.username) ||
+    (!account.dealer && !account.age) ||
+    (!account.dealer && !account.gender);
 
   async function register() {
     loading = true;
@@ -37,6 +50,8 @@
       const id = await response.text();
       goto(account.dealer ? `/dealer/${id}` : "/user/").then();
     } else {
+      const error: RequestError = await response.json();
+      errorMessage = error.message;
       openModal = true;
     }
     loading = false;
@@ -66,6 +81,7 @@
       <Input label="PLZ" type="number" bind:value={account.zip} />
     </div>
     <Input label="Telefon" type="tel" bind:value={account.phone} />
+    <Input label="Umsatzsteuer ID" type="text" bind:value={account.tax_id} />
   {:else}
     <ButtonGroup label="Geschlecht" options={gender} bind:value={account.gender} />
     <ButtonGroup label="Alter" options={age} bind:value={account.age} />
@@ -73,4 +89,4 @@
   <Button on:click={register} {loading} {disabled}>Registrieren</Button>
   <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
 </div>
-<Modal bind:open={openModal}>E-Mail wurde bereits registriert!</Modal>
+<Modal bind:open={openModal}>{errorMessage}</Modal>

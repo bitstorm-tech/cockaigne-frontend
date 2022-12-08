@@ -1,5 +1,5 @@
 import pool from "$lib/database/pg";
-import type { Position } from "../../geo/geo.types";
+import type { Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdateOptions } from "./account.model";
 
 export async function findAccountByEmail(email: string): Promise<Account | undefined> {
@@ -34,7 +34,7 @@ export async function findAccountById(id: number): Promise<Account | undefined> 
 
 export async function insertAccount(account: Account, position?: Position): Promise<number | undefined> {
   const query = account.dealer
-    ? "INSERT INTO account (email, password, dealer, company_name, street, house_number, city, zip, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, ST_POINT($10, $11)) RETURNING id"
+    ? "INSERT INTO account (email, password, dealer, company_name, street, house_number, city, zip, tax_id, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, ST_POINT($11, $12)) RETURNING id"
     : "INSERT INTO account (email, password, dealer, username, age, gender) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
 
   const values = account.dealer
@@ -47,6 +47,7 @@ export async function insertAccount(account: Account, position?: Position): Prom
         account.house_number,
         account.city,
         account.zip,
+        account.tax_id,
         account.phone,
         position?.longitude,
         position?.latitude
@@ -64,7 +65,9 @@ export async function updateAccount(id: number, update: AccountUpdateOptions) {
     .map((key, index) => `${key} = $${index + 2}`)
     .join(", ");
 
-  const query = `UPDATE account SET ${setCondition} WHERE id = $1`;
+  const query = `UPDATE account
+                 SET ${setCondition}
+                 WHERE id = $1`;
 
   await pool.query(query, [id, ...values]);
 }

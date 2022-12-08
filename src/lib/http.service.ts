@@ -8,17 +8,29 @@ export function response(bodyData?: unknown, status = 200, stringify = true): Re
   return new Response(body, options);
 }
 
-export function badRequestResponse(errorMessage: string, errorCode: number): Response {
-  const error = {
-    message: errorMessage,
-    code: errorCode
-  };
+export interface RequestError {
+  code: number;
+  message: string;
+}
+
+export function badRequestResponse(error: RequestError): Response {
   return new Response(JSON.stringify(error), { status: 400 });
 }
 
-export function usernameAlreadyExistsResponse(): Response {
-  return badRequestResponse("Der Benutzername wird bereits verwendet", 1);
-}
+export const RequestErrors = {
+  usernameAlreadyExists: {
+    code: 1,
+    message: "Der Benutzername wird bereits verwendet"
+  },
+  emailAlreadyExists: {
+    code: 2,
+    message: "Die E-Mail wird bereits verwendet"
+  },
+  noLocationFound: {
+    code: 3,
+    message: "Wir konnten deine Adresse leider nicht finden"
+  }
+};
 
 export function unauthorizedResponse(): Response {
   return new Response(null, { status: 401 });
@@ -58,8 +70,8 @@ export function redirectToLogin() {
   throw redirect(302, "/login");
 }
 
-export function redirectTo(url: string, status = 302) {
-  throw redirect(status, url);
+export function redirectTo(url: string) {
+  throw redirect(302, url);
 }
 
 export function PUT(body: unknown) {

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS account
     city                 text                  NULL,
     zip                  integer               NULL,
     phone                text                  NULL,
-    profile_image        text                  NULL,
+    tax_id               text                  NULL,
     last_login           timestamp             NULL,
     use_current_location bool                  NULL     DEFAULT false,
     search_radius        integer               NULL     DEFAULT 500,

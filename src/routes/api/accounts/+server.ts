@@ -8,13 +8,14 @@ import {
 } from "$lib/database/account/account.service";
 import type { Position } from "$lib/geo/geo.types";
 import {
+  badRequestResponse,
   errorResponse,
   forbiddenResponse,
   jwtCookieResponse,
   notFoundResponse,
+  RequestErrors,
   response,
-  unauthorizedResponse,
-  usernameAlreadyExistsResponse
+  unauthorizedResponse
 } from "$lib/http.service";
 import { extractJwt } from "$lib/jwt.service";
 import { getProfileImageURL } from "$lib/s3.utils";
@@ -72,8 +73,7 @@ export async function POST({ request }: RequestEvent) {
           account.zip,
           account.city
         );
-        // TODO proper handling
-        return response(null, 400);
+        return badRequestResponse(RequestErrors.noLocationFound);
       }
 
       position.latitude = geoInformation[0].lat;
@@ -106,7 +106,7 @@ export async function PUT({ request }: RequestEvent) {
     const update: AccountUpdateOptions = await request.json();
 
     if (update.username && (await usernameExists(update.username))) {
-      return usernameAlreadyExistsResponse();
+      return badRequestResponse(RequestErrors.usernameAlreadyExists);
     }
 
     await updateAccount(+jwt.sub, update);

@@ -4,7 +4,7 @@ export interface Account {
   password?: string;
   dealer: boolean;
   username?: string;
-  gender?: string;
+  gender?: "m" | "f";
   age?: number;
   company_name?: string;
   street?: string;
@@ -12,6 +12,7 @@ export interface Account {
   city?: string;
   zip?: number;
   phone?: string;
+  tax_id?: string;
   profile_image?: string;
   search_radius?: number;
   use_current_location?: boolean;

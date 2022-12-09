@@ -13,7 +13,7 @@ export interface Account {
   zip?: number;
   phone?: string;
   tax_id?: string;
-  profile_image?: string;
+  default_category: number;
   search_radius?: number;
   use_current_location?: boolean;
   selected_categories?: number[];

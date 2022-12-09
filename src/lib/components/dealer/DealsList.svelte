@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
@@ -14,7 +15,9 @@
   {#if deals.length === 0}
     <EmptyContent>
       <p>Du hast noch keine aktiven Deals. Worauf wartest du?</p>
-      <p><Link href="/deals/new" underline>Deal erstellen!</Link></p>
+      <p>
+        <Link href={"/deals/new?dealerId=" + $page.data.user.id} underline>Deal erstellen!</Link>
+      </p>
     </EmptyContent>
   {/if}
   {#each deals as deal, i}

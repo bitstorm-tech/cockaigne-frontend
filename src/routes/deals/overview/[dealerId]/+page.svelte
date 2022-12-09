@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
@@ -15,7 +16,7 @@
 
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
-    <Button warning on:click={() => goto("/deals/new")}>Deal erstellen</Button>
+    <Button warning on:click={() => goto("/deals/new?dealerId=" + $page.data.user.id)}>Deal erstellen</Button>
     <Button on:click={() => goto("/deals/templates")}>Vorlagen</Button>
   </div>
 </div>

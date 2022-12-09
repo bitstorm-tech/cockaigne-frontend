@@ -6,7 +6,10 @@
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
+  import Select from "$lib/components/ui/Select.svelte";
   import type { Account } from "$lib/database/account/account.model";
+  import type { Category } from "$lib/database/category/category.model";
+  import { categoryStore } from "$lib/database/category/category.store";
   import type { RequestError } from "$lib/http.service";
   import { POST } from "$lib/http.service";
 
@@ -14,6 +17,9 @@
   let openModal = false;
   let loading = false;
   let errorMessage = "Da ging leider etwas schief :(";
+
+  categoryStore.load();
+  $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
 
   const gender = {
     m: "Mann",
@@ -68,6 +74,7 @@
   <Input label="Passwort" type="password" bind:value={account.password} />
   {#if account.dealer}
     <Input label="Firmenname" type="text" bind:value={account.company_name} />
+    <Select label="Branche" options={categories} bind:value={account.default_category} />
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">
         <Input label="Straße" type="text" bind:value={account.street} />

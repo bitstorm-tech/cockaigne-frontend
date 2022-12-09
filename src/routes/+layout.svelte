@@ -30,9 +30,8 @@
   <Navbar />
 {/if}
 {#if loading}
-  <div class="flex items-center gap-3 pt-36 px-14">
-    <LoadingSpinner size="5" />
-    <p>Lade Dinge ...</p>
+  <div class="flex justify-center items-center h-full -mt-16">
+    <LoadingSpinner size="6" />
   </div>
 {:else}
   <div class="pb-16" in:blur>

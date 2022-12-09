@@ -44,7 +44,7 @@
   imageUrl="/images/anonym-profile-dealer.png"
 >
   {#if $page.data.user.isDealer}
-    <a href="/deals/new" class="mt-4">
+    <a href={"/deals/new?dealerId=" + dealerId} class="mt-4">
       <Button warning>Deal erstellen</Button>
     </a>
   {:else}

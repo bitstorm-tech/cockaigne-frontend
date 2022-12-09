@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS account
     age                  integer               NULL,
     gender               text                  NULL,
     company_name         text                  NULL,
+    default_category     integer               NULL REFERENCES category (id) ON DELETE RESTRICT ON UPDATE CASCADE,
     house_number         text                  NULL,
     city                 text                  NULL,
     zip                  integer               NULL,

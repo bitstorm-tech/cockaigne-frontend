@@ -1,6 +1,6 @@
+import { findAccountById } from "$lib/database/account/account.service";
+import { errorResponse, notFoundResponse, response } from "$lib/http.service";
 import type { RequestEvent } from "@sveltejs/kit";
-import { findAccountById } from "../../../../lib/database/account/account.service";
-import { errorResponse, notFoundResponse, response } from "../../../../lib/http.service";
 
 export async function GET({ params }: RequestEvent) {
   const id = params.id || 0;
@@ -16,6 +16,7 @@ export async function GET({ params }: RequestEvent) {
       company_name: account.company_name,
       street: account.street,
       house_number: account.house_number,
+      default_category: account.default_category,
       zip: account.zip,
       city: account.city
     };

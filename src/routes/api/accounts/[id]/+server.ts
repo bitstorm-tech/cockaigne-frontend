@@ -1,5 +1,6 @@
 import { findAccountById } from "$lib/database/account/account.service";
 import { errorResponse, notFoundResponse, response } from "$lib/http.service";
+import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function GET({ params }: RequestEvent) {
@@ -12,13 +13,17 @@ export async function GET({ params }: RequestEvent) {
       return notFoundResponse();
     }
 
+    const profileImage = await getProfileImageURL(+id, account.dealer);
+
     const body = {
       company_name: account.company_name,
       street: account.street,
       house_number: account.house_number,
       default_category: account.default_category,
       zip: account.zip,
-      city: account.city
+      city: account.city,
+      location: account.location,
+      profile_image: profileImage
     };
 
     return response(body);

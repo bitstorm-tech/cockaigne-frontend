@@ -2,6 +2,7 @@ import { errorResponse, response, unauthorizedResponse } from "$lib/http.service
 import { extractJwt } from "$lib/jwt.service";
 import { getImageUrls, savePicture } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
+import { randomUUID } from "crypto";
 
 export async function GET({ url }: RequestEvent) {
   try {
@@ -26,7 +27,7 @@ export async function POST({ request }: RequestEvent) {
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
-    const pictureUrl = await savePicture(file, +jwt.sub);
+    const pictureUrl = await savePicture(file, +jwt.sub, randomUUID(), "shop");
 
     return response(pictureUrl, 200, false);
   } catch (error) {

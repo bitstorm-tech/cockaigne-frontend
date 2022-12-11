@@ -1,4 +1,5 @@
 import { DeleteObjectCommand, ListObjectsCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { randomUUID } from "crypto";
 
 const bucket = process.env.DO_SPACES_BUCKET;
 const baseUrl = process.env.DO_SPACES_BASE_URL;
@@ -81,8 +82,9 @@ export async function savePictureBase64(
 }
 
 export async function saveProfilePicture(file: File, accountId: number): Promise<string> {
-  await emptyFolder(accountId);
-  return await savePicture(file, accountId, "profile");
+  await deleteFile(accountId + "/profile");
+  const filename = `profile-${randomUUID()}`;
+  return await savePicture(file, accountId, filename);
 }
 
 export async function saveDealImage(
@@ -101,9 +103,8 @@ export async function deletePicture(accountId: number, fileName: string) {
   await s3.send(command);
 }
 
-export async function emptyFolder(accountId: number) {
-  const prefix = accountId + "/";
-  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: prefix });
+export async function deleteFile(name: string) {
+  const command = new ListObjectsCommand({ Bucket: bucket, Prefix: name });
   const response = await s3.send(command);
 
   for (const object of response.Contents || []) {
@@ -112,10 +113,15 @@ export async function emptyFolder(accountId: number) {
   }
 }
 
-export async function getProfileImageURL(accountId: number): Promise<string> {
+export async function getProfileImageURL(accountId: number, isDealer: boolean): Promise<string> {
   const prefix = `${accountId}/profile`;
   const command = new ListObjectsCommand({ Bucket: bucket, Prefix: prefix });
   const response = await s3.send(command);
   const profileImage = response.Contents?.at(0)?.Key;
-  return profileImage ? `${baseUrl}/${profileImage}` : "/images/anonym-profile.png";
+
+  if (!profileImage) {
+    return isDealer ? "/images/anonym-profile-dealer.png" : "/images/anonym-profile.png";
+  }
+
+  return `${baseUrl}/${profileImage}`;
 }

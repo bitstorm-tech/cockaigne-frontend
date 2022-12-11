@@ -37,7 +37,7 @@
     class="absolute z-50 w-screen border-b-[0.01rem] border-[#556368]"
     on:click={toggleMobileMenu}
     on:keypress={toggleMobileMenu}
-    transition:blur
+    transition:blur={{ duration: 200 }}
   >
     <MobileMenu />
   </div>

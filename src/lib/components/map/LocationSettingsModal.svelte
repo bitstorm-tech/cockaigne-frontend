@@ -3,19 +3,23 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
+  import { addressToString } from "$lib/geo/address.service";
   import { getAddress } from "$lib/geo/address.service.js";
+  import type { Position } from "$lib/geo/geo.types";
+  import LocationService from "$lib/geo/location.service.js";
+  import { locationStore, StoreService, useCurrentLocationStore } from "$lib/store.service";
   import { debounce } from "lodash";
   import { onDestroy } from "svelte";
-  import { addressToString } from "../../geo/address.service";
-  import type { Position } from "../../geo/geo.types";
-  import LocationService from "../../geo/location.service.js";
-  import { locationStore, StoreService, useCurrentLocationStore } from "../../store.service";
 
   export let open = false;
   let address = "";
 
   const unsubscribe = locationStore.subscribe(async (position: Position) => {
-    address = addressToString(await getAddress(position));
+    const newAddress = await getAddress(position);
+
+    if (newAddress) {
+      address = addressToString(newAddress);
+    }
   });
 
   onDestroy(unsubscribe);

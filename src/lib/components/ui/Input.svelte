@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="form-control w-full">
+<div class="form-control">
   <label class="label">
     <span class="label-text text-xs">{label}</span>
   </label>

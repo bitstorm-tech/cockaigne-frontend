@@ -41,7 +41,7 @@
   name={account.company_name}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
-  imageUrl="/images/anonym-profile-dealer.png"
+  imageUrl={account.profile_image}
 >
   {#if $page.data.user.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId} class="mt-4">

@@ -13,6 +13,8 @@ export interface Account {
   zip?: number;
   phone?: string;
   tax_id?: string;
+  location?: string;
+  profile_image?: string;
   default_category: number;
   search_radius?: number;
   use_current_location?: boolean;
@@ -27,4 +29,12 @@ export interface AccountUpdateOptions {
   search_radius?: number;
   selected_categories?: number[];
   username?: string;
+  company_name?: string;
+  phone?: string;
+  tax_id?: string;
+  street?: string;
+  house_number?: string;
+  city?: string;
+  zip?: number;
+  location?: string;
 }

@@ -6,6 +6,7 @@ import {
   updateAccount,
   usernameExists
 } from "$lib/database/account/account.service";
+import { getLocation } from "$lib/geo/address.service";
 import type { Position } from "$lib/geo/geo.types";
 import {
   badRequestResponse,
@@ -37,7 +38,7 @@ export async function GET({ request }: RequestEvent) {
       return notFoundResponse();
     }
 
-    account.profile_image = await getProfileImageURL(+jwt.sub);
+    account.profile_image = await getProfileImageURL(+jwt.sub, account.dealer);
 
     delete account.password;
 
@@ -105,9 +106,11 @@ export async function PUT({ request }: RequestEvent) {
 
     const update: AccountUpdateOptions = await request.json();
 
-    if (update.username && (await usernameExists(update.username))) {
+    if (update.username && (await usernameExists(update.username, +jwt.sub))) {
       return badRequestResponse(RequestErrors.usernameAlreadyExists);
     }
+
+    await setLocation(update);
 
     await updateAccount(+jwt.sub, update);
 
@@ -115,5 +118,18 @@ export async function PUT({ request }: RequestEvent) {
   } catch (error) {
     console.log("Can't patch account:", error);
     return errorResponse();
+  }
+}
+
+async function setLocation(update: AccountUpdateOptions) {
+  if (!update.street || !update.city || !update.zip) {
+    return;
+  }
+
+  const address = `${update.street} ${update.house_number}, ${update.city} ${update.zip}`;
+  const position = await getLocation(address);
+
+  if (position) {
+    update.location = `${position.longitude} ${position.latitude}`;
   }
 }

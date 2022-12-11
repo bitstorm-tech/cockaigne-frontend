@@ -2,13 +2,14 @@
   import { createEventDispatcher } from "svelte";
   import Button from "./Button.svelte";
 
+  export let file: File;
   export let imagePreview;
   export let buttonText = "Bild auswählen";
   const dispatch = createEventDispatcher();
   let fileInput;
 
   function pictureSelected(event) {
-    const file = event.target.files[0] as File;
+    file = event.target.files[0] as File;
 
     if (!file) {
       return;

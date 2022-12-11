@@ -1,36 +1,43 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
   import WarningMessage from "$lib/components/ui/WarningMessage.svelte";
   import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
-  import { PUT } from "$lib/http.service";
+  import { POST, PUT } from "$lib/http.service";
+  import DealerSettings from "./DealerSettings.svelte";
+  import UserSettings from "./UserSettings.svelte";
 
   export let data;
-  let account: Account = data.account;
-  let newUsername = account.username;
+  let account: Account = data?.account;
   let newProfileImage: File | undefined;
   let errorMessage = "";
   let loading = false;
 
-  $: disableSave = (newUsername?.length === 0 || account.username === newUsername) && !newProfileImage;
+  const originalUsername = account.username;
+  const isDealer = $page.data.user.isDealer;
 
   async function save() {
     loading = true;
-    await saveUsername();
+    await saveAccount();
     await saveProfileImage();
     loading = false;
   }
 
-  async function saveUsername() {
-    if (newUsername?.toLowerCase() === account.username?.toLowerCase()) {
-      return;
-    }
-
-    const updates: AccountUpdateOptions = {
-      username: newUsername
-    };
+  async function saveAccount() {
+    const updates: AccountUpdateOptions = isDealer
+      ? {
+          company_name: account.company_name,
+          tax_id: account.tax_id,
+          phone: account.phone,
+          street: account.street,
+          house_number: account.house_number,
+          city: account.city,
+          zip: account.zip
+        }
+      : {
+          username: account.username
+        };
 
     let response = await fetch("/api/accounts", PUT(updates));
 
@@ -39,8 +46,6 @@
       errorMessage = error.message;
       return;
     }
-
-    account.username = newUsername;
   }
 
   async function saveProfileImage() {
@@ -50,7 +55,7 @@
 
     const formData = new FormData();
     formData.append("file", newProfileImage);
-    const response = await fetch("/api/images/profile", { method: "post", body: formData });
+    const response = await fetch("/api/images/profile", POST(formData));
 
     if (response.ok) {
       account.profile_image = await response.text();
@@ -64,20 +69,19 @@
 
   function confirmError() {
     errorMessage = "";
-    newUsername = account.username;
-  }
-
-  function onFileSelected(event: CustomEvent<File>) {
-    newProfileImage = event.detail;
+    account.username = originalUsername;
   }
 </script>
 
-<section class="flex flex-col p-10 gap-4">
-  <Input label="Benutzername" bind:value={newUsername} />
-  <MediaPicker imagePreview={account.profile_image} on:fileSelected={onFileSelected} buttonText="Profilbild ändern" />
+<section class="flex flex-col p-4 gap-4">
+  {#if isDealer}
+    <DealerSettings bind:account bind:profileImageFile={newProfileImage} />
+  {:else}
+    <UserSettings bind:account bind:profileImageFile={newProfileImage} />
+  {/if}
   <div class="grid grid-cols-2 gap-4">
-    <Button on:click={save} disabled={disableSave} {loading}>Speichern</Button>
-    <Button on:click={() => goto("/")}>Zurück</Button>
+    <Button on:click={save} {loading}>Speichern</Button>
+    <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </section>
 <WarningMessage show={errorMessage.length > 0} on:confirm={confirmError}>

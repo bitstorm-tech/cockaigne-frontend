@@ -84,7 +84,7 @@ export function PUT(body: unknown) {
 export function POST(body: unknown) {
   return {
     method: "POST",
-    body: JSON.stringify(body)
+    body: body instanceof FormData ? body : JSON.stringify(body)
   };
 }
 

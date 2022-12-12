@@ -33,7 +33,8 @@
           street: account.street,
           house_number: account.house_number,
           city: account.city,
-          zip: account.zip
+          zip: account.zip,
+          default_category: account.default_category
         }
       : {
           username: account.username

@@ -37,4 +37,5 @@ export interface AccountUpdateOptions {
   city?: string;
   zip?: number;
   location?: string;
+  default_category?: string | number;
 }

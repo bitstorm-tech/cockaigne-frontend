@@ -4,13 +4,11 @@
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
+  import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
-  import Select from "$lib/components/ui/Select.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import type { Category } from "$lib/database/category/category.model";
-  import { categoryStore } from "$lib/database/category/category.store";
   import type { Deal } from "$lib/database/deal/deal.model";
   import {
     dateToUnixTimestamp,
@@ -25,8 +23,6 @@
   export let data;
   export let deal: Deal = data;
 
-  $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
-
   const runtimes = {
     "24": "1 Tag",
     "48": "2 Tage",
@@ -34,8 +30,6 @@
   };
 
   const nowDateTimeString = getDateTimeAsIsoString();
-
-  categoryStore.load();
 
   let openErrorModal = false;
   let openDeleteModal = false;
@@ -149,7 +143,7 @@
 <div class="flex flex-col gap-4 p-4">
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
-  <Select label="Kategorie" options={categories} bind:value={deal.category_id} {disabled} />
+  <CategorySelect bind:value={deal.category_id} {disabled} />
   {#if deal.id < 0}
     <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
       Bild hinzufügen ({imagePreviews.length} / 3)

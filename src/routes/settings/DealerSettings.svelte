@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
   import type { Account } from "$lib/database/account/account.model";
@@ -28,6 +29,7 @@
     <Input label="E-Mail" bind:value={account.email} disabled />
     <Input label="Telefonnummer" bind:value={account.phone} type="tel" />
     <Input label="Umsatzsteuer ID" bind:value={account.tax_id} />
+    <CategorySelect label="Branche" bind:value={account.default_category} />
   </div>
 {:else if showTabIndex === 1}
   <AddressSettings bind:account />

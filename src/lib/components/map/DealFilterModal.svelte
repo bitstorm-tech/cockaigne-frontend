@@ -4,11 +4,11 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import type { Category } from "$lib/database/category/category.model";
+  import { selectedCategoriesStore } from "$lib/database/category/category.store";
   import type { MapService } from "$lib/map.service";
+  import { StoreService } from "$lib/store.service";
   import { debounce, union, without } from "lodash";
   import { get } from "svelte/store";
-  import { selectedCategoriesStore } from "../../database/category/category.store";
-  import { StoreService } from "../../store.service";
 
   export let categories: Category[] = [];
   export let open = false;

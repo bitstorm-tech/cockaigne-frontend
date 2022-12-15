@@ -1,40 +1,45 @@
 import pool from "$lib/database/pg";
 import { enrichStartTimestampWithTimezone } from "$lib/deal.service";
-import { getLikeCountByDealId } from "../like/like.service";
 import type { Deal, DealFilter } from "./deal.model";
 
-const FILTER_BASE_QUERY = `
-  SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location
-  FROM deal d,
-       account a
-  WHERE a.id = d.dealer_id
-    AND d.template = false
-    AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
-    AND ST_WITHIN(a.location, #extent)
-    #category_ids
-`;
+function createFilterQuery(filter: DealFilter): string | undefined {
+  const filterBaseQuery = `
+    SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location, c.likes
+    FROM deal d
+    JOIN account a ON d.dealer_id = a.id
+    LEFT JOIN like_count c ON c.deal_id = d.id
+    WHERE a.id = d.dealer_id
+      AND d.template = false
+      AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
+      AND ST_WITHIN(a.location, #extent)
+      #category_ids
+      #order_by
+      #limit
+  `.trim();
+  const extent = createExtentCondition(filter);
 
-export async function findAllDeals(): Promise<Deal[]> {
-  const result = await pool.query<Deal>("SELECT * FROM Deal WHERE template = false");
-  const deals: Deal[] = [];
-
-  for (const deal of result.rows) {
-    deal.likes = await getLikeCountByDealId(deal.id);
-    deals.push(deal);
+  if (!extent) {
+    return;
   }
 
-  return deals;
+  const categories =
+    filter.categoryIds && filter.categoryIds.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
+  const limit = filter.limit ? `LIMIT ${filter.limit}` : "";
+  const orderBy = filter.orderBy ? `ORDER BY ${filter.orderBy} NULLS LAST` : "";
+
+  return filterBaseQuery
+    .replace("#extent", extent)
+    .replace("#category_ids", categories)
+    .replace("#order_by", orderBy)
+    .replace("#limit", limit);
 }
 
 export async function findDealsByFilter(filter: DealFilter): Promise<Deal[]> {
-  const extent = createExtentCondition(filter);
-  const categories = filter.categoryIds?.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
+  const query = createFilterQuery(filter);
 
-  if (!extent) {
+  if (!query) {
     return [];
   }
-
-  const query = FILTER_BASE_QUERY.replace("#extent", extent).replace("#category_ids", categories);
 
   const result = await pool.query<Deal>(query);
 

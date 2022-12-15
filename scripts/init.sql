@@ -98,3 +98,9 @@ CREATE TABLE "like"
     created timestamp NOT NULL DEFAULT now(),
     CONSTRAINT "like_pk" UNIQUE (user_id, deal_id)
 );
+
+CREATE VIEW like_count AS
+SELECT deal_id, count(deal_id) AS likes
+FROM "like"
+GROUP BY deal_id
+ORDER BY likes DESC;

@@ -4,9 +4,6 @@ import { defineConfig } from "vite";
 /** @type {import("vite").UserConfig} */
 export default () => {
   return defineConfig({
-    plugins: [sveltekit()],
-    server: {
-      port: 3000
-    }
+    plugins: [sveltekit()]
   });
 };

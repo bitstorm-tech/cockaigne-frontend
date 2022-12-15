@@ -7,13 +7,13 @@
   import UserFavoriteDealsList from "$lib/components/user/UserFavoriteDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import type { Account } from "$lib/database/account/account.model";
+  import { selectedCategoriesStore } from "$lib/database/category/category.store";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { dealStore } from "$lib/database/deal/deal.store";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
+  import { locationStore, searchRadiusStore } from "$lib/store.service";
   import { onMount } from "svelte";
-  import { selectedCategoriesStore } from "../../lib/database/category/category.store";
-  import { dealStore } from "../../lib/database/deal/deal.store";
-  import { locationStore, searchRadiusStore } from "../../lib/store.service";
 
   export let data;
   let favoriteDeals: Deal[] = data?.favoriteDeals;

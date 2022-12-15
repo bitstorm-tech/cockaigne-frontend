@@ -34,5 +34,7 @@ export interface DealFilter {
   location?: Position;
   radius?: number;
   extent?: Extent;
-  categoryIds: number[];
+  categoryIds?: number[];
+  limit?: number;
+  orderBy?: string;
 }

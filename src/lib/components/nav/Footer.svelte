@@ -20,7 +20,7 @@
     <a href="/">
       <HomeIcon />
     </a>
-    <a href="/">
+    <a href="/top">
       <TagIcon />
     </a>
     <a href="/map">

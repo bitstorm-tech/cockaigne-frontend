@@ -1,16 +1,18 @@
 <script lang="ts">
-  export let options: Record<string, string | number>;
-  export let label: string;
-  export let value: string | number;
+  export let options: Record<string, string>;
+  export let label = "";
+  export let value: string;
   export let disabled = false;
 
   let activeButton = value;
 </script>
 
 <div class="form-control">
-  <label class="label">
-    <span class="label-text text-xs">{label}</span>
-  </label>
+  {#if label.length === 0}
+    <label class="label">
+      <span class="label-text text-xs">{label}</span>
+    </label>
+  {/if}
   <div class="btn-group">
     {#each Object.keys(options) as key}
       <button

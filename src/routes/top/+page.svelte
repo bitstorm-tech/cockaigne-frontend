@@ -43,12 +43,14 @@
   }
 </script>
 
-<section class="flex flex-col gap-3 p-4">
-  <p class="text-center">TOP-Deals in deiner Location</p>
-  <div class="py-8">
-    <ButtonGroup {options} bind:value={selectedOption} />
+<section class="flex flex-col">
+  <div class="p-3">
+    <p class="text-center">TOP-Deals in deiner Nähe</p>
+    <div class="py-4">
+      <ButtonGroup {options} bind:value={selectedOption} />
+    </div>
   </div>
-  <hr />
+  <hr class="pb-2" />
   {#if loading}
     <div class="flex justify-center items-center gap-3 pt-6">
       <LoadingSpinner />

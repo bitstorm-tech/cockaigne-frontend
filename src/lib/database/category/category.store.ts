@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import type { Category } from "$lib/database/category/category.model";
+import { PUT } from "$lib/http.utils";
 import { get, writable } from "svelte/store";
-import { PUT } from "../../http.service";
 import type { AccountUpdateOptions } from "../account/account.model";
 
 const categories = writable<Category[]>([]);

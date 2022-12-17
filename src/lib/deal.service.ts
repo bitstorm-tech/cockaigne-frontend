@@ -1,6 +1,6 @@
 import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
 import { convertToTimeZonedDateTimeString } from "$lib/date-time.utils";
-import { POST } from "$lib/http.service";
+import { POST } from "$lib/http.utils";
 
 export type DealState = "past" | "future" | "active";
 

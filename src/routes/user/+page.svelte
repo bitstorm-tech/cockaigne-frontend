@@ -13,6 +13,7 @@
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { locationStore, searchRadiusStore } from "$lib/store.service";
+  import { likeStore } from "$lib/stores/like.store";
   import { onMount } from "svelte";
 
   export let data;
@@ -23,8 +24,9 @@
   let address = "";
 
   onMount(async () => {
+    likeStore.load().then();
     address = addressToShortString(await getAddress($locationStore));
-    await dealStore.load($locationStore, $searchRadiusStore / 2, $selectedCategoriesStore);
+    dealStore.load($locationStore, $searchRadiusStore / 2, $selectedCategoriesStore).then();
   });
 
   function toggleFavorite(event: CustomEvent<Deal>) {

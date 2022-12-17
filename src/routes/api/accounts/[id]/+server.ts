@@ -1,5 +1,5 @@
 import { findAccountById } from "$lib/database/account/account.service";
-import { errorResponse, notFoundResponse, response } from "$lib/http.service";
+import { errorResponse, notFoundResponse, response } from "$lib/http.utils";
 import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 

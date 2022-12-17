@@ -1,5 +1,5 @@
 import { findAccountByEmail } from "$lib/database/account/account.service";
-import { errorResponse, forbiddenResponse } from "$lib/http.service";
+import { errorResponse, forbiddenResponse } from "$lib/http.utils";
 import { createJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";

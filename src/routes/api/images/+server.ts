@@ -1,4 +1,4 @@
-import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
+import { errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
 import { extractJwt } from "$lib/jwt.service";
 import { getImageUrls, savePicture } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";

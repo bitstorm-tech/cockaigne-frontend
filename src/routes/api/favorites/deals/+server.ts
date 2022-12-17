@@ -1,5 +1,5 @@
 import { deleteHotDeal, findHotDealsByUserId, insertHotDeal } from "$lib/database/deal/deal.service";
-import { errorResponse, response, unauthorizedResponse } from "$lib/http.service";
+import { errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
 import { extractJwt } from "$lib/jwt.service";
 import type { RequestEvent } from "@sveltejs/kit";
 

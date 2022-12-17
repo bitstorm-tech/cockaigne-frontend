@@ -4,8 +4,9 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
-  import { POST } from "$lib/http.service";
+  import { POST } from "$lib/http.utils";
   import { StoreService } from "$lib/store.service";
+  import { likeStore } from "$lib/stores/like.store";
   import { onMount } from "svelte";
 
   const options = {
@@ -22,6 +23,7 @@
   $: loadDeals() && selectedOption;
 
   onMount(() => {
+    likeStore.load();
     loadDeals();
   });
 

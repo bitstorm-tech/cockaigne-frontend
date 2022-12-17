@@ -4,8 +4,8 @@
   import Button from "$lib/components/ui/Button.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
-  import type { Rating } from "../../database/rating/rating.model";
-  import { POST } from "../../http.service";
+  import type { Rating } from "$lib/database/rating/rating.model";
+  import { POST } from "$lib/http.utils";
 
   export let showRatingButton = false;
   export let dealerId: number;

@@ -1,3 +1,4 @@
+import type { RequestError } from "$lib/request-errors";
 import { redirect } from "@sveltejs/kit";
 import type { Account } from "./database/account/account.model";
 import { createJwt } from "./jwt.service";
@@ -8,29 +9,9 @@ export function response(bodyData?: unknown, status = 200, stringify = true): Re
   return new Response(body, options);
 }
 
-export interface RequestError {
-  code: number;
-  message: string;
-}
-
 export function badRequestResponse(error: RequestError): Response {
   return new Response(JSON.stringify(error), { status: 400 });
 }
-
-export const RequestErrors = {
-  usernameAlreadyExists: {
-    code: 1,
-    message: "Der Benutzername wird bereits verwendet"
-  },
-  emailAlreadyExists: {
-    code: 2,
-    message: "Die E-Mail wird bereits verwendet"
-  },
-  noLocationFound: {
-    code: 3,
-    message: "Wir konnten deine Adresse leider nicht finden"
-  }
-};
 
 export function unauthorizedResponse(): Response {
   return new Response(null, { status: 401 });

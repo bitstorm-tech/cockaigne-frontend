@@ -1,4 +1,4 @@
-import { redirectTo, redirectToLogin } from "$lib/http.service";
+import { redirectTo, redirectToLogin } from "$lib/http.utils";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ parent }: LoadEvent) {

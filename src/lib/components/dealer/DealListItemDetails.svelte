@@ -1,20 +1,27 @@
 <script lang="ts">
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
-  import ThumbUpIcon from "$lib/components/ui/icons/ThumbUpIcon.svelte";
+  import LikeIcon from "$lib/components/ui/icons/LikeIcon.svelte";
+  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import { formatDate } from "$lib/date-time.utils.js";
+  import { likeStore } from "$lib/stores/like.store";
 
   export let isUser = false;
   export let deal: Deal;
   let openZoomModal = false;
   let zoomImageIndex = 0;
+  let processingLike = false;
 
   async function like() {
-    const response = await fetch("/api/deals/like?id=" + deal.id, { method: "post" });
+    processingLike = true;
+    const response = await fetch("/api/deals/like?id=" + deal.id);
 
     if (response.ok) {
       deal.likes = +(await response.text());
+      likeStore.toggleLike(deal.id);
     }
+    processingLike = false;
   }
 
   function onZoom(index: number) {
@@ -23,7 +30,7 @@
   }
 </script>
 
-<div class="flex flex-col justify-between bg-[#323e42] text-xs p-2">
+<div class="flex flex-col justify-between bg-[#323e42] p-2">
   {deal.description}
   <div class="grid grid-cols-3 gap-1 py-6">
     {#each deal.imageUrls as imageUrl, index}
@@ -32,14 +39,20 @@
   </div>
   {#if isUser}
     <div class="flex h-4 justify-between">
-      <div class="flex gap-4">
-        <button class="flex gap-2" on:click={like}>
-          <ThumbUpIcon size="1" />
-        </button>
+      <div class="flex items-center gap-2">
+        {#if processingLike}
+          <LoadingSpinner size={1} />
+        {:else}
+          <button on:click={like}>
+            <LikeIcon size="1" dislike={likeStore.isDealLiked(deal.id)} />
+          </button>
+        {/if}
+        <span>({deal.likes || "0"})</span>
       </div>
     </div>
   {:else}
-    <span class="mt-4 text-2xs">Start: {deal.start} / Dauer: {deal.duration} Stunden</span>
+    <span class="text-xs">Start: {formatDate(deal.start)}</span>
+    <span class="text-xs">Ende: {formatDate(deal.start, +deal.duration * 60)}</span>
   {/if}
 </div>
 <ZoomPictureModal bind:open={openZoomModal} imageUrls={deal.imageUrls} index={zoomImageIndex} title={deal.title} />

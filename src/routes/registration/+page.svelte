@@ -8,8 +8,8 @@
   import Link from "$lib/components/ui/Link.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import type { Account } from "$lib/database/account/account.model";
-  import type { RequestError } from "$lib/http.service";
-  import { POST } from "$lib/http.service";
+  import { POST } from "$lib/http.utils";
+  import type { RequestError } from "$lib/request-errors";
 
   const account = {} as Account;
   let openModal = false;

@@ -1,6 +1,6 @@
+import { findRatingsByDealerId } from "$lib/database/rating/rating.service";
+import { errorResponse, notFoundResponse, response } from "$lib/http.utils";
 import type { RequestEvent } from "@sveltejs/kit";
-import { findRatingsByDealerId } from "../../../../lib/database/rating/rating.service";
-import { errorResponse, notFoundResponse, response } from "../../../../lib/http.service";
 
 export async function GET({ params }: RequestEvent) {
   const dealerId = params.dealerId;

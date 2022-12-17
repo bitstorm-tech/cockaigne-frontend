@@ -14,11 +14,11 @@ import {
   forbiddenResponse,
   jwtCookieResponse,
   notFoundResponse,
-  RequestErrors,
   response,
   unauthorizedResponse
-} from "$lib/http.service";
+} from "$lib/http.utils";
 import { extractJwt } from "$lib/jwt.service";
+import { noLocationFound, usernameAlreadyExists } from "$lib/request-errors";
 import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
@@ -74,7 +74,7 @@ export async function POST({ request }: RequestEvent) {
           account.zip,
           account.city
         );
-        return badRequestResponse(RequestErrors.noLocationFound);
+        return badRequestResponse(noLocationFound);
       }
 
       position.latitude = geoInformation[0].lat;
@@ -107,7 +107,7 @@ export async function PUT({ request }: RequestEvent) {
     const update: AccountUpdateOptions = await request.json();
 
     if (update.username && (await usernameExists(update.username, +jwt.sub))) {
-      return badRequestResponse(RequestErrors.usernameAlreadyExists);
+      return badRequestResponse(usernameAlreadyExists);
     }
 
     await setLocation(update);

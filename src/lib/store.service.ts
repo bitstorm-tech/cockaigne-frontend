@@ -3,7 +3,7 @@ import { writable } from "svelte/store";
 import type { AccountUpdateOptions } from "./database/account/account.model";
 import type { Position } from "./geo/geo.types";
 import { munichPosition } from "./geo/geo.types";
-import { PUT } from "./http.service";
+import { PUT } from "./http.utils";
 
 const KEY_PREFIX = "ckn.";
 const KEYS = {

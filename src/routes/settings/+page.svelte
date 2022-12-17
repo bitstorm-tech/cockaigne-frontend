@@ -4,7 +4,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import WarningMessage from "$lib/components/ui/WarningMessage.svelte";
   import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
-  import { POST, PUT } from "$lib/http.service";
+  import { POST, PUT } from "$lib/http.utils";
   import DealerSettings from "./DealerSettings.svelte";
   import UserSettings from "./UserSettings.svelte";
 

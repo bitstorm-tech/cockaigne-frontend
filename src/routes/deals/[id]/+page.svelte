@@ -18,7 +18,7 @@
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.service";
   import { fileToBase64 } from "$lib/file.utils";
-  import { POST } from "$lib/http.service";
+  import { POST } from "$lib/http.utils";
 
   export let data;
   export let deal: Deal = data;
@@ -50,7 +50,7 @@
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
   $: disableSave = deal.title.length === 0 || deal.description.length === 0;
-  $: calculateCosts(), deal.duration, individualStartDateTime, individualEndDate, individuallyTime;
+  $: calculateCosts() && deal.duration && individualStartDateTime && individualEndDate && individuallyTime;
 
   async function save() {
     loading = true;

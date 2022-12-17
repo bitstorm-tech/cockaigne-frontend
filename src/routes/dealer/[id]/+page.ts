@@ -1,5 +1,5 @@
 import type { Dealer } from "$lib/database/dealer/dealer.model";
-import { redirectToLogin } from "$lib/http.service";
+import { redirectToLogin } from "$lib/http.utils";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ fetch, params }: LoadEvent) {

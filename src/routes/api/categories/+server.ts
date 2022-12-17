@@ -1,5 +1,5 @@
 import { findAllCategories } from "$lib/database/category/category.service";
-import { errorResponse, response } from "$lib/http.service";
+import { errorResponse, response } from "$lib/http.utils";
 
 export async function GET() {
   try {

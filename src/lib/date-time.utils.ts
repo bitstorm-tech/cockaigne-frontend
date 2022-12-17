@@ -25,3 +25,8 @@ export function convertToTimeZonedDateTimeString(date: string | Date | number, t
   const timeZonedDate = utcToZonedTime(date, timezone);
   return getDateTimeAsIsoString(timeZonedDate);
 }
+
+export function formatDate(date: string | number, offsetInMinutes = 0, timezone = "Europe/Berlin"): string {
+  const dateWithOffset = addMinutes(new Date(date), offsetInMinutes);
+  return formatInTimeZone(dateWithOffset, timezone, "dd.MM.yyyy 'um' HH:mm");
+}

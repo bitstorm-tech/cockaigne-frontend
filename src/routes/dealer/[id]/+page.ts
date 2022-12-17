@@ -2,6 +2,8 @@ import type { Dealer } from "$lib/database/dealer/dealer.model";
 import { redirectToLogin } from "$lib/http.utils";
 import type { LoadEvent } from "@sveltejs/kit";
 
+export const ssr = false;
+
 export async function load({ fetch, params }: LoadEvent) {
   const id = params.id;
   const responseDeals = await fetch("/api/deals?dealer=" + id);

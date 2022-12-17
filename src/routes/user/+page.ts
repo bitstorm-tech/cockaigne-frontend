@@ -1,6 +1,8 @@
 import { redirectToLogin } from "$lib/http.utils";
 import type { LoadEvent } from "@sveltejs/kit";
 
+export const ssr = false;
+
 export async function load({ fetch }: LoadEvent) {
   const accountResponse = await fetch("/api/accounts/");
   const favoritesDealsResponse = await fetch("/api/favorites/deals");

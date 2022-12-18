@@ -4,20 +4,19 @@
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
   import FavoriteDealersList from "$lib/components/user/FavoriteDealersList.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
-  import UserFavoriteDealsList from "$lib/components/user/UserFavoriteDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
+  import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import type { Account } from "$lib/database/account/account.model";
-  import { selectedCategoriesStore } from "$lib/database/category/category.store";
-  import type { Deal } from "$lib/database/deal/deal.model";
-  import { dealStore } from "$lib/database/deal/deal.store";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { locationStore, searchRadiusStore } from "$lib/store.service";
+  import { selectedCategoriesStore } from "$lib/stores/category.store";
+  import { dealStore } from "$lib/stores/deal.store";
+  import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
   import { onMount } from "svelte";
 
   export let data;
-  let favoriteDeals: Deal[] = data?.favoriteDeals;
   let favoriteDealers: Dealer[] = data?.favoriteDealers;
   let account: Account = data?.account;
   let showTabIndex = 0;
@@ -25,35 +24,20 @@
 
   onMount(async () => {
     likeStore.load().then();
-    address = addressToShortString(await getAddress($locationStore));
+    hotStore.load().then();
     dealStore.load($locationStore, $searchRadiusStore / 2, $selectedCategoriesStore).then();
+    const longAddress = await getAddress($locationStore);
+    address = addressToShortString(longAddress);
   });
-
-  function toggleFavorite(event: CustomEvent<Deal>) {
-    // const deal: Deal = event.detail;
-    // const favoriteDealIndex = favoriteDeals.findIndex((fav) => fav.id === deal.id);
-    // fetch("/api/favorites/deals", {
-    //   method: favoriteDealIndex >= 0 ? "delete" : "post",
-    //   body: `${deal.id}`
-    // });
-    //
-    // if (favoriteDealIndex >= 0) {
-    //   _.remove(favoriteDeals, (fav) => fav.id === deal.id);
-    //   favoriteDeals = [...favoriteDeals];
-    // } else {
-    //   favoriteDeals = [...favoriteDeals, deal];
-    // }
-    //
-    // deals = [...deals];
-  }
 </script>
 
 <UserHeader
   name={account.username}
   {address}
+  deals={$dealStore.length}
   imageUrl={account.profile_image}
   favoriteDealers={favoriteDealers?.length}
-  hotDeals={favoriteDeals.length}
+  hotDeals={$hotStore.length}
 />
 <div class="tabs mt-6 max-h-8 mb-2">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
@@ -68,11 +52,11 @@
 </div>
 {#if showTabIndex === 0}
   <div class="h-full overflow-auto">
-    <UserDealsList deals={$dealStore} {favoriteDeals} on:favor={toggleFavorite} />
+    <UserDealsList />
   </div>
 {:else if showTabIndex === 1}
   <div class="h-full overflow-auto">
-    <UserFavoriteDealsList {favoriteDeals} on:disfavor={toggleFavorite} />
+    <UserHotDealsList />
   </div>
 {:else}
   <FavoriteDealersList dealers={favoriteDealers} />

@@ -1,3 +1,27 @@
+CREATE TABLE category
+(
+    id   integer PRIMARY KEY,
+    name text NOT NULL
+);
+
+INSERT INTO category (id, name)
+VALUES (1, 'Elektronik & Technik'),
+       (2, 'Unterhaltung & Gaming'),
+       (3, 'Lebensmittel & Haushalt'),
+       (4, 'Fashion, Schmuck & Lifestyle'),
+       (5, 'Beauty, Wellness & Gesundheit'),
+       (6, 'Family & Kids'),
+       (7, 'Home & Living'),
+       (8, 'Baumarkt & Garten'),
+       (9, 'Auto, Fahhrad & Motorrad'),
+       (10, 'Gastronomie, Bars & Cafes'),
+       (11, 'Kultur & Freizeit'),
+       (12, 'Sport & Outdoor'),
+       (13, 'Reisen, Hotels & Übernachtungen'),
+       (14, 'Dienstleistungen & Finanzen'),
+       (15, 'Floristik'),
+       (16, 'Sonstiges');
+
 CREATE TABLE IF NOT EXISTS account
 (
     id                   integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -27,30 +51,6 @@ CREATE UNIQUE INDEX account_username_idx ON account (LOWER(username));
 CREATE UNIQUE INDEX account_company_name_idx ON account (LOWER(company_name));
 CREATE UNIQUE INDEX account_email_idx ON account (LOWER(email));
 CREATE INDEX account_location_idx ON account USING GIST (location);
-
-CREATE TABLE category
-(
-    id   integer PRIMARY KEY,
-    name text NOT NULL
-);
-
-INSERT INTO category (id, name)
-VALUES (1, 'Elektronik & Technik'),
-       (2, 'Unterhaltung & Gaming'),
-       (3, 'Lebensmittel & Haushalt'),
-       (4, 'Fashion, Schmuck & Lifestyle'),
-       (5, 'Beauty, Wellness & Gesundheit'),
-       (6, 'Family & Kids'),
-       (7, 'Home & Living'),
-       (8, 'Baumarkt & Garten'),
-       (9, 'Auto, Fahhrad & Motorrad'),
-       (10, 'Gastronomie, Bars & Cafes'),
-       (11, 'Kultur & Freizeit'),
-       (12, 'Sport & Outdoor'),
-       (13, 'Reisen, Hotels & Übernachtungen'),
-       (14, 'Dienstleistungen & Finanzen'),
-       (15, 'Floristik'),
-       (16, 'Sonstiges');
 
 CREATE TABLE deal
 (

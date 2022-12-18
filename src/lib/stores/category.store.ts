@@ -1,8 +1,8 @@
 import { browser } from "$app/environment";
+import type { AccountUpdateOptions } from "$lib/database/account/account.model";
 import type { Category } from "$lib/database/category/category.model";
 import { PUT } from "$lib/http.utils";
 import { get, writable } from "svelte/store";
-import type { AccountUpdateOptions } from "../account/account.model";
 
 const categories = writable<Category[]>([]);
 

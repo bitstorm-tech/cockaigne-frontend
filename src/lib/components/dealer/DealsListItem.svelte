@@ -9,7 +9,7 @@
   export let showDetails = false;
   export let showCompanyName = true;
 
-  const category = Categories[deal?.category_id] || { icon: CrossIcon, color: "fuchsia" };
+  $: category = Categories[deal?.category_id] || { icon: CrossIcon, color: "fuchsia" };
 
   const isUser = !$page.data.user.isDealer;
 </script>

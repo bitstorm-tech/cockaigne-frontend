@@ -79,15 +79,6 @@ export async function findDealsByDealerId(dealerId: number): Promise<Deal[]> {
   return result.rows; //.map(enrichStartTimestampWithTimezone);
 }
 
-export async function findHotDealsByUserId(userId: number): Promise<Deal[]> {
-  const result = await pool.query<Deal>(
-    "SELECT d.* FROM deal d, hot_deal h WHERE d.id = h.deal_id AND h.user_id = $1",
-    [userId]
-  );
-
-  return result.rows.map(enrichStartTimestampWithTimezone);
-}
-
 export async function findTemplateDealsByDealerId(dealerId: number): Promise<Deal[]> {
   const query = "SELECT * FROM deal WHERE dealer_id = $1 AND template is true";
   const result = await pool.query<Deal>(query, [dealerId]);
@@ -119,16 +110,4 @@ export async function upsertDeal(deal: Deal): Promise<number> {
 export async function deleteDealById(id: number) {
   const query = "DELETE FROM deal WHERE id = $1";
   await pool.query(query, [id]);
-}
-
-export async function insertHotDeal(userId: number, dealId: number) {
-  const query = "INSERT INTO hot_deal (user_id, deal_id) VALUES ($1, $2)";
-  const values = [userId, dealId];
-  await pool.query(query, values);
-}
-
-export async function deleteHotDeal(userId: number, dealId: number) {
-  const query = "DELETE FROM hot_deal WHERE user_id = $1 AND deal_id = $2";
-  const values = [userId, dealId];
-  await pool.query(query, values);
 }

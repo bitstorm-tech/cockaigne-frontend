@@ -1,7 +1,7 @@
 <script lang="ts">
   import Select from "$lib/components/ui/Select.svelte";
   import type { Category } from "$lib/database/category/category.model";
-  import { categoryStore } from "$lib/database/category/category.store";
+  import { categoryStore } from "$lib/stores/category.store";
 
   export let label = "Kategorie";
   export let value: string | number;

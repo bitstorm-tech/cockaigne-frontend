@@ -44,7 +44,7 @@
           <LoadingSpinner size={1} />
         {:else}
           <button on:click={like}>
-            <LikeIcon size="1" dislike={likeStore.isDealLiked(deal.id)} />
+            <LikeIcon size="1" dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
         <span>({deal.likes || "0"})</span>

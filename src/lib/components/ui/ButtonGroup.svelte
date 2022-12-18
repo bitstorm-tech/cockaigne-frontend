@@ -8,7 +8,7 @@
 </script>
 
 <div class="form-control">
-  {#if label.length === 0}
+  {#if label.length > 0}
     <label class="label">
       <span class="label-text text-xs">{label}</span>
     </label>

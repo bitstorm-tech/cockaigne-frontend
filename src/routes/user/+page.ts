@@ -5,16 +5,13 @@ export const ssr = false;
 
 export async function load({ fetch }: LoadEvent) {
   const accountResponse = await fetch("/api/accounts/");
-  const favoritesDealsResponse = await fetch("/api/favorites/deals");
   const favoritesDealerResponse = await fetch("/api/favorites/dealers");
 
-  if (accountResponse.ok && favoritesDealsResponse.ok && favoritesDealerResponse.ok) {
-    const favoriteDeals = await favoritesDealsResponse.json();
+  if (accountResponse.ok && favoritesDealerResponse.ok) {
     const favoriteDealers = await favoritesDealerResponse.json();
     const account = await accountResponse.json();
 
     return {
-      favoriteDeals,
       favoriteDealers,
       account
     };

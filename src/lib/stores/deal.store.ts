@@ -3,12 +3,12 @@ import type { Position } from "$lib/geo/geo.types";
 import { writable } from "svelte/store";
 import type { Deal, DealFilter } from "./deal.model";
 
-const { subscribe, set, update } = writable<Deal[]>([]);
+const deals = writable<Deal[]>([]);
 
 export const dealStore = {
-  subscribe,
-  set,
-  update,
+  subscribe: deals.subscribe,
+  set: deals.set,
+  update: deals.update,
 
   load: async function (location: Position, radius: number, categoryIds: number[]) {
     const filter: DealFilter = {
@@ -18,6 +18,6 @@ export const dealStore = {
     };
 
     const deals = await getDealsByFilter(filter);
-    set(deals);
+    this.set(deals);
   }
 };

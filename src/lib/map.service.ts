@@ -1,4 +1,6 @@
 import { getDealsByFilter } from "$lib/deal.service";
+import { selectedCategoriesStore } from "$lib/stores/category.store";
+import { dealStore } from "$lib/stores/deal.store";
 import { debounce } from "lodash";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
@@ -14,9 +16,7 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
-import { selectedCategoriesStore } from "./database/category/category.store";
 import type { Deal, DealFilter } from "./database/deal/deal.model";
-import { dealStore } from "./database/deal/deal.store";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";

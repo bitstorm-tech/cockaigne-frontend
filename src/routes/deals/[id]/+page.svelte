@@ -162,35 +162,27 @@
     {/if}
   </div>
   <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
-  {#if individuallyTime}
-    <div class="flex flex-col gap-3">
+  <div class="flex items-end gap-4">
+    {#if startDealImmediately}
+      <p class="text-xs">Dein Deal startet sofort wenn du auf "Erstellen" klickst!</p>
+    {:else}
       <Input
         type="datetime-local"
         min={nowDateTimeString}
         label="Start"
-        bind:value={individualStartDateTime}
-        {disabled}
+        bind:value={deal.start}
+        disabled={disabled || startDealImmediately}
       />
-      <Input type="date" label="Ende" bind:value={individualEndDate} {disabled} />
+    {/if}
+    <div class="w-52">
+      <Checkbox label="Sofort starten" bind:checked={startDealImmediately} {disabled} />
     </div>
+  </div>
+  {#if individuallyTime}
+    {deal.start}
+    <Input type="date" min={deal.start} label="Ende" bind:value={individualEndDate} {disabled} />
   {:else}
     <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
-    <div class="flex items-end gap-4">
-      {#if startDealImmediately}
-        <p class="text-xs">Dein Deal startet sofort wenn du auf "Erstellen" klickst!</p>
-      {:else}
-        <Input
-          type="datetime-local"
-          min="2022-12-02T14:27"
-          label="Start"
-          bind:value={deal.start}
-          disabled={disabled || startDealImmediately}
-        />
-      {/if}
-      <div class="w-52">
-        <Checkbox label="Sofort starten" bind:checked={startDealImmediately} {disabled} />
-      </div>
-    </div>
   {/if}
   <div class="grid grid-cols-2 pt-16">
     <div class="flex flex-col justify-center">

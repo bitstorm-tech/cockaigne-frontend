@@ -4,9 +4,9 @@
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import type { Category } from "$lib/database/category/category.model";
-  import { selectedCategoriesStore } from "$lib/database/category/category.store";
   import type { MapService } from "$lib/map.service";
   import { StoreService } from "$lib/store.service";
+  import { selectedCategoriesStore } from "$lib/stores/category.store";
   import { debounce, union, without } from "lodash";
   import { get } from "svelte/store";
 

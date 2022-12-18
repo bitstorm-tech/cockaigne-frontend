@@ -8,7 +8,7 @@
   export let disabled = false;
 
   categoryStore.load();
-  const categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
+  $: categories = Object.fromEntries($categoryStore.map((category: Category) => [+category.id, category.name]));
 </script>
 
 <Select {label} options={categories} bind:value {disabled} />

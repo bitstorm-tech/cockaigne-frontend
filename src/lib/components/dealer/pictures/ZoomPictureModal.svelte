@@ -18,6 +18,7 @@
 
 <Modal bind:open>
   <div class="flex flex-col gap-3">
+    <img src={imageUrls[index]} alt="Dealer shop impression" />
     <div class="flex items-center">
       <Button on:click={previous} circle>&lt;</Button>
       <div class="flex flex-col grow text-center">
@@ -26,6 +27,5 @@
       </div>
       <Button on:click={next} circle>&gt;</Button>
     </div>
-    <img src={imageUrls[index]} alt="Dealer shop impression" />
   </div>
 </Modal>

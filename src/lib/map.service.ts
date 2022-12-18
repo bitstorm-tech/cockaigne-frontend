@@ -1,4 +1,4 @@
-import { getDealsByFilter } from "$lib/deal.service";
+import { getDealsByFilter } from "$lib/deal.utils";
 import { selectedCategoriesStore } from "$lib/stores/category.store";
 import { dealStore } from "$lib/stores/deal.store";
 import { debounce } from "lodash";

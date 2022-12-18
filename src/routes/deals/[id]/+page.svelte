@@ -16,7 +16,7 @@
     getDateAsIsoString,
     getDateTimeAsIsoString
   } from "$lib/date-time.utils";
-  import { getDealState } from "$lib/deal.service";
+  import { getDealState } from "$lib/deal.utils";
   import { fileToBase64 } from "$lib/file.utils";
   import { POST } from "$lib/http.utils";
 

@@ -12,7 +12,7 @@
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
   import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
-  import { sortDealsByState } from "$lib/deal.service";
+  import { sortDealsByState } from "$lib/deal.utils";
 
   export let data;
   let activeTab = 0;

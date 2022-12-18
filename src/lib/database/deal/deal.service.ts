@@ -1,5 +1,5 @@
 import pool from "$lib/database/pg";
-import { enrichStartTimestampWithTimezone } from "$lib/deal.service";
+import { enrichStartTimestampWithTimezone } from "$lib/deal.utils";
 import type { Deal, DealFilter } from "./deal.model";
 
 function createFilterQuery(filter: DealFilter): string | undefined {

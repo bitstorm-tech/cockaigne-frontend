@@ -1,7 +1,7 @@
-import { getDealsByFilter } from "$lib/deal.service";
+import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
+import { getDealsByFilter } from "$lib/deal.utils";
 import type { Position } from "$lib/geo/geo.types";
 import { writable } from "svelte/store";
-import type { Deal, DealFilter } from "./deal.model";
 
 const deals = writable<Deal[]>([]);
 

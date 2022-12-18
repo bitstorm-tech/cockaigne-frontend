@@ -1,7 +1,7 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
 import { findDealsByFilter } from "$lib/database/deal/deal.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import { getImageUrls } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 

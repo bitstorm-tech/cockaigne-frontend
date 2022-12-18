@@ -1,6 +1,6 @@
 import { deleteHotDeal, findHotDealIds, insertHotDeal } from "$lib/database/hot/hot.service";
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function GET({ request, url }: RequestEvent) {

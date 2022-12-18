@@ -1,7 +1,7 @@
 import type { RequestError } from "$lib/request-errors";
 import { redirect } from "@sveltejs/kit";
 import type { Account } from "./database/account/account.model";
-import { createJwt } from "./jwt.service";
+import { createJwt } from "./jwt.utils";
 
 export function response(bodyData?: unknown, status = 200, stringify = true): Response {
   const body = bodyData ? (stringify ? JSON.stringify(bodyData) : bodyData.toString()) : null;

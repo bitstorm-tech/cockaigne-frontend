@@ -1,6 +1,6 @@
 import { deleteLike, findLike, getLikeCount, insertLike } from "$lib/database/like/like.service";
 import { badRequestResponse, errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import { missingDealId } from "$lib/request-errors";
 import type { RequestEvent } from "@sveltejs/kit";
 

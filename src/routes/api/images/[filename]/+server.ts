@@ -1,5 +1,5 @@
 import { errorResponse, response, unauthorizedResponse } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import { deletePicture } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 

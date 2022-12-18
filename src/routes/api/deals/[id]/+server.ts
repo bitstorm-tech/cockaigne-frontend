@@ -1,6 +1,6 @@
 import { deleteDealById, findDealById } from "$lib/database/deal/deal.service";
 import { errorResponse, forbiddenResponse, notFoundResponse, response, unauthorizedResponse } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import { getImageUrls } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 

@@ -17,7 +17,7 @@ import {
   response,
   unauthorizedResponse
 } from "$lib/http.utils";
-import { extractJwt } from "$lib/jwt.service";
+import { extractJwt } from "$lib/jwt.utils";
 import { noLocationFound, usernameAlreadyExists } from "$lib/request-errors";
 import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";

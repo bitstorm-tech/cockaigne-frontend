@@ -179,7 +179,6 @@
     </div>
   </div>
   {#if individuallyTime}
-    {deal.start}
     <Input type="date" min={deal.start} label="Ende" bind:value={individualEndDate} {disabled} />
   {:else}
     <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />

@@ -7,10 +7,6 @@
   export let imageUrls: string[] = [];
   export let title = "Bilder";
 
-  function close() {
-    open = false;
-  }
-
   function next() {
     index = index === imageUrls.length - 1 ? 0 : ++index;
   }
@@ -18,11 +14,9 @@
   function previous() {
     index = index === 0 ? imageUrls.length - 1 : --index;
   }
-
-  const buttons = [{ text: "Schön!", callback: close }];
 </script>
 
-<Modal bind:open {buttons}>
+<Modal bind:open>
   <div class="flex flex-col gap-3">
     <div class="flex items-center">
       <Button on:click={previous} circle>&lt;</Button>

@@ -3,19 +3,21 @@
 
   export let buttons: { text: string; callback: () => void }[] = [];
   export let open = false;
+  const showButtons = buttons.length > 0;
 </script>
 
 <div class="modal backdrop-blur-sm" class:modal-open={open}>
   <div class="modal-box">
+    {#if !showButtons}
+      <button class="btn btn-sm btn-circle absolute right-2 top-2" on:click={() => (open = false)}>X</button>
+    {/if}
     <slot />
-    <div class="modal-action">
-      {#if buttons.length > 0}
+    {#if showButtons}
+      <div class="modal-action">
         {#each buttons as button}
           <Button on:click={button.callback}>{button.text}</Button>
         {/each}
-      {:else}
-        <Button on:click={() => (open = false)}>OK</Button>
-      {/if}
-    </div>
+      </div>
+    {/if}
   </div>
 </div>

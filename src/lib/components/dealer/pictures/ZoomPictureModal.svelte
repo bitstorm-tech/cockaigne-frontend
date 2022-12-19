@@ -17,8 +17,10 @@
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col gap-3">
-    <img src={imageUrls[index]} alt="Dealer shop impression" />
+  <div class="flex flex-col gap-3 max-h-[75vh]">
+    <div class="overflow-auto">
+      <img src={imageUrls[index]} alt="Dealer shop impression or deal images" />
+    </div>
     <div class="flex items-center">
       <Button on:click={previous} circle>&lt;</Button>
       <div class="flex flex-col grow text-center">

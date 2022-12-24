@@ -57,7 +57,6 @@
     <Picture
       url={picture}
       showDelete={$page.data.user.isDealer}
-      showZoom={!$page.data.user.isDealer}
       on:delete={() => onDelete(picture)}
       on:zoom={() => onZoom(index)}
     />

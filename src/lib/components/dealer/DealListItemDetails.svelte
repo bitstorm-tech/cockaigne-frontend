@@ -34,7 +34,7 @@
   {deal.description}
   <div class="grid grid-cols-3 gap-1 py-6">
     {#each deal.imageUrls as imageUrl, index}
-      <Picture url={imageUrl} smallHeight={true} showZoom={true} on:zoom={() => onZoom(index)} />
+      <Picture url={imageUrl} smallHeight={true} on:zoom={() => onZoom(index)} />
     {/each}
   </div>
   {#if isUser}

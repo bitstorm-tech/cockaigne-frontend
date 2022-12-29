@@ -1,1 +1,1 @@
-<span class="badge p-3 text-[#dde3e4] bg-primary">BASIS</span>
+<span class="badge badge-xs p-2 text-xs text-[#dde3e4] bg-primary">BASIS</span>

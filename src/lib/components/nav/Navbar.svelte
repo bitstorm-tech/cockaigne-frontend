@@ -16,17 +16,17 @@
 <nav class="flex px-4 py-2 md:px-52 items-center border-b-[0.01rem] border-[#556368]">
   <div class="flex justify-between text-xl w-full">
     <div class="flex gap-6 items-end">
-      <Link href="/"><img class="h-10" src="/images/logo.svg" alt="Logo Text" /></Link>
+      <Link href="/"><img class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
       <MemberStatus />
     </div>
-    <div class="flex cursor-pointer text-[#69828c]">
+    <div class="flex cursor-pointer text-[#69828c] z-20">
       {#if showMobileMenu}
         <button on:click={toggleMobileMenu}>
-          <CrossIcon size={2.5} />
+          <CrossIcon size={1.85} />
         </button>
       {:else}
         <button on:click={toggleMobileMenu}>
-          <MenuIcon size={2.5} />
+          <MenuIcon size={1.85} />
         </button>
       {/if}
     </div>

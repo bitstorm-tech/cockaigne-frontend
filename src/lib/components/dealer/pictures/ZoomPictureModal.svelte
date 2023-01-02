@@ -21,7 +21,7 @@
     <div class="overflow-auto">
       <img src={imageUrls[index]} alt="Dealer shop impression or deal images" />
     </div>
-    <div class="flex items-center">
+    <div class="flex items-center text-[#fff4eb]">
       <Button on:click={previous} circle>&lt;</Button>
       <div class="flex flex-col grow text-center">
         <p>{title}</p>

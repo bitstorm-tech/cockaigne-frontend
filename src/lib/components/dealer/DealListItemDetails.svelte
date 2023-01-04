@@ -1,8 +1,10 @@
 <script lang="ts">
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
+  import ReportDealModal from "$lib/components/dealer/ReportDealModal.svelte";
   import LikeIcon from "$lib/components/ui/icons/LikeIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
@@ -10,6 +12,7 @@
   export let isUser = false;
   export let deal: Deal;
   let openZoomModal = false;
+  let openReportModal = false;
   let zoomImageIndex = 0;
   let processingLike = false;
 
@@ -38,17 +41,20 @@
     {/each}
   </div>
   {#if isUser}
-    <div class="flex h-4 justify-between">
-      <div class="flex items-center gap-2">
+    <div class="flex h-6 justify-between">
+      <div class="flex items-center gap-3">
         {#if processingLike}
-          <LoadingSpinner size={1} />
+          <LoadingSpinner size="1.5" />
         {:else}
           <button on:click={like}>
-            <LikeIcon size="1" dislike={$likeStore.includes(deal.id)} />
+            <LikeIcon size="1.5" dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
-        <span>({deal.likes || "0"})</span>
+        <span class="text-lg">{deal.likes || "0"}</span>
       </div>
+      <button on:click={() => (openReportModal = true)}>
+        <ReportIcon size="1.5" />
+      </button>
     </div>
   {:else}
     <span class="text-xs">Start: {formatDate(deal.start)}</span>
@@ -56,3 +62,4 @@
   {/if}
 </div>
 <ZoomPictureModal bind:open={openZoomModal} imageUrls={deal.imageUrls} index={zoomImageIndex} title={deal.title} />
+<ReportDealModal bind:open={openReportModal} dealName={deal.title} dealId={deal.id} />

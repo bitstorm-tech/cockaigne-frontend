@@ -83,6 +83,15 @@ CREATE TABLE hot_deal
     CONSTRAINT "hot_deal_pk" UNIQUE (user_id, deal_id)
 );
 
+CREATE TABLE reported_deal
+(
+    reporter_id integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    deal_id     integer   NOT NULL REFERENCES deal (id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    reason      text      NOT NULL,
+    created     timestamp NOT NULL DEFAULT now(),
+    CONSTRAINT "reported_deal_pk" UNIQUE (reporter_id, deal_id)
+);
+
 CREATE TABLE favorite_dealer
 (
     user_id   integer   NOT NULL REFERENCES account (id) ON DELETE RESTRICT ON UPDATE CASCADE,

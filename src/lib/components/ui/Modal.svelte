@@ -8,11 +8,9 @@
 
 <div class="modal backdrop-blur-sm" class:modal-open={open}>
   <div class="modal-box">
-    {#if !showButtons}
-      <button class="btn btn-sm btn-circle btn-warning absolute right-2 top-2 z-20" on:click={() => (open = false)}>
-        ✕
-      </button>
-    {/if}
+    <button class="btn btn-sm btn-circle btn-warning absolute right-2 top-2 z-20" on:click={() => (open = false)}>
+      ✕
+    </button>
     <slot />
     {#if showButtons}
       <div class="modal-action">

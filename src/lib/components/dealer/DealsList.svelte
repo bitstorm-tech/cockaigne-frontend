@@ -13,12 +13,18 @@
 
 <div class="flex flex-col gap-4">
   {#if deals.length === 0}
-    <EmptyContent>
-      <p>Du hast noch keine aktiven Deals. Worauf wartest du?</p>
-      <p>
-        <Link href={"/deals/new?dealerId=" + $page.data.user.id} underline>Deal erstellen!</Link>
-      </p>
-    </EmptyContent>
+    {#if $page.data.user.isDealer}
+      <EmptyContent>
+        <p>Du hast noch keine aktiven Deals. Worauf wartest du?</p>
+        <p>
+          <Link href={"/deals/new?dealerId=" + $page.data.user.id} underline>Deal erstellen!</Link>
+        </p>
+      </EmptyContent>
+    {:else}
+      <EmptyContent>
+        <p>Dieser Dealer hat momentan leider keine aktiven Deals :(</p>
+      </EmptyContent>
+    {/if}
   {/if}
   {#each deals as deal, i}
     <DealsListItem

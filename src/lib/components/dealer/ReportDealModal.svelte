@@ -5,7 +5,6 @@
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import type { Report } from "$lib/database/report/report.model";
   import { POST } from "$lib/http.utils";
-  import { onMount } from "svelte";
 
   export let open = false;
   export let dealName = "";
@@ -15,14 +14,14 @@
   let alreadyReported = false;
   let loading = false;
 
-  onMount(async () => {
+  async function onOpen() {
     loading = true;
     const response = await fetch("/api/reports?dealId=" + dealId);
     const report: Report = await response.json();
     alreadyReported = report?.reason?.length > 0;
     reason = alreadyReported ? report.reason : "";
     loading = false;
-  });
+  }
 
   function sendReport() {
     const report: Report = {
@@ -36,11 +35,11 @@
   }
 </script>
 
-<Modal bind:open>
+<Modal bind:open openCallback={onOpen}>
   <h2 class="break-words">Du willst den Deal <i>{dealName}</i> melden?</h2>
   {#if loading}
     <div class="flex justify-around py-4">
-      <LoadingSpinner size="3" />
+      <LoadingSpinner size={3} />
     </div>
   {:else if alreadyReported}
     <div class="flex flex-col gap-3">

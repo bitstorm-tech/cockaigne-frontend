@@ -3,7 +3,10 @@
 
   export let buttons: { text: string; callback: () => void }[] = [];
   export let open = false;
+  export let openCallback = () => {};
   const showButtons = buttons.length > 0;
+
+  $: open && openCallback();
 </script>
 
 <div class="modal backdrop-blur-sm" class:modal-open={open}>

@@ -21,6 +21,7 @@ export interface Account {
   selected_categories?: number[];
   likes_deal_id?: number[];
   favorites_deal_id?: number[];
+  activation_code?: string;
 }
 
 export interface AccountUpdateOptions {
@@ -38,4 +39,5 @@ export interface AccountUpdateOptions {
   zip?: number;
   location?: string;
   default_category?: string | number;
+  activation_code?: string;
 }

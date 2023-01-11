@@ -32,10 +32,27 @@ export async function findAccountById(id: number): Promise<Account | undefined> 
   return result.rows[0];
 }
 
+export async function findAccountByActivationCode(activationCode: string): Promise<Account | undefined> {
+  const query = "SELECT * FROM account WHERE activation_code = $1";
+  const result = await pool.query<Account>(query, [activationCode]);
+
+  if (result.rows.length === 0) {
+    console.log("No account found for activation code:", activationCode);
+    return;
+  }
+
+  return result.rows[0];
+}
+
+export async function activateAccount(id: number) {
+  const query = "UPDATE account SET activation_code = NULL WHERE id = $1";
+  await pool.query(query, [id]);
+}
+
 export async function insertAccount(account: Account, position?: Position): Promise<number | undefined> {
   const query = account.dealer
-    ? "INSERT INTO account (email, password, dealer, company_name, default_category, street, house_number, city, zip, tax_id, phone, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, ST_POINT($12, $13)) RETURNING id"
-    : "INSERT INTO account (email, password, dealer, username, age, gender) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id";
+    ? "INSERT INTO account (email, password, dealer, company_name, default_category, street, house_number, city, zip, tax_id, phone, activation_code, location) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, ST_POINT($13, $14)) RETURNING id"
+    : "INSERT INTO account (email, password, dealer, username, age, gender, activation_code) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id";
 
   const values = account.dealer
     ? [
@@ -50,10 +67,19 @@ export async function insertAccount(account: Account, position?: Position): Prom
         account.zip,
         account.tax_id,
         account.phone,
+        account.activation_code,
         position?.longitude,
         position?.latitude
       ]
-    : [account.email, account.password, account.dealer, account.username, account.age, account.gender];
+    : [
+        account.email,
+        account.password,
+        account.dealer,
+        account.username,
+        account.age,
+        account.gender,
+        account.activation_code
+      ];
 
   const result = await pool.query<Account>(query, values);
 

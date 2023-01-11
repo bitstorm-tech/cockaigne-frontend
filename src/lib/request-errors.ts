@@ -18,6 +18,16 @@ export const missingDealId: RequestError = {
   message: "Für die Aktion wird eine Deal ID benötigt, es wurde jedoch keine mit geschickt"
 };
 
+export const activationFailed: RequestError = {
+  code: 5,
+  message: "Bei der Aktivierung des Accounts ging etwas schief"
+};
+
+export const noAccount: RequestError = {
+  code: 6,
+  message: "Der Account existiert nicht"
+};
+
 export interface RequestError {
   code: number;
   message: string;

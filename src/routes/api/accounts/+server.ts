@@ -18,10 +18,12 @@ import {
   unauthorizedResponse
 } from "$lib/http.utils";
 import { extractJwt } from "$lib/jwt.utils";
+import { sendActivationMail } from "$lib/mail.utils";
 import { noLocationFound, usernameAlreadyExists } from "$lib/request-errors";
 import { getProfileImageURL } from "$lib/s3.utils";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
+import { randomUUID } from "crypto";
 
 export async function GET({ request }: RequestEvent) {
   try {
@@ -87,7 +89,10 @@ export async function POST({ request }: RequestEvent) {
     }
 
     account.password = bcryptjs.hashSync(account.password);
+    account.activation_code = randomUUID();
     account.id = await insertAccount(account, position);
+
+    sendActivationMail(account.username!, account.email, account.activation_code).then();
 
     return await jwtCookieResponse(account);
   } catch (error) {

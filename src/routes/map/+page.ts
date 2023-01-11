@@ -1,5 +1,7 @@
 import type { LoadEvent } from "@sveltejs/kit";
 
+export let ssr = false;
+
 export async function load({ fetch, url }: LoadEvent) {
   const response = await fetch("/api/categories");
   const showDealFilterModal = url.searchParams.get("showFilter") || false;

@@ -1,5 +1,5 @@
 {
-  "11.1.2023": ["Login nur mit aktiviertem Account möglich"],
+  "11.1.2023": ["Login nur mit aktiviertem Account möglich", "Fehler beim Neuladen der Karte behoben"],
   "4.1.2023": ["Sende E-Mails zur Aktivierung von neuen Accounts"],
   "2.1.2023": [
     "Schriftfarben im Bilder-Zoom Popup angepasst",

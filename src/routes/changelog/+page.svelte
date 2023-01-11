@@ -5,7 +5,7 @@
 </script>
 
 <section class="p-5">
-  <h1 class="text-center">Was gibt es Neues?</h1>
+  <h1 class="pb-6 text-center">Was gibt es Neues?</h1>
   {#each dates as date}
     <h2 class="mt-5">{date}</h2>
     <ul class="pl-4">

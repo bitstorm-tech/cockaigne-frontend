@@ -29,17 +29,21 @@
         goto("/user/").then();
       }
     } else {
+      const body = await response.json();
+      if (body.code === 7) {
+        goto("/activate");
+      }
       openModal = true;
       loading = false;
     }
   }
 </script>
 
-<div class="flex flex-col gap-3 mx-auto mt-10 h-full w-5/6 lg:w-1/3">
+<div class="mx-auto mt-10 flex h-full w-5/6 flex-col gap-3 lg:w-1/3">
   <h1>Einloggen</h1>
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Password" type="password" bind:value={password} on:enter={login} />
   <Button on:click={login} {loading} {disabled}>Einloggen</Button>
-  <span class="text-xs mt-6">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
+  <span class="mt-6 text-xs">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
 </div>
 <Modal bind:open={openModal}>E-Mail und/oder Passwort falsch!</Modal>

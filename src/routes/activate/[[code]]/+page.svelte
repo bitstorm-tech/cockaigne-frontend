@@ -28,7 +28,7 @@
   {:else if data.noActivationCode}
     <div class="flex flex-col gap-3">
       <span>Bevor du weiter machen kannst, musst du erst noch deinen Account aktivieren.</span>
-      <span>Hierfür haben wir dir eine E-Mail mit weiteren Instruktionen geschickt.</span>
+      <span>Hierfür haben wir dir eine E-Mail mit dem Aktivierungs-Code geschickt.</span>
       <span>Falls du die E-Mail nicht finden kannst, schaue bitte auch mal in deinem Spam-Ordner nach.</span>
       <span>
         Sollte sie dort auch nicht sein, kannst du dir entweder unten eine neue senden lassen oder du kontaktierst uns
@@ -38,6 +38,7 @@
         <Input label="E-Mail" bind:value={email} />
         <Button on:click={sendEmail}>Aktivierungs-Code senden</Button>
       </div>
+      <a class="link text-center" href="/">Zurück zur Startseite</a>
     </div>
   {/if}
 </section>

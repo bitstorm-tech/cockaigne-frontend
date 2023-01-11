@@ -1,6 +1,7 @@
 import { findAccountByEmail } from "$lib/database/account/account.service";
-import { errorResponse, forbiddenResponse } from "$lib/http.utils";
+import { badRequestResponse, errorResponse, forbiddenResponse } from "$lib/http.utils";
 import { createJwt } from "$lib/jwt.utils";
+import { accountNotActivated } from "$lib/request-errors";
 import type { RequestEvent } from "@sveltejs/kit";
 import bcryptjs from "bcryptjs";
 
@@ -19,6 +20,10 @@ export async function POST({ request }: RequestEvent) {
 
     if (!account.id || !isPasswordValid) {
       return forbiddenResponse();
+    }
+
+    if (account.activation_code) {
+      return badRequestResponse(accountNotActivated);
     }
 
     const jwt = await createJwt(account.id.toString(), { isDealer: account.dealer });

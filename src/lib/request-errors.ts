@@ -28,6 +28,11 @@ export const noAccount: RequestError = {
   message: "Der Account existiert nicht"
 };
 
+export const accountNotActivated: RequestError = {
+  code: 7,
+  message: "Der Account wurde noch nicht aktiviert"
+};
+
 export interface RequestError {
   code: number;
   message: string;

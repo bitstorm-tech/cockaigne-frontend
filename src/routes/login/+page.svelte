@@ -1,13 +1,14 @@
 <script lang="ts">
   import { goto, invalidateAll } from "$app/navigation";
+  import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import Modal from "$lib/components/ui/Modal.svelte";
+  import type { RequestError } from "$lib/request-errors";
 
   let email = "";
   let password = "";
-  let openModal = false;
+  let errorMessage = "";
   let loading = false;
 
   $: disabled = email.length === 0 || password.length === 0;
@@ -29,12 +30,17 @@
         goto("/user/").then();
       }
     } else {
-      const body = await response.json();
-      if (body.code === 7) {
+      if (response.status === 403) {
+        errorMessage = "E-Mail und/oder Passwort falsch!";
+        loading = false;
+        return;
+      }
+
+      const error: RequestError = await response.json();
+      if (error.code === 7) {
         goto("/activate");
       }
-      openModal = true;
-      loading = false;
+      errorMessage = error.message;
     }
   }
 </script>
@@ -44,6 +50,13 @@
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Password" type="password" bind:value={password} on:enter={login} />
   <Button on:click={login} {loading} {disabled}>Einloggen</Button>
-  <span class="mt-6 text-xs">Noch keinen Account? <Link href="/registration">Hier anmelden!</Link></span>
+  <p class="mt-6 text-center text-xs">
+    Noch keinen Account?
+    <Link href="/registration">Hier anmelden!</Link>
+  </p>
+  <p class="text-center text-xs">
+    Passwort vergessen?
+    <Link href="/password">Klicke hier</Link>
+  </p>
 </div>
-<Modal bind:open={openModal}>E-Mail und/oder Passwort falsch!</Modal>
+<Alert show={errorMessage.length > 0} on:confirm={() => (errorMessage = "")}>{errorMessage}</Alert>

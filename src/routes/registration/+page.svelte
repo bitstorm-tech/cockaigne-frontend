@@ -59,7 +59,7 @@
   }
 </script>
 
-<div class="flex flex-col gap-3 mx-auto mt-10 h-full w-5/6 lg:w-1/3">
+<div class="mx-auto mt-10 flex h-full w-5/6 flex-col gap-3 lg:w-1/3">
   <h1>Registrieren</h1>
   <Checkbox label="Ich bin ein Dealer" bind:checked={account.dealer} />
   <Input label="E-Mail" type="email" bind:value={account.email} />
@@ -89,6 +89,6 @@
     <ButtonGroup label="Alter" options={age} bind:value={account.age} />
   {/if}
   <Button on:click={register} {loading} {disabled}>Registrieren</Button>
-  <span class="text-xs mt-6">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></span>
+  <p class="mt-6 text-center text-xs">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></p>
 </div>
 <Modal bind:open={openModal}>{errorMessage}</Modal>

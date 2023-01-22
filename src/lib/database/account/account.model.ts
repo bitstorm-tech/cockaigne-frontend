@@ -22,6 +22,7 @@ export interface Account {
   likes_deal_id?: number[];
   favorites_deal_id?: number[];
   activation_code?: string;
+  reset_password_code?: string;
 }
 
 export interface AccountUpdateOptions {
@@ -30,6 +31,7 @@ export interface AccountUpdateOptions {
   search_radius?: number;
   selected_categories?: number[];
   username?: string;
+  password?: string;
   company_name?: string;
   phone?: string;
   tax_id?: string;
@@ -40,4 +42,5 @@ export interface AccountUpdateOptions {
   location?: string;
   default_category?: string | number;
   activation_code?: string;
+  reset_password_code?: string;
 }

@@ -2,7 +2,7 @@
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
   import Button from "$lib/components/ui/Button.svelte";
-  import WarningMessage from "$lib/components/ui/WarningMessage.svelte";
+  import Alert from "$lib/components/ui/Alert.svelte";
   import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
   import { POST, PUT } from "$lib/http.utils";
   import DealerSettings from "./DealerSettings.svelte";
@@ -74,7 +74,7 @@
   }
 </script>
 
-<section class="flex flex-col p-4 gap-4">
+<section class="flex flex-col gap-4 p-4">
   {#if isDealer}
     <DealerSettings bind:account bind:profileImageFile={newProfileImage} />
   {:else}
@@ -85,6 +85,6 @@
     <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </section>
-<WarningMessage show={errorMessage.length > 0} on:confirm={confirmError}>
+<Alert show={errorMessage.length > 0} on:confirm={confirmError}>
   {errorMessage}
-</WarningMessage>
+</Alert>

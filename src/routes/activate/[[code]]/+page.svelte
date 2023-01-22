@@ -36,7 +36,7 @@
       </span>
       <div class="m-8 flex flex-col gap-3">
         <Input label="E-Mail" bind:value={email} />
-        <Button on:click={sendEmail}>Aktivierungs-Code senden</Button>
+        <Button on:click={sendEmail}>Aktivierungscode senden</Button>
       </div>
       <a class="link text-center" href="/">Zurück zur Startseite</a>
     </div>

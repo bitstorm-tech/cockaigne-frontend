@@ -33,6 +33,11 @@ export const accountNotActivated: RequestError = {
   message: "Der Account wurde noch nicht aktiviert"
 };
 
+export const noPasswordResetCode: RequestError = {
+  code: 8,
+  message: "Für diesen Account wurde keine Anfrage zum Passwort zurücksetzen gestellt"
+};
+
 export interface RequestError {
   code: number;
   message: string;

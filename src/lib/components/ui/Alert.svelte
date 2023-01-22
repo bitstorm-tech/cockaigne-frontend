@@ -6,6 +6,7 @@
   const dispatch = createEventDispatcher();
 
   export let show = false;
+  export let warning = true;
 
   function confirm() {
     show = false;
@@ -14,13 +15,15 @@
 </script>
 
 {#if show}
-  <div class="toast toast-center toast-middle in:blur={{ duration: 500 }}">
-    <div class="alert alert-error">
-      <div class="flex">
-        <WarningIcon size={6} />
+  <div class="transition:blur toast z-10 mb-14 w-screen">
+    <div class="alert" class:alert-warning={warning}>
+      <div class="flex w-full">
+        <div>
+          <WarningIcon size={2} />
+        </div>
         <p><slot /></p>
       </div>
-      <Button on:click={confirm}>OK</Button>
+      <Button on:click={confirm} small {warning}>OK</Button>
     </div>
   </div>
 {/if}

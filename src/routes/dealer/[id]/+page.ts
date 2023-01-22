@@ -6,10 +6,13 @@ export const ssr = false;
 
 export async function load({ fetch, params }: LoadEvent) {
   const id = params.id;
-  const responseDeals = await fetch("/api/deals?dealer=" + id);
-  const responsePictures = await fetch("/api/images?dealer=" + id);
-  const responseFavoriteDealers = await fetch("/api/accounts/favorite-dealers");
-  const responseAccount = await fetch("/api/accounts/" + id);
+
+  const [responseDeals, responsePictures, responseFavoriteDealers, responseAccount] = await Promise.all([
+    fetch("/api/deals?dealer=" + id),
+    fetch("/api/images?dealer=" + id),
+    fetch("/api/accounts/favorite-dealers"),
+    fetch("/api/accounts/" + id)
+  ]);
 
   if (responseDeals.ok && responsePictures.ok && responseFavoriteDealers && responseAccount.ok) {
     const deals = await responseDeals.json();

@@ -44,16 +44,16 @@
     <div class="flex h-6 justify-between">
       <div class="flex items-center gap-3">
         {#if processingLike}
-          <LoadingSpinner size="1.5" />
+          <LoadingSpinner size={1.5} />
         {:else}
           <button on:click={like}>
-            <LikeIcon size="1.5" dislike={$likeStore.includes(deal.id)} />
+            <LikeIcon size={1.5} dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
         <span class="text-lg">{deal.likes || "0"}</span>
       </div>
       <button on:click={() => (openReportModal = true)}>
-        <ReportIcon size="1.5" />
+        <ReportIcon size={1.5} />
       </button>
     </div>
   {:else}

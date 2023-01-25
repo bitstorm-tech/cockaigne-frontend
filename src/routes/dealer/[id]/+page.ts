@@ -15,10 +15,12 @@ export async function load({ fetch, params }: LoadEvent) {
   ]);
 
   if (responseDeals.ok && responsePictures.ok && responseFavoriteDealers && responseAccount.ok) {
-    const deals = await responseDeals.json();
-    const pictures = await responsePictures.json();
-    const favoriteDealers = await responseFavoriteDealers.json();
-    const account = await responseAccount.json();
+    const [deals, pictures, favoriteDealers, account] = await Promise.all([
+      responseDeals.json(),
+      responsePictures.json(),
+      responseFavoriteDealers.json(),
+      responseAccount.json()
+    ]);
 
     return {
       deals,

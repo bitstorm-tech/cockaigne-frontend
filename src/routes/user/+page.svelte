@@ -7,6 +7,7 @@
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import type { Account } from "$lib/database/account/account.model";
+  import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { locationStore, searchRadiusStore } from "$lib/store.service";
@@ -15,10 +16,12 @@
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
   import { onMount } from "svelte";
+  import type { PageData } from "./$types";
 
-  export let data;
-  let favoriteDealers: Dealer[] = data?.favoriteDealers;
-  let account: Account = data?.account;
+  export let data: PageData;
+  const favoriteDealers: Dealer[] = data.favoriteDealers;
+  const favoriteDealerDeals: Deal[] = data.favoriteDealerDeals;
+  const account: Account = data.account;
   let showTabIndex = 0;
   let address = "";
 
@@ -52,12 +55,12 @@
 </div>
 {#if showTabIndex === 0}
   <div class="h-full overflow-auto">
-    <UserDealsList />
+    <UserDealsList deals={$dealStore} />
   </div>
 {:else if showTabIndex === 1}
   <div class="h-full overflow-auto">
     <UserHotDealsList />
   </div>
 {:else}
-  <FavoriteDealersList dealers={favoriteDealers} />
+  <FavoriteDealersList dealers={favoriteDealers} deals={favoriteDealerDeals} />
 {/if}

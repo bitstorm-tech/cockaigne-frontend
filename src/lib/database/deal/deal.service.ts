@@ -86,6 +86,16 @@ export async function findTemplateDealsByDealerId(dealerId: number): Promise<Dea
   return result.rows.map(enrichStartTimestampWithTimezone);
 }
 
+export async function findDealsOfFavoriteDealers(userId: number): Promise<Deal[]> {
+  const query = `SELECT * FROM deal d 
+  JOIN favorite_dealer f ON d.dealer_id = f.dealer_id 
+  WHERE f.user_id = $1 AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
+
+  const result = await pool.query<Deal>(query, [userId]);
+
+  return result.rows;
+}
+
 export async function upsertDeal(deal: Deal): Promise<number> {
   const doUpdate = deal?.id > 0;
   const query = doUpdate

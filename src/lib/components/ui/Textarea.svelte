@@ -4,6 +4,7 @@
   export let placeholder = "";
   export let value = "";
   export let disabled = false;
+  export let lines = 5;
 </script>
 
 <div class="form-control">
@@ -12,7 +13,8 @@
   </label>
   <textarea
     {id}
-    class="textarea textarea-bordered h-40 focus:border-primary focus:outline-none"
+    rows={lines}
+    class="textarea textarea-bordered focus:border-primary focus:outline-none"
     {placeholder}
     {disabled}
     bind:value

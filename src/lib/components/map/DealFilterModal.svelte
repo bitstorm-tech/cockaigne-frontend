@@ -16,6 +16,15 @@
   let searchRadius = StoreService.getSearchRadius();
   $: sortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
+  const buttons = [
+    {
+      text: "Übernehmen",
+      callback: () => {
+        open = false;
+      }
+    }
+  ];
+
   selectedCategoriesStore.load();
 
   const saveRadius = debounce(() => {
@@ -56,7 +65,7 @@
   }
 </script>
 
-<Modal bind:open>
+<Modal bind:open {buttons}>
   <div class="flex flex-col m-2 max-h-[60vh]">
     <div class="flex flex-col gap-3">
       <RangeSelect

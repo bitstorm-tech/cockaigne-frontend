@@ -1,7 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import { addressToString } from "$lib/geo/address.service";
   import { getAddress } from "$lib/geo/address.service.js";
@@ -10,9 +9,20 @@
   import { locationStore, StoreService, useCurrentLocationStore } from "$lib/store.service";
   import { debounce } from "lodash";
   import { onDestroy } from "svelte";
+  import Textarea from "../ui/Textarea.svelte";
 
   export let open = false;
   let address = "";
+  let loading = false;
+
+  const buttons = [
+    {
+      text: "Übernehmen",
+      callback: () => {
+        open = false;
+      }
+    }
+  ];
 
   const unsubscribe = locationStore.subscribe(async (position: Position) => {
     const newAddress = await getAddress(position);
@@ -29,6 +39,7 @@
   }, 2000);
 
   async function search() {
+    loading = true;
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}`;
     const response = await fetch(url);
 
@@ -45,6 +56,8 @@
 
       StoreService.saveLocation(position);
     }
+
+    loading = false;
   }
 
   async function searchCurrentLocation(event) {
@@ -54,12 +67,10 @@
   }
 </script>
 
-<Modal bind:open>
-  <div class="flex flex-col m-2">
-    <div class="grid grid-rows-2 gap-2">
-      <Input label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} />
-      <Button small on:click={search} disabled={$useCurrentLocationStore}>Suchen</Button>
-    </div>
+<Modal bind:open {buttons}>
+  <div class="flex flex-col m-2 gap-3">
+    <Textarea label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} lines={2} />
+    <Button on:click={search} disabled={$useCurrentLocationStore} {loading}>Suchen</Button>
     <Checkbox
       label="Aktuellen Standort verwenden"
       bind:checked={$useCurrentLocationStore}

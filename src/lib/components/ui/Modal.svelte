@@ -1,5 +1,6 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
+  import CrossIcon from "./icons/CrossIcon.svelte";
 
   export let buttons: { text: string; callback: () => void }[] = [];
   export let open = false;
@@ -11,8 +12,8 @@
 
 <div class="modal backdrop-blur-sm" class:modal-open={open}>
   <div class="modal-box">
-    <button class="btn btn-sm btn-circle btn-warning absolute right-2 top-2 z-20" on:click={() => (open = false)}>
-      ✕
+    <button class="btn btn-sm btn-circle absolute right-2 top-2 z-20 btn-primary" on:click={() => (open = false)}>
+      <CrossIcon size={1.3} />
     </button>
     <slot />
     {#if showButtons}

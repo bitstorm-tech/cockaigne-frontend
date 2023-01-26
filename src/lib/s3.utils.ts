@@ -81,10 +81,10 @@ export async function savePictureBase64(
   return `${baseUrl}/${key}`;
 }
 
-export async function saveProfilePicture(file: File, accountId: number): Promise<string> {
+export async function saveProfilePicture(base64: string, accountId: number): Promise<string> {
   await deleteFile(accountId + "/profile");
   const filename = `profile-${randomUUID()}`;
-  return await savePicture(file, accountId, filename);
+  return await savePictureBase64(base64, accountId, filename);
 }
 
 export async function saveDealImage(

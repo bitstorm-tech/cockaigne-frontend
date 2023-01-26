@@ -11,10 +11,8 @@ export async function POST({ request }: RequestEvent) {
       return unauthorizedResponse();
     }
 
-    const formData = await request.formData();
-    const file = formData.get("file") as File;
-
-    const pictureUrl = await saveProfilePicture(file, +jwt.sub);
+    const { base64 } = await request.json();
+    const pictureUrl = await saveProfilePicture(base64, +jwt.sub);
 
     return response(pictureUrl, 200, false);
   } catch (error) {

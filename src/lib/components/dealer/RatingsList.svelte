@@ -71,7 +71,7 @@
         <RatingsListItem {rating} />
       {/each}
     {/if}
-  {:catch error}
+  {:catch}
     <EmptyContent>
       <p>Ups, da ist leider etwas schief gelaufen :(</p>
       <p>Bitte versuche es später nochmal</p>

@@ -1,9 +1,10 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import Button from "$lib/components/ui/Button.svelte";
   import Alert from "$lib/components/ui/Alert.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
   import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
+  import { fileToBase64 } from "$lib/file.utils";
   import { POST, PUT } from "$lib/http.utils";
   import DealerSettings from "./DealerSettings.svelte";
   import UserSettings from "./UserSettings.svelte";
@@ -54,9 +55,8 @@
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", newProfileImage);
-    const response = await fetch("/api/images/profile", POST(formData));
+    const base64 = (await fileToBase64(newProfileImage)) as string;
+    const response = await fetch("/api/images/profile", POST({ base64 }));
 
     if (response.ok) {
       account.profile_image = await response.text();

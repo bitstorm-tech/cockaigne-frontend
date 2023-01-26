@@ -3,7 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@aws-sdk/client-s3': 3.258.0
   '@sveltejs/adapter-vercel': 1.0.5
-  '@sveltejs/kit': 1.2.9
+  '@sveltejs/kit': 1.2.10
   '@types/bcryptjs': 2.4.2
   '@types/leaflet': 1.9.0
   '@types/lodash': 4.14.191
@@ -51,8 +51,8 @@ dependencies:
   pg: 8.8.0
 
 devDependencies:
-  '@sveltejs/adapter-vercel': 1.0.5_@sveltejs+kit@1.2.9
-  '@sveltejs/kit': 1.2.9_svelte@3.55.1+vite@4.0.4
+  '@sveltejs/adapter-vercel': 1.0.5_@sveltejs+kit@1.2.10
+  '@sveltejs/kit': 1.2.10_svelte@3.55.1+vite@4.0.4
   '@types/bcryptjs': 2.4.2
   '@types/leaflet': 1.9.0
   '@types/lodash': 4.14.191
@@ -1502,12 +1502,12 @@ packages:
     engines: {node: '>=14.16'}
     dev: true
 
-  /@sveltejs/adapter-vercel/1.0.5_@sveltejs+kit@1.2.9:
+  /@sveltejs/adapter-vercel/1.0.5_@sveltejs+kit@1.2.10:
     resolution: {integrity: sha512-TnFw+2ZwUuzguIeh013h0eiFmHylBuL1aV3jcUWbJmBLRo6YA0Ti8X8VXgFP4izP7XGuLKdpUIMg7HaZe21LbA==}
     peerDependencies:
       '@sveltejs/kit': ^1.0.0
     dependencies:
-      '@sveltejs/kit': 1.2.9_svelte@3.55.1+vite@4.0.4
+      '@sveltejs/kit': 1.2.10_svelte@3.55.1+vite@4.0.4
       '@vercel/nft': 0.22.6
       esbuild: 0.16.17
     transitivePeerDependencies:
@@ -1515,8 +1515,8 @@ packages:
       - supports-color
     dev: true
 
-  /@sveltejs/kit/1.2.9_svelte@3.55.1+vite@4.0.4:
-    resolution: {integrity: sha512-zHuYwMgCJpmgYoQ1EOIgNFNkBTKqErHH+fqZVfNmEw2hICoKZHIjqm8/fetRUtF71dqXq0TmPS/HuCCBHXQiZw==}
+  /@sveltejs/kit/1.2.10_svelte@3.55.1+vite@4.0.4:
+    resolution: {integrity: sha512-5LKhBEvkli5xzRObhV0c9QfyRiV96MQNouFM2Cn9nlEno6c88WVCFlNFPuTiSmHM2GE3pSCB+uT37fMFoWSERA==}
     engines: {node: ^16.14 || >=18}
     hasBin: true
     requiresBuild: true

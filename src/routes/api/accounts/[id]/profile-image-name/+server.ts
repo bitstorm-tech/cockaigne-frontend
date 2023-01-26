@@ -15,7 +15,7 @@ export async function GET({ params }: RequestEvent) {
 
     const profileImageUrl = await getProfileImageURL(+id, account.dealer);
 
-    return response(profileImageUrl);
+    return response({ profileImageUrl, name: account.username });
   } catch (error) {
     console.error("Can't get profile image of account with id:", id, error);
     return errorResponse();

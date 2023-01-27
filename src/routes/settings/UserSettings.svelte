@@ -1,9 +1,9 @@
 <script lang="ts">
+  import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
   import type { Account } from "$lib/database/account/account.model";
-  import Alert from "$lib/components/ui/Alert.svelte";
 
   export let account: Account;
   export let profileImageFile: File;
@@ -17,6 +17,11 @@
     await fetch("/api/accounts/reset-password");
     showAlert = true;
     loading = false;
+  }
+
+  async function notify() {
+    await Notification.requestPermission();
+    new Notification("Hallo Cockaigne User!");
   }
 </script>
 
@@ -33,6 +38,7 @@
   <Input label="Benutzername" bind:value={account.username} />
   <Input label="E-Mail" bind:value={account.email} disabled />
   <Button on:click={changePassword} {loading}>Passwort ändern</Button>
+  <Button on:click={notify}>Notification Test</Button>
 {:else}
   <MediaPicker imagePreview={account.profile_image} bind:file={profileImageFile} buttonText="Profilbild ändern" />
 {/if}

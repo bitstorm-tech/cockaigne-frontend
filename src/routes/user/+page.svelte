@@ -53,14 +53,12 @@
     <HeartIcon outline={showTabIndex !== 2} />
   </button>
 </div>
-{#if showTabIndex === 0}
-  <div class="h-full overflow-auto">
+<div class="h-full overflow-auto">
+  {#if showTabIndex === 0}
     <UserDealsList deals={$dealStore} />
-  </div>
-{:else if showTabIndex === 1}
-  <div class="h-full overflow-auto">
+  {:else if showTabIndex === 1}
     <UserHotDealsList />
-  </div>
-{:else}
-  <FavoriteDealersList dealers={favoriteDealers} deals={favoriteDealerDeals} />
-{/if}
+  {:else}
+    <FavoriteDealersList dealers={favoriteDealers} deals={favoriteDealerDeals} />
+  {/if}
+</div>

@@ -11,15 +11,19 @@
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
   import { locationStore, useCurrentLocationStore } from "$lib/store.service";
+  import { navigationStore } from "$lib/stores/navigation.store";
   import { onDestroy, onMount } from "svelte";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
 
   let mapService: MapService;
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
   let showDealFilterModal = data?.showDealFilterModal;
   let address = "";
+
+  navigationStore.currentPage("map");
 
   onMount(async () => {
     if (!browser) {

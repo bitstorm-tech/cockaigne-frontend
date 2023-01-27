@@ -3,7 +3,8 @@
   import DealsOverviewIcon from "$lib/components/ui/icons/DealsOverviewIcon.svelte";
   import HomeIcon from "$lib/components/ui/icons/HomeIcon.svelte";
   import MapIcon from "$lib/components/ui/icons/MapIcon.svelte";
-  import TagIcon from "$lib/components/ui/icons/TagIcon.svelte";
+  import TopIcon from "$lib/components/ui/icons/TopIcon.svelte";
+  import { navigationStore } from "$lib/stores/navigation.store";
 </script>
 
 {#if $page.data.user.isDealer}
@@ -18,13 +19,13 @@
 {:else}
   <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c] h-12">
     <a href="/">
-      <HomeIcon />
+      <HomeIcon outline={$navigationStore !== "home"} />
     </a>
     <a href="/top">
-      <TagIcon />
+      <TopIcon outline={$navigationStore !== "top"} />
     </a>
     <a href="/map">
-      <MapIcon />
+      <MapIcon outline={$navigationStore !== "map"} />
     </a>
   </footer>
 {/if}

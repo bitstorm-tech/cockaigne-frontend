@@ -16,6 +16,7 @@
   import { dealStore } from "$lib/stores/deal.store";
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
+  import { navigationStore } from "$lib/stores/navigation.store";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -25,6 +26,8 @@
   const account: Account = data.account;
   let showTabIndex = 0;
   let address = "";
+
+  navigationStore.currentPage("home");
 
   onMount(async () => {
     likeStore.load().then();

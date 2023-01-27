@@ -7,7 +7,10 @@
   import { POST } from "$lib/http.utils";
   import { StoreService } from "$lib/store.service";
   import { likeStore } from "$lib/stores/like.store";
+  import { navigationStore } from "$lib/stores/navigation.store";
   import { onMount } from "svelte";
+
+  navigationStore.currentPage("top");
 
   const options = {
     "10": "TOP 10",

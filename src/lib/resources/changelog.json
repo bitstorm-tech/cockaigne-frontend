@@ -1,5 +1,8 @@
 {
-  "27.1.2023": ["Deals werden nach Startzeit sortiert (Datum wird ignoriert)"],
+  "27.1.2023": [
+    "Deals werden nach Startzeit sortiert (Datum wird ignoriert)",
+    "Icon der aktiven Seite wird im Footer hervorgehoben"
+  ],
   "24.1.2023": ["Profilbilder bei den Bewertungen angepasst"],
   "23.1.2023": ["Anpassung der Dialoge in der Kartenansicht"],
   "22.1.2023": ["Deals werden im Tab der favorisierten Dealer aufgelistet"],

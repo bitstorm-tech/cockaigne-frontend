@@ -9,6 +9,7 @@
   import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
+  import { sortDealsByTime } from "$lib/deal.utils";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { locationStore, searchRadiusStore } from "$lib/store.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
@@ -55,7 +56,7 @@
 </div>
 <div class="h-full overflow-auto">
   {#if showTabIndex === 0}
-    <UserDealsList deals={$dealStore} />
+    <UserDealsList deals={sortDealsByTime($dealStore)} />
   {:else if showTabIndex === 1}
     <UserHotDealsList />
   {:else}

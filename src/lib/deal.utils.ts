@@ -41,6 +41,14 @@ export function sortDealsByState(deals: Deal[]): SortedDeals {
   return sortedDeals;
 }
 
+export function sortDealsByTime(deals: Deal[]): Deal[] {
+  return deals.sort((a: Deal, b: Deal) => {
+    const timeA = a.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
+    const timeB = b.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
+    return +timeA - +timeB;
+  });
+}
+
 export function enrichStartTimestampWithTimezone(deal: Deal): Deal {
   return {
     ...deal,

@@ -1,7 +1,8 @@
 {
+  "27.1.2023": ["Deals werden nach Startzeit sortiert (Datum wird ignoriert)"],
   "24.1.2023": ["Profilbilder bei den Bewertungen angepasst"],
   "23.1.2023": ["Anpassung der Dialoge in der Kartenansicht"],
-  "22.1.2023": ["Liste Deals im Tab der favorisierten Dealer auf"],
+  "22.1.2023": ["Deals werden im Tab der favorisierten Dealer aufgelistet"],
   "18.1.2023": ["Die Möglichkeit das Passwort zurücksetzen hinzugefügt"],
   "11.1.2023": ["Login nur mit aktiviertem Account möglich", "Fehler beim Neuladen der Karte behoben"],
   "4.1.2023": ["Sende E-Mails zur Aktivierung von neuen Accounts"],

@@ -8,24 +8,24 @@
 </script>
 
 {#if $page.data.user.isDealer}
-  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c] h-12">
+  <footer class="btm-nav btm-nav-sm h-12 border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
     <a href="/">
-      <HomeIcon />
+      <HomeIcon active={$navigationStore === "home"} />
     </a>
     <a href={`/deals/overview/${$page.data.user.id}`}>
-      <DealsOverviewIcon />
+      <DealsOverviewIcon active={$navigationStore === "dealOverview"} />
     </a>
   </footer>
 {:else}
-  <footer class="btm-nav btm-nav-sm border-t-[0.01rem] border-t-[#556368] text-[#69828c] h-12">
+  <footer class="btm-nav btm-nav-sm h-12 border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
     <a href="/">
-      <HomeIcon outline={$navigationStore !== "home"} />
+      <HomeIcon active={$navigationStore === "home"} />
     </a>
     <a href="/top">
-      <TopIcon outline={$navigationStore !== "top"} />
+      <TopIcon active={$navigationStore === "top"} />
     </a>
     <a href="/map">
-      <MapIcon outline={$navigationStore !== "map"} />
+      <MapIcon active={$navigationStore === "map"} />
     </a>
   </footer>
 {/if}

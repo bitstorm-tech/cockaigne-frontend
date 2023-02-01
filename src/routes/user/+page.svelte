@@ -16,7 +16,6 @@
   import { dealStore } from "$lib/stores/deal.store";
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
-  import { navigationStore } from "$lib/stores/navigation.store";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -26,8 +25,6 @@
   const account: Account = data.account;
   let showTabIndex = 0;
   let address = "";
-
-  navigationStore.currentPage("home");
 
   onMount(async () => {
     likeStore.load().then();
@@ -46,7 +43,7 @@
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$hotStore.length}
 />
-<div class="tabs mt-6 max-h-8 mb-2">
+<div class="tabs mt-6 mb-2 max-h-8">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
   </button>

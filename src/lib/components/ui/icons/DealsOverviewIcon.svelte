@@ -1,16 +1,16 @@
 <script lang="ts">
+  export let active = true;
   export let size = 2;
-  const style = `height: ${size}rem; width: ${size}rem`;
+  $: style = `height: ${size}rem; width: ${size}rem; color: ${active ? "#ffffff" : ""}`;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 141.732 141.732" fill="currentColor" {style}>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 141.732 141.732" fill="currentColor" stroke="currentColor" {style}>
   <rect
     width="86.133"
     height="100.267"
     x="33.437"
     y="24.068"
     fill="none"
-    stroke="#3a4145"
     stroke-miterlimit="10"
     stroke-width="6"
     rx="10.933"

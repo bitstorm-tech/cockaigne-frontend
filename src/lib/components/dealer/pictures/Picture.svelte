@@ -16,5 +16,12 @@
       <TrashIcon />
     </button>
   {/if}
-  <img class:h-60={fixedHeight} class:h-36={smallHeight} class="object-cover" src={url} alt="Dealer Impression" />
+  <img
+    loading="lazy"
+    class:h-60={fixedHeight}
+    class:h-36={smallHeight}
+    class="object-cover"
+    src={url}
+    alt="Dealer Impression"
+  />
 </div>

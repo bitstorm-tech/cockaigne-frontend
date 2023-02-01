@@ -1,11 +1,14 @@
 import type { Dealer } from "$lib/database/dealer/dealer.model";
 import { redirectToLogin } from "$lib/http.utils";
+import { navigationStore } from "$lib/stores/navigation.store";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export const ssr = false;
 
 export async function load({ fetch, params }: LoadEvent) {
   const id = params.id;
+
+  navigationStore.currentPage("home");
 
   const [responseDeals, responsePictures, responseFavoriteDealers, responseAccount] = await Promise.all([
     fetch("/api/deals?dealer=" + id),

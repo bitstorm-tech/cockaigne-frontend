@@ -5,7 +5,7 @@
 </script>
 
 <div class="avatar cursor-pointer">
-  <div class="rounded-full ring-2 ring-primary ring-[#556368]" {style}>
-    <img src={imageUrl} alt="Profile" />
+  <div class="rounded-full ring-2 ring-[#556368]" {style}>
+    <img loading="lazy" src={imageUrl} alt="Profile" />
   </div>
 </div>

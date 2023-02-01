@@ -19,7 +19,7 @@
 <Modal bind:open>
   <div class="flex flex-col gap-3 max-h-[75vh]">
     <div class="overflow-auto">
-      <img src={imageUrls[index]} alt="Dealer shop impression or deal images" />
+      <img loading="lazy" src={imageUrls[index]} alt="Dealer shop impression or deal images" />
     </div>
     <div class="flex items-center text-[#fff4eb]">
       <Button on:click={previous} circle>&lt;</Button>

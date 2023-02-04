@@ -11,7 +11,7 @@
   let openDetail = -1;
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-2">
   {#if deals.length === 0}
     {#if $page.data.user.isDealer}
       <EmptyContent>
@@ -33,7 +33,7 @@
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     >
-      <button slot="right-action" on:click={() => goto("/deals/" + deal.id.toString())}>
+      <button slot="right-action" on:click={() => goto("/deals/" + deal.id)}>
         <GearIcon />
       </button>
     </DealsListItem>

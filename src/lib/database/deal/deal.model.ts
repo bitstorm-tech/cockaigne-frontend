@@ -3,7 +3,7 @@ import type { Position } from "$lib/geo/geo.types";
 import type { Extent } from "ol/extent";
 
 export interface Deal {
-  id: number;
+  id?: number;
   dealer_id: number;
   company_name?: string;
   title: string;

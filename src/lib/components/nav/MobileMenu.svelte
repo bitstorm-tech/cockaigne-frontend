@@ -6,9 +6,10 @@
   import { page } from "$app/stores";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
+  import { supabase } from "$lib/supabase";
 
   async function logout() {
-    await fetch("/api/logout");
+    await supabase.auth.signOut();
     await goto("/login");
     await invalidateAll();
   }

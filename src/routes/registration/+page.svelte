@@ -1,27 +1,37 @@
 <script lang="ts">
-  import { goto, invalidateAll } from "$app/navigation";
+  import { goto } from "$app/navigation";
+  import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import Modal from "$lib/components/ui/Modal.svelte";
-  import type { Account } from "$lib/database/account/account.model";
-  import { POST } from "$lib/http.utils";
-  import type { RequestError } from "$lib/request-errors";
+  import { supabase, translateError } from "$lib/supabase";
 
-  const account = {} as Account;
-  let openModal = false;
+  let isDealer = false;
+  let email: string;
+  let password: string;
+  let username: string;
+  let companyName: string;
+  let defaultCategory: number;
+  let street: string;
+  let houseNumber: string;
+  let city: string;
+  let zip: string;
+  let phone: string;
+  let taxId: string;
+  let age: string;
+  let gender: string;
   let loading = false;
-  let errorMessage = "Da ging leider etwas schief :(";
+  let errorMessage: string | null;
 
-  const gender = {
+  const genderOptions = {
     m: "Mann",
     f: "Frau"
   };
 
-  const age = {
+  const ageOptions = {
     1: "Bis 16",
     2: "17-24",
     3: "25-36",
@@ -30,65 +40,82 @@
   };
 
   $: disabled =
-    account.email?.length === 0 ||
-    account.password?.length === 0 ||
-    (account.dealer && !account.company_name) ||
-    (account.dealer && !account.street) ||
-    (account.dealer && !account.house_number) ||
-    (account.dealer && !account.city) ||
-    (account.dealer && !account.zip) ||
-    (account.dealer && !account.phone) ||
-    (!account.dealer && !account.username) ||
-    (!account.dealer && !account.age) ||
-    (!account.dealer && !account.gender);
+    email?.length === 0 ||
+    password?.length === 0 ||
+    (isDealer && !companyName) ||
+    (isDealer && !street) ||
+    (isDealer && !houseNumber) ||
+    (isDealer && !city) ||
+    (isDealer && !zip) ||
+    (isDealer && !phone) ||
+    (!isDealer && !username) ||
+    (!isDealer && !age) ||
+    (!isDealer && !gender);
 
   async function register() {
     loading = true;
-    const response = await fetch("/api/accounts", POST(account));
 
-    if (response.ok) {
-      await invalidateAll();
-      const id = await response.text();
-      goto(account.dealer ? `/dealer/${id}` : "/user/").then();
-    } else {
-      const error: RequestError = await response.json();
-      errorMessage = error.message;
-      openModal = true;
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          isDealer,
+          defaultCategory,
+          companyName,
+          street,
+          houseNumber,
+          city,
+          zip,
+          phone,
+          username,
+          age,
+          gender,
+          taxId
+        }
+      }
+    });
+
+    if (error) {
+      errorMessage = translateError(error);
+      loading = false;
+      return;
     }
-    loading = false;
+
+    goto(`/confirm/${email}`).then();
   }
 </script>
 
 <div class="mx-auto mt-10 flex h-full w-5/6 flex-col gap-3 lg:w-1/3">
   <h1>Registrieren</h1>
-  <Checkbox label="Ich bin ein Dealer" bind:checked={account.dealer} />
-  <Input label="E-Mail" type="email" bind:value={account.email} />
-  {#if !account.dealer}
-    <Input label="Benutzername" type="text" bind:value={account.username} />
+  <Checkbox label="Ich bin ein Dealer" bind:checked={isDealer} />
+  <Input label="E-Mail" type="email" bind:value={email} />
+  {#if !isDealer}
+    <Input label="Benutzername" type="text" bind:value={username} />
   {/if}
-  <Input label="Passwort" type="password" bind:value={account.password} />
-  {#if account.dealer}
-    <Input label="Firmenname" type="text" bind:value={account.company_name} />
-    <CategorySelect label="Branche" bind:value={account.default_category} />
+  <Input label="Passwort" type="password" bind:value={password} />
+  {#if isDealer}
+    <Input label="Firmenname" type="text" bind:value={companyName} />
+    <CategorySelect label="Branche" bind:value={defaultCategory} />
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">
-        <Input label="Straße" type="text" bind:value={account.street} />
+        <Input label="Straße" type="text" bind:value={street} />
       </div>
-      <Input label="Hausnummer" type="text" bind:value={account.house_number} />
+      <Input label="Hausnummer" type="text" bind:value={houseNumber} />
     </div>
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">
-        <Input label="Ort" type="text" bind:value={account.city} />
+        <Input label="Ort" type="text" bind:value={city} />
       </div>
-      <Input label="PLZ" type="number" bind:value={account.zip} />
+      <Input label="PLZ" type="number" bind:value={zip} />
     </div>
-    <Input label="Telefon" type="tel" bind:value={account.phone} />
-    <Input label="Umsatzsteuer ID" type="text" bind:value={account.tax_id} />
+    <Input label="Telefon" type="tel" bind:value={phone} />
+    <Input label="Umsatzsteuer ID" type="text" bind:value={taxId} />
   {:else}
-    <ButtonGroup label="Geschlecht" options={gender} bind:value={account.gender} />
-    <ButtonGroup label="Alter" options={age} bind:value={account.age} />
+    <ButtonGroup label="Geschlecht" options={genderOptions} bind:value={gender} />
+    <ButtonGroup label="Alter" options={ageOptions} bind:value={age} />
   {/if}
   <Button on:click={register} {loading} {disabled}>Registrieren</Button>
   <p class="mt-6 text-center text-xs">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></p>
 </div>
-<Modal bind:open={openModal}>{errorMessage}</Modal>
+<Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

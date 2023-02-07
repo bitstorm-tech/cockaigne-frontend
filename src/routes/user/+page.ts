@@ -1,25 +1,26 @@
+import type { Account } from "$lib/database/account/account.model";
 import { redirectToLogin } from "$lib/http.utils";
-import type { LoadEvent } from "@sveltejs/kit";
-import { navigationStore } from "../../lib/stores/navigation.store";
+import { navigationStore } from "$lib/stores/navigation.store";
+import { supabase } from "$lib/supabase";
 
 export const ssr = false;
 
-export async function load({ fetch }: LoadEvent) {
+export async function load() {
   navigationStore.currentPage("home");
 
-  const [accountResponse, favoriteDealerResponse, favoriteDealerDealsResponse] = await Promise.all([
-    fetch("/api/accounts/"),
-    fetch("/api/favorites/dealers"),
-    fetch("/api/deals/favorite-dealer-deals")
+  const [accountData, favoriteDealersData, favoriteDealerDealsData] = await Promise.all([
+    supabase.from("account").select("username").single(),
+    supabase.rpc("get_favorite_dealers"),
+    supabase.rpc("get_favorite_dealer_deals")
   ]);
 
-  if (accountResponse.ok && favoriteDealerResponse.ok && favoriteDealerDealsResponse.ok) {
-    const [account, favoriteDealers, favoriteDealerDeals] = await Promise.all([
-      accountResponse.json(),
-      favoriteDealerResponse.json(),
-      favoriteDealerDealsResponse.json()
-    ]);
+  const account: Account = accountData.data as Account;
+  account.profile_image = "/images/anonym-profile.png";
 
+  const favoriteDealers = favoriteDealersData.data;
+  const favoriteDealerDeals = favoriteDealerDealsData.data;
+
+  if (account) {
     return {
       account,
       favoriteDealers,

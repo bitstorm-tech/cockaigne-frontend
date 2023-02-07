@@ -31,7 +31,7 @@
 {/if}
 {#if loading}
   <div class="flex justify-center items-center h-full -mt-16">
-    <LoadingSpinner size="6" />
+    <LoadingSpinner size={6} />
   </div>
 {:else}
   <div class="pb-16" in:blur>

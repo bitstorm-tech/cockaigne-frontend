@@ -4,44 +4,30 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import type { RequestError } from "$lib/request-errors";
+  import { supabase, translateError } from "$lib/supabase";
 
-  let email = "";
-  let password = "";
-  let errorMessage = "";
+  let email: string;
+  let password: string;
+  let errorMessage: string | null;
   let loading = false;
 
-  $: disabled = email.length === 0 || password.length === 0;
+  $: disabled = email?.length === 0 || password?.length === 0;
 
   async function login() {
     loading = true;
-    const response = await fetch("/api/login", {
-      method: "post",
-      body: JSON.stringify({ email, password })
+    const { error, data } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
 
-    if (response.ok) {
-      await invalidateAll(); // needed to update $page.data.user with actual user data
-      const body = await response.json();
-
-      if (body.dealer) {
-        goto("/dealer/" + body.id).then();
-      } else {
-        goto("/user/").then();
-      }
-    } else {
-      if (response.status === 403) {
-        errorMessage = "E-Mail und/oder Passwort falsch!";
-        loading = false;
-        return;
-      }
-
-      const error: RequestError = await response.json();
-      if (error.code === 7) {
-        goto("/activate");
-      }
-      errorMessage = error.message;
+    if (error) {
+      errorMessage = translateError(error);
+      loading = false;
+      return;
     }
+
+    await invalidateAll(); // needed to update $page.data.user with actual user data
+    goto(data.user?.user_metadata.isDealer ? "/dealer" : "/user").then();
   }
 </script>
 
@@ -58,5 +44,9 @@
     Passwort vergessen?
     <Link href="/password">Klicke hier</Link>
   </p>
+  <p class="text-center text-xs">
+    Account noch nicht aktiviert?
+    <Link href={`/confirm/${email}`}>Klicke hier</Link>
+  </p>
 </div>
-<Alert show={errorMessage.length > 0} on:confirm={() => (errorMessage = "")}>{errorMessage}</Alert>
+<Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

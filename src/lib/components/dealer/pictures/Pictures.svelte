@@ -6,11 +6,12 @@
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
+  import { deleteDealerImage, saveDealerImage } from "$lib/supabase";
 
   export let pictures: string[] = [];
   export let companyName = "";
 
-  let toastText = "";
+  let toastText: string | null;
   let openDeleteModal = false;
   let openZoomModal = false;
   let deletePictureUrl: string;
@@ -18,24 +19,21 @@
 
   async function savePicture(event: CustomEvent<File>) {
     toastText = "Speichere Bild ...";
-    const formData = new FormData();
-    formData.append("file", event.detail);
+    const imageUrl = await saveDealerImage(event.detail);
 
-    const response = await fetch("/api/images", { method: "post", body: formData });
-    if (response.ok) {
-      const picture = await response.text();
-      pictures = [...pictures, picture];
+    if (imageUrl) {
+      pictures = [...pictures, imageUrl];
     }
-    toastText = "";
+
+    toastText = null;
   }
 
   async function deletePictureCallback() {
     toastText = "Lösche Bild ...";
-    const tokens = deletePictureUrl.split("/");
-    const filename = tokens.pop();
-    await fetch(`/api/images/${filename}`, { method: "delete" });
+    const filename = deletePictureUrl.split("/").pop() || "";
+    await deleteDealerImage(filename);
     pictures = pictures.filter((pictureUrl) => pictureUrl !== deletePictureUrl);
-    toastText = "";
+    toastText = null;
   }
 
   function onDelete(url: string) {
@@ -67,10 +65,6 @@
     <AddPictureButton on:select={savePicture} />
   </div>
 {/if}
-{#if toastText.length > 0}
-  <div class="mx-3 sticky bottom-3">
-    <Toast>{toastText}</Toast>
-  </div>
-{/if}
+<Toast show={!!toastText}>{toastText}</Toast>
 <ConfirmDeletePictureModal bind:open={openDeleteModal} url={deletePictureUrl} deleteFunction={deletePictureCallback} />
 <ZoomPictureModal bind:open={openZoomModal} imageUrls={pictures} index={zoomImageIndex} title={companyName} />

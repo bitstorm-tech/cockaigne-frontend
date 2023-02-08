@@ -6,25 +6,28 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Rating } from "$lib/database/rating/rating.model";
   import { POST } from "$lib/http.utils";
+  import { supabase } from "$lib/supabase";
 
   export let showRatingButton = false;
-  export let dealerId: number;
-  export let userId: number;
+  export let dealerId: string;
+  export let userId: string;
   export let isDealer = false;
   let newRating: Rating;
   let openModal = false;
 
   async function fetchRatings() {
-    const result = await fetch("/api/ratings/" + dealerId);
+    const { data } = await supabase
+      .from("dealer_rating")
+      .select("user_id, stars, rating_text")
+      .eq("dealer_id", dealerId);
 
-    if (!result.ok) {
-      throw result.statusText;
+    if (!data) {
+      throw "Oops";
     }
 
-    const ratings = await result.json();
-    showRatingButton = !isDealer && !ratings.some((rating: Rating) => +rating.account_id === +userId);
+    showRatingButton = !isDealer && !data.some((rating) => rating.user_id === userId);
 
-    return ratings;
+    return data;
   }
 
   async function saveNewRating(event) {

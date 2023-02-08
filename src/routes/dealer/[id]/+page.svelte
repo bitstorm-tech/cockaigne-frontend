@@ -10,17 +10,17 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
-  import type { Account } from "$lib/database/account/account.model";
-  import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.utils";
+  import type { PageData } from "./$types";
 
-  export let data;
+  export let data: PageData;
   let activeTab = 0;
-  const dealerId = +data?.dealerId;
-  const deals: Deal[] = data?.deals;
-  const account: Account = data?.account;
-  const pictures: string[] = data?.pictures;
-  let favoriteDealers: number[] = data?.favoriteDealers;
+  const dealerId = data?.dealerId;
+  const deals = data?.deals;
+  const account = data?.account;
+  const profileImage = data.profileImage;
+  const pictures = data?.pictures;
+  let favoriteDealers = data?.favoriteDealers;
   let loadingFavorite = false;
 
   $: isFavoriteDealer = favoriteDealers.indexOf(dealerId) >= 0;
@@ -41,7 +41,7 @@
   name={account.company_name}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
-  imageUrl={account.profile_image}
+  imageUrl={profileImage}
 >
   {#if $page.data.user.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId} class="mt-4">

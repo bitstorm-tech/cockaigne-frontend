@@ -27,7 +27,7 @@
     }
 
     await invalidateAll(); // needed to update $page.data.user with actual user data
-    goto(data.user?.user_metadata.isDealer ? "/dealer" : "/user").then();
+    goto("/").then();
   }
 </script>
 

@@ -1,9 +1,12 @@
 <script>
   import LoadingSpinner from "./icons/LoadingSpinner.svelte";
+  export let show = false;
 </script>
 
-<div class="toast">
-  <div class="alert alert-success">
-    <span><LoadingSpinner /><slot /></span>
+{#if show}
+  <div class="toast toast-center toast-bottom mb-16 w-screen">
+    <div class="alert">
+      <span><LoadingSpinner /><slot /></span>
+    </div>
   </div>
-</div>
+{/if}

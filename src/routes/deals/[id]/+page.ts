@@ -1,5 +1,5 @@
 import type { Account } from "$lib/database/account/account.model";
-import { newDeal } from "$lib/database/deal/deal.model";
+import { newDeal, type Deal } from "$lib/database/deal/deal.model";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ params, fetch, url }: LoadEvent) {
@@ -11,15 +11,16 @@ export async function load({ params, fetch, url }: LoadEvent) {
       const account: Account = await response.json();
       deal.category_id = account.default_category;
     }
-    return deal;
+    delete deal.id;
+    return { deal };
   }
 
   const response = await fetch(`/api/deals/${params.id}`);
-  const deal = await response.json();
+  const deal: Deal = await response.json();
 
   deal.duration = deal.duration.toString();
 
   return {
-    ...deal
+    deal
   };
 }

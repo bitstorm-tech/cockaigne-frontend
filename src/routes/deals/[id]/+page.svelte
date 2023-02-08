@@ -18,10 +18,11 @@
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
   import { fileToBase64 } from "$lib/file.utils";
-  import { POST } from "$lib/http.utils";
+  import { supabase } from "$lib/supabase";
+  import type { PageData } from "./$types";
 
-  export let data;
-  export let deal: Deal = data;
+  export let data: PageData;
+  export let deal: Deal = data.deal;
 
   const runtimes = {
     "24": "1 Tag",
@@ -81,16 +82,13 @@
       imagesAsBase64
     };
 
-    const response = await fetch("/api/deals", POST(data));
+    const { error } = await supabase.from("deal").insert(deal);
 
-    if (response.ok) {
-      goto("/").then();
-    } else if (response.status === 403) {
-      goto("/login").then();
-    } else {
-      loading = false;
+    if (error) {
       openErrorModal = true;
     }
+
+    loading = false;
   }
 
   function getDuration(): number {

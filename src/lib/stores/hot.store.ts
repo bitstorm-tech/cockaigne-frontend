@@ -1,3 +1,4 @@
+import { supabase } from "$lib/supabase/supabase-client";
 import { xor } from "lodash";
 import { writable } from "svelte/store";
 
@@ -9,11 +10,10 @@ export const hotStore = {
   set: hotDealIds.set,
 
   load: async function () {
-    const response = await fetch("/api/deals/hots");
+    const { data } = await supabase.from("hot_deals").select("deal_id");
 
-    if (response.ok) {
-      const ids: number[] = await response.json();
-      this.set(ids);
+    if (data) {
+      this.set(data.map((hotDeal) => hotDeal.deal_id));
     }
   },
 

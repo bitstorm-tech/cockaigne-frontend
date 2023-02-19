@@ -2,6 +2,7 @@ import { browser } from "$app/environment";
 import type { AccountUpdateOptions } from "$lib/database/account/account.model";
 import type { Category } from "$lib/database/category/category.model";
 import { PUT } from "$lib/http.utils";
+import { supabase } from "$lib/supabase/supabase-client";
 import { get, writable } from "svelte/store";
 
 const categories = writable<Category[]>([]);
@@ -16,14 +17,14 @@ export const categoryStore = {
       return;
     }
 
-    const response = await fetch("/api/categories");
+    const { data, error } = await supabase.from("categories").select();
 
-    if (!response.ok) {
-      console.error("Can't fetch categories:", response.status, response.statusText);
+    if (error) {
+      console.error("Can't fetch categories:", error);
       return;
     }
 
-    const categories = await response.json();
+    const categories = data;
     this.set(categories);
   }
 };

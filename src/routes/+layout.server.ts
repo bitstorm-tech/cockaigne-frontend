@@ -1,4 +1,4 @@
-import { supabase } from "$lib/supabase";
+import { supabase } from "$lib/supabase/supabase-client";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export async function load({ cookies }: RequestEvent) {

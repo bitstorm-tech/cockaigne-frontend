@@ -43,7 +43,7 @@
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$hotStore.length}
 />
-<div class="tabs mt-6 mb-2 max-h-8">
+<div class="flex tabs mt-6 mb-2 max-h-8">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
   </button>

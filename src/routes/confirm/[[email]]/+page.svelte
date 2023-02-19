@@ -3,7 +3,7 @@
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import { supabase, translateError } from "$lib/supabase";
+  import { supabase, translateError } from "$lib/supabase/supabase-client";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -35,7 +35,9 @@
   <p>Wir haben dir an deine E-Mail einen Aktivierungscode geschickt. Gib diesen bitte hier ein:</p>
   <Input label="Deine E-Mail" bind:value={email} />
   <Input label="Aktivierungscode" centerText letterSpacing bind:value={code} maxlength={6} />
-  <Button disabled={code?.length < 6 || email.length === 0} {loading} on:click={confirm}>Aktivieren</Button>
-  <p>Dein Account ist bereits aktiviert? <a href="/login">Hier geht es zum Login!</a></p>
+  <div class="grid grid-cols-2 gap-4 pt-6">
+    <Button disabled={code?.length < 6 || email.length === 0} {loading} on:click={confirm}>Aktivieren</Button>
+    <Button on:click={() => goto("/")}>Abbrechen</Button>
+  </div>
 </section>
 <Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

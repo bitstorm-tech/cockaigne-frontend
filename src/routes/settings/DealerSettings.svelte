@@ -25,7 +25,7 @@
 </div>
 {#if showTabIndex === 0}
   <div class="flex flex-col gap-3">
-    <Input label="Firmenname" bind:value={account.company_name} />
+    <Input label="Firmenname" bind:value={account.username} />
     <Input label="E-Mail" bind:value={account.email} disabled />
     <Input label="Telefonnummer" bind:value={account.phone} type="tel" />
     <Input label="Umsatzsteuer ID" bind:value={account.tax_id} />

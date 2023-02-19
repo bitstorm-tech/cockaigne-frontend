@@ -1,7 +1,8 @@
+import { supabase } from "$lib/supabase/supabase-client";
 import { xor } from "lodash";
 import { writable } from "svelte/store";
 
-const likedDealIds = writable<number[]>([]);
+const likedDealIds = writable<string[]>([]);
 
 export const likeStore = {
   subscribe: likedDealIds.subscribe,
@@ -9,15 +10,14 @@ export const likeStore = {
   set: likedDealIds.set,
 
   load: async function () {
-    const response = await fetch("/api/deals/likes");
+    const { data } = await supabase.from("likes").select("deal_id");
 
-    if (response.ok) {
-      const ids: number[] = await response.json();
-      this.set(ids);
+    if (data) {
+      this.set(data.map((like) => like.deal_id));
     }
   },
 
-  toggleLike: function (dealId: number) {
+  toggleLike: function (dealId: string) {
     this.update((oldLikes) => xor(oldLikes, [dealId]));
   }
 };

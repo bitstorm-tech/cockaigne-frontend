@@ -6,14 +6,12 @@
   import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import Link from "$lib/components/ui/Link.svelte";
-  import { supabase, translateError } from "$lib/supabase";
+  import { supabase, translateError } from "$lib/supabase/supabase-client";
 
   let isDealer = false;
   let email: string;
   let password: string;
   let username: string;
-  let companyName: string;
   let defaultCategory: number;
   let street: string;
   let houseNumber: string;
@@ -42,13 +40,12 @@
   $: disabled =
     email?.length === 0 ||
     password?.length === 0 ||
-    (isDealer && !companyName) ||
+    username?.length === 0 ||
     (isDealer && !street) ||
     (isDealer && !houseNumber) ||
     (isDealer && !city) ||
     (isDealer && !zip) ||
     (isDealer && !phone) ||
-    (!isDealer && !username) ||
     (!isDealer && !age) ||
     (!isDealer && !gender);
 
@@ -62,7 +59,6 @@
         data: {
           isDealer,
           defaultCategory,
-          companyName,
           street,
           houseNumber,
           city,
@@ -95,7 +91,7 @@
   {/if}
   <Input label="Passwort" type="password" bind:value={password} />
   {#if isDealer}
-    <Input label="Firmenname" type="text" bind:value={companyName} />
+    <Input label="Firmenname" type="text" bind:value={username} />
     <CategorySelect label="Branche" bind:value={defaultCategory} />
     <div class="grid grid-cols-3 gap-3">
       <div class="col-span-2">
@@ -115,7 +111,9 @@
     <ButtonGroup label="Geschlecht" options={genderOptions} bind:value={gender} />
     <ButtonGroup label="Alter" options={ageOptions} bind:value={age} />
   {/if}
-  <Button on:click={register} {loading} {disabled}>Registrieren</Button>
-  <p class="mt-6 text-center text-xs">Du hast schon einen Account? <Link href="/">Hier einloggen!</Link></p>
+  <div class="grid grid-cols-2 gap-4 pt-6">
+    <Button on:click={register} {loading} {disabled}>Registrieren</Button>
+    <Button on:click={() => goto("/")}>Abbrechen</Button>
+  </div>
 </div>
 <Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

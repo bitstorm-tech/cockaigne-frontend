@@ -1,24 +1,26 @@
-import type { Account } from "$lib/database/account/account.model";
-import { newDeal, type Deal } from "$lib/database/deal/deal.model";
+import { newDeal } from "$lib/database/deal/deal.model";
+import AccountService from "$lib/supabase/account-service";
+import DealService from "$lib/supabase/deal-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
-export async function load({ params, fetch, url }: LoadEvent) {
-  if (params.id?.toLowerCase() === "new") {
+export async function load({ params, url }: LoadEvent) {
+  const id = params.id;
+
+  if (!id) {
+    return;
+  }
+
+  if (id.toLowerCase() === "new") {
     const deal = newDeal();
     const dealerId = url.searchParams.get("dealerId");
     if (dealerId) {
-      const response = await fetch("/api/accounts/" + dealerId);
-      const account: Account = await response.json();
-      deal.category_id = account.default_category;
+      deal.category_id = await AccountService.getDefaultCategory();
+      deal.dealer_id = dealerId;
     }
-    delete deal.id;
     return { deal };
   }
 
-  const response = await fetch(`/api/deals/${params.id}`);
-  const deal: Deal = await response.json();
-
-  deal.duration = deal.duration.toString();
+  const deal = await DealService.getDeal(id);
 
   return {
     deal

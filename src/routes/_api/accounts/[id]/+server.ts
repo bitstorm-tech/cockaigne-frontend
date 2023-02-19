@@ -16,7 +16,7 @@ export async function GET({ params }: RequestEvent) {
     const profileImage = await getProfileImageURL(+id, account.dealer);
 
     const body = {
-      company_name: account.company_name,
+      username: account.username,
       street: account.street,
       house_number: account.house_number,
       default_category: account.default_category,

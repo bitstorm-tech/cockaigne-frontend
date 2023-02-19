@@ -38,7 +38,7 @@
 </script>
 
 <ProfileHeader
-  name={account.company_name}
+  name={account.username}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
   imageUrl={profileImage}
@@ -72,7 +72,7 @@
 {#if activeTab === 0}
   <DealsList deals={activeDeals} />
 {:else if activeTab === 1}
-  <Pictures {pictures} companyName={account.company_name} />
+  <Pictures {pictures} companyName={account.username} />
 {:else}
   <RatingsList {dealerId} userId={$page.data.user.id} isDealer={$page.data.user.isDealer} />
 {/if}

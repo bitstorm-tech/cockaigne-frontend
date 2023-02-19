@@ -4,7 +4,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import { supabase, translateError } from "$lib/supabase";
+  import { supabase, translateError } from "$lib/supabase/supabase-client";
 
   let email: string;
   let password: string;
@@ -36,17 +36,10 @@
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Password" type="password" bind:value={password} on:enter={login} />
   <Button on:click={login} {loading} {disabled}>Einloggen</Button>
-  <p class="mt-6 text-center text-xs">
-    Noch keinen Account?
-    <Link href="/registration">Hier anmelden!</Link>
-  </p>
-  <p class="text-center text-xs">
-    Passwort vergessen?
-    <Link href="/password">Klicke hier</Link>
-  </p>
-  <p class="text-center text-xs">
-    Account noch nicht aktiviert?
-    <Link href={`/confirm/${email}`}>Klicke hier</Link>
-  </p>
+  <span class="pt-10 text-center text-sm">
+    <Link href="/registration">Registrieren</Link> // <Link href="/password">Passwort vergessen</Link> // <Link
+      href={`/confirm/${email}`}>Account aktivieren</Link
+    >
+  </span>
 </div>
 <Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

@@ -2,8 +2,7 @@ import pool from "../pg";
 import type { Dealer } from "./dealer.model";
 
 export async function findFavoriteDealersByUserId(userId: number): Promise<Dealer[]> {
-  const query =
-    "SELECT a.id, a.company_name FROM account a, favorite_dealer f WHERE f.user_id = $1 AND a.id = f.dealer_id";
+  const query = "SELECT a.id, a.username FROM account a, favorite_dealer f WHERE f.user_id = $1 AND a.id = f.dealer_id";
   const values = [userId];
 
   const result = await pool.query<Dealer>(query, values);

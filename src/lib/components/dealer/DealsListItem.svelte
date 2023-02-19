@@ -19,7 +19,7 @@
     {#if showCompanyName}
       <div class="flex justify-between px-2 py-0.5 bg-[#232b2e]">
         <a href="/dealer/{deal.dealer_id}" class="flex items-center text-[#b2b2b2]">
-          {deal.company_name}
+          {deal.username}
         </a>
         <a href="/dealer/{deal.dealer_id}" class="text-[#617780]">>></a>
       </div>

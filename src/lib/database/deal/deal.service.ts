@@ -4,10 +4,10 @@ import type { Deal, DealFilter } from "./deal.model";
 
 function createFilterQuery(filter: DealFilter): string | undefined {
   const filterBaseQuery = `
-    SELECT d.*, a.company_name, ST_ASTEXT(a.location) AS location, c.likes
-    FROM deal d
-    JOIN account a ON d.dealer_id = a.id
-    LEFT JOIN like_count c ON c.deal_id = d.id
+    SELECT d.*, a.username, ST_ASTEXT(a.location) AS location, c.likecount
+    FROM deals d
+    JOIN accounts a ON d.dealer_id = a.id
+    LEFT JOIN like_counts c ON c.deal_id = d.id
     WHERE a.id = d.dealer_id
       AND d.template = false
       AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval
@@ -87,9 +87,11 @@ export async function findTemplateDealsByDealerId(dealerId: number): Promise<Dea
 }
 
 export async function findDealsOfFavoriteDealers(userId: number): Promise<Deal[]> {
-  const query = `SELECT * FROM deal d 
-  JOIN favorite_dealer f ON d.dealer_id = f.dealer_id 
-  WHERE f.user_id = $1 AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
+  const query = `SELECT *
+                 FROM deal d
+                        JOIN favorite_dealer f ON d.dealer_id = f.dealer_id
+                 WHERE f.user_id = $1
+                   AND now() between d."start" and d."start" + (d."duration" || ' hours')::interval`;
 
   const result = await pool.query<Deal>(query, [userId]);
 

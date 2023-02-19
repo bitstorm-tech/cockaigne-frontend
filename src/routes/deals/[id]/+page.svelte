@@ -18,7 +18,7 @@
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
   import { fileToBase64 } from "$lib/file.utils";
-  import { supabase } from "$lib/supabase";
+  import { supabase } from "$lib/supabase/supabase-client";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -37,15 +37,14 @@
   let createTemplate = false;
   let startDealImmediately = false;
   let individuallyTime = +deal.duration > 72;
-  let individualStartDateTime = deal.id > -1 ? deal.start : getDateTimeAsIsoString(new Date(), 60);
-  let individualEndDate =
-    deal.id > -1
-      ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
-      : getDateAsIsoString(new Date(), 25 * 60);
+  let individualStartDateTime = deal.id ? deal.start : getDateTimeAsIsoString(new Date(), 60);
+  let individualEndDate = deal.id
+    ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
+    : getDateAsIsoString(new Date(), 25 * 60);
   let costs = "4,99";
   let images: File[] = [];
   let imagePreviews: string[] = [];
-  let fileInput;
+  let fileInput: HTMLInputElement;
   let loading = false;
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
@@ -58,17 +57,17 @@
 
     if (deal.template) {
       deal.template = false;
-      deal.id = -1;
+      deal.id = null;
     } else {
       deal.template = createTemplate;
     }
 
     if (individuallyTime) {
-      deal.start = dateToUnixTimestamp(individualStartDateTime);
+      deal.start = individualStartDateTime;
       deal.duration = getDuration();
     } else {
       const startDatetimeString = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
-      deal.start = dateToUnixTimestamp(startDatetimeString);
+      deal.start = startDatetimeString;
     }
 
     const imagesAsBase64: string[] = [];
@@ -82,7 +81,7 @@
       imagesAsBase64
     };
 
-    const { error } = await supabase.from("deal").insert(deal);
+    const { error } = await supabase.from("deals").insert(deal);
 
     if (error) {
       openErrorModal = true;
@@ -142,14 +141,14 @@
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <CategorySelect bind:value={deal.category_id} {disabled} />
-  {#if deal.id < 0}
+  {#if !deal.id}
     <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
       Bild hinzufügen ({imagePreviews.length} / 3)
     </Button>
     <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
   {/if}
   <div class="grid grid-cols-3 gap-2">
-    {#if deal.id > 0}
+    {#if deal.id}
       {#each deal.imageUrls as imageUrl}
         <Picture url={imageUrl} fixedHeight={false} />
       {/each}
@@ -187,9 +186,9 @@
     </div>
     <div class="flex flex-col gap-3">
       <Button warning on:click={save} disabled={disableSave || disabled} {loading}>
-        {deal.id > 0 && !deal.template ? "Speichern" : "Erstellen"}
+        {deal.id && !deal.template ? "Speichern" : "Erstellen"}
       </Button>
-      {#if deal.id > 0 && !disabled}
+      {#if deal.id && !disabled}
         <Button error on:click={() => (openDeleteModal = true)}>Löschen</Button>
       {/if}
       <Button small on:click={() => goto("/")}>Abbrechen</Button>

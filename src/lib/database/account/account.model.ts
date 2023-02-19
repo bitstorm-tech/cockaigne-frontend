@@ -6,7 +6,6 @@ export interface Account {
   username?: string;
   gender?: "m" | "f";
   age?: number;
-  company_name?: string;
   street?: string;
   house_number?: string;
   city?: string;
@@ -32,7 +31,6 @@ export interface AccountUpdateOptions {
   selected_categories?: number[];
   username?: string;
   password?: string;
-  company_name?: string;
   phone?: string;
   tax_id?: string;
   street?: string;

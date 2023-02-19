@@ -36,7 +36,7 @@
 <div class="flex flex-col justify-between bg-[#323e42] p-2">
   {deal.description}
   <div class="grid grid-cols-3 gap-1 py-6">
-    {#each deal.imageUrls as imageUrl, index}
+    {#each deal.imageUrls || [] as imageUrl, index}
       <Picture url={imageUrl} smallHeight={true} on:zoom={() => onZoom(index)} />
     {/each}
   </div>
@@ -57,8 +57,10 @@
       </button>
     </div>
   {:else}
-    <span class="text-xs">Start: {formatDate(deal.start)}</span>
-    <span class="text-xs">Ende: {formatDate(deal.start, +deal.duration * 60)}</span>
+    <div class="flex justify-between">
+      <span class="text-xs">Von: {formatDate(deal.start)}</span>
+      <span class="text-xs">Bis: {formatDate(deal.start, +deal.duration * 60)}</span>
+    </div>
   {/if}
 </div>
 <ZoomPictureModal bind:open={openZoomModal} imageUrls={deal.imageUrls} index={zoomImageIndex} title={deal.title} />

@@ -3,9 +3,9 @@ import type { Position } from "$lib/geo/geo.types";
 import type { Extent } from "ol/extent";
 
 export interface Deal {
-  id?: number;
-  dealer_id: number;
-  company_name?: string;
+  id?: string;
+  dealer_id: string;
+  username?: string;
   title: string;
   description: string;
   category_id: number;
@@ -19,8 +19,7 @@ export interface Deal {
 
 export function newDeal(): Deal {
   return {
-    id: -1,
-    dealer_id: -1,
+    dealer_id: "",
     start: getDateTimeAsIsoString(new Date(), 60),
     title: "",
     description: "",

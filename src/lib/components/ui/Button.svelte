@@ -1,6 +1,6 @@
 <script lang="ts">
   export let disabled = false;
-  export let type = "";
+  export let type = "button";
   export let small = false;
   export let loading = false;
   export let circle = false;

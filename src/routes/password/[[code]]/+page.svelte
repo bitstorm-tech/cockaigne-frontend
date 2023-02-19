@@ -58,7 +58,7 @@
       </Button>
     {:else}
       <Input type="email" label="E-Mail" bind:value={email} />
-      <div class="grid grid-cols-2 gap-3">
+      <div class="grid grid-cols-2 gap-4 pt-6">
         <Button disabled={!emailValid} on:click={sendResetPasswordMail} {loading}>Passwort zurücksetzen</Button>
         <Button on:click={() => goto("/")}>Abbrechen</Button>
       </div>

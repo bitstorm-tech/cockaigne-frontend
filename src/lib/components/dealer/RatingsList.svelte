@@ -5,8 +5,7 @@
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Rating } from "$lib/database/rating/rating.model";
-  import { POST } from "$lib/http.utils";
-  import { supabase } from "$lib/supabase";
+  import { supabase } from "$lib/supabase/supabase-client";
 
   export let showRatingButton = false;
   export let dealerId: string;
@@ -17,7 +16,7 @@
 
   async function fetchRatings() {
     const { data } = await supabase
-      .from("dealer_rating")
+      .from("dealer_ratings")
       .select("user_id, stars, rating_text")
       .eq("dealer_id", dealerId);
 
@@ -33,10 +32,10 @@
   async function saveNewRating(event) {
     const rating = event.detail;
     rating.dealer_id = dealerId;
-    const result = await fetch("/api/ratings", POST(rating));
-
-    if (result.ok) {
-      newRating = await result.json();
+    rating.user_id = userId;
+    const { error } = await supabase.from("dealer_ratings").insert(rating);
+    if (!error) {
+      newRating = rating;
     }
   }
 

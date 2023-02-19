@@ -28,7 +28,7 @@
   async function saveAccount() {
     const updates: AccountUpdateOptions = isDealer
       ? {
-          company_name: account.company_name,
+          username: account.username,
           tax_id: account.tax_id,
           phone: account.phone,
           street: account.street,

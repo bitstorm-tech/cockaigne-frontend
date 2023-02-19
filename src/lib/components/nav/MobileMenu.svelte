@@ -6,7 +6,7 @@
   import { page } from "$app/stores";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
-  import { supabase } from "$lib/supabase";
+  import { supabase } from "$lib/supabase/supabase-client";
 
   async function logout() {
     await supabase.auth.signOut();
@@ -15,22 +15,22 @@
   }
 </script>
 
-<div class="flex flex-col gap-8 p-4 z-50 bg-base-300">
+<div class="z-50 flex flex-col gap-8 bg-base-300 p-4">
   {#if $page.data.user.isAuthenticated}
-    <a href="/settings" class="h-8 flex items-center gap-3">
+    <a href="/settings" class="flex h-8 items-center gap-3">
       <GearIcon />
       Einstellungen
     </a>
-    <a href="/changelog" class="h-8 flex items-center gap-3">
+    <a href="/changelog" class="flex h-8 items-center gap-3">
       <NewsIcon />
       Was gibt es Neues?
     </a>
-    <button on:click={logout} class="h-8 flex items-center gap-3 cursor-pointer">
+    <button on:click={logout} class="flex h-8 cursor-pointer items-center gap-3">
       <LogoutIcon />
       Logout
     </button>
   {:else}
-    <a href="/" class="h-8 flex items-center gap-3">
+    <a href="/" class="flex h-8 items-center gap-3">
       <LoginIcon />
       Login
     </a>

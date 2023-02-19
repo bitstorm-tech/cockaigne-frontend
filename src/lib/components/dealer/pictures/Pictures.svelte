@@ -6,7 +6,7 @@
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import { deleteDealerImage, saveDealerImage } from "$lib/supabase";
+  import StorageService from "$lib/supabase/storage-service";
 
   export let pictures: string[] = [];
   export let companyName = "";
@@ -19,7 +19,7 @@
 
   async function savePicture(event: CustomEvent<File>) {
     toastText = "Speichere Bild ...";
-    const imageUrl = await saveDealerImage(event.detail);
+    const imageUrl = await StorageService.saveDealerImage(event.detail);
 
     if (imageUrl) {
       pictures = [...pictures, imageUrl];
@@ -61,7 +61,7 @@
   {/each}
 </div>
 {#if $page.data.user.isDealer}
-  <div class="sticky bottom-3 pr-3 pb-9 w-full flex justify-end">
+  <div class="sticky bottom-3 flex w-full justify-end pr-3 pb-9">
     <AddPictureButton on:select={savePicture} />
   </div>
 {/if}

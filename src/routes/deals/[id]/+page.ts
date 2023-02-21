@@ -1,4 +1,5 @@
 import { newDeal } from "$lib/database/deal/deal.model";
+import DateTimeUtils from "$lib/date-time.utils";
 import AccountService from "$lib/supabase/account-service";
 import DealService from "$lib/supabase/deal-service";
 import type { LoadEvent } from "@sveltejs/kit";
@@ -21,6 +22,9 @@ export async function load({ params, url }: LoadEvent) {
   }
 
   const deal = await DealService.getDeal(id);
+  if (deal) {
+    DateTimeUtils.removeTimezoneOffsetFromDeal(deal);
+  }
 
   return {
     deal

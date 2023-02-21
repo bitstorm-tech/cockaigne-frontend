@@ -9,8 +9,7 @@
   import Input from "$lib/components/ui/Input.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
-  import {
+  import DateTimeUtils, {
     dateToUnixTimestamp,
     extractTimeFromDateTimeString,
     getDateAsIsoString,
@@ -18,6 +17,7 @@
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
   import { fileToBase64 } from "$lib/file.utils";
+  import type { Deal } from "$lib/supabase/public-types";
   import { supabase } from "$lib/supabase/supabase-client";
   import type { PageData } from "./$types";
 
@@ -37,7 +37,7 @@
   let createTemplate = false;
   let startDealImmediately = false;
   let individuallyTime = +deal.duration > 72;
-  let individualStartDateTime = deal.id ? deal.start : getDateTimeAsIsoString(new Date(), 60);
+  let individualStartDateTime = deal.id ? deal.start : getDateTimeAsIsoString();
   let individualEndDate = deal.id
     ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
     : getDateAsIsoString(new Date(), 25 * 60);
@@ -66,8 +66,7 @@
       deal.start = individualStartDateTime;
       deal.duration = getDuration();
     } else {
-      const startDatetimeString = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
-      deal.start = startDatetimeString;
+      deal.start = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
     }
 
     const imagesAsBase64: string[] = [];
@@ -81,7 +80,8 @@
       imagesAsBase64
     };
 
-    const { error } = await supabase.from("deals").insert(deal);
+    DateTimeUtils.addTimezoneOffsetToDeal(deal);
+    const { error } = await supabase.from("deals").upsert(deal);
 
     if (error) {
       openErrorModal = true;

@@ -10,7 +10,7 @@ export interface Deal {
   description: string;
   category_id: number;
   duration: string | number;
-  start: string | number;
+  start: string;
   template: boolean;
   likes?: number;
   location?: Position | string;

@@ -1,4 +1,4 @@
-import type { Deal } from "$lib/database/deal/deal.model";
+import type { Deal } from "./public-types";
 import { supabase } from "./supabase-client";
 
 async function getDeal(id: string): Promise<Deal | undefined> {
@@ -14,8 +14,6 @@ async function getDeal(id: string): Promise<Deal | undefined> {
   if (!deal.imageUrls) {
     deal.imageUrls = [];
   }
-
-  deal.duration = deal.duration.toString();
 
   return deal;
 }

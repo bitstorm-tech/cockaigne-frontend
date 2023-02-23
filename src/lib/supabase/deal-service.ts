@@ -1,6 +1,7 @@
+import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
-import { omit } from "lodash";
-import type { Deal } from "./public-types";
+import omit from "lodash/omit";
+import type { ActiveDeal, Deal } from "./public-types";
 import { supabase } from "./supabase-client";
 
 async function getDeal(id: string): Promise<Deal | undefined> {
@@ -47,7 +48,19 @@ async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boole
   return true;
 }
 
+export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]> {
+  const { data, error } = await supabase.from("active_deals").select();
+
+  if (error) {
+    console.error("Can't get filtered deals:", error);
+    return [];
+  }
+
+  return data;
+}
+
 export default {
   getDeal,
-  upsertDeal
+  upsertDeal,
+  getDealsByFilter
 };

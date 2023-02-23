@@ -1,9 +1,10 @@
-import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
-import { getDealsByFilter } from "$lib/deal.utils";
+import type { DealFilter } from "$lib/database/deal/deal.model";
 import type { Position } from "$lib/geo/geo.types";
+import dealService from "$lib/supabase/deal-service";
+import type { ActiveDeal } from "$lib/supabase/public-types";
 import { writable } from "svelte/store";
 
-const deals = writable<Deal[]>([]);
+const deals = writable<ActiveDeal[]>([]);
 
 export const dealStore = {
   subscribe: deals.subscribe,
@@ -17,7 +18,7 @@ export const dealStore = {
       categoryIds
     };
 
-    const deals = await getDealsByFilter(filter);
+    const deals = await dealService.getDealsByFilter(filter);
     this.set(deals);
   }
 };

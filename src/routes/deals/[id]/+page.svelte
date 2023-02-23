@@ -2,14 +2,14 @@
   import { goto } from "$app/navigation";
   import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
+  import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import Modal from "$lib/components/ui/Modal.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import DateTimeUtils, {
+  import {
     dateToUnixTimestamp,
     extractTimeFromDateTimeString,
     getDateAsIsoString,
@@ -17,8 +17,8 @@
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
   import { fileToBase64 } from "$lib/file.utils";
+  import dealService from "$lib/supabase/deal-service";
   import type { Deal } from "$lib/supabase/public-types";
-  import { supabase } from "$lib/supabase/supabase-client";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -57,9 +57,7 @@
 
     if (deal.template) {
       deal.template = false;
-      deal.id = null;
-    } else {
-      deal.template = createTemplate;
+      deal.id = "";
     }
 
     if (individuallyTime) {
@@ -80,14 +78,15 @@
       imagesAsBase64
     };
 
-    DateTimeUtils.addTimezoneOffsetToDeal(deal);
-    const { error } = await supabase.from("deals").upsert(deal);
+    const success = await dealService.upsertDeal(deal, createTemplate);
 
-    if (error) {
+    if (!success) {
       openErrorModal = true;
+      loading = false;
+      return;
     }
 
-    loading = false;
+    goto("/");
   }
 
   function getDuration(): number {
@@ -200,5 +199,5 @@
     </div>
   </div>
 </div>
-<Modal bind:open={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Modal>
+<Alert bind:show={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Alert>
 <ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />

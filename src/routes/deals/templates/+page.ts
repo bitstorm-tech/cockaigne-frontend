@@ -1,12 +1,13 @@
+import { getUserId, supabase } from "$lib/supabase/supabase-client";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ fetch }: LoadEvent) {
-  const response = await fetch("/api/deals/templates");
+  const id = await getUserId();
+  const { data } = await supabase.from("deals").select().eq("dealer_id", id).eq("template", true);
 
-  if (response.ok) {
-    const templates = await response.json();
+  if (data) {
     return {
-      templates
+      templates: data
     };
   }
 }

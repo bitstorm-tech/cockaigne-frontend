@@ -210,6 +210,20 @@ export interface Database {
       }
     }
     Views: {
+      active_deals: {
+        Row: {
+          category_id: number | null
+          dealer_id: string | null
+          description: string | null
+          duration: number | null
+          id: string | null
+          likecount: number | null
+          location: string | null
+          start: string | null
+          title: string | null
+          username: string | null
+        }
+      }
       dealer: {
         Row: {
           city: string | null

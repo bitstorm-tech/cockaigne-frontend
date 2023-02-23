@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { PUBLIC_SUPABASE_API_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public";
 import { AuthError, createClient } from "@supabase/supabase-js";
-import type { Database } from "./supabase-types";
+import type { Database } from "./generated-types";
 
 export const supabase = createClient<Database>(PUBLIC_SUPABASE_URL || "", PUBLIC_SUPABASE_API_KEY || "");
 

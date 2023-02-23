@@ -1,3 +1,5 @@
+import dateTimeUtils from "$lib/date-time.utils";
+import { omit } from "lodash";
 import type { Deal } from "./public-types";
 import { supabase } from "./supabase-client";
 
@@ -18,6 +20,34 @@ async function getDeal(id: string): Promise<Deal | undefined> {
   return deal;
 }
 
+async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boolean> {
+  dateTimeUtils.addTimezoneOffsetToDeal(deal);
+  const _deal = deal.id === "" ? omit(deal, "id") : deal;
+  delete _deal.imageUrls;
+
+  let result = await supabase.from("deals").upsert(_deal);
+
+  if (result.error) {
+    console.log("Can't upsert deal:", result.error);
+    return false;
+  }
+
+  if (!alsoCreateTemplate) {
+    return true;
+  }
+
+  deal.template = true;
+  result = await supabase.from("deals").insert(deal);
+
+  if (result.error) {
+    console.log("Can't insert deal template:", result.error);
+    return false;
+  }
+
+  return true;
+}
+
 export default {
-  getDeal
+  getDeal,
+  upsertDeal
 };

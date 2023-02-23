@@ -1,4 +1,3 @@
-import type { Account } from "$lib/database/account/account.model";
 import type { Dealer } from "$lib/database/dealer/dealer.model";
 import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
@@ -15,7 +14,7 @@ export async function load({ params }: LoadEvent) {
 
   const [responseDeals, responsePictures, responseFavoriteDealers, responseAccount, responseProfileImage] =
     await Promise.all([
-      supabase.from("deals").select().eq("dealer_id", id),
+      supabase.from("deals").select().eq("dealer_id", id).eq("template", false),
       StorageService.getAllDealerImageUrls(id),
       supabase.rpc("get_favorite_dealers"),
       supabase.from("accounts").select().single(),
@@ -25,7 +24,7 @@ export async function load({ params }: LoadEvent) {
   const deals = responseDeals.data;
   const pictures = responsePictures;
   const favoriteDealers = responseFavoriteDealers.data;
-  const account: Account = responseAccount.data;
+  const account = responseAccount.data;
   const profileImage = responseProfileImage;
 
   if (account && favoriteDealers) {

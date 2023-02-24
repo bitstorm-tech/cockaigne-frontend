@@ -35,5 +35,8 @@ export interface DealFilter {
   extent?: Extent;
   categoryIds?: number[];
   limit?: number;
-  orderBy?: string;
+  order?: {
+    column: string;
+    ascending: boolean;
+  };
 }

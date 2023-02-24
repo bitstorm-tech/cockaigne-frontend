@@ -32,7 +32,7 @@ export function convertToTimeZonedDateTimeString(date: string | Date | number, t
 
 export function formatDate(date: string | number, offsetInMinutes = 0, timezone = "Europe/Berlin"): string {
   const dateWithOffset = addMinutes(new Date(date), offsetInMinutes);
-  return formatInTimeZone(dateWithOffset, timezone, DATE_TIME_FORMAT_WITHOUT_TIMEZONE);
+  return formatInTimeZone(dateWithOffset, timezone, "dd.MM.yyyy 'um' HH:mm");
 }
 
 function addTimezoneOffset(datetime: string): string {

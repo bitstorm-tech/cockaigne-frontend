@@ -25,7 +25,7 @@ function createFilterQuery(filter: DealFilter): string | undefined {
   const categories =
     filter.categoryIds && filter.categoryIds.length > 0 ? `AND d.category_id in (${filter.categoryIds.join(",")})` : "";
   const limit = filter.limit ? `LIMIT ${filter.limit}` : "";
-  const orderBy = filter.orderBy ? `ORDER BY ${filter.orderBy} NULLS LAST` : "";
+  const orderBy = filter.order ? `ORDER BY ${filter.order.column} NULLS LAST` : "";
 
   return filterBaseQuery
     .replace("#extent", extent)

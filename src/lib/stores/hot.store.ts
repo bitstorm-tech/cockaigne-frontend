@@ -1,8 +1,9 @@
+import dealService from "$lib/supabase/deal-service";
 import { supabase } from "$lib/supabase/supabase-client";
 import { xor } from "lodash";
 import { writable } from "svelte/store";
 
-const hotDealIds = writable<number[]>([]);
+const hotDealIds = writable<string[]>([]);
 
 export const hotStore = {
   subscribe: hotDealIds.subscribe,
@@ -17,8 +18,8 @@ export const hotStore = {
     }
   },
 
-  toggleHotDeal: function (dealId: number) {
+  toggleHotDeal: function (dealId: string) {
     this.update((oldLikes) => xor(oldLikes, [dealId]));
-    fetch("/api/deals/hot?id=" + dealId).then();
+    dealService.toggleHotDeal(dealId);
   }
 };

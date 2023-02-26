@@ -15,6 +15,7 @@ export interface Database {
           city: string | null
           dealer: boolean
           default_category: number | null
+          email: string
           gender: string | null
           house_number: string | null
           id: string
@@ -33,6 +34,7 @@ export interface Database {
           city?: string | null
           dealer?: boolean
           default_category?: number | null
+          email: string
           gender?: string | null
           house_number?: string | null
           id?: string
@@ -51,6 +53,7 @@ export interface Database {
           city?: string | null
           dealer?: boolean
           default_category?: number | null
+          email?: string
           gender?: string | null
           house_number?: string | null
           id?: string

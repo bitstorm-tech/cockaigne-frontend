@@ -3,11 +3,12 @@
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
-  import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
-  import { POST } from "$lib/http.utils";
+  import type { DealFilter } from "$lib/database/deal/deal.model";
   import { StoreService } from "$lib/store.service";
   import { likeStore } from "$lib/stores/like.store";
   import { navigationStore } from "$lib/stores/navigation.store";
+  import { getDealsByFilter } from "$lib/supabase/deal-service";
+  import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
 
   navigationStore.currentPage("top");
@@ -21,7 +22,7 @@
 
   let loading = false;
   let selectedOption = "10";
-  let topDeals: Deal[] = [];
+  let topDeals: ActiveDeal[] = [];
 
   $: loadDeals() && selectedOption;
 
@@ -33,16 +34,14 @@
   async function loadDeals() {
     if (!browser) return;
     loading = true;
+
     const filter: DealFilter = {
       limit: +selectedOption,
       radius: StoreService.getSearchRadius(),
       location: StoreService.getLocation()
     };
-    const response = await fetch("/api/deals/top", POST(filter));
 
-    if (response.ok) {
-      topDeals = await response.json();
-    }
+    topDeals = await getDealsByFilter(filter);
 
     loading = false;
   }
@@ -57,7 +56,7 @@
   </div>
   <hr class="pb-2" />
   {#if loading}
-    <div class="flex justify-center items-center gap-3 pt-6">
+    <div class="flex items-center justify-center gap-3 pt-6">
       <LoadingSpinner />
       <p>Suche die TOP-Deals ...</p>
     </div>

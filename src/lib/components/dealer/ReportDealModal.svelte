@@ -3,12 +3,11 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import type { Report } from "$lib/database/report/report.model";
-  import { POST } from "$lib/http.utils";
+  import reportService from "$lib/supabase/report-service";
 
   export let open = false;
   export let dealName = "";
-  export let dealId = -1;
+  export let dealId: string;
 
   let reason = "";
   let alreadyReported = false;
@@ -16,21 +15,14 @@
 
   async function onOpen() {
     loading = true;
-    const response = await fetch("/api/reports?dealId=" + dealId);
-    const report: Report = await response.json();
-    alreadyReported = report?.reason?.length > 0;
-    reason = alreadyReported ? report.reason : "";
+    const report = await reportService.getReport(dealId);
+    alreadyReported = !!report;
+    reason = alreadyReported ? report!!.reason : "";
     loading = false;
   }
 
   function sendReport() {
-    const report: Report = {
-      deal_id: dealId,
-      reason,
-      reporter_id: -1
-    };
-
-    fetch("/api/reports", POST(report));
+    reportService.saveReport(dealId, reason);
     open = false;
   }
 </script>

@@ -1,7 +1,6 @@
 import { browser } from "$app/environment";
-import type { AccountUpdateOptions } from "$lib/database/account/account.model";
 import type { Category } from "$lib/database/category/category.model";
-import { PUT } from "$lib/http.utils";
+import categoryService from "$lib/supabase/category-service";
 import { supabase } from "$lib/supabase/supabase-client";
 import { get, writable } from "svelte/store";
 
@@ -41,15 +40,8 @@ export const selectedCategoriesStore = {
       return console.error("Can't load selected categories -> not in browser!");
     }
 
-    const response = await fetch("/api/accounts");
-
-    if (!response.ok) {
-      console.error("Can't fetch selected categories of account:", response.status, response.statusText);
-      return;
-    }
-
-    const account = await response.json();
-    this.set(account.selected_categories);
+    const selectedCategories = await categoryService.getSelectedCategories();
+    this.set(selectedCategories);
   },
 
   save: async function () {
@@ -57,14 +49,7 @@ export const selectedCategoriesStore = {
       return console.error("Can't save selected categories -> not in browser!");
     }
 
-    const updateOptions: AccountUpdateOptions = {
-      selected_categories: get(selectedCategories)
-    };
-
-    const response = await fetch("/api/accounts", PUT(updateOptions));
-
-    if (!response.ok) {
-      console.error("Can't save selected categories:", response.status, response.statusText);
-    }
+    const newSelectedCategoryIds = get(selectedCategories);
+    categoryService.upddateSelcetedCateogry(newSelectedCategoryIds);
   }
 };

@@ -7,7 +7,6 @@
   import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
-  import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
   import { locationStore, useCurrentLocationStore } from "$lib/store.service";
@@ -21,7 +20,6 @@
   let searchCurrentAddress = false;
   let showLocationSettingsModal = false;
   let showDealFilterModal = data?.showDealFilterModal;
-  let address = "";
 
   navigationStore.currentPage("map");
 
@@ -35,7 +33,6 @@
     if ($useCurrentLocationStore) {
       mapService.jumpToLocation($locationStore);
     }
-    address = addressToShortString(await getAddress($locationStore));
   });
 
   const unsubscribe = locationStore.subscribe(async (position: Position) => {
@@ -44,7 +41,6 @@
     }
 
     mapService.jumpToLocation(position);
-    address = addressToShortString(await getAddress(position));
   });
 
   onDestroy(unsubscribe);
@@ -54,27 +50,26 @@
   }
 </script>
 
-<div class="grid grid-cols-3 gap-2 m-3">
-  <Button on:click={() => (showLocationSettingsModal = true)}>
+<div class="fixed top-12 right-1 z-10 m-3 grid grid-cols-3 gap-2">
+  <Button circle on:click={() => (showLocationSettingsModal = true)}>
     <GearIcon />
   </Button>
-  <Button on:click={() => (showDealFilterModal = true)}>
+  <Button circle on:click={() => (showDealFilterModal = true)}>
     <FilterIcon />
   </Button>
-  <Button on:click={jumpToCurrentLocation}>
+  <Button circle on:click={jumpToCurrentLocation}>
     <CurrentLocationIcon />
   </Button>
 </div>
-<span class="p-3 text-2xs">Standort: {address}</span>
-<div id="map" class="w-[calc(100vw-1.5rem)] h-[calc(100vh-12rem)] m-auto z-0">
+<div id="map" class="h-[calc(100vh-6rem)] w-screen">
   {#if !mapService}
-    <div class="flex justify-center content-center gap-2 mt-16">
+    <div class="mt-16 flex content-center justify-center gap-2">
       <h2>Lade Karte</h2>
       <LoadingSpinner />
     </div>
   {/if}
   {#if searchCurrentAddress}
-    <div class="flex gap-4 justify-center content-center relative z-[1000] top-1/3 text-xl bg-gray-500 py-6 opacity-75">
+    <div class="relative top-1/3 z-[1000] flex content-center justify-center gap-4 bg-gray-500 py-6 text-xl opacity-75">
       <span>Ermittele aktuellen Standort</span>
       <LoadingSpinner />
     </div>

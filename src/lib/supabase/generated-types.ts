@@ -211,6 +211,23 @@ export interface Database {
           reporter_id?: string
         }
       }
+      selected_categories: {
+        Row: {
+          category_id: number
+          created: string
+          user_id: string
+        }
+        Insert: {
+          category_id: number
+          created?: string
+          user_id: string
+        }
+        Update: {
+          category_id?: number
+          created?: string
+          user_id?: string
+        }
+      }
     }
     Views: {
       active_deals: {

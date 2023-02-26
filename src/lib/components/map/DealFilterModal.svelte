@@ -5,15 +5,15 @@
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import type { Category } from "$lib/database/category/category.model";
   import type { MapService } from "$lib/map.service";
-  import { StoreService } from "$lib/store.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
+  import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { debounce, union, without } from "lodash";
   import { get } from "svelte/store";
 
   export let categories: Category[] = [];
   export let open = false;
   export let mapService: MapService;
-  let searchRadius = StoreService.getSearchRadius();
+  let searchRadius = $searchRadiusStore;
   $: sortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
   const buttons = [
@@ -28,7 +28,7 @@
   selectedCategoriesStore.load();
 
   const saveRadius = debounce(() => {
-    StoreService.saveSearchRadius(searchRadius);
+    searchRadiusStore.save(searchRadius);
   }, 2000);
 
   const saveSelectedCategories = debounce(() => {

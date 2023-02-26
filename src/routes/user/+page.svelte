@@ -11,11 +11,12 @@
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByTime } from "$lib/deal.utils";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
-  import { locationStore, searchRadiusStore } from "$lib/store.service";
+  import { locationStore } from "$lib/store.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
   import { dealStore } from "$lib/stores/deal.store";
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
+  import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -43,14 +44,14 @@
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$hotStore.length}
 />
-<div class="flex tabs mt-6 mb-2 max-h-8">
-  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+<div class="tabs mt-6 mb-2 flex max-h-8">
+  <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
   </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
+  <button on:click={() => (showTabIndex = 1)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 1}>
     <FireIcon outline={showTabIndex !== 1} />
   </button>
-  <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
+  <button on:click={() => (showTabIndex = 2)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 2}>
     <HeartIcon outline={showTabIndex !== 2} />
   </button>
 </div>

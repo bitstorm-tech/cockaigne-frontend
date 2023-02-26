@@ -3,9 +3,11 @@
   import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import type { Account, AccountUpdateOptions } from "$lib/database/account/account.model";
+  import type { Account } from "$lib/database/account/account.model";
   import { fileToBase64 } from "$lib/file.utils";
-  import { POST, PUT } from "$lib/http.utils";
+  import { POST } from "$lib/http.utils";
+  import accountService from "$lib/supabase/account-service";
+  import type { AccountUpdate } from "$lib/supabase/public-types";
   import DealerSettings from "./DealerSettings.svelte";
   import UserSettings from "./UserSettings.svelte";
 
@@ -26,7 +28,7 @@
   }
 
   async function saveAccount() {
-    const updates: AccountUpdateOptions = isDealer
+    const updates: AccountUpdate = isDealer
       ? {
           username: account.username,
           tax_id: account.tax_id,
@@ -41,12 +43,10 @@
           username: account.username
         };
 
-    let response = await fetch("/api/accounts", PUT(updates));
+    const error = await accountService.updateAccount(updates);
 
-    if (!response.ok) {
-      const error = await response.json();
-      errorMessage = error.message;
-      return;
+    if (error) {
+      errorMessage = error;
     }
   }
 

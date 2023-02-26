@@ -65,6 +65,7 @@
           zip,
           phone,
           username,
+          email,
           age,
           gender,
           taxId

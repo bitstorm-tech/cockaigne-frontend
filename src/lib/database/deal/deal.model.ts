@@ -37,6 +37,6 @@ export interface DealFilter {
   limit?: number;
   order?: {
     column: string;
-    ascending: boolean;
+    ascending?: boolean;
   };
 }

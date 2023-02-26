@@ -66,7 +66,7 @@
 </script>
 
 <Modal bind:open {buttons}>
-  <div class="flex flex-col m-2 max-h-[60vh]">
+  <div class="m-2 flex max-h-[60vh] flex-col">
     <div class="flex flex-col gap-3">
       <RangeSelect
         label="Suche im Umkreis von {searchRadius} m"
@@ -79,12 +79,12 @@
       <Button small on:click={toggleAllCategories}>Alle Filter aktivieren / deaktivieren</Button>
     </div>
     <hr class="my-4" />
-    <div class="flex flex-wrap gap-x-4 overflow-auto">
+    <div class="flex flex-col gap-x-4 overflow-auto">
       {#each categories as category}
         <Checkbox
           label={category.name}
           on:change={(event) => toggleCategory(+category.id, event.target.checked)}
-          checked={$selectedCategoriesStore?.includes(+category.id)}
+          checked={$selectedCategoriesStore.includes(+category.id)}
         />
       {/each}
     </div>

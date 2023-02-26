@@ -1,13 +1,11 @@
-import { supabase } from "$lib/supabase/supabase-client";
+import categoryService from "$lib/supabase/category-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export let ssr = false;
 
-export async function load({ fetch, url }: LoadEvent) {
+export async function load({ url }: LoadEvent) {
   const showDealFilterModal = url.searchParams.get("showFilter") || false;
-  const { data } = await supabase.from("categories").select();
-
-  const categories = data || [];
+  const categories = await categoryService.getCategories();
 
   return {
     categories,

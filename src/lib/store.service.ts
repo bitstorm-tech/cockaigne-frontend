@@ -7,41 +7,20 @@ import { PUT } from "./http.utils";
 
 const KEY_PREFIX = "ckn.";
 const KEYS = {
-  searchRadius: KEY_PREFIX + "searchRadius",
   useCurrentLocation: KEY_PREFIX + "useCurrentLocation",
   location: KEY_PREFIX + "location"
 };
 
 export const useCurrentLocationStore = writable<boolean>(false);
 export const locationStore = writable<Position>(munichPosition);
-export const searchRadiusStore = writable<number>(100);
 
 export class StoreService {
   static init() {
-    const searchRadius = this.getSearchRadius();
     const useCurrentLocation = this.getUseCurrentLocation();
     const location = this.getLocation();
 
-    searchRadiusStore.set(searchRadius);
     useCurrentLocationStore.set(useCurrentLocation);
     locationStore.set(location);
-  }
-
-  static saveSearchRadius(searchRadius: number, persistToDB = true) {
-    this.setToLocalStorage(KEYS.searchRadius, searchRadius);
-    searchRadiusStore.set(searchRadius);
-
-    if (persistToDB) {
-      const update: AccountUpdateOptions = {
-        search_radius: searchRadius
-      };
-
-      fetch("/api/accounts", PUT(update)).then();
-    }
-  }
-
-  static getSearchRadius(): number {
-    return parseInt(this.getFromLocalStorage(KEYS.searchRadius, "100"));
   }
 
   static saveUseCurrentLocation(useCurrentLocation: boolean, persistToDB = true) {

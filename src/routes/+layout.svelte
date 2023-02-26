@@ -6,10 +6,12 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import LocationService from "$lib/geo/location.service";
   import { locationStore, StoreService, useCurrentLocationStore } from "$lib/store.service";
+  import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { blur } from "svelte/transition";
   import "../tailwind.css";
 
   StoreService.init();
+  searchRadiusStore.load();
   if ($useCurrentLocationStore) {
     LocationService.startWatching();
   } else {

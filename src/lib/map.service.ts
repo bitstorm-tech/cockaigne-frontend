@@ -21,7 +21,8 @@ import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
 import { getIconPathById } from "./icon-mapping";
-import { locationStore, searchRadiusStore, StoreService, useCurrentLocationStore } from "./store.service";
+import { locationStore, useCurrentLocationStore } from "./store.service";
+import { searchRadiusStore } from "./stores/search-radius.store";
 
 export class MapService {
   private map: Map;
@@ -137,7 +138,7 @@ export class MapService {
 
   setRadius(radius: number) {
     this.circle.setRadius(this.transformRadius(radius));
-    StoreService.saveSearchRadius(radius);
+    searchRadiusStore.save(radius);
   }
 
   setDeals(deals: Deal[]) {

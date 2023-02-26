@@ -7,6 +7,7 @@
   import { StoreService } from "$lib/store.service";
   import { likeStore } from "$lib/stores/like.store";
   import { navigationStore } from "$lib/stores/navigation.store";
+  import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { getDealsByFilter } from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
@@ -37,7 +38,7 @@
 
     const filter: DealFilter = {
       limit: +selectedOption,
-      radius: StoreService.getSearchRadius(),
+      radius: $searchRadiusStore,
       location: StoreService.getLocation()
     };
 

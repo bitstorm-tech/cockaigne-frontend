@@ -6,7 +6,8 @@
   import { getAddress } from "$lib/geo/address.service.js";
   import type { Position } from "$lib/geo/geo.types";
   import LocationService from "$lib/geo/location.service.js";
-  import { locationStore, StoreService, useCurrentLocationStore } from "$lib/store.service";
+  import { locationStore } from "$lib/stores/location.store";
+  import { useCurrentLocationStore } from "$lib/stores/use-current-location.store";
   import { debounce } from "lodash";
   import { onDestroy } from "svelte";
   import Textarea from "../ui/Textarea.svelte";
@@ -35,7 +36,7 @@
   onDestroy(unsubscribe);
 
   const saveUseCurrentLocation = debounce(() => {
-    StoreService.saveUseCurrentLocation($useCurrentLocationStore);
+    useCurrentLocationStore.save();
   }, 2000);
 
   async function search() {
@@ -54,7 +55,8 @@
         longitude: +addresses[0].lon
       };
 
-      StoreService.saveLocation(position);
+      locationStore.set(position);
+      locationStore.save();
     }
 
     loading = false;
@@ -68,7 +70,7 @@
 </script>
 
 <Modal bind:open {buttons}>
-  <div class="flex flex-col m-2 gap-3">
+  <div class="m-2 flex flex-col gap-3">
     <Textarea label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} lines={2} />
     <Button on:click={search} disabled={$useCurrentLocationStore} {loading}>Suchen</Button>
     <Checkbox

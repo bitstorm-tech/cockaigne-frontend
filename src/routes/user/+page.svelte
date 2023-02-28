@@ -11,11 +11,11 @@
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByTime } from "$lib/deal.utils";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
-  import { locationStore } from "$lib/store.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
   import { dealStore } from "$lib/stores/deal.store";
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
+  import { locationStore } from "$lib/stores/location.store";
   import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";

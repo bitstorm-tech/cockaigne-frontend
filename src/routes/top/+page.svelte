@@ -4,11 +4,11 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import type { DealFilter } from "$lib/database/deal/deal.model";
-  import { StoreService } from "$lib/store.service";
   import { likeStore } from "$lib/stores/like.store";
+  import { locationStore } from "$lib/stores/location.store";
   import { navigationStore } from "$lib/stores/navigation.store";
   import { searchRadiusStore } from "$lib/stores/search-radius.store";
-  import { getDealsByFilter } from "$lib/supabase/deal-service";
+  import dealService from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
 
@@ -39,10 +39,10 @@
     const filter: DealFilter = {
       limit: +selectedOption,
       radius: $searchRadiusStore,
-      location: StoreService.getLocation()
+      location: $locationStore
     };
 
-    topDeals = await getDealsByFilter(filter);
+    topDeals = await dealService.getDealsByFilter(filter);
 
     loading = false;
   }

@@ -1,5 +1,10 @@
-import { StoreService } from "../store.service";
+import { locationStore } from "$lib/stores/location.store";
+import { debounce } from "lodash";
 import type { Position } from "./geo.types";
+
+const saveLocation = debounce(async () => {
+  locationStore.save();
+}, 1000);
 
 export default class LocationService {
   private static watcherId = -1;
@@ -26,6 +31,7 @@ export default class LocationService {
   }
 
   static setPosition(position: Position) {
-    StoreService.saveLocation(position);
+    locationStore.set(position);
+    saveLocation();
   }
 }

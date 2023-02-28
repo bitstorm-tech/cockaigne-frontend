@@ -1,4 +1,3 @@
-import { getDealsByFilter } from "$lib/deal.utils";
 import { selectedCategoriesStore } from "$lib/stores/category.store";
 import { dealStore } from "$lib/stores/deal.store";
 import { debounce } from "lodash";
@@ -16,13 +15,16 @@ import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
-import type { Deal, DealFilter } from "./database/deal/deal.model";
+import type { DealFilter } from "./database/deal/deal.model";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import LocationService from "./geo/location.service";
 import { getIconPathById } from "./icon-mapping";
-import { locationStore, useCurrentLocationStore } from "./store.service";
+import { locationStore } from "./stores/location.store";
 import { searchRadiusStore } from "./stores/search-radius.store";
+import { useCurrentLocationStore } from "./stores/use-current-location.store";
+import dealService from "./supabase/deal-service";
+import type { ActiveDeal } from "./supabase/public-types";
 
 export class MapService {
   private map: Map;
@@ -40,7 +42,7 @@ export class MapService {
       extent
     };
 
-    const deals = await getDealsByFilter(filter);
+    const deals = await dealService.getDealsByFilter(filter);
     this.setDeals(deals);
   }, 1000);
 
@@ -141,7 +143,7 @@ export class MapService {
     searchRadiusStore.save(radius);
   }
 
-  setDeals(deals: Deal[]) {
+  setDeals(deals: ActiveDeal[]) {
     this.dealLayerSource.clear(true);
     deals.map((deal) => {
       const coordinate = this.parseWKT(deal.location as string);
@@ -175,14 +177,14 @@ export class MapService {
     return wkt.match(/[+-]?\d+(\.\d+)?/g)?.map((value) => parseFloat(value));
   }
 
-  private createIcon(deal: Deal, coordinate: Coordinate): Feature {
+  private createIcon(deal: ActiveDeal, coordinate: Coordinate): Feature {
     const feature = new Feature({
       geometry: new Point(coordinate)
     });
 
     const style = new Style({
       image: new Icon({
-        src: getIconPathById(deal.category_id),
+        src: getIconPathById(deal.category_id!!),
         scale: 0.08
       })
     });

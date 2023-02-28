@@ -5,12 +5,13 @@
   import Button from "$lib/components/ui/Button.svelte";
   import CurrentLocationIcon from "$lib/components/ui/icons/CurrentLocationIcon.svelte";
   import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
-  import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
-  import { locationStore, useCurrentLocationStore } from "$lib/store.service";
+  import { locationStore } from "$lib/stores/location.store";
   import { navigationStore } from "$lib/stores/navigation.store";
+  import { useCurrentLocationStore } from "$lib/stores/use-current-location.store";
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -52,7 +53,7 @@
 
 <div class="fixed top-12 right-1 z-10 m-3 grid grid-cols-3 gap-2">
   <Button circle on:click={() => (showLocationSettingsModal = true)}>
-    <GearIcon />
+    <LocationIcon />
   </Button>
   <Button circle on:click={() => (showDealFilterModal = true)}>
     <FilterIcon />

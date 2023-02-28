@@ -20,3 +20,7 @@ export function fromOpenLayersCoordinate(coordinate: Coordinate): Position {
     latitude: coordinate[1]
   };
 }
+
+export function toPostGisPoint(position: Position): string {
+  return `POINT(${position.longitude} ${position.latitude})`;
+}

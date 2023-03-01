@@ -22,7 +22,6 @@ export interface Database {
           location: unknown | null
           phone: string | null
           search_radius: number | null
-          selected_categories: number[] | null
           street: string | null
           tax_id: string | null
           use_current_location: boolean | null
@@ -41,7 +40,6 @@ export interface Database {
           location?: unknown | null
           phone?: string | null
           search_radius?: number | null
-          selected_categories?: number[] | null
           street?: string | null
           tax_id?: string | null
           use_current_location?: boolean | null
@@ -60,7 +58,6 @@ export interface Database {
           location?: unknown | null
           phone?: string | null
           search_radius?: number | null
-          selected_categories?: number[] | null
           street?: string | null
           tax_id?: string | null
           use_current_location?: boolean | null
@@ -268,6 +265,15 @@ export interface Database {
           street?: string | null
           username?: string | null
           zip?: number | null
+        }
+      }
+      dealer_ratings_view: {
+        Row: {
+          dealer_id: string | null
+          rating_text: string | null
+          stars: number | null
+          user_id: string | null
+          username: string | null
         }
       }
       like_counts: {

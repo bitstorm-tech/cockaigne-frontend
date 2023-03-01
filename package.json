@@ -15,10 +15,10 @@
     "update": "ncu -u && npm i"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.281.0",
+    "@aws-sdk/client-s3": "3.282.0",
     "@supabase/supabase-js": "2.8.0",
     "bcryptjs": "2.4.3",
-    "daisyui": "2.51.2",
+    "daisyui": "2.51.3",
     "date-fns": "2.29.3",
     "date-fns-tz": "2.0.0",
     "jose": "4.13.0",
@@ -28,8 +28,8 @@
     "pg": "8.9.0"
   },
   "devDependencies": {
-    "@sveltejs/adapter-vercel": "2.2.0",
-    "@sveltejs/kit": "1.9.1",
+    "@sveltejs/adapter-vercel": "2.2.1",
+    "@sveltejs/kit": "1.9.2",
     "@types/bcryptjs": "2.4.2",
     "@types/leaflet": "1.9.1",
     "@types/lodash": "4.14.191",
@@ -52,7 +52,7 @@
     "tailwindcss": "3.2.7",
     "tslib": "2.5.0",
     "typescript": "4.9.5",
-    "vercel": "28.16.9",
+    "vercel": "28.16.10",
     "vite": "4.1.4"
   }
 }

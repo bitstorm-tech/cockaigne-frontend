@@ -59,13 +59,13 @@
 </ProfileHeader>
 
 <div class="mt-4 mb-2 grid grid-cols-3">
-  <button class="tab tab-bordered" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
+  <button class="tab-bordered tab" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
     <DealIcon />
   </button>
-  <button class="tab tab-bordered" class:tab-active={activeTab === 1} on:click={() => (activeTab = 1)}>
+  <button class="tab-bordered tab" class:tab-active={activeTab === 1} on:click={() => (activeTab = 1)}>
     <PhotoIcon />
   </button>
-  <button class="tab tab-bordered" class:tab-active={activeTab === 2} on:click={() => (activeTab = 2)}>
+  <button class="tab-bordered tab" class:tab-active={activeTab === 2} on:click={() => (activeTab = 2)}>
     <RatingIcon />
   </button>
 </div>

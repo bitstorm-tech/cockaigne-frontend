@@ -1,6 +1,7 @@
-import type { Dealer } from "$lib/database/dealer/dealer.model";
 import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
+import dealerService from "$lib/supabase/dealer-service";
+import type { Dealer } from "$lib/supabase/public-types";
 import StorageService from "$lib/supabase/storage-service";
 import { supabase } from "$lib/supabase/supabase-client";
 import type { LoadEvent } from "@sveltejs/kit";
@@ -17,14 +18,14 @@ export async function load({ params }: LoadEvent) {
       supabase.from("deals").select().eq("dealer_id", id).eq("template", false),
       StorageService.getAllDealerImageUrls(id),
       supabase.rpc("get_favorite_dealers"),
-      supabase.from("accounts").select().single(),
+      dealerService.getDealer(id),
       StorageService.getProfileImage(id, true)
     ]);
 
   const deals = responseDeals.data;
   const pictures = responsePictures;
   const favoriteDealers = responseFavoriteDealers.data;
-  const account = responseAccount.data;
+  const account = responseAccount;
   const profileImage = responseProfileImage;
 
   if (account && favoriteDealers) {

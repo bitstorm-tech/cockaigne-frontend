@@ -1,6 +1,6 @@
-import type { Account } from "$lib/database/account/account.model";
 import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
+import accountService from "$lib/supabase/account-service";
 import { supabase } from "$lib/supabase/supabase-client";
 
 export const ssr = false;
@@ -9,13 +9,13 @@ export async function load() {
   navigationStore.currentPage("home");
 
   const [accountData, favoriteDealersData, favoriteDealerDealsData] = await Promise.all([
-    supabase.from("accounts").select("username").single(),
+    accountService.getAccount(),
     supabase.rpc("get_favorite_dealers"),
     supabase.rpc("get_favorite_dealer_deals")
   ]);
 
-  const account: Account = accountData.data as Account;
-  account.profile_image = "/images/anonym-profile.png";
+  const account = accountData;
+  account.profileImageUrl = "/images/anonym-profile.png";
 
   const favoriteDealers = favoriteDealersData.data;
   const favoriteDealerDeals = favoriteDealerDealsData.data;

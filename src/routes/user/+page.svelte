@@ -6,7 +6,6 @@
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
-  import type { Account } from "$lib/database/account/account.model";
   import type { Deal } from "$lib/database/deal/deal.model";
   import type { Dealer } from "$lib/database/dealer/dealer.model";
   import { sortDealsByTime } from "$lib/deal.utils";
@@ -23,7 +22,7 @@
   export let data: PageData;
   const favoriteDealers: Dealer[] = data.favoriteDealers;
   const favoriteDealerDeals: Deal[] = data.favoriteDealerDeals;
-  const account: Account = data.account;
+  const account = data.account;
   let showTabIndex = 0;
   let address = "";
 
@@ -40,7 +39,7 @@
   name={account.username}
   {address}
   deals={$dealStore.length}
-  imageUrl={account.profile_image}
+  imageUrl={account.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$hotStore.length}
 />

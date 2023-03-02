@@ -6,8 +6,9 @@
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import type { Deal } from "$lib/database/deal/deal.model";
+  import type { ActiveDeal } from "$lib/supabase/public-types";
 
-  export let deals: Deal[] = [];
+  export let deals: Deal[] | ActiveDeal[] = [];
   let openDetail = -1;
 </script>
 

@@ -6,7 +6,6 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Rating } from "$lib/supabase/public-types";
   import ratingService from "$lib/supabase/rating-service";
-  import { supabase } from "$lib/supabase/supabase-client";
 
   export let showRatingButton = false;
   export let dealerId: string;
@@ -27,10 +26,8 @@
     const rating = event.detail;
     rating.dealer_id = dealerId;
     rating.user_id = userId;
-    const { error } = await supabase.from("dealer_ratings").insert(rating);
-    if (!error) {
-      newRating = rating;
-    }
+    await ratingService.saveRating(rating);
+    newRating = rating;
   }
 
   function calcAverageRating(ratings: Rating[]): string {
@@ -41,6 +38,7 @@
   }
 </script>
 
+{newRating}
 {#if showRatingButton}
   <div class="grid grid-cols-1 p-2">
     <Button on:click={() => (openModal = true)}>Schreibe eine Bewertung</Button>

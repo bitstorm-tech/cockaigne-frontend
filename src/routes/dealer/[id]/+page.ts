@@ -1,9 +1,9 @@
 import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
+import dealService from "$lib/supabase/deal-service";
 import dealerService from "$lib/supabase/dealer-service";
-import type { Dealer } from "$lib/supabase/public-types";
-import StorageService from "$lib/supabase/storage-service";
-import { supabase } from "$lib/supabase/supabase-client";
+import favoriteDealerService from "$lib/supabase/favorite-dealer-service";
+import storageService from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export const ssr = false;
@@ -15,16 +15,16 @@ export async function load({ params }: LoadEvent) {
 
   const [responseDeals, responsePictures, responseFavoriteDealers, responseAccount, responseProfileImage] =
     await Promise.all([
-      supabase.from("deals").select().eq("dealer_id", id).eq("template", false),
-      StorageService.getAllDealerImageUrls(id),
-      supabase.rpc("get_favorite_dealers"),
+      dealService.getDealsByDealerId(id),
+      storageService.getAllDealerImageUrls(id),
+      favoriteDealerService.getFavoriteDealerIDs(),
       dealerService.getDealer(id),
-      StorageService.getProfileImage(id, true)
+      storageService.getProfileImage(id, true)
     ]);
 
-  const deals = responseDeals.data;
+  const deals = responseDeals;
   const pictures = responsePictures;
-  const favoriteDealers = responseFavoriteDealers.data;
+  const favoriteDealers = responseFavoriteDealers;
   const account = responseAccount;
   const profileImage = responseProfileImage;
 
@@ -35,7 +35,7 @@ export async function load({ params }: LoadEvent) {
       dealerId: id,
       account,
       profileImage,
-      favoriteDealers: favoriteDealers.map((dealer: Dealer) => dealer.id)
+      favoriteDealers
     };
   }
 

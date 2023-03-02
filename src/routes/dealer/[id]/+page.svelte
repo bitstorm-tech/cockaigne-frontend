@@ -10,7 +10,8 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
-  import { sortDealsByState } from "$lib/deal.utils";
+  import favoriteDealerService from "$lib/supabase/favorite-dealer-service";
+  import { xor } from "lodash";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -23,16 +24,13 @@
   let favoriteDealers = data?.favoriteDealers;
   let loadingFavorite = false;
 
-  $: isFavoriteDealer = favoriteDealers.indexOf(dealerId) >= 0;
-  $: activeDeals = sortDealsByState(deals).active;
+  $: isFavoriteDealer = favoriteDealers?.includes(dealerId || "");
 
   async function toggleFavor() {
     loadingFavorite = true;
-    const response = await fetch(`/api/accounts/favor-dealer/${dealerId}`);
-    if (response.ok) {
-      const favoriteDealersJson = await response.json();
-      favoriteDealers = favoriteDealersJson.map((dealer) => dealer.id);
-    }
+    if (!dealerId) return;
+    await favoriteDealerService.toggleFavoriteDealer(dealerId);
+    favoriteDealers = xor(favoriteDealers, [dealerId]);
     loadingFavorite = false;
   }
 </script>
@@ -57,7 +55,6 @@
     </Button>
   {/if}
 </ProfileHeader>
-
 <div class="mt-4 mb-2 grid grid-cols-3">
   <button class="tab-bordered tab" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
     <DealIcon />
@@ -70,7 +67,7 @@
   </button>
 </div>
 {#if activeTab === 0}
-  <DealsList deals={activeDeals} />
+  <DealsList {deals} />
 {:else if activeTab === 1}
   <Pictures {pictures} companyName={account.username} />
 {:else}

@@ -5,7 +5,7 @@
   import type { Deal } from "$lib/database/deal/deal.model";
   import CrossIcon from "../ui/icons/CrossIcon.svelte";
 
-  export let deal: Deal;
+  export let deal: Deal | ActiveDeal;
   export let showDetails = false;
   export let showCompanyName = true;
 
@@ -14,18 +14,18 @@
   const isUser = !$page.data.user.isDealer;
 </script>
 
-<div class="flex gap-2 items-center">
-  <div class="flex flex-col grow">
+<div class="flex items-center gap-2">
+  <div class="flex grow flex-col">
     {#if showCompanyName}
-      <div class="flex justify-between px-2 py-0.5 bg-[#232b2e]">
+      <div class="flex justify-between bg-[#232b2e] px-2 py-0.5">
         <a href="/dealer/{deal.dealer_id}" class="flex items-center text-[#b2b2b2]">
           {deal.username}
         </a>
         <a href="/dealer/{deal.dealer_id}" class="text-[#617780]">>></a>
       </div>
     {/if}
-    <button class="flex justify-between bg-[#2c363a] items-center" on:click>
-      <div class="flex gap-2 items-center">
+    <button class="flex items-center justify-between bg-[#2c363a]" on:click>
+      <div class="flex items-center gap-2">
         <div class="m-2 rounded" style="background: {category.color}">
           <svelte:component this={category.icon} size="2.8" />
         </div>

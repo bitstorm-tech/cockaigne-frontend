@@ -81,6 +81,17 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
   return data;
 }
 
+async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
+  const { data, error } = await supabase.from("active_deals").select().eq("dealer_id", dealerId);
+
+  if (error) {
+    console.error("Can't get deals by dealer id:", error);
+    return [];
+  }
+
+  return data;
+}
+
 function createExtentCondition(filter: DealFilter): string | undefined {
   if (filter.location && filter.radius) {
     const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
@@ -113,5 +124,6 @@ export default {
   getDeal,
   upsertDeal,
   getDealsByFilter,
+  getDealsByDealerId,
   toggleHotDeal
 };

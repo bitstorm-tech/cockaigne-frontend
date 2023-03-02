@@ -14,7 +14,11 @@ async function getDefaultCategory(): Promise<number> {
 }
 
 async function getAccount(): Promise<Account | undefined> {
-  const { data, error } = await supabase.from("accounts").select().single();
+  const userId = await getUserId();
+
+  if (!userId) return;
+
+  const { data, error } = await supabase.from("accounts").select().eq("id", userId).single();
 
   console.log(data);
 

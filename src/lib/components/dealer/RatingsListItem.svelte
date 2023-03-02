@@ -12,8 +12,9 @@
   let name: string;
 
   onMount(async () => {
-    if (!rating.user_id) return;
-    imageUrl = await storageService.getProfileImage(rating.user_id);
+    if (rating.user_id) {
+      imageUrl = await storageService.getProfileImage(rating.user_id);
+    }
     name = rating.username || "Name";
   });
 </script>

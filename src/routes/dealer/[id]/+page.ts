@@ -12,29 +12,29 @@ export async function load({ params }: LoadEvent) {
 
   navigationStore.currentPage("home");
 
-  const [responseDeals, responsePictures, responseFavoriteDealers, responseAccount, responseProfileImage] =
+  const [responseDeals, responsePictures, responseIsFavoriteDealer, responseAccount, responseProfileImage] =
     await Promise.all([
       dealService.getDealsByDealerId(id),
       storageService.getAllDealerImageUrls(id),
-      dealerService.getFavoriteDealerIDs(),
+      dealerService.isFavoriteDealer(id),
       dealerService.getDealer(id),
       storageService.getProfileImage(id, true)
     ]);
 
   const deals = responseDeals;
   const pictures = responsePictures;
-  const favoriteDealers = responseFavoriteDealers;
+  const isFavoriteDealer = responseIsFavoriteDealer;
   const account = responseAccount;
   const profileImage = responseProfileImage;
 
-  if (account && favoriteDealers) {
+  if (account) {
     return {
       deals,
       pictures,
       dealerId: id,
       account,
       profileImage,
-      favoriteDealers
+      isFavoriteDealer
     };
   }
 

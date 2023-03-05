@@ -11,7 +11,6 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
   import dealerService from "$lib/supabase/dealer-service";
-  import { xor } from "lodash";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -21,16 +20,14 @@
   const account = data?.account;
   const profileImage = data.profileImage;
   const pictures = data?.pictures;
-  let favoriteDealers = data?.favoriteDealers;
+  let isFavoriteDealer = data?.isFavoriteDealer;
   let loadingFavorite = false;
-
-  $: isFavoriteDealer = favoriteDealers?.includes(dealerId || "");
 
   async function toggleFavor() {
     loadingFavorite = true;
     if (!dealerId) return;
     await dealerService.toggleFavoriteDealer(dealerId);
-    favoriteDealers = xor(favoriteDealers, [dealerId]);
+    isFavoriteDealer = !isFavoriteDealer;
     loadingFavorite = false;
   }
 </script>

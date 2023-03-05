@@ -14,7 +14,6 @@
   searchRadiusStore.load();
   locationStore.load().then(() => {
     useCurrentLocationStore.load().then((useCurrentLocation) => {
-      console.log("UseCurrent");
       if (useCurrentLocation) {
         LocationService.startWatching();
       } else {

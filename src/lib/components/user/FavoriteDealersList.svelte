@@ -1,27 +1,42 @@
 <script lang="ts">
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
-  import type { Dealer } from "$lib/database/dealer/dealer.model";
+  import dealService from "$lib/supabase/deal-service";
+  import dealerService from "$lib/supabase/dealer-service";
+  import type { ActiveDeal, FavoriteDealer } from "$lib/supabase/public-types";
+  import { onMount } from "svelte";
+  import HeartIcon from "../ui/icons/HeartIcon.svelte";
   import UserDealsList from "./UserDealsList.svelte";
 
-  export let dealers: Dealer[] = [];
-  export let deals: Deal[] = [];
+  let dealers: FavoriteDealer[] = [];
+  let deals: ActiveDeal[] = [];
+  let loading = true;
 
-  async function unfavorite(dealerId: number) {
-    const response = await fetch("/api/accounts/favor-dealer/" + dealerId);
-    if (response.ok) {
-      dealers = await response.json();
-    }
+  onMount(async () => {
+    dealers = await dealerService.getFavoriteDealers();
+    const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
+    deals = await dealService.getActiveDealsByDealer(dealerIds);
+    loading = false;
+  });
+
+  async function unfavorite(dealerId: string) {
+    await dealerService.toggleFavoriteDealer(dealerId);
+    dealers = dealers.filter((dealer) => dealer.dealer_id !== dealerId);
   }
 </script>
 
-<div class="flex flex-col gap-2 justify-center h-full overflow-auto">
+<div class="flex h-full flex-col justify-center gap-2 overflow-auto">
   {#if dealers.length === 0}
     <EmptyContent>
       <p>Du hast noch keine favorisierten Dealer?!</p>
     </EmptyContent>
   {/if}
   {#each dealers as dealer}
-    <UserDealsList deals={deals.filter((deal) => deal.dealer_id === dealer.id)} />
+    <a href={`/dealer/${dealer.dealer_id}`} class="flex w-full justify-between bg-[#2c363a] p-3 text-[#b2b2b2]">
+      <p>{dealer.username}</p>
+      <button class="cursor-pointer" on:click|preventDefault={() => unfavorite(dealer.dealer_id || "")}>
+        <HeartIcon />
+      </button>
+    </a>
+    <UserDealsList deals={deals.filter((deal) => deal.dealer_id === dealer.dealer_id)} showCompanyName={false} />
   {/each}
 </div>

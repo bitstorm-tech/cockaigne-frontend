@@ -60,6 +60,6 @@
   {:else if showTabIndex === 1}
     <UserHotDealsList />
   {:else}
-    <FavoriteDealersList dealers={favoriteDealers} deals={favoriteDealerDeals} />
+    <FavoriteDealersList />
   {/if}
 </div>

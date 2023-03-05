@@ -2,9 +2,11 @@
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import UserDealListItme from "$lib/components/user/UserDealListItme.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
+  import type { ActiveDeal } from "$lib/supabase/public-types";
 
-  export let deals: Deal[] = [];
+  export let deals: ActiveDeal[] = [];
+  export let showCompanyName = true;
+
   let openDetail = -1;
 </script>
 
@@ -21,6 +23,11 @@
     </EmptyContent>
   {/if}
   {#each deals as deal, i}
-    <UserDealListItme {deal} openDetail={openDetail === i} on:click={() => (openDetail = openDetail === i ? -1 : i)} />
+    <UserDealListItme
+      {deal}
+      {showCompanyName}
+      openDetail={openDetail === i}
+      on:click={() => (openDetail = openDetail === i ? -1 : i)}
+    />
   {/each}
 </div>

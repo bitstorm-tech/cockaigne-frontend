@@ -20,8 +20,6 @@ async function getAccount(): Promise<Account | undefined> {
 
   const { data, error } = await supabase.from("accounts").select().eq("id", userId).single();
 
-  console.log(data);
-
   if (error) {
     console.error("Can't get account:", error);
     return;

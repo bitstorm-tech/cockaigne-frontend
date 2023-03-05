@@ -29,18 +29,23 @@ async function toggleFavoriteDealer(dealerId: string) {
   }
 }
 
-async function getFavoriteDealerIDs(): Promise<string[]> {
+async function isFavoriteDealer(dealerId: string): Promise<boolean> {
   const userId = await getUserId();
 
-  if (!userId) return [];
+  if (!userId) return false;
 
-  const { data } = await supabase.from("favorite_dealers").select("dealer_id").eq("user_id", userId);
+  const { data, error } = await supabase
+    .from("favorite_dealers")
+    .select("dealer_id")
+    .eq("user_id", userId)
+    .eq("dealer_id", dealerId);
 
-  if (!data) {
-    return [];
+  if (error) {
+    console.error("Can't check if dealer is favorite:", error);
+    return false;
   }
 
-  return data.map((favoriteDealer) => favoriteDealer.dealer_id);
+  return data.length !== 0;
 }
 
 async function getFavoriteDealers(): Promise<FavoriteDealer[]> {
@@ -60,6 +65,6 @@ async function getFavoriteDealers(): Promise<FavoriteDealer[]> {
 export default {
   getDealer,
   toggleFavoriteDealer,
-  getFavoriteDealerIDs,
+  isFavoriteDealer,
   getFavoriteDealers
 };

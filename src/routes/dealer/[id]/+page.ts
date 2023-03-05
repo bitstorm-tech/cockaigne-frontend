@@ -2,7 +2,6 @@ import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
 import dealService from "$lib/supabase/deal-service";
 import dealerService from "$lib/supabase/dealer-service";
-import favoriteDealerService from "$lib/supabase/favorite-dealer-service";
 import storageService from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
@@ -17,7 +16,7 @@ export async function load({ params }: LoadEvent) {
     await Promise.all([
       dealService.getDealsByDealerId(id),
       storageService.getAllDealerImageUrls(id),
-      favoriteDealerService.getFavoriteDealerIDs(),
+      dealerService.getFavoriteDealerIDs(),
       dealerService.getDealer(id),
       storageService.getProfileImage(id, true)
     ]);

@@ -21,6 +21,18 @@ async function getDeal(id: string): Promise<Deal | undefined> {
   return deal;
 }
 
+async function getActiveDealsByDealer(dealerIds: string | string[]): Promise<ActiveDeal[]> {
+  const ids = Array.isArray(dealerIds) ? dealerIds : [dealerIds];
+  const { data, error } = await supabase.from("active_deals_view").select().in("dealer_id", ids);
+
+  if (error) {
+    console.error("Can't get active deals:", error);
+    return [];
+  }
+
+  return data;
+}
+
 async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boolean> {
   dateTimeUtils.addTimezoneOffsetToDeal(deal);
   const _deal = deal.id === "" ? omit(deal, "id") : deal;
@@ -49,7 +61,7 @@ async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boole
 }
 
 export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]> {
-  let query = supabase.from("active_deals").select();
+  let query = supabase.from("active_deals_view").select();
 
   const extent = createExtentCondition(filter);
 
@@ -82,7 +94,7 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
 }
 
 async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
-  const { data, error } = await supabase.from("active_deals").select().eq("dealer_id", dealerId);
+  const { data, error } = await supabase.from("active_deals_view").select().eq("dealer_id", dealerId);
 
   if (error) {
     console.error("Can't get deals by dealer id:", error);
@@ -121,9 +133,10 @@ async function toggleHotDeal(dealId: string) {
 }
 
 export default {
+  getActiveDealsByDealer,
   getDeal,
-  upsertDeal,
-  getDealsByFilter,
   getDealsByDealerId,
-  toggleHotDeal
+  getDealsByFilter,
+  toggleHotDeal,
+  upsertDeal
 };

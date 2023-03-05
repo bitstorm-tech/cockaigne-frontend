@@ -10,7 +10,7 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
-  import favoriteDealerService from "$lib/supabase/favorite-dealer-service";
+  import dealerService from "$lib/supabase/dealer-service";
   import { xor } from "lodash";
   import type { PageData } from "./$types";
 
@@ -29,7 +29,7 @@
   async function toggleFavor() {
     loadingFavorite = true;
     if (!dealerId) return;
-    await favoriteDealerService.toggleFavoriteDealer(dealerId);
+    await dealerService.toggleFavoriteDealer(dealerId);
     favoriteDealers = xor(favoriteDealers, [dealerId]);
     loadingFavorite = false;
   }

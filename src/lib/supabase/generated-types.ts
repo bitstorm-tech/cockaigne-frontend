@@ -227,7 +227,7 @@ export interface Database {
       }
     }
     Views: {
-      active_deals: {
+      active_deals_view: {
         Row: {
           category_id: number | null
           dealer_id: string | null
@@ -241,7 +241,16 @@ export interface Database {
           username: string | null
         }
       }
-      dealer: {
+      dealer_ratings_view: {
+        Row: {
+          dealer_id: string | null
+          rating_text: string | null
+          stars: number | null
+          user_id: string | null
+          username: string | null
+        }
+      }
+      dealer_view: {
         Row: {
           city: string | null
           house_number: string | null
@@ -267,16 +276,14 @@ export interface Database {
           zip?: number | null
         }
       }
-      dealer_ratings_view: {
+      favorite_dealers_view: {
         Row: {
           dealer_id: string | null
-          rating_text: string | null
-          stars: number | null
           user_id: string | null
           username: string | null
         }
       }
-      like_counts: {
+      like_counts_view: {
         Row: {
           deal_id: string | null
           likecount: number | null

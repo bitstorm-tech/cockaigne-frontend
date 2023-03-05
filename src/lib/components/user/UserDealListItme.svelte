@@ -1,12 +1,12 @@
 <script lang="ts">
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
   import { hotStore } from "$lib/stores/hot.store.js";
+  import type { ActiveDeal } from "$lib/supabase/public-types";
 
   export let openDetail = false;
   export let showCompanyName = true;
-  export let deal: Deal;
+  export let deal: ActiveDeal;
 </script>
 
 <DealsListItem {deal} showDetails={openDetail} {showCompanyName} on:click>

@@ -14,7 +14,7 @@
   const isUser = !$page.data.user.isDealer;
 </script>
 
-<div class="flex items-center gap-2">
+<div class="flex items-center">
   <div class="flex grow flex-col">
     {#if showCompanyName}
       <div class="flex justify-between bg-[#232b2e] px-2 py-0.5">

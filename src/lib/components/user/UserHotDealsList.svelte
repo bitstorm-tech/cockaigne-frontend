@@ -10,7 +10,7 @@
   $: hotDeals = $dealStore.filter((deal: Deal) => $hotStore.includes(deal.id));
 </script>
 
-<div class="flex flex-col justify-center gap-2">
+<div class="flex flex-col justify-center gap-1">
   {#if hotDeals.length === 0}
     <EmptyContent>
       <p>Hier gibt es noch keine heißen Deals.</p>

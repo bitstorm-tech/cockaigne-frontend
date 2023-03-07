@@ -24,7 +24,7 @@
   }
 </script>
 
-<div class="flex h-full flex-col justify-center gap-2 overflow-auto">
+<div class="flex h-full flex-col justify-center gap-1 overflow-auto">
   {#if dealers.length === 0}
     <EmptyContent>
       <p>Du hast noch keine favorisierten Dealer?!</p>

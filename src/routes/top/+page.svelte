@@ -5,10 +5,10 @@
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import type { DealFilter } from "$lib/database/deal/deal.model";
   import { likeStore } from "$lib/stores/like.store";
-  import { locationStore } from "$lib/stores/location.store";
   import { navigationStore } from "$lib/stores/navigation.store";
   import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import dealService from "$lib/supabase/deal-service";
+  import locationService from "$lib/supabase/location-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
 
@@ -36,10 +36,12 @@
     if (!browser) return;
     loading = true;
 
+    const location = await locationService.getLocation();
+
     const filter: DealFilter = {
       limit: +selectedOption,
       radius: $searchRadiusStore,
-      location: $locationStore
+      location: location
     };
 
     topDeals = await dealService.getDealsByFilter(filter);

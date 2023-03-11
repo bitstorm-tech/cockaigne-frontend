@@ -4,23 +4,8 @@
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
-  import LocationService from "$lib/geo/location.service";
-  import { locationStore } from "$lib/stores/location.store";
-  import { searchRadiusStore } from "$lib/stores/search-radius.store";
-  import { useCurrentLocationStore } from "$lib/stores/use-current-location.store";
   import { blur } from "svelte/transition";
   import "../tailwind.css";
-
-  searchRadiusStore.load();
-  locationStore.load().then(() => {
-    useCurrentLocationStore.load().then((useCurrentLocation) => {
-      if (useCurrentLocation) {
-        LocationService.startWatching();
-      } else {
-        LocationService.setPosition($locationStore);
-      }
-    });
-  });
 
   let loading = false;
 

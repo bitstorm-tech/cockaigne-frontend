@@ -14,8 +14,8 @@
   import { dealStore } from "$lib/stores/deal.store";
   import { hotStore } from "$lib/stores/hot.store";
   import { likeStore } from "$lib/stores/like.store";
-  import { locationStore } from "$lib/stores/location.store";
   import { searchRadiusStore } from "$lib/stores/search-radius.store";
+  import locationService from "$lib/supabase/location-service";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -29,8 +29,9 @@
   onMount(async () => {
     likeStore.load().then();
     hotStore.load().then();
-    dealStore.load($locationStore, $searchRadiusStore / 2, $selectedCategoriesStore).then();
-    const longAddress = await getAddress($locationStore);
+    const location = await locationService.getLocation();
+    dealStore.load(location, $searchRadiusStore / 2, $selectedCategoriesStore).then();
+    const longAddress = await getAddress(location);
     address = addressToShortString(longAddress);
   });
 </script>

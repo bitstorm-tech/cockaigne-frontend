@@ -18,23 +18,21 @@ import { get } from "svelte/store";
 import type { DealFilter } from "./database/deal/deal.model";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
-import LocationService from "./geo/location.service";
 import { getIconPathById } from "./icon-mapping";
-import { locationStore } from "./stores/location.store";
 import { searchRadiusStore } from "./stores/search-radius.store";
-import { useCurrentLocationStore } from "./stores/use-current-location.store";
 import dealService from "./supabase/deal-service";
+import locationService from "./supabase/location-service";
 import type { ActiveDeal } from "./supabase/public-types";
 
 export class MapService {
-  private map: Map;
+  private map!: Map;
   private dealLayerSource = new VectorSource();
   private view = new View({
     zoom: 16,
     maxZoom: 20
   });
-  private readonly circle: Circle;
-  private readonly centerPoint: Circle;
+  private circle!: Circle;
+  private centerPoint!: Circle;
 
   private updateDeals = debounce(async (extent: Extent) => {
     const filter: DealFilter = {
@@ -46,30 +44,32 @@ export class MapService {
     this.setDeals(deals);
   }, 1000);
 
-  constructor(htmlElementId: string) {
+  static async init(htmlElementId: string): Promise<MapService> {
+    const mapService = new MapService();
     useGeographic();
+    const location = await locationService.getLocation();
     searchRadiusStore.subscribe(async (radius) => {
-      const location = get(locationStore);
+      const location = await locationService.getLocation();
       const selectedCategories = get(selectedCategoriesStore);
       await dealStore.load(location, radius / 2, selectedCategories);
     });
-    const center = toOpenLayersCoordinate(get(locationStore));
+    const center = toOpenLayersCoordinate(location);
 
-    this.view.setCenter(center);
+    mapService.view.setCenter(center);
 
-    this.centerPoint = new Circle(center, this.transformRadius(2));
+    mapService.centerPoint = new Circle(center, mapService.transformRadius(2));
 
     const searchRadius = get(searchRadiusStore);
-    this.circle = new Circle(center, this.transformRadius(searchRadius));
+    mapService.circle = new Circle(center, mapService.transformRadius(searchRadius));
 
-    this.map = new Map({
+    mapService.map = new Map({
       target: htmlElementId,
       layers: [
         new TileLayer({
           source: new OSM()
         }),
         new VectorLayer({
-          source: this.dealLayerSource,
+          source: mapService.dealLayerSource,
           style: new Style({
             stroke: new Stroke({
               color: "red",
@@ -82,7 +82,7 @@ export class MapService {
         }),
         new VectorLayer({
           source: new VectorSource({
-            features: [new Feature(this.circle), new Feature(this.centerPoint)]
+            features: [new Feature(mapService.circle), new Feature(mapService.centerPoint)]
           }),
           style: new Style({
             stroke: new Stroke({
@@ -95,36 +95,27 @@ export class MapService {
           })
         })
       ],
-      view: this.view
+      view: mapService.view
     });
 
-    this.map.on("click", (event) => {
-      const useCurrentLocation = get(useCurrentLocationStore);
+    mapService.map.on("click", async (event) => {
+      const useCurrentLocation = await locationService.useCurrentLocation();
 
       if (useCurrentLocation) {
         return;
       }
 
-      this.moveCircle(event.coordinate);
-      this.saveCenter(event.coordinate);
-      LocationService.setPosition(fromOpenLayersCoordinate(event.coordinate));
+      mapService.moveCircle(event.coordinate);
+      mapService.saveCenter(event.coordinate);
+      locationService.saveLocation(fromOpenLayersCoordinate(event.coordinate));
     });
 
-    this.map.on("moveend", () => {
-      const extend = this.map.getView().calculateExtent(this.map.getSize());
-      this.updateDeals(extend);
+    mapService.map.on("moveend", () => {
+      const extend = mapService.map.getView().calculateExtent(mapService.map.getSize());
+      mapService.updateDeals(extend);
     });
 
-    locationStore.subscribe(async (position) => {
-      const radius = get(searchRadiusStore);
-      const selectedCategories = get(selectedCategoriesStore);
-      this.jumpToLocation(position);
-      await dealStore.load(position, radius / 2, selectedCategories);
-    });
-
-    selectedCategoriesStore.subscribe(async (selectedCategories) => {
-      await dealStore.load(get(locationStore), get(searchRadiusStore) / 2, selectedCategories);
-    });
+    return mapService;
   }
 
   jumpToLocation(position: Position) {
@@ -132,8 +123,9 @@ export class MapService {
     this.moveCircle(center);
   }
 
-  jumpToCurrentLocation() {
-    const center = toOpenLayersCoordinate(get(locationStore));
+  async jumpToCurrentLocation() {
+    const postion = await locationService.getLocation();
+    const center = toOpenLayersCoordinate(postion);
     this.view.setCenter(center);
     this.moveCircle();
   }
@@ -154,8 +146,9 @@ export class MapService {
     });
   }
 
-  private moveCircle(location?: Coordinate) {
-    const center = toOpenLayersCoordinate(get(locationStore));
+  private async moveCircle(location?: Coordinate) {
+    const _location = await locationService.getLocation();
+    const center = toOpenLayersCoordinate(_location);
     const newCoordinates = location ? location : center;
     this.circle.setCenter(newCoordinates);
     this.centerPoint.setCenter(newCoordinates);
@@ -194,8 +187,8 @@ export class MapService {
     return feature;
   }
 
-  private saveCenter(coordinate: Coordinate) {
+  private async saveCenter(coordinate: Coordinate) {
     const position = fromOpenLayersCoordinate(coordinate);
-    LocationService.setPosition(position);
+    locationService.saveLocation(position);
   }
 }

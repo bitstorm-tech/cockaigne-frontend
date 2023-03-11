@@ -9,9 +9,8 @@
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
   import type { Position } from "$lib/geo/geo.types";
   import { MapService } from "$lib/map.service";
-  import { locationStore } from "$lib/stores/location.store";
   import { navigationStore } from "$lib/stores/navigation.store";
-  import { useCurrentLocationStore } from "$lib/stores/use-current-location.store";
+  import locationService from "$lib/supabase/location-service";
   import { onDestroy, onMount } from "svelte";
   import type { PageData } from "./$types";
 
@@ -29,22 +28,10 @@
       return;
     }
 
-    mapService = new MapService("map");
-
-    if ($useCurrentLocationStore) {
-      mapService.jumpToLocation($locationStore);
-    }
+    const location = await locationService.getLocation();
+    mapService = await MapService.init("map");
+    mapService.jumpToLocation(location);
   });
-
-  const unsubscribe = locationStore.subscribe(async (position: Position) => {
-    if (!mapService) {
-      return;
-    }
-
-    mapService.jumpToLocation(position);
-  });
-
-  onDestroy(unsubscribe);
 
   function jumpToCurrentLocation() {
     mapService.jumpToCurrentLocation();

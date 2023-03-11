@@ -22,23 +22,28 @@
     return ratings;
   }
 
-  async function saveNewRating(event) {
+  async function saveNewRating(event: CustomEvent) {
     const rating = event.detail;
     rating.dealer_id = dealerId;
     rating.user_id = userId;
     await ratingService.saveRating(rating);
     newRating = rating;
+    showRatingButton = false;
   }
 
   function calcAverageRating(ratings: Rating[]): string {
     let sum = 0;
+    let numberOfRatings = ratings.length;
     ratings.forEach((rating) => (sum += rating?.stars || 0));
-    console.log("sum, rating.length:", sum, ratings.length);
-    return (sum / ratings.length).toFixed(1);
+    if (newRating) {
+      sum += newRating.stars!!;
+      numberOfRatings += 1;
+    }
+
+    return (sum / numberOfRatings).toFixed(1);
   }
 </script>
 
-{newRating}
 {#if showRatingButton}
   <div class="grid grid-cols-1 p-2">
     <Button on:click={() => (openModal = true)}>Schreibe eine Bewertung</Button>
@@ -50,7 +55,7 @@
       <LoadingSpinner /> Lade Bewertungen ...
     </span>
   {:then ratings}
-    {#if ratings.length === 0}
+    {#if ratings.length === 0 && !newRating}
       {#if isDealer}
         <EmptyContent>Leider hat dich noch niemand bewertet :(</EmptyContent>
       {:else}

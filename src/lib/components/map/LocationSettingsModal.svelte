@@ -6,38 +6,35 @@
   import { getAddress } from "$lib/geo/address.service.js";
   import type { Position } from "$lib/geo/geo.types";
   import LocationService from "$lib/geo/location.service.js";
-  import { locationStore } from "$lib/stores/location.store";
-  import { useCurrentLocationStore } from "$lib/stores/use-current-location.store";
-  import { debounce } from "lodash";
-  import { onDestroy } from "svelte";
+  import locationService from "$lib/supabase/location-service";
   import Textarea from "../ui/Textarea.svelte";
 
   export let open = false;
   let address = "";
   let loading = false;
+  let useCurrentLocation: boolean;
+  let location: Position;
 
   const buttons = [
     {
       text: "Übernehmen",
       callback: () => {
+        locationService.saveUseCurrentLocation(useCurrentLocation);
+        locationService.saveLocation(location);
         open = false;
       }
     }
   ];
 
-  const unsubscribe = locationStore.subscribe(async (position: Position) => {
-    const newAddress = await getAddress(position);
+  async function onOpen() {
+    useCurrentLocation = await locationService.useCurrentLocation();
+    location = await locationService.getLocation();
+    const newAddress = await getAddress(location);
 
     if (newAddress) {
       address = addressToString(newAddress);
     }
-  });
-
-  onDestroy(unsubscribe);
-
-  const saveUseCurrentLocation = debounce(() => {
-    useCurrentLocationStore.save();
-  }, 2000);
+  }
 
   async function search() {
     loading = true;
@@ -55,28 +52,22 @@
         longitude: +addresses[0].lon
       };
 
-      locationStore.set(position);
-      locationStore.save();
+      location = position;
     }
 
     loading = false;
   }
 
   async function searchCurrentLocation(event) {
-    useCurrentLocationStore.set(event.target.checked);
-    saveUseCurrentLocation();
-    $useCurrentLocationStore ? LocationService.startWatching() : LocationService.stopWatching();
+    useCurrentLocation = event.target.checked;
+    useCurrentLocation ? LocationService.startWatching() : LocationService.stopWatching();
   }
 </script>
 
-<Modal bind:open {buttons}>
+<Modal bind:open openCallback={onOpen} {buttons}>
   <div class="m-2 flex flex-col gap-3">
-    <Textarea label="Adresse" bind:value={address} on:enter={search} disabled={$useCurrentLocationStore} lines={2} />
-    <Button on:click={search} disabled={$useCurrentLocationStore} {loading}>Suchen</Button>
-    <Checkbox
-      label="Aktuellen Standort verwenden"
-      bind:checked={$useCurrentLocationStore}
-      on:change={searchCurrentLocation}
-    />
+    <Textarea label="Adresse" bind:value={address} on:enter={search} disabled={useCurrentLocation} lines={2} />
+    <Button on:click={search} disabled={useCurrentLocation} {loading}>Suchen</Button>
+    <Checkbox label="Aktuellen Standort verwenden" checked={useCurrentLocation} on:change={searchCurrentLocation} />
   </div>
 </Modal>

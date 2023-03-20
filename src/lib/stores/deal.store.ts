@@ -1,6 +1,5 @@
-import type { DealFilter } from "$lib/database/deal/deal.model";
-import type { Position } from "$lib/geo/geo.types";
 import dealService from "$lib/supabase/deal-service";
+import locationService from "$lib/supabase/location-service";
 import type { ActiveDeal } from "$lib/supabase/public-types";
 import { writable } from "svelte/store";
 
@@ -11,14 +10,20 @@ export const dealStore = {
   set: deals.set,
   update: deals.update,
 
-  load: async function (location: Position, radius: number, categoryIds: number[]) {
-    const filter: DealFilter = {
-      location,
-      radius,
-      categoryIds
-    };
-
+  load: async function () {
+    const filter = await locationService.createFilterByCurrentLocation();
     const deals = await dealService.getDealsByFilter(filter);
     this.set(deals);
+  },
+
+  toggleHot: async function (dealId: string) {
+    const isHot = await dealService.toggleHotDeal(dealId);
+    this.update((deals) => {
+      const deal = deals.find((deal) => deal.id === dealId);
+      if (deal) {
+        deal.isHot = isHot;
+      }
+      return deals;
+    });
   }
 };

@@ -1,3 +1,4 @@
+import type { DealFilter } from "$lib/database/deal/deal.model";
 import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import { getUserId, supabase } from "./supabase-client";
 
@@ -42,9 +43,28 @@ async function saveLocation(location: Position) {
   await supabase.from("accounts").update({ location: point }).eq("id", userId);
 }
 
+async function createFilterByCurrentLocation(): Promise<DealFilter> {
+  const userId = await getUserId();
+  const { error, data } = await supabase.from("accounts").select("search_radius, location").eq("id", userId).single();
+
+  if (error) {
+    console.log("Can't create filter by current location:", error);
+    return {};
+  }
+
+  return {
+    radius: data.search_radius ?? 500,
+    location: {
+      longitude: data.location.coordinates[0],
+      latitude: data.location.coordinates[1]
+    }
+  };
+}
+
 export default {
   saveUseCurrentLocation,
   useCurrentLocation,
   getLocation,
-  saveLocation
+  saveLocation,
+  createFilterByCurrentLocation
 };

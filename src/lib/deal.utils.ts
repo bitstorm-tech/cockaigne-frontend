@@ -1,6 +1,7 @@
 import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
 import { convertToTimeZonedDateTimeString } from "$lib/date-time.utils";
 import { POST } from "$lib/http.utils";
+import type { ActiveDeal } from "./supabase/public-types";
 
 export type DealState = "past" | "future" | "active";
 
@@ -41,8 +42,8 @@ export function sortDealsByState(deals: Deal[]): SortedDeals {
   return sortedDeals;
 }
 
-export function sortDealsByTime(deals: Deal[]): Deal[] {
-  return deals.sort((a: Deal, b: Deal) => {
+export function sortDealsByTime(deals: ActiveDeal[]): ActiveDeal[] {
+  return deals.sort((a: ActiveDeal, b: ActiveDeal) => {
     const timeA = a.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
     const timeB = b.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
     return +timeA - +timeB;

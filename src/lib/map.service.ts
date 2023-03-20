@@ -1,5 +1,4 @@
 import { selectedCategoriesStore } from "$lib/stores/category.store";
-import { dealStore } from "$lib/stores/deal.store";
 import { debounce } from "lodash";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
@@ -48,11 +47,6 @@ export class MapService {
     const mapService = new MapService();
     useGeographic();
     const location = await locationService.getLocation();
-    searchRadiusStore.subscribe(async (radius) => {
-      const location = await locationService.getLocation();
-      const selectedCategories = get(selectedCategoriesStore);
-      await dealStore.load(location, radius / 2, selectedCategories);
-    });
     const center = toOpenLayersCoordinate(location);
 
     mapService.view.setCenter(center);

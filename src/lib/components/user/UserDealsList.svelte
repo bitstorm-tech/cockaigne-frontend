@@ -2,10 +2,13 @@
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Link from "$lib/components/ui/Link.svelte";
   import UserDealListItme from "$lib/components/user/UserDealListItme.svelte";
-  import type { ActiveDeal } from "$lib/supabase/public-types";
+  import { dealStore } from "$lib/stores/deal.store";
 
-  export let deals: ActiveDeal[] = [];
   export let showCompanyName = true;
+  export let showHotIcon = true;
+  export let deals = $dealStore;
+
+  $: deals = $dealStore;
 
   let openDetail = -1;
 </script>
@@ -26,6 +29,7 @@
     <UserDealListItme
       {deal}
       {showCompanyName}
+      {showHotIcon}
       openDetail={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     />

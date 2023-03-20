@@ -1,7 +1,8 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
 import omit from "lodash/omit";
-import type { ActiveDeal, Deal } from "./public-types";
+import locationService from "./location-service";
+import type { ActiveDeal, Deal, HotDeal } from "./public-types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function getDeal(id: string): Promise<Deal | undefined> {
@@ -90,7 +91,14 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
     return [];
   }
 
-  return data;
+  const hotDeals = await getHotDeals();
+
+  const deals = data.map((deal: ActiveDeal) => {
+    deal.isHot = hotDeals.some((hotDeal) => hotDeal.deal_id === deal.id);
+    return deal;
+  });
+
+  return deals;
 }
 
 async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
@@ -119,17 +127,38 @@ function createExtentCondition(filter: DealFilter): string | undefined {
   console.warn("Can't create extent statement: neither location/radius nor extent is given");
 }
 
-async function toggleHotDeal(dealId: string) {
+async function toggleHotDeal(dealId: string): Promise<boolean> {
   const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId);
 
   if (data && data.length >= 1) {
     await supabase.from("hot_deals").delete().eq("deal_id", dealId);
-  } else {
-    const userId = await getUserId();
-    if (userId) {
-      await supabase.from("hot_deals").insert({ user_id: userId, deal_id: dealId });
-    }
+    return false;
   }
+
+  const userId = await getUserId();
+  if (userId) {
+    await supabase.from("hot_deals").insert({ user_id: userId, deal_id: dealId });
+  }
+  return true;
+}
+
+async function getTopDeals(limit: number): Promise<ActiveDeal[]> {
+  const filter = await locationService.createFilterByCurrentLocation();
+  filter.limit = limit;
+
+  return await getDealsByFilter(filter);
+}
+
+async function getHotDeals(): Promise<HotDeal[]> {
+  const userId = await getUserId();
+  const { error, data } = await supabase.from("hot_deals").select().eq("user_id", userId);
+
+  if (error) {
+    console.log("Can't get hot deals:", error);
+    return [];
+  }
+
+  return data;
 }
 
 export default {
@@ -137,6 +166,7 @@ export default {
   getDeal,
   getDealsByDealerId,
   getDealsByFilter,
+  getTopDeals,
   toggleHotDeal,
   upsertDeal
 };

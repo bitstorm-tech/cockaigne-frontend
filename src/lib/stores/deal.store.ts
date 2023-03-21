@@ -11,7 +11,7 @@ export const dealStore = {
   update: deals.update,
 
   load: async function () {
-    const filter = await locationService.createFilterByCurrentLocation();
+    const filter = await locationService.createFilterByCurrentLocationAndSelectedCategories();
     const deals = await dealService.getDealsByFilter(filter);
     this.set(deals);
   },

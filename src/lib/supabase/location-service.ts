@@ -43,7 +43,7 @@ async function saveLocation(location: Position) {
   await supabase.from("accounts").update({ location: point }).eq("id", userId);
 }
 
-async function createFilterByCurrentLocation(): Promise<DealFilter> {
+async function createFilterByCurrentLocationAndSelectedCategories(): Promise<DealFilter> {
   const userId = await getUserId();
   const { error, data } = await supabase.from("accounts").select("search_radius, location").eq("id", userId).single();
 
@@ -52,7 +52,15 @@ async function createFilterByCurrentLocation(): Promise<DealFilter> {
     return {};
   }
 
+  const result2 = await supabase.from("selected_categories").select("category_id").eq("user_id", userId);
+
+  if (result2.error) {
+    console.log("Can't create filter by selected categories:", result2.error);
+    return {};
+  }
+
   return {
+    categoryIds: result2.data.map((result) => result.category_id),
     radius: data.search_radius ?? 500,
     location: {
       longitude: data.location.coordinates[0],
@@ -66,5 +74,5 @@ export default {
   useCurrentLocation,
   getLocation,
   saveLocation,
-  createFilterByCurrentLocation
+  createFilterByCurrentLocationAndSelectedCategories
 };

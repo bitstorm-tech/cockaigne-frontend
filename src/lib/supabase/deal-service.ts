@@ -143,7 +143,7 @@ async function toggleHotDeal(dealId: string): Promise<boolean> {
 }
 
 async function getTopDeals(limit: number): Promise<ActiveDeal[]> {
-  const filter = await locationService.createFilterByCurrentLocation();
+  const filter = await locationService.createFilterByCurrentLocationAndSelectedCategories();
   filter.limit = limit;
 
   return await getDealsByFilter(filter);

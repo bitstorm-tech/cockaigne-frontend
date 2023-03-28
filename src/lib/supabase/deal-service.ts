@@ -2,7 +2,7 @@ import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
 import omit from "lodash/omit";
 import locationService from "./location-service";
-import type { ActiveDeal, Deal, HotDeal } from "./public-types";
+import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments, HotDeal } from "./public-types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function getDeal(id: string): Promise<Deal | undefined> {
@@ -61,16 +61,31 @@ async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boole
   return true;
 }
 
-export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]> {
-  let query = supabase.from("active_deals_view").select();
+function createExtentFromFilter(filter: DealFilter): GetActiveDealsWithinExtentFunctionArguments | null {
+  if (filter.extent) {
+    return { p_extent: filter.extent };
+  }
 
-  const extent = createExtentCondition(filter);
+  if (filter.radius && filter.location) {
+    return {
+      p_location: [filter.location.longitude, filter.location.latitude],
+      p_radius: filter.radius
+    };
+  }
+
+  return null;
+}
+
+export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]> {
+  const extent = createExtentFromFilter(filter);
 
   if (!extent) {
+    console.log("Can't get deals by filter -> no valid extent");
     return [];
   }
 
-  // query = query.filter("location", "st_within", `(${extent})`);
+  let query = supabase.rpc("get_active_deals_within_extent", extent);
+  // let query = supabase.from("active_deals_view").select();
 
   if (filter.categoryIds && filter.categoryIds.length > 0) {
     query = query.in("category_id", filter.categoryIds);
@@ -87,7 +102,7 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
   const { data, error } = await query;
 
   if (error) {
-    console.error("Can't get filtered deals:", error);
+    console.error("Can't get deals by filter:", error);
     return [];
   }
 
@@ -110,21 +125,6 @@ async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
   }
 
   return data;
-}
-
-function createExtentCondition(filter: DealFilter): string | undefined {
-  if (filter.location && filter.radius) {
-    const point = `ST_POINT(${filter.location.longitude}, ${filter.location.latitude})::geography`;
-    return `ST_BUFFER(${point}, ${filter.radius})::geometry`;
-  }
-
-  if (filter.extent) {
-    const pointMin = `ST_POINT(${filter.extent[0]}, ${filter.extent[1]})::geography::geometry`;
-    const pointMax = `ST_POINT(${filter.extent[2]}, ${filter.extent[3]})::geography::geometry`;
-    return `ST_ENVELOPE(ST_MAKELINE(${pointMin}, ${pointMax}))::geometry`;
-  }
-
-  console.warn("Can't create extent statement: neither location/radius nor extent is given");
 }
 
 async function toggleHotDeal(dealId: string): Promise<boolean> {

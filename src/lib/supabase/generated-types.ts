@@ -291,6 +291,25 @@ export interface Database {
       }
     }
     Functions: {
+      get_active_deals_within_extent: {
+        Args: {
+          p_location?: number[]
+          p_radius?: number
+          p_extent?: number[]
+        }
+        Returns: {
+          category_id: number | null
+          dealer_id: string | null
+          description: string | null
+          duration: number | null
+          id: string | null
+          likecount: number | null
+          location: string | null
+          start: string | null
+          title: string | null
+          username: string | null
+        }[]
+      }
       get_favorite_dealer_deals: {
         Args: Record<PropertyKey, never>
         Returns: Record<string, unknown>[]

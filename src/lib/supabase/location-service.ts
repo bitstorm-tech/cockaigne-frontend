@@ -1,5 +1,5 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
-import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
+import { munichPosition, type Position, toPostGisPoint } from "$lib/geo/geo.types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function useCurrentLocation(): Promise<boolean> {
@@ -61,7 +61,7 @@ async function createFilterByCurrentLocationAndSelectedCategories(): Promise<Dea
 
   return {
     categoryIds: result2.data.map((result) => result.category_id),
-    radius: data.search_radius ?? 500,
+    radius: data.search_radius / 2 ?? 250,
     location: {
       longitude: data.location.coordinates[0],
       latitude: data.location.coordinates[1]

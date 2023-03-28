@@ -132,7 +132,7 @@ export class MapService {
   setDeals(deals: ActiveDeal[]) {
     this.dealLayerSource.clear(true);
     deals.map((deal) => {
-      const coordinate = this.parseWKT(deal.location as string);
+      const coordinate = deal.location?.coordinates;
       if (coordinate) {
         const icon = this.createIcon(deal, coordinate);
         this.dealLayerSource.addFeature(icon);
@@ -160,10 +160,6 @@ export class MapService {
     return radius / 149500;
   }
 
-  private parseWKT(wkt: string): number[] | undefined {
-    return wkt.match(/[+-]?\d+(\.\d+)?/g)?.map((value) => parseFloat(value));
-  }
-
   private createIcon(deal: ActiveDeal, coordinate: Coordinate): Feature {
     const feature = new Feature({
       geometry: new Point(coordinate)
@@ -181,8 +177,8 @@ export class MapService {
     return feature;
   }
 
-  private async saveCenter(coordinate: Coordinate) {
+  private saveCenter(coordinate: Coordinate) {
     const position = fromOpenLayersCoordinate(coordinate);
-    locationService.saveLocation(position);
+    locationService.saveLocation(position).then();
   }
 }

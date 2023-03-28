@@ -1,3 +1,4 @@
+import type { LngLatLike } from "mapbox-gl";
 import type { Coordinate } from "ol/coordinate";
 
 export interface Position {
@@ -23,4 +24,8 @@ export function fromOpenLayersCoordinate(coordinate: Coordinate): Position {
 
 export function toPostGisPoint(position: Position): string {
   return `POINT(${position.longitude} ${position.latitude})`;
+}
+
+export function toMapboxCoordinates(positoin: Position): LngLatLike {
+  return [positoin.longitude, positoin.latitude];
 }

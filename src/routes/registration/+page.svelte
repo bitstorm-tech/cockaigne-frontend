@@ -6,7 +6,7 @@
   import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import { supabase, translateError } from "$lib/supabase/supabase-client";
+  import accountService from "$lib/supabase/account-service";
 
   let isDealer = false;
   let email: string;
@@ -52,29 +52,24 @@
   async function register() {
     loading = true;
 
-    const { error } = await supabase.auth.signUp({
+    const error = await accountService.register({
       email,
       password,
-      options: {
-        data: {
-          isDealer,
-          defaultCategory,
-          street,
-          houseNumber,
-          city,
-          zip,
-          phone,
-          username,
-          email,
-          age,
-          gender,
-          taxId
-        }
-      }
+      isDealer,
+      defaultCategory,
+      street,
+      houseNumber,
+      city,
+      zip,
+      phone,
+      username,
+      age,
+      gender,
+      taxId
     });
 
     if (error) {
-      errorMessage = translateError(error);
+      errorMessage = error;
       loading = false;
       return;
     }

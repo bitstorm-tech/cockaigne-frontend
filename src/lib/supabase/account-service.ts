@@ -1,6 +1,23 @@
 import { goto } from "$app/navigation";
+import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
-import { getUserId, supabase } from "./supabase-client";
+import { getUserId, supabase, translateError } from "./supabase-client";
+
+export type RegistrationData = {
+  password: string;
+  isDealer: boolean;
+  defaultCategory: number;
+  street: string;
+  houseNumber: string;
+  city: string;
+  zip: string;
+  phone: string;
+  username: string;
+  email: string;
+  age: string;
+  gender: string;
+  taxId: string;
+};
 
 async function getDefaultCategory(): Promise<number> {
   const { data, error } = await supabase.from("accounts").select("default_category").single();
@@ -46,8 +63,72 @@ async function updateAccount(update: AccountUpdate): Promise<string | undefined>
   }
 }
 
+async function getLocation(street: string, houseNumber: string, city: string, zip: string): Promise<Position | null> {
+  const query = `format=json&street=${houseNumber} ${street}&city=${city}&postalcode=${zip}`;
+  const response = await fetch(`https://nominatim.openstreetmap.org/search?${query}`);
+  const geoInformation = await response.json();
+
+  if (geoInformation.length === 0) {
+    console.error("Can't find location for address:", street, houseNumber, zip, city);
+    return null;
+  }
+
+  return {
+    latitude: geoInformation[0].lat,
+    longitude: geoInformation[0].lon
+  };
+}
+
+async function register(registrationData: RegistrationData): Promise<string | undefined> {
+  let position: Position = munichPosition;
+
+  if (registrationData.isDealer) {
+    const _position = await getLocation(
+      registrationData.street,
+      registrationData.houseNumber,
+      registrationData.city,
+      registrationData.zip
+    );
+
+    if (!_position) {
+      return "Adresse ist ungültig";
+    }
+
+    position = _position;
+  }
+
+  let payload = {
+    isDealer: registrationData.isDealer,
+    defaultCategory: registrationData.defaultCategory,
+    street: registrationData.street,
+    houseNumber: registrationData.houseNumber,
+    city: registrationData.city,
+    zip: registrationData.zip,
+    phone: registrationData.phone,
+    username: registrationData.username,
+    email: registrationData.email,
+    age: registrationData.age,
+    gender: registrationData.gender,
+    taxId: registrationData.taxId,
+    location: toPostGisPoint(position)
+  };
+
+  const { error } = await supabase.auth.signUp({
+    email: registrationData.email,
+    password: registrationData.password,
+    options: {
+      data: payload
+    }
+  });
+
+  if (error) {
+    return translateError(error);
+  }
+}
+
 export default {
   getDefaultCategory,
   getAccount,
-  updateAccount
+  updateAccount,
+  register
 };

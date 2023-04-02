@@ -3,14 +3,24 @@
   import Link from "$lib/components/ui/Link.svelte";
   import UserDealListItme from "$lib/components/user/UserDealListItme.svelte";
   import { dealStore } from "$lib/stores/deal.store";
+  import { hotDealStore } from "$lib/stores/hot-deal.store";
+  import { likeStore } from "$lib/stores/like.store";
+  import { onMount } from "svelte";
 
   export let showCompanyName = true;
   export let showHotIcon = true;
   export let deals = $dealStore;
 
-  $: deals = $dealStore;
+  $: {
+    $dealStore && $hotDealStore;
+    deals = hotDealStore.updateHotFlag($dealStore);
+  }
 
   let openDetail = -1;
+
+  onMount(async () => {
+    await Promise.all([hotDealStore.load(), dealStore.load(), likeStore.load()]);
+  });
 </script>
 
 <div class="flex flex-col gap-1">

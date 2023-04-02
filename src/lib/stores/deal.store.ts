@@ -14,16 +14,5 @@ export const dealStore = {
     const filter = await locationService.createFilterByCurrentLocationAndSelectedCategories();
     const deals = await dealService.getDealsByFilter(filter);
     this.set(deals);
-  },
-
-  toggleHot: async function (dealId: string) {
-    const isHot = await dealService.toggleHotDeal(dealId);
-    this.update((deals) => {
-      const deal = deals.find((deal) => deal.id === dealId);
-      if (deal) {
-        deal.isHot = isHot;
-      }
-      return deals;
-    });
   }
 };

@@ -2,7 +2,7 @@ import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
 import omit from "lodash/omit";
 import locationService from "./location-service";
-import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments, HotDeal } from "./public-types";
+import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function getDeal(id: string): Promise<Deal | undefined> {
@@ -106,14 +106,7 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
     return [];
   }
 
-  const hotDeals = await getHotDeals();
-
-  const deals = data.map((deal: ActiveDeal) => {
-    deal.isHot = hotDeals.some((hotDeal) => hotDeal.deal_id === deal.id);
-    return deal;
-  });
-
-  return deals;
+  return data;
 }
 
 async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
@@ -127,19 +120,28 @@ async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
   return data;
 }
 
-async function toggleHotDeal(dealId: string): Promise<boolean> {
+async function toggleHotDeal(dealId: string): Promise<ActiveDeal | null> {
   const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId);
 
   if (data && data.length >= 1) {
     await supabase.from("hot_deals").delete().eq("deal_id", dealId);
-    return false;
+    return null;
   }
 
   const userId = await getUserId();
-  if (userId) {
-    await supabase.from("hot_deals").insert({ user_id: userId, deal_id: dealId });
+  if (!userId) {
+    console.log("Can't toggle hot deal, unknown user");
+    return null;
   }
-  return true;
+  await supabase.from("hot_deals").insert({ user_id: userId, deal_id: dealId });
+  const result = await supabase.from("active_deals_view").select().eq("id", dealId).single();
+
+  if (result.error) {
+    console.log("Can't get hot deal:", result.error);
+    return null;
+  }
+
+  return result.data;
 }
 
 async function getTopDeals(limit: number): Promise<ActiveDeal[]> {
@@ -149,20 +151,34 @@ async function getTopDeals(limit: number): Promise<ActiveDeal[]> {
   return await getDealsByFilter(filter);
 }
 
-async function getHotDeals(): Promise<HotDeal[]> {
+async function getHotDeals(): Promise<ActiveDeal[]> {
   const userId = await getUserId();
-  const { error, data } = await supabase.from("hot_deals").select().eq("user_id", userId);
+  const hotDealsResult = await supabase.from("hot_deals").select().eq("user_id", userId);
 
-  if (error) {
-    console.log("Can't get hot deals:", error);
+  if (hotDealsResult.error) {
+    console.log("Can't get hot deals:", hotDealsResult.error);
     return [];
   }
 
-  return data;
+  const activeDealsResult = await supabase
+    .from("active_deals_view")
+    .select()
+    .in(
+      "id",
+      hotDealsResult.data.map((hot) => hot.deal_id)
+    );
+
+  if (activeDealsResult.error) {
+    console.log("Can't get hot deals:", activeDealsResult.error);
+    return [];
+  }
+
+  return activeDealsResult.data;
 }
 
 export default {
   getActiveDealsByDealer,
+  getHotDeals,
   getDeal,
   getDealsByDealerId,
   getDealsByFilter,

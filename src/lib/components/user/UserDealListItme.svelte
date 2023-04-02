@@ -1,7 +1,7 @@
 <script lang="ts">
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
-  import { dealStore } from "$lib/stores/deal.store";
+  import { hotDealStore } from "$lib/stores/hot-deal.store";
   import type { ActiveDeal } from "$lib/supabase/public-types";
 
   export let openDetail = false;
@@ -14,7 +14,7 @@
   <button
     slot="right-action"
     class="cursor-pointer"
-    on:click={() => dealStore.toggleHot(deal.id)}
+    on:click={() => hotDealStore.toggleHot(deal.id)}
     hidden={!showHotIcon}
   >
     <FireIcon outline={!deal.isHot} />

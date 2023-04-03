@@ -6,15 +6,20 @@
   import type { Category } from "$lib/database/category/category.model";
   import type { MapService } from "$lib/map.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
-  import { searchRadiusStore } from "$lib/stores/search-radius.store";
+  import locationService from "$lib/supabase/location-service";
   import { debounce, union, without } from "lodash";
+  import { onMount } from "svelte";
   import { get } from "svelte/store";
 
   export let categories: Category[] = [];
   export let open = false;
   export let mapService: MapService;
-  let searchRadius = $searchRadiusStore;
+  let searchRadius = 0;
   $: sortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
+
+  onMount(async () => {
+    searchRadius = await locationService.getSearchRadius();
+  });
 
   const buttons = [
     {
@@ -28,7 +33,7 @@
   selectedCategoriesStore.load();
 
   const saveRadius = debounce(() => {
-    searchRadiusStore.save(searchRadius);
+    locationService.saveSearchRadius(searchRadius);
   }, 2000);
 
   const saveSelectedCategories = debounce(() => {

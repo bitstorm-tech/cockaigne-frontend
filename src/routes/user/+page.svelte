@@ -18,7 +18,7 @@
   const favoriteDealers = data.favoriteDealers ?? [];
   const account = data.account;
   let showTabIndex = 0;
-  let address = "";
+  let address: string[] = [""];
 
   onMount(async () => {
     hotDealStore.load();
@@ -38,7 +38,7 @@
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$dealStore.filter((deal) => deal.isHot).length}
 />
-<div class="tabs mb-2 mt-6 flex max-h-8">
+<div class="tabs mb-1 mt-6 flex max-h-8">
   <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
     <StarIcon outline={showTabIndex !== 0} />
   </button>

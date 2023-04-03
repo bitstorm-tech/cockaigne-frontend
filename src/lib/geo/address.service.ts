@@ -54,6 +54,8 @@ export function addressToString(address: Address): string {
     : "Keine Adresse";
 }
 
-export function addressToShortString(address: Address | undefined): string {
-  return address ? `${address.street} ${address.houseNumber}, ${address.postcode} ${address.city}` : "Keine Adresse";
+export function addressToShortString(address: Address | undefined): string[] {
+  return address
+    ? [`${address.street} ${address.houseNumber}`, `${address.postcode} ${address.city}`]
+    : ["Keine Adresse"];
 }

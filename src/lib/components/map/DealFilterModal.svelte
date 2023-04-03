@@ -15,7 +15,6 @@
   export let open = false;
   export let mapService: MapService;
   let searchRadius = 0;
-  $: sortedCategories = categories.sort((a, b) => a.name.localeCompare(b.name));
 
   onMount(async () => {
     searchRadius = await locationService.getSearchRadius();

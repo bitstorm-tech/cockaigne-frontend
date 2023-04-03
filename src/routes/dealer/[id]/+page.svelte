@@ -52,7 +52,7 @@
     </Button>
   {/if}
 </ProfileHeader>
-<div class="mt-4 mb-2 grid grid-cols-3">
+<div class="mb-1 mt-4 grid grid-cols-3">
   <button class="tab-bordered tab" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
     <DealIcon />
   </button>

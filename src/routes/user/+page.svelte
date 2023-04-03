@@ -8,6 +8,8 @@
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { dealStore } from "$lib/stores/deal.store";
+  import { hotDealStore } from "$lib/stores/hot-deal.store";
+  import { likeStore } from "$lib/stores/like.store";
   import locationService from "$lib/supabase/location-service";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
@@ -19,6 +21,9 @@
   let address = "";
 
   onMount(async () => {
+    hotDealStore.load();
+    dealStore.load();
+    likeStore.load();
     const location = await locationService.getLocation();
     const longAddress = await getAddress(location);
     address = addressToShortString(longAddress);

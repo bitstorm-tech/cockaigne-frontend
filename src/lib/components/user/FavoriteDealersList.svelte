@@ -41,6 +41,7 @@
       deals={deals.filter((deal) => deal.dealer_id === dealer.dealer_id)}
       showCompanyName={false}
       showHotIcon={false}
+      liveUpdate={false}
     />
   {/each}
 </div>

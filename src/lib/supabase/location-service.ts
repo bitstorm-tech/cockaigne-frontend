@@ -1,5 +1,5 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
-import { munichPosition, type Position, toPostGisPoint } from "$lib/geo/geo.types";
+import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function useCurrentLocation(): Promise<boolean> {
@@ -69,10 +69,35 @@ async function createFilterByCurrentLocationAndSelectedCategories(): Promise<Dea
   };
 }
 
+async function getSearchRadius(): Promise<number> {
+  const userId = await getUserId();
+
+  if (!userId) {
+    console.log("Can't get search radius -> unknown user");
+    return 500;
+  }
+
+  const { error, data } = await supabase.from("accounts").select("search_radius").eq("id", userId).single();
+
+  if (!data) {
+    console.log("Can't get search radius:", error);
+    return 500;
+  }
+
+  return data.search_radius || 500;
+}
+
+async function saveSearchRadius(searchRadius: number) {
+  const userId = await getUserId();
+  await supabase.from("accounts").update({ search_radius: searchRadius }).eq("id", userId);
+}
+
 export default {
   saveUseCurrentLocation,
   useCurrentLocation,
   getLocation,
   saveLocation,
-  createFilterByCurrentLocationAndSelectedCategories
+  createFilterByCurrentLocationAndSelectedCategories,
+  getSearchRadius,
+  saveSearchRadius
 };

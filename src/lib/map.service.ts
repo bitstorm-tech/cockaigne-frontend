@@ -1,13 +1,13 @@
 import { selectedCategoriesStore } from "$lib/stores/category.store";
 import { debounce } from "lodash";
 import { Feature, View } from "ol";
+import Map from "ol/Map";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
 import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
-import Map from "ol/Map";
 import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
@@ -18,7 +18,6 @@ import type { DealFilter } from "./database/deal/deal.model";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import { getIconPathById } from "./icon-mapping";
-import { searchRadiusStore } from "./stores/search-radius.store";
 import dealService from "./supabase/deal-service";
 import locationService from "./supabase/location-service";
 import type { ActiveDeal } from "./supabase/public-types";
@@ -53,7 +52,7 @@ export class MapService {
 
     mapService.centerPoint = new Circle(center, mapService.transformRadius(2));
 
-    const searchRadius = get(searchRadiusStore);
+    const searchRadius = await locationService.getSearchRadius();
     mapService.circle = new Circle(center, mapService.transformRadius(searchRadius));
 
     mapService.map = new Map({
@@ -126,7 +125,7 @@ export class MapService {
 
   setRadius(radius: number) {
     this.circle.setRadius(this.transformRadius(radius));
-    searchRadiusStore.save(radius);
+    locationService.saveSearchRadius(radius);
   }
 
   setDeals(deals: ActiveDeal[]) {

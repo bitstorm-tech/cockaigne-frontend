@@ -3,11 +3,9 @@
   import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import type { Account } from "$lib/database/account/account.model";
-  import { fileToBase64 } from "$lib/file.utils";
-  import { POST } from "$lib/http.utils";
   import accountService from "$lib/supabase/account-service";
-  import type { AccountUpdate } from "$lib/supabase/public-types";
+  import type { Account, AccountUpdate } from "$lib/supabase/public-types";
+  import storageService from "$lib/supabase/storage-service";
   import DealerSettings from "./DealerSettings.svelte";
   import UserSettings from "./UserSettings.svelte";
 
@@ -55,17 +53,17 @@
       return;
     }
 
-    const base64 = (await fileToBase64(newProfileImage)) as string;
-    const response = await fetch("/api/images/profile", POST({ base64 }));
+    // const base64 = (await fileToBase64(newProfileImage)) as string;
+    // const response = await fetch("/api/images/profile", POST({ base64 }));
+    const profileImageUrl = await storageService.saveProfileImage(newProfileImage);
 
-    if (response.ok) {
-      account.profile_image = await response.text();
+    if (profileImageUrl) {
+      account.profileImageUrl = profileImageUrl;
       newProfileImage = undefined;
       return;
     }
 
-    const error = await response.json();
-    errorMessage = error.message;
+    errorMessage = "Kann Profilbild gerade nicht speichern";
   }
 
   function confirmError() {

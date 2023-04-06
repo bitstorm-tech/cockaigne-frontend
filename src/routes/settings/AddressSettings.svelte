@@ -1,9 +1,9 @@
 <script lang="ts">
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import type { Account } from "$lib/database/account/account.model";
   import { getAddress, getLocation } from "$lib/geo/address.service";
   import type { Position } from "$lib/geo/geo.types";
+  import type { Account } from "$lib/supabase/public-types";
   import type { LeafletMouseEvent } from "leaflet";
   import L, { Map, Marker } from "leaflet";
   import { onMount } from "svelte";
@@ -72,4 +72,4 @@
   <Input label="PLZ" bind:value={account.zip} />
 </div>
 <Button on:click={showOnMap} {loading}>Auf Karte anzeigen</Button>
-<div id="map" class="flex justify-center items-center h-72" />
+<div id="map" class="flex h-72 items-center justify-center" />

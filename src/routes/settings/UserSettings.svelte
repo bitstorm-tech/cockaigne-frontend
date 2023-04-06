@@ -3,7 +3,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
-  import type { Account } from "$lib/database/account/account.model";
+  import type { Account } from "$lib/supabase/public-types";
 
   export let account: Account;
   export let profileImageFile: File;
@@ -26,10 +26,10 @@
 </script>
 
 <div class="tabs">
-  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+  <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
     Allgemein
   </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
+  <button on:click={() => (showTabIndex = 1)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 1}>
     Profilbild
   </button>
 </div>
@@ -40,7 +40,7 @@
   <Button on:click={changePassword} {loading}>Passwort ändern</Button>
   <Button on:click={notify}>Notification Test</Button>
 {:else}
-  <MediaPicker imagePreview={account.profile_image} bind:file={profileImageFile} buttonText="Profilbild ändern" />
+  <MediaPicker imagePreview={account.profileImageUrl} bind:file={profileImageFile} buttonText="Profilbild ändern" />
 {/if}
 <Alert bind:show={showAlert} warning={false}>
   Wir haben dir eine E-Mail mit einem Link zum ändern deines Passworts gesendet.

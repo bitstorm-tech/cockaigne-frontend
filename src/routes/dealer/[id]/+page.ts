@@ -14,7 +14,7 @@ export async function load({ params }: LoadEvent) {
 
   const [deals, pictures, isFavoriteDealer, account, profileImage] = await Promise.all([
     dealService.getDealsByDealerId(id),
-    storageService.getAllDealerImageUrls(id),
+    storageService.getDealerImages(id),
     dealerService.isFavoriteDealer(id),
     dealerService.getDealer(id),
     storageService.getProfileImage(id, true)

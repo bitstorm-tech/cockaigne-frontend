@@ -26,7 +26,8 @@
     "lodash": "4.17.21",
     "mapbox-gl": "2.13.0",
     "ol": "7.3.0",
-    "pg": "8.10.0"
+    "pg": "8.10.0",
+    "uuid": "9.0.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "2.4.1",

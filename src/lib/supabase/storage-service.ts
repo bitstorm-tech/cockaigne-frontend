@@ -1,10 +1,16 @@
+import { v4 as uuid } from "uuid";
 import { getUserId, supabase } from "./supabase-client";
 
 const BUCKET_DEALER_IMAGES = "dealer-images";
 const BUCKET_PROFILE_IMAGES = "profile-images";
+const BUCKET_DEAL_IMAGES = "deal-images";
 
 const DEFAULT_DEALER_PROFILE_IMAGE_URL = "/images/anonym-profile-dealer.png";
 const DEFAULT_USER_PROFILE_IMAGE_URL = "/images/anonym-profile.png";
+
+function generateRandomFilename(file: File) {
+  return uuid() + "." + file.name.split(".").pop();
+}
 
 async function saveImage(file: File, bucket: string, filename: string, folder?: string): Promise<string | undefined> {
   const path = folder ? folder + "/" + filename : filename;
@@ -33,14 +39,14 @@ async function saveProfileImage(image: File): Promise<string | undefined> {
     await supabase.storage.from(BUCKET_PROFILE_IMAGES).remove(data.map((fileObject) => `${userId}/${fileObject.name}`));
   }
 
-  const filename = Date.now() + "." + image.name.split(".").pop();
+  const filename = generateRandomFilename(image);
 
   return await saveImage(image, BUCKET_PROFILE_IMAGES, filename, userId);
 }
 
 async function saveDealerImage(image: File): Promise<string | undefined> {
   const id = await getUserId();
-  const filename = new Date().getTime() + "." + image.name.split(".").pop();
+  const filename = generateRandomFilename(image);
 
   return await saveImage(image, BUCKET_DEALER_IMAGES, filename, id);
 }
@@ -50,7 +56,7 @@ async function deleteDealerImage(filename: string) {
   await supabase.storage.from(BUCKET_DEALER_IMAGES).remove([id + "/" + filename]);
 }
 
-async function getAllDealerImageUrls(dealerId: string): Promise<string[]> {
+async function getDealerImages(dealerId: string): Promise<string[]> {
   const { data } = await supabase.storage.from(BUCKET_DEALER_IMAGES).list(dealerId);
 
   if (data) {
@@ -81,10 +87,41 @@ async function getProfileImage(id?: string, isDealer = false): Promise<string> {
   return isDealer ? DEFAULT_DEALER_PROFILE_IMAGE_URL : DEFAULT_USER_PROFILE_IMAGE_URL;
 }
 
+async function getDealImages(dealId: string): Promise<string[]> {
+  return [];
+}
+
+async function saveDealImages(images: File[], dealId: string) {
+  const dealerId = await getUserId();
+  const folder = `${dealerId}/${dealId}`;
+
+  for (const image of images) {
+    const filename = generateRandomFilename(image);
+    await saveImage(image, BUCKET_DEAL_IMAGES, filename, folder);
+  }
+}
+
+async function deleteDealImages(dealId: string) {
+  const dealerId = await getUserId();
+  const path = `${dealerId}/${dealId}`;
+
+  const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);
+
+  if (error) {
+    console.log("Can't delete deal images:", error);
+  }
+
+  const filesToDelete = data?.map((fileObject) => `${path}/${fileObject.name}`) || [];
+  await supabase.storage.from(BUCKET_DEAL_IMAGES).remove([...filesToDelete, path]);
+}
+
 export default {
-  saveDealerImage,
   deleteDealerImage,
-  getAllDealerImageUrls,
+  deleteDealImages,
+  getDealerImages,
+  getDealImages,
   getProfileImage,
+  saveDealerImage,
+  saveDealImages,
   saveProfileImage
 };

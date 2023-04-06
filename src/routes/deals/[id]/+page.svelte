@@ -9,16 +9,11 @@
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import {
-    dateToUnixTimestamp,
-    extractTimeFromDateTimeString,
-    getDateAsIsoString,
-    getDateTimeAsIsoString
-  } from "$lib/date-time.utils";
+  import { getDateAsIsoString, getDateTimeAsIsoString } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
-  import { fileToBase64 } from "$lib/file.utils";
   import dealService from "$lib/supabase/deal-service";
   import type { Deal } from "$lib/supabase/public-types";
+  import storageService from "$lib/supabase/storage-service";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -37,7 +32,6 @@
   let createTemplate = false;
   let startDealImmediately = false;
   let individuallyTime = +deal.duration > 72;
-  let individualStartDateTime = deal.id ? deal.start : getDateTimeAsIsoString();
   let individualEndDate = deal.id
     ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
     : getDateAsIsoString(new Date(), 25 * 60);
@@ -50,7 +44,11 @@
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
   $: disableSave = deal.title.length === 0 || deal.description.length === 0;
-  $: calculateCosts() && deal.duration && individualStartDateTime && individualEndDate && individuallyTime;
+  $: {
+    deal.start && individualEndDate && individuallyTime;
+    const durationInDays = getDurationInHours() / 24;
+    costs = (4.99 * durationInDays).toFixed(2).replace(".", ",");
+  }
 
   async function save() {
     loading = true;
@@ -61,60 +59,65 @@
     }
 
     if (individuallyTime) {
-      deal.start = individualStartDateTime;
-      deal.duration = getDuration();
+      deal.duration = getDurationInHours();
     } else {
       deal.start = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
     }
 
-    const imagesAsBase64: string[] = [];
-    for (const image of images) {
-      const base64 = (await fileToBase64(image)) as string;
-      imagesAsBase64.push(base64);
-    }
+    // const imagesAsBase64: string[] = [];
+    // for (const image of images) {
+    //   const base64 = (await fileToBase64(image)) as string;
+    //   imagesAsBase64.push(base64);
+    // }
 
-    const data = {
-      deal,
-      imagesAsBase64
-    };
+    // const data = {
+    //   deal,
+    //   imagesAsBase64
+    // };
 
-    const success = await dealService.upsertDeal(deal, createTemplate);
+    const dealId = await dealService.upsertDeal(deal, createTemplate);
 
-    if (!success) {
+    if (!dealId) {
       openErrorModal = true;
       loading = false;
       return;
     }
 
+    await storageService.saveDealImages(images, dealId);
+
     goto("/");
   }
 
-  function getDuration(): number {
+  function getDurationInHours(): number {
     if (individuallyTime) {
-      const startTimestamp = dateToUnixTimestamp(individualStartDateTime);
-      const endTime = extractTimeFromDateTimeString(individualStartDateTime as string);
-      const endTimestamp = dateToUnixTimestamp(individualEndDate, endTime);
-      return (endTimestamp - startTimestamp) / (60 * 60);
+      const startDate = deal.start.split("T")[0];
+      const startTimestamp = Date.parse(startDate);
+      const endTimestamp = Date.parse(individualEndDate);
+      return (endTimestamp - startTimestamp) / (60 * 60 * 1000);
     }
 
     return +deal.duration;
   }
 
-  function calculateCosts() {
-    costs = (4.99 * (getDuration() / 24)).toFixed(2).replace(".", ",");
-  }
-
   async function del() {
-    const response = await fetch(`/api/deals/${deal.id}`, { method: "delete" });
+    // const response = await fetch(`/api/deals/${deal.id}`, { method: "delete" });
 
-    if (response.ok) {
-      goto("/").then();
-    } else if (response.status === 403) {
-      goto("/login").then();
-    } else {
-      loading = false;
-      openErrorModal = true;
+    // if (response.ok) {
+    //   goto("/").then();
+    // } else if (response.status === 403) {
+    //   goto("/login").then();
+    // } else {
+    //   loading = false;
+    //   openErrorModal = true;
+    // }
+    const error = await dealService.deleteDeal(deal.id);
+
+    if (!error) {
+      storageService.deleteDealImages(deal.id);
+      await goto("/");
     }
+
+    openErrorModal = true;
   }
 
   function pictureSelected(event) {
@@ -199,5 +202,5 @@
     </div>
   </div>
 </div>
-<Alert bind:show={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern!</Alert>
+<Alert bind:show={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern oder löschen!</Alert>
 <ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />

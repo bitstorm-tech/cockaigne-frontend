@@ -34,31 +34,41 @@ async function getActiveDealsByDealer(dealerIds: string | string[]): Promise<Act
   return data;
 }
 
-async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<boolean> {
+async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<string | undefined> {
   dateTimeUtils.addTimezoneOffsetToDeal(deal);
   const _deal = deal.id === "" ? omit(deal, "id") : deal;
   delete _deal.imageUrls;
 
-  let result = await supabase.from("deals").upsert(_deal);
+  const resultUpsertDeal = await supabase.from("deals").upsert(_deal).select("id").single();
 
-  if (result.error) {
-    console.log("Can't upsert deal:", result.error);
-    return false;
+  if (resultUpsertDeal.error) {
+    console.log("Can't upsert deal:", resultUpsertDeal.error);
+    return;
   }
 
   if (!alsoCreateTemplate) {
-    return true;
+    return resultUpsertDeal.data.id;
   }
 
   deal.template = true;
-  result = await supabase.from("deals").insert(deal);
+  const resultUpsertTemplate = await supabase.from("deals").insert(deal).select("id").single();
 
-  if (result.error) {
-    console.log("Can't insert deal template:", result.error);
-    return false;
+  if (resultUpsertTemplate.error) {
+    console.log("Can't insert deal template:", resultUpsertTemplate.error);
+    return resultUpsertDeal.data.id;
   }
 
-  return true;
+  return resultUpsertTemplate.data.id;
+}
+
+async function deleteDeal(dealId: string): Promise<string | undefined> {
+  const dealerId = await getUserId();
+  const { error } = await supabase.from("deals").delete().eq("id", dealId).eq("dealer_id", dealerId);
+
+  if (error) {
+    console.log("Can't delete deal:", error);
+    return error.message;
+  }
 }
 
 function createExtentFromFilter(filter: DealFilter): GetActiveDealsWithinExtentFunctionArguments | null {
@@ -177,11 +187,12 @@ async function getHotDeals(): Promise<ActiveDeal[]> {
 }
 
 export default {
+  deleteDeal,
   getActiveDealsByDealer,
-  getHotDeals,
   getDeal,
   getDealsByDealerId,
   getDealsByFilter,
+  getHotDeals,
   getTopDeals,
   toggleHotDeal,
   upsertDeal

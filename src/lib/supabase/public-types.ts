@@ -2,7 +2,10 @@ import type { Database } from "./generated-types";
 
 export type Account = Database["public"]["Tables"]["accounts"]["Row"] & { profileImageUrl?: string };
 export type AccountUpdate = Database["public"]["Tables"]["accounts"]["Update"];
-export type ActiveDeal = Database["public"]["Views"]["active_deals_view"]["Row"] & { isHot?: boolean };
+export type ActiveDeal = Database["public"]["Views"]["active_deals_view"]["Row"] & {
+  isHot?: boolean;
+  imageUrls?: string[];
+};
 export type Category = Database["public"]["Tables"]["categories"]["Row"];
 export type Deal = Database["public"]["Tables"]["deals"]["Row"] & { imageUrls?: string[] };
 export type Dealer = Database["public"]["Views"]["dealer_view"]["Row"];

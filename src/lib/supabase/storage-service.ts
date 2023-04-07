@@ -87,8 +87,17 @@ async function getProfileImage(id?: string, isDealer = false): Promise<string> {
   return isDealer ? DEFAULT_DEALER_PROFILE_IMAGE_URL : DEFAULT_USER_PROFILE_IMAGE_URL;
 }
 
-async function getDealImages(dealId: string): Promise<string[]> {
-  return [];
+async function getDealImages(dealId: string, dealerId: string): Promise<string[]> {
+  const path = `${dealerId}/${dealId}`;
+  const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);
+
+  if (error) {
+    console.log("Can't get deal images:", error);
+    return [];
+  }
+
+  const filenames = data?.map((fileObject) => `${path}/${fileObject.name}`);
+  return filenames.map((filename) => supabase.storage.from(BUCKET_DEAL_IMAGES).getPublicUrl(filename).data.publicUrl);
 }
 
 async function saveDealImages(images: File[], dealId: string) {

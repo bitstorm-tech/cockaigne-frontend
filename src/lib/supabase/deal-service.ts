@@ -1,5 +1,6 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
+import storageService from "$lib/supabase/storage-service";
 import omit from "lodash/omit";
 import locationService from "./location-service";
 import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
@@ -31,7 +32,7 @@ async function getActiveDealsByDealer(dealerIds: string | string[]): Promise<Act
     return [];
   }
 
-  return data;
+  return enrichDealWithImageUrls(data);
 }
 
 async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<string | undefined> {
@@ -116,18 +117,21 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
     return [];
   }
 
-  return data;
+  return enrichDealWithImageUrls(data);
 }
 
-async function getDealsByDealerId(dealerId: string): Promise<ActiveDeal[]> {
-  const { data, error } = await supabase.from("active_deals_view").select().eq("dealer_id", dealerId);
+async function getDealsByDealerId(dealerId: string, activeOnly = true): Promise<ActiveDeal[] | Deal[]> {
+  const query = activeOnly
+    ? supabase.from("active_deals_view").select().eq("dealer_id", dealerId)
+    : supabase.from("deals").select().eq("dealer_id", dealerId).eq("template", false);
+  const { data, error } = await query;
 
   if (error) {
     console.error("Can't get deals by dealer id:", error);
     return [];
   }
 
-  return data;
+  return enrichDealWithImageUrls(data);
 }
 
 async function toggleHotDeal(dealId: string): Promise<ActiveDeal | null> {
@@ -183,7 +187,19 @@ async function getHotDeals(): Promise<ActiveDeal[]> {
     return [];
   }
 
-  return activeDealsResult.data;
+  return enrichDealWithImageUrls(activeDealsResult.data);
+}
+
+async function enrichDealWithImageUrls(deals: ActiveDeal[] | Deal[]): Promise<ActiveDeal[] | Deal[]> {
+  for (const deal of deals) {
+    if (!deal.id || !deal.dealer_id) {
+      console.log("Can't enrich deal with image URLs -> either deal or dealer ID unknown");
+      continue;
+    }
+    deal.imageUrls = await storageService.getDealImages(deal.id, deal.dealer_id);
+  }
+
+  return deals;
 }
 
 export default {

@@ -64,17 +64,6 @@
       deal.start = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
     }
 
-    // const imagesAsBase64: string[] = [];
-    // for (const image of images) {
-    //   const base64 = (await fileToBase64(image)) as string;
-    //   imagesAsBase64.push(base64);
-    // }
-
-    // const data = {
-    //   deal,
-    //   imagesAsBase64
-    // };
-
     const dealId = await dealService.upsertDeal(deal, createTemplate);
 
     if (!dealId) {
@@ -100,16 +89,6 @@
   }
 
   async function del() {
-    // const response = await fetch(`/api/deals/${deal.id}`, { method: "delete" });
-
-    // if (response.ok) {
-    //   goto("/").then();
-    // } else if (response.status === 403) {
-    //   goto("/login").then();
-    // } else {
-    //   loading = false;
-    //   openErrorModal = true;
-    // }
     const error = await dealService.deleteDeal(deal.id);
 
     if (!error) {

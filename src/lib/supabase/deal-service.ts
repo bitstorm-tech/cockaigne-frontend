@@ -207,6 +207,37 @@ function rotateByCurrentTime(deals: ActiveDeal[]): ActiveDeal[] {
   return [...deals, ...dealsAfterNow];
 }
 
+async function toggleLike(deal: ActiveDeal): Promise<number> {
+  const userId = await getUserId();
+
+  const { count, error } = await supabase
+    .from("likes")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("deal_id", deal.id);
+
+  if (error || !userId || !deal.id) {
+    console.log("Can't toggle like:", error);
+    return deal.likes || 0;
+  }
+
+  const query =
+    count === 0
+      ? supabase.from("likes").insert({
+          user_id: userId,
+          deal_id: deal.id
+        })
+      : supabase.from("likes").delete().eq("user_id", userId).eq("deal_id", deal.id);
+
+  await query;
+
+  if (!deal.likes) {
+    deal.likes = 0;
+  }
+
+  return count === 0 ? deal.likes + 1 : deal.likes - 1;
+}
+
 export default {
   deleteDeal,
   getActiveDealsByDealer,
@@ -217,5 +248,6 @@ export default {
   getTopDeals,
   rotateByCurrentTime,
   toggleHotDeal,
+  toggleLike,
   upsertDeal
 };

@@ -7,6 +7,7 @@
   import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
+  import dealService from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
 
   export let isUser = false;
@@ -18,12 +19,8 @@
 
   async function like() {
     processingLike = true;
-    const response = await fetch("/api/deals/like?id=" + deal.id);
-
-    if (response.ok) {
-      deal.likecount = +(await response.text());
-      likeStore.toggleLike(deal.id);
-    }
+    deal.likes = await dealService.toggleLike(deal);
+    likeStore.toggleLike(deal.id);
     processingLike = false;
   }
 
@@ -51,7 +48,7 @@
             <LikeIcon size={1.5} dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
-        <span class="text-lg">{deal.likecount || "0"}</span>
+        <span class="text-lg">{deal.likes}</span>
       </div>
       <button on:click={() => (openReportModal = true)}>
         <ReportIcon size={1.5} />

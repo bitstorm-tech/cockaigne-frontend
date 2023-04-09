@@ -234,7 +234,7 @@ export interface Database {
           description: string | null
           duration: number | null
           id: string | null
-          likecount: number | null
+          likes: number | null
           location: unknown | null
           start: string | null
           start_time: string | null
@@ -304,7 +304,7 @@ export interface Database {
           description: string | null
           duration: number | null
           id: string | null
-          likecount: number | null
+          likes: number | null
           location: unknown | null
           start: string | null
           start_time: string | null

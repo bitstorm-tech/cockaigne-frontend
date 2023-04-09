@@ -53,8 +53,6 @@
       return;
     }
 
-    // const base64 = (await fileToBase64(newProfileImage)) as string;
-    // const response = await fetch("/api/images/profile", POST({ base64 }));
     const profileImageUrl = await storageService.saveProfileImage(newProfileImage);
 
     if (profileImageUrl) {

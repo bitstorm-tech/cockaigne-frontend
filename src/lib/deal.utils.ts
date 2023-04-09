@@ -1,7 +1,4 @@
-import type { Deal, DealFilter } from "$lib/database/deal/deal.model";
-import { convertToTimeZonedDateTimeString } from "$lib/date-time.utils";
-import { POST } from "$lib/http.utils";
-import type { ActiveDeal } from "./supabase/public-types";
+import type { Deal } from "$lib/supabase/public-types";
 
 export type DealState = "past" | "future" | "active";
 
@@ -40,30 +37,4 @@ export function sortDealsByState(deals: Deal[]): SortedDeals {
   }
 
   return sortedDeals;
-}
-
-export function sortDealsByTime(deals: ActiveDeal[]): ActiveDeal[] {
-  return deals.sort((a: ActiveDeal, b: ActiveDeal) => {
-    const timeA = a.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
-    const timeB = b.start.toString().split("T")[1].replaceAll("Z", "").replaceAll(":", "").replaceAll(".", "");
-    return +timeA - +timeB;
-  });
-}
-
-export function enrichStartTimestampWithTimezone(deal: Deal): Deal {
-  return {
-    ...deal,
-    start: convertToTimeZonedDateTimeString(deal.start)
-  };
-}
-
-export async function getDealsByFilter(filter: DealFilter): Promise<Deal[]> {
-  const response = await fetch("/api/deals/filter", POST(filter));
-
-  if (!response.ok) {
-    console.error("Can't fetch filtered deals:", response.status, response.statusText);
-    return [];
-  }
-
-  return await response.json();
 }

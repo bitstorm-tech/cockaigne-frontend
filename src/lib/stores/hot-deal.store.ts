@@ -34,5 +34,10 @@ export const hotDealStore = {
     const _hotDeals = get(hotDeals);
     deals.forEach((deal) => (deal.isHot = _hotDeals.some((hotDeal) => hotDeal.id === deal.id)));
     return deals;
+  },
+
+  rotateByCurrentTime: function () {
+    const rotatedDeals = dealService.rotateByCurrentTime(get(hotDeals));
+    this.set(rotatedDeals);
   }
 };

@@ -235,8 +235,9 @@ export interface Database {
           duration: number | null
           id: string | null
           likecount: number | null
-          location: string | null
+          location: unknown | null
           start: string | null
+          start_time: string | null
           title: string | null
           username: string | null
         }
@@ -304,8 +305,9 @@ export interface Database {
           duration: number | null
           id: string | null
           likecount: number | null
-          location: string | null
+          location: unknown | null
           start: string | null
+          start_time: string | null
           title: string | null
           username: string | null
         }[]

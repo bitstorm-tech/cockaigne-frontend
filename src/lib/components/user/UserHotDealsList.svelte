@@ -2,16 +2,15 @@
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import UserDealListItme from "$lib/components/user/UserDealListItme.svelte";
   import { hotDealStore } from "$lib/stores/hot-deal.store";
-  import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
   import LoadingSpinner from "../ui/icons/LoadingSpinner.svelte";
 
   let loading = true;
   let openDetail = -1;
-  let hotDeals: ActiveDeal[] = [];
 
   onMount(async () => {
     await hotDealStore.load();
+    hotDealStore.rotateByCurrentTime();
     loading = false;
   });
 </script>

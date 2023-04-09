@@ -16,15 +16,6 @@ export function getDateAsIsoString(date = new Date(), offsetInMinutes = 0, timez
   return formatInTimeZone(dateWithOffset, timezone, DATE_FORMAT);
 }
 
-export function extractTimeFromDateTimeString(dateTime: string): string {
-  return dateTime.split("T")[1];
-}
-
-export function dateToUnixTimestamp(date: string | number, time = ""): number {
-  const dateTime = time.length > 0 ? date + "T" + time : date;
-  return new Date(dateTime).getTime() / 1000;
-}
-
 export function convertToTimeZonedDateTimeString(date: string | Date | number, timezone = "Europe/Berlin"): string {
   const timeZonedDate = utcToZonedTime(date, timezone);
   return getDateTimeAsIsoString(timeZonedDate);
@@ -62,8 +53,12 @@ function removeTimezoneOffsetFromDeal(deal: Deal) {
   deal.start = removeTimezoneOffset(deal.start);
 }
 
+function getTimeString(datetime: string | Date = new Date(), timezone = "Europe/Berlin"): string {
+  return formatInTimeZone(new Date(datetime), timezone, "HH:mm:ss");
+}
+
 export default {
-  addTimezoneOffset,
   addTimezoneOffsetToDeal,
+  getTimeString,
   removeTimezoneOffsetFromDeal
 };

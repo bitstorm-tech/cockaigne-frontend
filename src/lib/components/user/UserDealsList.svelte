@@ -12,7 +12,9 @@
 
   $: {
     $dealStore && $hotDealStore;
+
     if (liveUpdate) {
+      dealStore.rotateByCurrentTime();
       deals = hotDealStore.updateHotFlag($dealStore);
     }
   }

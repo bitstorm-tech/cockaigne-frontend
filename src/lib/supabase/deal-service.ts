@@ -1,6 +1,7 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
 import dateTimeUtils from "$lib/date-time.utils";
 import storageService from "$lib/supabase/storage-service";
+import { remove } from "lodash";
 import omit from "lodash/omit";
 import locationService from "./location-service";
 import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
@@ -106,9 +107,11 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
     query = query.limit(filter.limit);
   }
 
-  if (filter.order) {
-    query = query.order(filter.order.column, { ascending: filter.order.ascending });
-  }
+  query = query.order("start_time");
+
+  // if (filter.order) {
+  //   query = query.order(filter.order.column, { ascending: filter.order.ascending });
+  // }
 
   const { data, error } = await query;
 
@@ -190,7 +193,7 @@ async function getHotDeals(): Promise<ActiveDeal[]> {
   return enrichDealWithImageUrls(activeDealsResult.data);
 }
 
-async function enrichDealWithImageUrls(deals: ActiveDeal[] | Deal[]): Promise<ActiveDeal[] | Deal[]> {
+async function enrichDealWithImageUrls<T extends ActiveDeal[] | Deal[]>(deals: T): Promise<T> {
   for (const deal of deals) {
     if (!deal.id || !deal.dealer_id) {
       console.log("Can't enrich deal with image URLs -> either deal or dealer ID unknown");
@@ -202,6 +205,13 @@ async function enrichDealWithImageUrls(deals: ActiveDeal[] | Deal[]): Promise<Ac
   return deals;
 }
 
+function rotateByCurrentTime(deals: ActiveDeal[]): ActiveDeal[] {
+  const nowTime = dateTimeUtils.getTimeString();
+  const dealsAfterNow = remove(deals, (deal) => nowTime > dateTimeUtils.getTimeString(deal.start));
+
+  return [...deals, ...dealsAfterNow];
+}
+
 export default {
   deleteDeal,
   getActiveDealsByDealer,
@@ -210,6 +220,7 @@ export default {
   getDealsByFilter,
   getHotDeals,
   getTopDeals,
+  rotateByCurrentTime,
   toggleHotDeal,
   upsertDeal
 };

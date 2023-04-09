@@ -15,9 +15,9 @@ export async function load() {
     storageService.getProfileImage()
   ]);
 
-  account.profileImageUrl = profileImageUrl;
-
   if (account) {
+    account.profileImageUrl = profileImageUrl;
+
     return {
       account,
       favoriteDealers

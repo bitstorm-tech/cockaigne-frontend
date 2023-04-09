@@ -5,12 +5,12 @@
   import LikeIcon from "$lib/components/ui/icons/LikeIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
+  import type { ActiveDeal } from "$lib/supabase/public-types";
 
   export let isUser = false;
-  export let deal: Deal;
+  export let deal: ActiveDeal;
   let openZoomModal = false;
   let openReportModal = false;
   let zoomImageIndex = 0;
@@ -21,7 +21,7 @@
     const response = await fetch("/api/deals/like?id=" + deal.id);
 
     if (response.ok) {
-      deal.likes = +(await response.text());
+      deal.likecount = +(await response.text());
       likeStore.toggleLike(deal.id);
     }
     processingLike = false;
@@ -51,7 +51,7 @@
             <LikeIcon size={1.5} dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
-        <span class="text-lg">{deal.likes || "0"}</span>
+        <span class="text-lg">{deal.likecount || "0"}</span>
       </div>
       <button on:click={() => (openReportModal = true)}>
         <ReportIcon size={1.5} />

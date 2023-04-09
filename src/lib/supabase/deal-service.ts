@@ -97,7 +97,6 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
   }
 
   let query = supabase.rpc("get_active_deals_within_extent", extent);
-  // let query = supabase.from("active_deals_view").select();
 
   if (filter.categoryIds && filter.categoryIds.length > 0) {
     query = query.in("category_id", filter.categoryIds);
@@ -108,10 +107,6 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
   }
 
   query = query.order("start_time");
-
-  // if (filter.order) {
-  //   query = query.order(filter.order.column, { ascending: filter.order.ascending });
-  // }
 
   const { data, error } = await query;
 

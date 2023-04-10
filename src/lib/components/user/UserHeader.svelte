@@ -35,7 +35,7 @@
       </span>
     </div>
     <div class="-mt-6 mr-14 flex flex-col">
-      <div class="z-10 h-24 w-24">
+      <div class="h-24 w-24">
         <ProfilePicture {imageUrl} />
       </div>
     </div>

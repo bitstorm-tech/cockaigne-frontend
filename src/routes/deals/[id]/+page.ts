@@ -1,7 +1,6 @@
-import { newDeal } from "$lib/database/deal/deal.model";
 import DateTimeUtils from "$lib/date-time.utils";
 import accountService from "$lib/supabase/account-service";
-import dealService from "$lib/supabase/deal-service";
+import dealService, { newDeal } from "$lib/supabase/deal-service";
 import storageService from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 

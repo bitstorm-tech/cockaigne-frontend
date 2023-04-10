@@ -1,8 +1,8 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
-import dateTimeUtils from "$lib/date-time.utils";
+import dateTimeUtils, { getDateTimeAsIsoString } from "$lib/date-time.utils";
 import storageService from "$lib/supabase/storage-service";
-import { remove } from "lodash";
 import omit from "lodash/omit";
+import remove from "lodash/remove";
 import locationService from "./location-service";
 import type { ActiveDeal, Deal, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
 import { getUserId, supabase } from "./supabase-client";
@@ -238,6 +238,20 @@ async function toggleLike(deal: ActiveDeal): Promise<number> {
   return count === 0 ? deal.likes + 1 : deal.likes - 1;
 }
 
+export function newDeal(): Deal {
+  return {
+    id: "",
+    dealer_id: "",
+    start: getDateTimeAsIsoString(new Date(), 60),
+    title: "",
+    description: "",
+    duration: 24,
+    template: false,
+    category_id: 1,
+    created: ""
+  };
+}
+
 export default {
   deleteDeal,
   getActiveDealsByDealer,
@@ -246,6 +260,7 @@ export default {
   getDealsByFilter,
   getHotDeals,
   getTopDeals,
+  newDeal,
   rotateByCurrentTime,
   toggleHotDeal,
   toggleLike,

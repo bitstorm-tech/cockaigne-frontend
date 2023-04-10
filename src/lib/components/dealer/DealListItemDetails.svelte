@@ -37,27 +37,31 @@
       <Picture url={imageUrl} smallHeight={true} on:zoom={() => onZoom(index)} />
     {/each}
   </div>
-  <span class="py-4 text-xs">Endet am {formatDate(deal.start, +deal.duration * 60)}</span>
   {#if isUser}
+    <span class="py-4 text-xs">Endet am {formatDate(deal.start, +deal.duration * 60)}</span>
     <div class="flex h-6 justify-between">
       <div class="flex items-center gap-3">
         {#if processingLike}
           <LoadingSpinner size={1.5} />
         {:else}
           <button on:click={like}>
-            <LikeIcon size={1.5} dislike={$likeStore.includes(deal.id)} />
+            <LikeIcon size={1.3} dislike={$likeStore.includes(deal.id)} />
           </button>
         {/if}
         <span class="text-lg">{deal.likes}</span>
       </div>
       <button on:click={() => (openReportModal = true)}>
-        <ReportIcon size={1.5} />
+        <ReportIcon size={1.3} />
       </button>
     </div>
   {:else}
-    <div class="flex justify-between">
-      <span class="text-xs">Von: {formatDate(deal.start)}</span>
-      <span class="text-xs">Bis: {formatDate(deal.start, +deal.duration * 60)}</span>
+    <div class="flex justify-between text-xs">
+      <span>Von: {formatDate(deal.start)}</span>
+      <div class="flex items-center gap-1">
+        <span>{deal.likes}</span>
+        <LikeIcon size={0.8} />
+      </div>
+      <span>Bis: {formatDate(deal.start, +deal.duration * 60)}</span>
     </div>
   {/if}
 </div>

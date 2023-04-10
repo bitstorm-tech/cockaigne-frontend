@@ -1,7 +1,5 @@
 import type { RequestError } from "$lib/request-errors";
 import { redirect } from "@sveltejs/kit";
-import type { Account } from "./database/account/account.model";
-import { createJwt } from "./jwt.utils";
 
 export function response(bodyData?: unknown, status = 200, stringify = true): Response {
   const body = bodyData ? (stringify ? JSON.stringify(bodyData) : bodyData.toString()) : null;
@@ -32,19 +30,6 @@ export function errorResponse(text = ""): Response {
   };
 
   return new Response(null, options);
-}
-
-export async function jwtCookieResponse(account: Account): Promise<Response> {
-  if (!account.id) {
-    console.error("[http.service.ts] Can't create jwtCookieResponse -> no account ID available");
-    return response();
-  }
-
-  const jwt = await createJwt(account.id.toString(), { isDealer: account.dealer });
-  const headers = new Headers();
-  headers.append("set-cookie", `jwt=${jwt}; SameSite=Lax; Path=/; HttpOnly`);
-
-  return new Response(account.id.toString(), { headers });
 }
 
 export function redirectToLogin() {

@@ -284,10 +284,40 @@ export interface Database {
           username: string | null
         }
       }
+      future_deals_view: {
+        Row: {
+          category_id: number | null
+          dealer_id: string | null
+          description: string | null
+          duration: number | null
+          id: string | null
+          likes: number | null
+          location: unknown | null
+          start: string | null
+          start_time: string | null
+          title: string | null
+          username: string | null
+        }
+      }
       like_counts_view: {
         Row: {
           deal_id: string | null
           likecount: number | null
+        }
+      }
+      past_deals_view: {
+        Row: {
+          category_id: number | null
+          dealer_id: string | null
+          description: string | null
+          duration: number | null
+          id: string | null
+          likes: number | null
+          location: unknown | null
+          start: string | null
+          start_time: string | null
+          title: string | null
+          username: string | null
         }
       }
     }

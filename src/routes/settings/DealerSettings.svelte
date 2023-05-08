@@ -3,7 +3,6 @@
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
   import type { Account } from "$lib/supabase/public-types";
-  import "leaflet/dist/leaflet.css";
   import AddressSettings from "./AddressSettings.svelte";
 
   export let account: Account;

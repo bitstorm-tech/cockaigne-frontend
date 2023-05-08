@@ -1,6 +1,4 @@
-import type { Position } from "./geo.types";
-
-export let currentLocation: Position;
+import { locationStore } from "$lib/stores/location.store";
 
 export default class LocationService {
   private static watcherId = -1;
@@ -9,10 +7,11 @@ export default class LocationService {
     if (this.watcherId === -1) {
       console.log("[LocationWatcher] start watching ...");
       this.watcherId = window.navigator.geolocation.watchPosition((geolocationPosition) => {
-        currentLocation = {
+        const currentLocation = {
           longitude: geolocationPosition.coords.longitude,
           latitude: geolocationPosition.coords.latitude
         };
+        locationStore.set(currentLocation);
       });
     }
   }

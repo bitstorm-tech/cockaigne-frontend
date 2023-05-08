@@ -1,6 +1,8 @@
 {
-  "plugins": ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-
+  "plugins": [
+    "prettier-plugin-svelte",
+    "prettier-plugin-tailwindcss"
+  ],
   "trailingComma": "none",
   "printWidth": 120
 }

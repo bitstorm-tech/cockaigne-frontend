@@ -2,7 +2,7 @@
   import { page } from "$app/stores";
   import { Categories } from "$lib/categories";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
+  import type { ActiveDeal, Deal } from "$lib/supabase/public-types";
   import CrossIcon from "../ui/icons/CrossIcon.svelte";
 
   export let deal: Deal | ActiveDeal;

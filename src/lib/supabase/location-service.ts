@@ -1,5 +1,5 @@
 import type { DealFilter } from "$lib/database/deal/deal.model";
-import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
+import { munichPosition, type Position, toPostGisPoint } from "$lib/geo/geo.types";
 import { getUserId, supabase } from "./supabase-client";
 
 async function useCurrentLocation(): Promise<boolean> {
@@ -16,14 +16,21 @@ async function useCurrentLocation(): Promise<boolean> {
 
 async function saveUseCurrentLocation(useCurrentLocation: boolean) {
   const userId = await getUserId();
-  await supabase.from("accounts").update({ use_current_location: useCurrentLocation }).eq("id", userId);
+  const { error } = await supabase
+    .from("accounts")
+    .update({ use_current_location: useCurrentLocation })
+    .eq("id", userId);
+
+  if (error) {
+    console.log("Can't save use current location:", error);
+  }
 }
 
 async function getLocation(): Promise<Position> {
   const userId = await getUserId();
   const { error, data } = await supabase.from("accounts").select("location").eq("id", userId).single();
 
-  if (error) {
+  if (error || !data.location) {
     console.log("Can't get location:", error);
     return munichPosition;
   }

@@ -4,12 +4,14 @@
   import CrossIcon from "$lib/components/ui/icons/CrossIcon.svelte";
   import MenuIcon from "$lib/components/ui/icons/MenuIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
+  import { menuOpen } from "$lib/stores/navigation.store";
   import { blur } from "svelte/transition";
 
   let showMobileMenu = false;
 
   function toggleMobileMenu() {
     showMobileMenu = !showMobileMenu;
+    menuOpen.set(showMobileMenu);
   }
 </script>
 

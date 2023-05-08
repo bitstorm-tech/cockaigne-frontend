@@ -13,3 +13,5 @@ export const navigationStore = {
     page.set(currentPage);
   }
 };
+
+export const menuOpen = writable<boolean>(false);

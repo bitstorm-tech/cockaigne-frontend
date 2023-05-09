@@ -6,10 +6,9 @@
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
-  import { supabase } from "$lib/supabase/supabase-client";
 
   async function logout() {
-    await supabase.auth.signOut();
+    await $page.data.supabase.auth.signOut();
     await goto("/login");
     await invalidateAll();
   }

@@ -1,17 +1,18 @@
 import DateTimeUtils from "$lib/date-time.utils";
-import accountService from "$lib/supabase/account-service";
-import dealService, { newDeal } from "$lib/supabase/deal-service";
-import storageService from "$lib/supabase/storage-service";
+import { getDefaultCategory } from "$lib/supabase/account-service";
+import { getDeal, newDeal } from "$lib/supabase/deal-service";
+import { getDealImages } from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
-export async function load({ params, url }: LoadEvent) {
+export async function load({ params, url, parent }: LoadEvent) {
   const id = params.id;
+  const { supabase } = await parent();
 
   if (!id) {
     return;
   }
 
-  const defaultCategory = await accountService.getDefaultCategory();
+  const defaultCategory = await getDefaultCategory();
 
   if (id.toLowerCase() === "new") {
     const deal = newDeal();
@@ -23,11 +24,11 @@ export async function load({ params, url }: LoadEvent) {
     return { deal };
   }
 
-  const deal = await dealService.getDeal(id);
+  const deal = await getDeal(id);
   if (deal) {
     DateTimeUtils.removeTimezoneOffsetFromDeal(deal);
     deal.category_id = defaultCategory;
-    deal.imageUrls = await storageService.getDealImages(deal.id, deal.dealer_id);
+    deal.imageUrls = await getDealImages(supabase, deal.id, deal.dealer_id);
   }
 
   return {

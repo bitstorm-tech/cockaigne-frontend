@@ -2,7 +2,7 @@
   import { addressToString } from "$lib/geo/address.service";
   import { getAddress } from "$lib/geo/address.service.js";
   import type { Position } from "$lib/geo/geo.types";
-  import LocationService from "$lib/geo/location.service.js";
+  import LocationWatcher from "$lib/geo/location-watcher.js";
   import { locationStore } from "$lib/stores/location.store";
   import locationService from "$lib/supabase/location-service";
 
@@ -69,6 +69,6 @@
 
   async function searchCurrentLocation(event) {
     useCurrentLocation = event.target.checked;
-    useCurrentLocation ? LocationService.startWatching() : LocationService.stopWatching();
+    useCurrentLocation ? LocationWatcher.startWatching() : LocationWatcher.stopWatching();
   }
 </script>

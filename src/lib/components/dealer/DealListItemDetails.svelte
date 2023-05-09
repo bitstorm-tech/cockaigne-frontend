@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
   import ReportDealModal from "$lib/components/dealer/ReportDealModal.svelte";
@@ -7,7 +8,7 @@
   import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
-  import dealService from "$lib/supabase/deal-service";
+  import { toggleLike } from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
 
   export let isUser = false;
@@ -17,10 +18,13 @@
   let zoomImageIndex = 0;
   let processingLike = false;
 
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
+
   async function like() {
     processingLike = true;
-    deal.likes = await dealService.toggleLike(deal);
-    likeStore.toggleLike(deal.id);
+    deal.likes = await toggleLike(supabase, userId, deal);
+    likeStore.toggleLike(deal.id!);
     processingLike = false;
   }
 

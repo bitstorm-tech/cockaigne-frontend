@@ -9,7 +9,13 @@ declare global {
   declare namespace App {
     interface Locals {
       supabase: Supabase;
+
       getSession(): Promise<Session | null>;
+    }
+
+    interface PageData {
+      supabase: Supabase;
+      session: Session;
     }
   }
 }

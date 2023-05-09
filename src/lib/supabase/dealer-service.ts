@@ -1,7 +1,7 @@
+import type { Supabase } from "$lib/supabase/supabase-client";
 import type { Dealer, FavoriteDealer } from "./public-types";
-import { getUserId, supabase, type Supabase } from "./supabase-client";
 
-export async function getDealer(dealerId: string): Promise<Dealer | null> {
+export async function getDealer(supabase: Supabase, dealerId: string): Promise<Dealer | null> {
   const { data } = await supabase.from("dealer_view").select().eq("id", dealerId).single();
 
   if (!data) {
@@ -11,11 +11,7 @@ export async function getDealer(dealerId: string): Promise<Dealer | null> {
   return data;
 }
 
-export async function toggleFavoriteDealer(dealerId: string) {
-  const userId = await getUserId();
-
-  if (!userId) return;
-
+export async function toggleFavoriteDealer(supabase: Supabase, userId: string, dealerId: string) {
   const { data } = await supabase
     .from("favorite_dealers")
     .select("user_id")
@@ -29,11 +25,7 @@ export async function toggleFavoriteDealer(dealerId: string) {
   }
 }
 
-export async function isFavoriteDealer(dealerId: string): Promise<boolean> {
-  const userId = await getUserId();
-
-  if (!userId) return false;
-
+export async function isFavoriteDealer(supabase: Supabase, userId: string, dealerId: string): Promise<boolean> {
   const { data, error } = await supabase
     .from("favorite_dealers")
     .select("dealer_id")

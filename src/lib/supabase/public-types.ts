@@ -28,3 +28,5 @@ export type DealFilter = {
   limit?: number;
   orderBy?: string;
 };
+
+export type Location = { coordinates: number[] };

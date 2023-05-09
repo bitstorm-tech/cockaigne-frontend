@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import ConfirmDeleteDealModal from "$lib/components/dealer/ConfirmDeleteDealModal.svelte";
   import Picture from "$lib/components/dealer/pictures/Picture.svelte";
   import Alert from "$lib/components/ui/Alert.svelte";
@@ -11,13 +12,15 @@
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import { getDateAsIsoString, getDateTimeAsIsoString } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
-  import dealService from "$lib/supabase/deal-service";
+  import { deleteDeal, upsertDeal } from "$lib/supabase/deal-service";
   import type { Deal } from "$lib/supabase/public-types";
-  import storageService from "$lib/supabase/storage-service";
+  import { deleteDealImages, saveDealImages } from "$lib/supabase/storage-service";
   import type { PageData } from "./$types";
 
   export let data: PageData;
   export let deal: Deal = data.deal;
+
+  const supabase = $page.data.supabase;
 
   const runtimes = {
     "24": "1 Tag",
@@ -64,7 +67,7 @@
       deal.start = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
     }
 
-    const dealId = await dealService.upsertDeal(deal, createTemplate);
+    const dealId = await upsertDeal(supabase, deal, createTemplate);
 
     if (!dealId) {
       openErrorModal = true;
@@ -72,7 +75,7 @@
       return;
     }
 
-    await storageService.saveDealImages(images, dealId);
+    await saveDealImages(supabase, images, dealId);
 
     goto("/");
   }
@@ -89,10 +92,10 @@
   }
 
   async function del() {
-    const error = await dealService.deleteDeal(deal.id);
+    const error = await deleteDeal(supabase, deal.dealer_id, deal.id);
 
     if (!error) {
-      storageService.deleteDealImages(deal.id);
+      await deleteDealImages(supabase, deal.dealer_id, deal.id);
       await goto("/");
     }
 

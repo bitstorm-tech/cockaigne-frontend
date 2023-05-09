@@ -13,15 +13,14 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. .",
     "ncu": "ncu -u && pnpm i"
   },
-  "dependencies": {
+  "devDependencies": {
     "@supabase/supabase-js": "2.21.0",
     "date-fns": "2.30.0",
     "date-fns-tz": "2.0.0",
     "lodash": "4.17.21",
     "ol": "7.3.0",
-    "uuid": "9.0.0"
-  },
-  "devDependencies": {
+    "uuid": "9.0.0",
+    "@supabase/auth-helpers-sveltekit": "0.9.4",
     "@sveltejs/adapter-vercel": "2.4.3",
     "@sveltejs/kit": "1.16.2",
     "@types/lodash": "4.14.194",

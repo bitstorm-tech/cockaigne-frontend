@@ -1,13 +1,28 @@
 <script lang="ts">
-  import { afterNavigate, beforeNavigate } from "$app/navigation";
+  import { afterNavigate, beforeNavigate, invalidate } from "$app/navigation";
   import { page } from "$app/stores";
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import { onMount } from "svelte";
   import { blur } from "svelte/transition";
   import "../tailwind.css";
 
   let loading = false;
+
+  export let data;
+  const supabase = data.supabase;
+  const session = data.session;
+
+  onMount(() => {
+    const { data } = supabase.auth.onAuthStateChange((event, _session) => {
+      if (_session?.expires_at !== session?.expires_at) {
+        invalidate("supabase:auth");
+      }
+    });
+
+    return () => data.subscription.unsubscribe();
+  });
 
   beforeNavigate(() => {
     loading = true;
@@ -17,7 +32,7 @@
   });
 </script>
 
-{#if $page.data.user.isAuthenticated}
+{#if $page.data.session?.user}
   <Navbar />
 {/if}
 {#if loading}
@@ -29,6 +44,6 @@
     <slot />
   </div>
 {/if}
-{#if $page.data.user.isAuthenticated}
+{#if $page.data.session?.user}
   <Footer />
 {/if}

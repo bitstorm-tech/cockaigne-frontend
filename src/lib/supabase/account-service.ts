@@ -1,7 +1,6 @@
-import { goto } from "$app/navigation";
 import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
-import { getUserId, supabase, translateError, type Supabase } from "./supabase-client";
+import { supabase, translateError, type Supabase } from "./supabase-client";
 
 export type RegistrationData = {
   password: string;
@@ -41,15 +40,8 @@ export async function getAccount(supabase: Supabase, userId: string): Promise<Ac
   return data;
 }
 
-export async function updateAccount(update: AccountUpdate): Promise<string | undefined> {
-  console.log("Update account:", update);
-  const id = await getUserId();
-
-  if (!id) {
-    goto("/");
-  }
-
-  const { error } = await supabase.from("accounts").update(update).eq("id", id);
+export async function updateAccount(supabase: Supabase, update: AccountUpdate): Promise<string | undefined> {
+  const { error } = await supabase.from("accounts").update(update).eq("id", update.id);
 
   if (error) {
     console.log("Can't update account:", error);

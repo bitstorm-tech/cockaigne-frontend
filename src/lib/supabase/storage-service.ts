@@ -30,14 +30,7 @@ export async function saveImage(
   console.log("Can't save image:", error);
 }
 
-export async function saveProfileImage(image: File): Promise<string | undefined> {
-  const userId = await getUserId();
-
-  if (!userId) {
-    console.log("Can't save profile image -> unknown user");
-    return;
-  }
-
+export async function saveProfileImage(supabase: Supabase, userId: string, image: File): Promise<string | undefined> {
   const { data } = await supabase.storage.from(BUCKET_PROFILE_IMAGES).list(userId);
 
   if (data && data.length > 0) {

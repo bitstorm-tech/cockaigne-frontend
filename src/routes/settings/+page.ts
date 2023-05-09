@@ -1,17 +1,18 @@
 import { goto } from "$app/navigation";
-import accountService from "$lib/supabase/account-service";
-import storageService from "$lib/supabase/storage-service";
+import { getAccount } from "$lib/supabase/account-service";
+import { getProfileImage } from "$lib/supabase/storage-service";
+import type { LoadEvent } from "@sveltejs/kit";
 
-export const ssr = false;
-
-export async function load() {
-  const account = await accountService.getAccount();
+export async function load({ parent }: LoadEvent) {
+  const { supabase, session } = await parent();
+  const userId = session.user.id;
+  const account = await getAccount(supabase, userId);
 
   if (!account) {
     return goto("/");
   }
 
-  account.profileImageUrl = await storageService.getProfileImage(account.id, account.dealer);
+  account.profileImageUrl = await getProfileImage(supabase, account.id, account.dealer);
 
   return {
     account

@@ -1,3 +1,5 @@
+import type { Position } from "$lib/geo/geo.types";
+import type { Extent } from "ol/extent";
 import type { Database } from "./generated-types";
 
 export type Account = Database["public"]["Tables"]["accounts"]["Row"] & { profileImageUrl?: string };
@@ -17,3 +19,12 @@ export type ReportedDeal = Database["public"]["Tables"]["reported_deals"]["Row"]
 export type SelectedCategory = Database["public"]["Tables"]["selected_categories"]["Row"];
 export type GetActiveDealsWithinExtentFunctionArguments =
   Database["public"]["Functions"]["get_active_deals_within_extent"]["Args"];
+
+export type DealFilter = {
+  location?: Position;
+  radius?: number;
+  extent?: Extent;
+  categoryIds?: number[];
+  limit?: number;
+  orderBy?: string;
+};

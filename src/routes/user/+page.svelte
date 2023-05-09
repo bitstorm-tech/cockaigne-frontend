@@ -55,6 +55,6 @@
   {:else if showTabIndex === 1}
     <UserHotDealsList />
   {:else}
-    <FavoriteDealersList />
+    <FavoriteDealersList supabsae={data.supabase} userId={data.account?.id} />
   {/if}
 </div>

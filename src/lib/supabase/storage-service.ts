@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { getUserId, supabase } from "./supabase-client";
+import { getUserId, supabase, type Supabase } from "./supabase-client";
 
 const BUCKET_DEALER_IMAGES = "dealer-images";
 const BUCKET_PROFILE_IMAGES = "profile-images";
@@ -12,7 +12,12 @@ function generateRandomFilename(file: File) {
   return uuid() + "." + file.name.split(".").pop();
 }
 
-async function saveImage(file: File, bucket: string, filename: string, folder?: string): Promise<string | undefined> {
+export async function saveImage(
+  file: File,
+  bucket: string,
+  filename: string,
+  folder?: string
+): Promise<string | undefined> {
   const path = folder ? folder + "/" + filename : filename;
 
   const { error } = await supabase.storage.from(bucket).upload(path, file);
@@ -25,7 +30,7 @@ async function saveImage(file: File, bucket: string, filename: string, folder?: 
   console.log("Can't save image:", error);
 }
 
-async function saveProfileImage(image: File): Promise<string | undefined> {
+export async function saveProfileImage(image: File): Promise<string | undefined> {
   const userId = await getUserId();
 
   if (!userId) {
@@ -44,7 +49,7 @@ async function saveProfileImage(image: File): Promise<string | undefined> {
   return await saveImage(image, BUCKET_PROFILE_IMAGES, filename, userId);
 }
 
-async function saveDealerImage(image: File): Promise<string | undefined> {
+export async function saveDealerImage(image: File): Promise<string | undefined> {
   const id = await getUserId();
   const filename = generateRandomFilename(image);
 
@@ -56,7 +61,7 @@ async function deleteDealerImage(filename: string) {
   await supabase.storage.from(BUCKET_DEALER_IMAGES).remove([id + "/" + filename]);
 }
 
-async function getDealerImages(dealerId: string): Promise<string[]> {
+export async function getDealerImages(dealerId: string): Promise<string[]> {
   const { data } = await supabase.storage.from(BUCKET_DEALER_IMAGES).list(dealerId);
 
   if (data) {
@@ -69,9 +74,7 @@ async function getDealerImages(dealerId: string): Promise<string[]> {
   return [];
 }
 
-async function getProfileImage(id?: string, isDealer = false): Promise<string> {
-  const userId = id ? id : await getUserId();
-
+export async function getProfileImage(supabase: Supabase, userId?: string, isDealer = false): Promise<string> {
   if (!userId) {
     console.log("Can't get profile image -> unknown user");
     return isDealer ? DEFAULT_DEALER_PROFILE_IMAGE_URL : DEFAULT_USER_PROFILE_IMAGE_URL;
@@ -87,7 +90,7 @@ async function getProfileImage(id?: string, isDealer = false): Promise<string> {
   return isDealer ? DEFAULT_DEALER_PROFILE_IMAGE_URL : DEFAULT_USER_PROFILE_IMAGE_URL;
 }
 
-async function getDealImages(dealId: string, dealerId: string): Promise<string[]> {
+export async function getDealImages(dealId: string, dealerId: string): Promise<string[]> {
   const path = `${dealerId}/${dealId}`;
   const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);
 
@@ -100,7 +103,7 @@ async function getDealImages(dealId: string, dealerId: string): Promise<string[]
   return filenames.map((filename) => supabase.storage.from(BUCKET_DEAL_IMAGES).getPublicUrl(filename).data.publicUrl);
 }
 
-async function saveDealImages(images: File[], dealId: string) {
+export async function saveDealImages(images: File[], dealId: string) {
   const dealerId = await getUserId();
   const folder = `${dealerId}/${dealId}`;
 
@@ -110,7 +113,7 @@ async function saveDealImages(images: File[], dealId: string) {
   }
 }
 
-async function deleteDealImages(dealId: string) {
+export async function deleteDealImages(dealId: string) {
   const dealerId = await getUserId();
   const path = `${dealerId}/${dealId}`;
 
@@ -123,14 +126,3 @@ async function deleteDealImages(dealId: string) {
   const filesToDelete = data?.map((fileObject) => `${path}/${fileObject.name}`) || [];
   await supabase.storage.from(BUCKET_DEAL_IMAGES).remove([...filesToDelete, path]);
 }
-
-export default {
-  deleteDealerImage,
-  deleteDealImages,
-  getDealerImages,
-  getDealImages,
-  getProfileImage,
-  saveDealerImage,
-  saveDealImages,
-  saveProfileImage
-};

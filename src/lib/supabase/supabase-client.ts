@@ -1,10 +1,19 @@
-import { browser } from "$app/environment";
 import { PUBLIC_SUPABASE_API_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public";
-import { AuthError, createClient } from "@supabase/supabase-js";
+import { AuthError, SupabaseClient, createClient } from "@supabase/supabase-js";
 import type { Database } from "./generated-types";
 
 export const supabase = createClient<Database>(PUBLIC_SUPABASE_URL || "", PUBLIC_SUPABASE_API_KEY || "");
-
+export type Supabase = SupabaseClient<Database>;
+export type Session = {
+  user: {
+    id: string;
+    user_metadata: {
+      isDealer: boolean;
+      username: string;
+    };
+    role: string;
+  };
+};
 export function translateError(error: AuthError): string {
   switch (error.status) {
     case 400:
@@ -33,19 +42,19 @@ export async function getUserId(): Promise<string | undefined> {
   return data.session?.user.id;
 }
 
-supabase.auth.onAuthStateChange((event, session) => {
-  if (!browser) {
-    return;
-  }
+// supabase.auth.onAuthStateChange((event, session) => {
+//   if (!browser) {
+//     return;
+//   }
 
-  if (event === "SIGNED_OUT" || event === "USER_DELETED") {
-    // delete cookies on sign out
-    const expires = new Date(0).toUTCString();
-    document.cookie = `my-access-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
-    document.cookie = `my-refresh-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
-  } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
-    const maxAge = 5 * 24 * 60 * 60; // 5 days
-    document.cookie = `my-access-token=${session?.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
-    document.cookie = `my-refresh-token=${session?.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
-  }
-});
+//   if (event === "SIGNED_OUT" || event === "USER_DELETED") {
+//     // delete cookies on sign out
+//     const expires = new Date(0).toUTCString();
+//     document.cookie = `my-access-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
+//     document.cookie = `my-refresh-token=; path=/; expires=${expires}; SameSite=Lax; secure`;
+//   } else if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
+//     const maxAge = 5 * 24 * 60 * 60; // 5 days
+//     document.cookie = `my-access-token=${session?.access_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+//     document.cookie = `my-refresh-token=${session?.refresh_token}; path=/; max-age=${maxAge}; SameSite=Lax; secure`;
+//   }
+// });

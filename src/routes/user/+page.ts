@@ -1,17 +1,19 @@
 import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
-import accountService from "$lib/supabase/account-service";
-import dealerService from "$lib/supabase/dealer-service";
-import storageService from "$lib/supabase/storage-service";
+import { getAccount } from "$lib/supabase/account-service";
+import { getFavoriteDealers } from "$lib/supabase/dealer-service";
+import { getProfileImage } from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ parent }: LoadEvent) {
   navigationStore.currentPage("home");
+  const { supabase, session } = await parent();
+  const userId = session.user.id;
 
   const [account, favoriteDealers, profileImageUrl] = await Promise.all([
-    accountService.getAccount(),
-    dealerService.getFavoriteDealers(),
-    storageService.getProfileImage()
+    getAccount(supabase, userId),
+    getFavoriteDealers(supabase, userId),
+    getProfileImage(supabase, userId)
   ]);
 
   if (account) {

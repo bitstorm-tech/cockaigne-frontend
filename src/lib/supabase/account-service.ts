@@ -1,7 +1,7 @@
 import { goto } from "$app/navigation";
 import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
-import { getUserId, supabase, translateError } from "./supabase-client";
+import { getUserId, supabase, translateError, type Supabase } from "./supabase-client";
 
 export type RegistrationData = {
   password: string;
@@ -19,7 +19,7 @@ export type RegistrationData = {
   taxId: string;
 };
 
-async function getDefaultCategory(): Promise<number> {
+export async function getDefaultCategory(): Promise<number> {
   const { data, error } = await supabase.from("accounts").select("default_category").single();
 
   if (error) {
@@ -30,11 +30,7 @@ async function getDefaultCategory(): Promise<number> {
   return data.default_category || -1;
 }
 
-async function getAccount(): Promise<Account | undefined> {
-  const userId = await getUserId();
-
-  if (!userId) return;
-
+export async function getAccount(supabase: Supabase, userId: string): Promise<Account | undefined> {
   const { data, error } = await supabase.from("accounts").select().eq("id", userId).single();
 
   if (error) {
@@ -45,7 +41,7 @@ async function getAccount(): Promise<Account | undefined> {
   return data;
 }
 
-async function updateAccount(update: AccountUpdate): Promise<string | undefined> {
+export async function updateAccount(update: AccountUpdate): Promise<string | undefined> {
   console.log("Update account:", update);
   const id = await getUserId();
 
@@ -63,7 +59,12 @@ async function updateAccount(update: AccountUpdate): Promise<string | undefined>
   }
 }
 
-async function getLocation(street: string, houseNumber: string, city: string, zip: string): Promise<Position | null> {
+export async function getLocation(
+  street: string,
+  houseNumber: string,
+  city: string,
+  zip: string
+): Promise<Position | null> {
   const query = `format=json&street=${houseNumber} ${street}&city=${city}&postalcode=${zip}`;
   const response = await fetch(`https://nominatim.openstreetmap.org/search?${query}`);
   const geoInformation = await response.json();
@@ -79,7 +80,7 @@ async function getLocation(street: string, houseNumber: string, city: string, zi
   };
 }
 
-async function register(registrationData: RegistrationData): Promise<string | undefined> {
+export async function register(registrationData: RegistrationData): Promise<string | undefined> {
   let position: Position = munichPosition;
 
   if (registrationData.isDealer) {
@@ -125,10 +126,3 @@ async function register(registrationData: RegistrationData): Promise<string | un
     return translateError(error);
   }
 }
-
-export default {
-  getDefaultCategory,
-  getAccount,
-  updateAccount,
-  register
-};

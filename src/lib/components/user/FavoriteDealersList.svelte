@@ -1,26 +1,34 @@
 <script lang="ts">
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
-  import dealService from "$lib/supabase/deal-service";
-  import dealerService from "$lib/supabase/dealer-service";
+  import { getFavoriteDealers, toggleFavoriteDealer } from "$lib/supabase/dealer-service";
   import type { ActiveDeal, FavoriteDealer } from "$lib/supabase/public-types";
+  import type { Supabase } from "$lib/supabase/supabase-client";
   import { onMount } from "svelte";
   import HeartIcon from "../ui/icons/HeartIcon.svelte";
   import UserDealsList from "./UserDealsList.svelte";
+
+  export let supabsae: Supabase;
+  export let userId: string | undefined;
 
   let dealers: FavoriteDealer[] = [];
   let deals: ActiveDeal[] = [];
   let loading = true;
 
   onMount(async () => {
-    dealers = await dealerService.getFavoriteDealers();
+    if (!userId) return;
+    dealers = await getFavoriteDealers(supabsae, userId);
     const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
-    deals = await dealService.getActiveDealsByDealer(dealerIds);
+    deals = await getActiveDealsByDealer(dealerIds);
     loading = false;
   });
 
   async function unfavorite(dealerId: string) {
-    await dealerService.toggleFavoriteDealer(dealerId);
+    await toggleFavoriteDealer(dealerId);
     dealers = dealers.filter((dealer) => dealer.dealer_id !== dealerId);
+  }
+
+  function getActiveDealsByDealer(dealerIds: string[]): ActiveDeal[] | PromiseLike<ActiveDeal[]> {
+    throw new Error("Function not implemented.");
   }
 </script>
 

@@ -4,10 +4,9 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import Link from "$lib/components/ui/Link.svelte";
-  import { supabase, translateError } from "$lib/supabase/supabase-client";
+  import { translateError } from "$lib/supabase/supabase-client";
 
   export let data;
-
   let email: string;
   let password: string;
   let errorMessage: string | null;
@@ -17,7 +16,7 @@
 
   async function login() {
     loading = true;
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await data.supabase.auth.signInWithPassword({
       email,
       password
     });
@@ -28,7 +27,6 @@
       return;
     }
 
-    // await invalidateAll(); // needed to update $page.data.user with actual user data
     goto("/").then();
   }
 </script>

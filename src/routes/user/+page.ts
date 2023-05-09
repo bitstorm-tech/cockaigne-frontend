@@ -3,10 +3,9 @@ import { navigationStore } from "$lib/stores/navigation.store";
 import accountService from "$lib/supabase/account-service";
 import dealerService from "$lib/supabase/dealer-service";
 import storageService from "$lib/supabase/storage-service";
+import type { LoadEvent } from "@sveltejs/kit";
 
-export const ssr = false;
-
-export async function load() {
+export async function load({ parent }: LoadEvent) {
   navigationStore.currentPage("home");
 
   const [account, favoriteDealers, profileImageUrl] = await Promise.all([

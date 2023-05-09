@@ -20,11 +20,6 @@ export const handle: Handle = async ({ event, resolve }) => {
     return session;
   };
 
-  event.locals.isDealer = async () => {
-    const session = await event.locals.getSession();
-    return session?.user.user_metadata.isDealer;
-  };
-
   return resolve(event, {
     /**
      * There´s an issue with `filterSerializedResponseHeaders` not working when using `sequence`

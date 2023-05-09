@@ -10,23 +10,21 @@
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
-  import dealerService from "$lib/supabase/dealer-service";
+  import { toggleFavoriteDealer } from "$lib/supabase/dealer-service";
   import type { PageData } from "./$types";
 
   export let data: PageData;
   let activeTab = 0;
-  const dealerId = data?.dealerId;
-  const deals = data?.deals;
-  const account = data?.account;
-  const profileImage = data.profileImage;
-  const pictures = data?.pictures;
-  let isFavoriteDealer = data?.isFavoriteDealer;
+  const { dealerId, deals, account, profileImage, pictures } = data;
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
+  let isFavoriteDealer = data.isFavDealer;
   let loadingFavorite = false;
 
   async function toggleFavor() {
     loadingFavorite = true;
     if (!dealerId) return;
-    await dealerService.toggleFavoriteDealer(dealerId);
+    await toggleFavoriteDealer(supabase, userId, dealerId);
     isFavoriteDealer = !isFavoriteDealer;
     loadingFavorite = false;
   }

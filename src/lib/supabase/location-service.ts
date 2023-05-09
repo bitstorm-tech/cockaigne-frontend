@@ -1,9 +1,8 @@
-import type { DealFilter } from "$lib/database/deal/deal.model";
 import { munichPosition, type Position, toPostGisPoint } from "$lib/geo/geo.types";
-import { getUserId, supabase } from "./supabase-client";
+import type { DealFilter, Location } from "$lib/supabase/public-types";
+import type { Supabase } from "$lib/supabase/supabase-client";
 
-async function useCurrentLocation(): Promise<boolean> {
-  const userId = await getUserId();
+export async function getUseCurrentLocation(supabase: Supabase, userId: string): Promise<boolean> {
   const { error, data } = await supabase.from("accounts").select("use_current_location").eq("id", userId).single();
 
   if (error) {
@@ -14,8 +13,7 @@ async function useCurrentLocation(): Promise<boolean> {
   return data.use_current_location || false;
 }
 
-async function saveUseCurrentLocation(useCurrentLocation: boolean) {
-  const userId = await getUserId();
+export async function saveUseCurrentLocation(supabase: Supabase, userId: string, useCurrentLocation: boolean) {
   const { error } = await supabase
     .from("accounts")
     .update({ use_current_location: useCurrentLocation })
@@ -26,8 +24,7 @@ async function saveUseCurrentLocation(useCurrentLocation: boolean) {
   }
 }
 
-async function getLocation(): Promise<Position> {
-  const userId = await getUserId();
+export async function getLocation(supabase: Supabase, userId: string): Promise<Position> {
   const { error, data } = await supabase.from("accounts").select("location").eq("id", userId).single();
 
   if (error || !data.location) {
@@ -35,8 +32,8 @@ async function getLocation(): Promise<Position> {
     return munichPosition;
   }
 
-  const longitude = data.location.coordinates[0];
-  const latitude = data.location.coordinates[1];
+  const longitude = (data.location as Location).coordinates[0];
+  const latitude = (data.location as Location).coordinates[1];
 
   return {
     longitude,
@@ -44,14 +41,15 @@ async function getLocation(): Promise<Position> {
   };
 }
 
-async function saveLocation(location: Position) {
-  const userId = await getUserId();
+export async function saveLocation(supabase: Supabase, userId: string, location: Position) {
   const point = toPostGisPoint(location);
   await supabase.from("accounts").update({ location: point }).eq("id", userId);
 }
 
-async function createFilterByCurrentLocationAndSelectedCategories(): Promise<DealFilter> {
-  const userId = await getUserId();
+export async function createFilterByCurrentLocationAndSelectedCategories(
+  supabase: Supabase,
+  userId: string
+): Promise<DealFilter> {
   const { error, data } = await supabase.from("accounts").select("search_radius, location").eq("id", userId).single();
 
   if (error) {
@@ -68,22 +66,15 @@ async function createFilterByCurrentLocationAndSelectedCategories(): Promise<Dea
 
   return {
     categoryIds: result2.data.map((result) => result.category_id),
-    radius: data.search_radius / 2 ?? 250,
+    radius: data.search_radius! / 2 ?? 250,
     location: {
-      longitude: data.location.coordinates[0],
-      latitude: data.location.coordinates[1]
+      longitude: (data.location as Location).coordinates[0],
+      latitude: (data.location as Location).coordinates[1]
     }
   };
 }
 
-async function getSearchRadius(): Promise<number> {
-  const userId = await getUserId();
-
-  if (!userId) {
-    console.log("Can't get search radius -> unknown user");
-    return 500;
-  }
-
+export async function getSearchRadius(supabase: Supabase, userId: string): Promise<number> {
   const { error, data } = await supabase.from("accounts").select("search_radius").eq("id", userId).single();
 
   if (!data) {
@@ -94,17 +85,6 @@ async function getSearchRadius(): Promise<number> {
   return data.search_radius || 500;
 }
 
-async function saveSearchRadius(searchRadius: number) {
-  const userId = await getUserId();
+export async function saveSearchRadius(supabase: Supabase, userId: string, searchRadius: number) {
   await supabase.from("accounts").update({ search_radius: searchRadius }).eq("id", userId);
 }
-
-export default {
-  saveUseCurrentLocation,
-  useCurrentLocation,
-  getLocation,
-  saveLocation,
-  createFilterByCurrentLocationAndSelectedCategories,
-  getSearchRadius,
-  saveSearchRadius
-};

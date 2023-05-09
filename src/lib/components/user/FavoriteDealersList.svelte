@@ -1,25 +1,22 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import { getFavoriteDealers, toggleFavoriteDealer } from "$lib/supabase/dealer-service";
   import type { ActiveDeal, FavoriteDealer } from "$lib/supabase/public-types";
-  import type { Supabase } from "$lib/supabase/supabase-client";
   import { onMount } from "svelte";
   import HeartIcon from "../ui/icons/HeartIcon.svelte";
   import UserDealsList from "./UserDealsList.svelte";
 
-  export let supabsae: Supabase;
-  export let userId: string | undefined;
-
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
   let dealers: FavoriteDealer[] = [];
   let deals: ActiveDeal[] = [];
-  let loading = true;
 
   onMount(async () => {
     if (!userId) return;
-    dealers = await getFavoriteDealers(supabsae, userId);
+    dealers = await getFavoriteDealers(supabase, userId);
     const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
     deals = await getActiveDealsByDealer(dealerIds);
-    loading = false;
   });
 
   async function unfavorite(dealerId: string) {

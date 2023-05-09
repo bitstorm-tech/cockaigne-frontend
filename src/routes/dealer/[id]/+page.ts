@@ -1,23 +1,22 @@
-import { redirectToLogin } from "$lib/http.utils";
 import { navigationStore } from "$lib/stores/navigation.store";
-import dealService from "$lib/supabase/deal-service";
-import dealerService from "$lib/supabase/dealer-service";
-import storageService from "$lib/supabase/storage-service";
+import { getDealsByDealerId } from "$lib/supabase/deal-service";
+import { getDealer, isFavoriteDealer } from "$lib/supabase/dealer-service";
+import { getDealerImages, getProfileImage } from "$lib/supabase/storage-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
-export const ssr = false;
-
-export async function load({ params }: LoadEvent) {
+export async function load({ params, parent }: LoadEvent) {
   const id = params.id || "";
+  const { session, supabase } = await parent();
+  const userId = session.user.id;
 
   navigationStore.currentPage("home");
 
-  const [deals, pictures, isFavoriteDealer, account, profileImage] = await Promise.all([
-    dealService.getDealsByDealerId(id),
-    storageService.getDealerImages(id),
-    dealerService.isFavoriteDealer(id),
-    dealerService.getDealer(id),
-    storageService.getProfileImage(id, true)
+  const [deals, pictures, isFavDealer, account, profileImage] = await Promise.all([
+    getDealsByDealerId(supabase, id),
+    getDealerImages(supabase, id),
+    isFavoriteDealer(supabase, userId, id),
+    getDealer(supabase, id),
+    getProfileImage(supabase, id, true)
   ]);
 
   if (account) {
@@ -27,9 +26,9 @@ export async function load({ params }: LoadEvent) {
       dealerId: id,
       account,
       profileImage,
-      isFavoriteDealer
+      isFavDealer
     };
   }
 
-  redirectToLogin();
+  history.back();
 }

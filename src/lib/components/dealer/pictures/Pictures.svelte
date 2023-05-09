@@ -6,7 +6,7 @@
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
-  import StorageService from "$lib/supabase/storage-service";
+  import { deleteDealerImage, saveDealerImage } from "$lib/supabase/storage-service";
 
   export let pictures: string[] = [];
   export let companyName = "";
@@ -17,9 +17,12 @@
   let deletePictureUrl: string;
   let zoomImageIndex = 0;
 
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
+
   async function savePicture(event: CustomEvent<File>) {
     toastText = "Speichere Bild ...";
-    const imageUrl = await StorageService.saveDealerImage(event.detail);
+    const imageUrl = await saveDealerImage(supabase, userId, event.detail);
 
     if (imageUrl) {
       pictures = [...pictures, imageUrl];
@@ -31,7 +34,7 @@
   async function deletePictureCallback() {
     toastText = "Lösche Bild ...";
     const filename = deletePictureUrl.split("/").pop() || "";
-    await deleteDealerImage(filename);
+    await deleteDealerImage(supabase, userId, filename);
     pictures = pictures.filter((pictureUrl) => pictureUrl !== deletePictureUrl);
     toastText = null;
   }
@@ -61,7 +64,7 @@
   {/each}
 </div>
 {#if $page.data.user.isDealer}
-  <div class="sticky bottom-3 flex w-full justify-end pr-3 pb-9">
+  <div class="sticky bottom-3 flex w-full justify-end pb-9 pr-3">
     <AddPictureButton on:select={savePicture} />
   </div>
 {/if}

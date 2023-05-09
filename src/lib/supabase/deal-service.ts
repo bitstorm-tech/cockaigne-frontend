@@ -4,9 +4,9 @@ import omit from "lodash/omit";
 import remove from "lodash/remove";
 import locationService from "./location-service";
 import type { ActiveDeal, Deal, DealFilter, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
-import { getUserId, supabase } from "./supabase-client";
+import { getUserId, type Supabase, supabase } from "./supabase-client";
 
-async function getDeal(id: string): Promise<Deal | undefined> {
+export async function getDeal(id: string): Promise<Deal | undefined> {
   const { data, error } = await supabase.from("deals").select().eq("id", id).single();
 
   if (error) {
@@ -23,7 +23,7 @@ async function getDeal(id: string): Promise<Deal | undefined> {
   return deal;
 }
 
-async function getActiveDealsByDealer(dealerIds: string | string[]): Promise<ActiveDeal[]> {
+export async function getActiveDealsByDealer(supabase: Supabase, dealerIds: string | string[]): Promise<ActiveDeal[]> {
   const ids = Array.isArray(dealerIds) ? dealerIds : [dealerIds];
   const { data, error } = await supabase.from("active_deals_view").select().in("dealer_id", ids);
 
@@ -32,10 +32,14 @@ async function getActiveDealsByDealer(dealerIds: string | string[]): Promise<Act
     return [];
   }
 
-  return enrichDealWithImageUrls(data);
+  return enrichDealWithImageUrls(supabase, data);
 }
 
-async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<string | undefined> {
+export async function upsertDeal(
+  supabase: Supabase,
+  deal: Deal,
+  alsoCreateTemplate = false
+): Promise<string | undefined> {
   dateTimeUtils.addTimezoneOffsetToDeal(deal);
   const _deal = deal.id === "" ? omit(deal, "id") : deal;
   delete _deal.imageUrls;
@@ -62,8 +66,7 @@ async function upsertDeal(deal: Deal, alsoCreateTemplate = false): Promise<strin
   return resultUpsertTemplate.data.id;
 }
 
-async function deleteDeal(dealId: string): Promise<string | undefined> {
-  const dealerId = await getUserId();
+export async function deleteDeal(supabase: Supabase, dealerId: string, dealId: string): Promise<string | undefined> {
   const { error } = await supabase.from("deals").delete().eq("id", dealId).eq("dealer_id", dealerId);
 
   if (error) {
@@ -87,7 +90,7 @@ function createExtentFromFilter(filter: DealFilter): GetActiveDealsWithinExtentF
   return null;
 }
 
-export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]> {
+export async function getDealsByFilter(supabase: Supabase, filter: DealFilter): Promise<ActiveDeal[]> {
   const extent = createExtentFromFilter(filter);
 
   if (!extent) {
@@ -114,10 +117,14 @@ export async function getDealsByFilter(filter: DealFilter): Promise<ActiveDeal[]
     return [];
   }
 
-  return enrichDealWithImageUrls(data);
+  return enrichDealWithImageUrls(supabase, data);
 }
 
-async function getDealsByDealerId(dealerId: string, activeOnly = true): Promise<ActiveDeal[] | Deal[]> {
+export async function getDealsByDealerId(
+  supabase: Supabase,
+  dealerId: string,
+  activeOnly = true
+): Promise<ActiveDeal[] | Deal[]> {
   const query = activeOnly
     ? supabase.from("active_deals_view").select().eq("dealer_id", dealerId)
     : supabase.from("deals").select().eq("dealer_id", dealerId).eq("template", false);
@@ -128,10 +135,10 @@ async function getDealsByDealerId(dealerId: string, activeOnly = true): Promise<
     return [];
   }
 
-  return enrichDealWithImageUrls(data);
+  return enrichDealWithImageUrls(supabase, data);
 }
 
-async function toggleHotDeal(dealId: string): Promise<ActiveDeal | null> {
+export async function toggleHotDeal(supabase: Supabase, dealId: string): Promise<ActiveDeal | null> {
   const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId);
 
   if (data && data.length >= 1) {
@@ -155,15 +162,14 @@ async function toggleHotDeal(dealId: string): Promise<ActiveDeal | null> {
   return result.data;
 }
 
-async function getTopDeals(limit: number): Promise<ActiveDeal[]> {
+export async function getTopDeals(supabase: Supabase, limit: number): Promise<ActiveDeal[]> {
   const filter = await locationService.createFilterByCurrentLocationAndSelectedCategories();
   filter.limit = limit;
 
-  return await getDealsByFilter(filter);
+  return await getDealsByFilter(supabase, filter);
 }
 
-async function getHotDeals(): Promise<ActiveDeal[]> {
-  const userId = await getUserId();
+export async function getHotDeals(supabase: Supabase, userId: string): Promise<ActiveDeal[]> {
   const hotDealsResult = await supabase.from("hot_deals").select().eq("user_id", userId);
 
   if (hotDealsResult.error) {
@@ -184,31 +190,32 @@ async function getHotDeals(): Promise<ActiveDeal[]> {
     return [];
   }
 
-  return enrichDealWithImageUrls(activeDealsResult.data);
+  return enrichDealWithImageUrls(supabase, activeDealsResult.data);
 }
 
-async function enrichDealWithImageUrls<T extends ActiveDeal[] | Deal[]>(deals: T): Promise<T> {
+export async function enrichDealWithImageUrls<T extends ActiveDeal[] | Deal[]>(
+  supabase: Supabase,
+  deals: T
+): Promise<T> {
   for (const deal of deals) {
     if (!deal.id || !deal.dealer_id) {
       console.log("Can't enrich deal with image URLs -> either deal or dealer ID unknown");
       continue;
     }
-    deal.imageUrls = await getDealImages(deal.id, deal.dealer_id);
+    deal.imageUrls = await getDealImages(supabase, deal.id, deal.dealer_id);
   }
 
   return deals;
 }
 
-function rotateByCurrentTime(deals: ActiveDeal[]): ActiveDeal[] {
+export function rotateByCurrentTime(deals: ActiveDeal[]): ActiveDeal[] {
   const nowTime = dateTimeUtils.getTimeString();
   const dealsAfterNow = remove(deals, (deal) => nowTime > dateTimeUtils.getTimeString(deal.start!));
 
   return [...deals, ...dealsAfterNow];
 }
 
-async function toggleLike(deal: ActiveDeal): Promise<number> {
-  const userId = await getUserId();
-
+export async function toggleLike(supabase: Supabase, userId: string, deal: ActiveDeal): Promise<number> {
   const { count, error } = await supabase
     .from("likes")
     .select("*", { count: "exact", head: true })
@@ -250,18 +257,3 @@ export function newDeal(): Deal {
     created: ""
   };
 }
-
-export default {
-  deleteDeal,
-  getActiveDealsByDealer,
-  getDeal,
-  getDealsByDealerId,
-  getDealsByFilter,
-  getHotDeals,
-  getTopDeals,
-  newDeal,
-  rotateByCurrentTime,
-  toggleHotDeal,
-  toggleLike,
-  upsertDeal
-};

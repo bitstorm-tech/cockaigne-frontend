@@ -1,23 +1,26 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Button from "$lib/components/ui/Button.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
-  import type { Category } from "$lib/database/category/category.model";
-  import type { MapService } from "$lib/map.service";
+  import { setRadius } from "$lib/map.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
-  import locationService from "$lib/supabase/location-service";
+  import { updateSelectedCategory } from "$lib/supabase/category-service";
+  import { getSearchRadius, saveSearchRadius } from "$lib/supabase/location-service";
+  import type { Category } from "$lib/supabase/public-types";
   import { debounce, union, without } from "lodash";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
 
   export let categories: Category[] = [];
   export let open = false;
-  export let mapService: MapService;
   let searchRadius = 0;
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
 
   onMount(async () => {
-    searchRadius = await locationService.getSearchRadius();
+    searchRadius = await getSearchRadius(supabase, userId);
   });
 
   const buttons = [
@@ -29,18 +32,18 @@
     }
   ];
 
-  selectedCategoriesStore.load();
+  selectedCategoriesStore.load(supabase);
 
   const saveRadius = debounce(() => {
-    locationService.saveSearchRadius(searchRadius);
+    saveSearchRadius(supabase, userId, searchRadius);
   }, 2000);
 
-  const saveSelectedCategories = debounce(() => {
-    selectedCategoriesStore.save();
+  const saveSelectedCategoriesDebounced = debounce(() => {
+    updateSelectedCategory(supabase, userId, $selectedCategoriesStore);
   }, 2000);
 
   function changeSearchRadius() {
-    mapService.setRadius(searchRadius);
+    setRadius(searchRadius);
     saveRadius();
   }
 
@@ -51,7 +54,7 @@
       selectedCategoriesStore.update((oldState) => without(oldState, categoryId));
     }
 
-    saveSelectedCategories();
+    saveSelectedCategoriesDebounced();
   }
 
   function toggleAllCategories() {
@@ -65,7 +68,7 @@
       });
     }
 
-    saveSelectedCategories();
+    saveSelectedCategoriesDebounced();
   }
 </script>
 

@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import RatingStars from "$lib/components/ui/RatingStars.svelte";
   import type { Rating } from "$lib/supabase/public-types";
-  import storageService from "$lib/supabase/storage-service";
+  import { getProfileImage } from "$lib/supabase/storage-service";
   import { onMount } from "svelte";
   import LoadingSpinner from "../ui/icons/LoadingSpinner.svelte";
 
@@ -11,9 +12,11 @@
   let imageUrl: string;
   let name: string;
 
+  const supabase = $page.data.supabase;
+
   onMount(async () => {
     if (rating.user_id) {
-      imageUrl = await storageService.getProfileImage(rating.user_id);
+      imageUrl = await getProfileImage(supabase, rating.user_id);
     }
     name = rating.username || "Name";
   });

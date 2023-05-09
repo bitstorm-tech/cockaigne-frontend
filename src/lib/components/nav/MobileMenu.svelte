@@ -1,10 +1,10 @@
 <script>
-  import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
-  import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
-  import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import { goto, invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
+  import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
+  import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
+  import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
   import { supabase } from "$lib/supabase/supabase-client";
 
@@ -16,7 +16,7 @@
 </script>
 
 <div class="z-50 flex flex-col gap-8 bg-base-300 p-4">
-  {#if $page.data.user.isAuthenticated}
+  {#if $page.data.session?.user}
     <a href="/settings" class="flex h-8 items-center gap-3">
       <GearIcon />
       Einstellungen

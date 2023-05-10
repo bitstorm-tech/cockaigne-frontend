@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
@@ -10,21 +11,23 @@
   import { dealStore } from "$lib/stores/deal.store";
   import { hotDealStore } from "$lib/stores/hot-deal.store";
   import { likeStore } from "$lib/stores/like.store";
-  import locationService from "$lib/supabase/location-service";
+  import { getLocation } from "$lib/supabase/location-service";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
   const favoriteDealers = data.favoriteDealers ?? [];
   const account = data.account;
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
   let showTabIndex = 0;
   let address: string[] = [""];
 
   onMount(async () => {
-    hotDealStore.load();
-    dealStore.load();
-    likeStore.load();
-    const location = await locationService.getLocation();
+    hotDealStore.load().then();
+    dealStore.load().then();
+    likeStore.load().then();
+    const location = await getLocation(supabase, userId);
     const longAddress = await getAddress(location);
     address = addressToShortString(longAddress);
   });

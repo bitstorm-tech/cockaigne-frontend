@@ -5,8 +5,6 @@ import type { ActiveDeal } from "$lib/supabase/public-types";
 import { get, writable } from "svelte/store";
 
 const deals = writable<ActiveDeal[]>([]);
-const supabase = get(page).data.supabase;
-const userId = get(page).data.session.user.id;
 
 export const dealStore = {
   subscribe: deals.subscribe,
@@ -14,6 +12,8 @@ export const dealStore = {
   update: deals.update,
 
   load: async function () {
+    const supabase = get(page).data.supabase;
+    const userId = get(page).data.session.user.id;
     const filter = await createFilterByCurrentLocationAndSelectedCategories(supabase, userId);
     const deals = await getDealsByFilter(supabase, filter);
     this.set(deals);

@@ -11,7 +11,7 @@
 
   $: category = Categories[deal?.category_id] || { icon: CrossIcon, color: "fuchsia" };
 
-  const isUser = !$page.data.user.isDealer;
+  const isUser = !$page.data.session.user.user_metadata.isDealer;
 </script>
 
 <div class="flex items-center">

@@ -7,20 +7,19 @@
   import HeartIcon from "../ui/icons/HeartIcon.svelte";
   import UserDealsList from "./UserDealsList.svelte";
 
-  const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
   let dealers: FavoriteDealer[] = [];
   let deals: ActiveDeal[] = [];
 
   onMount(async () => {
-    if (!userId) return;
+    const supabase = $page.data.supabase;
+    const userId = $page.data.session.user.id;
     dealers = await getFavoriteDealers(supabase, userId);
     const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
     deals = await getActiveDealsByDealer(dealerIds);
   });
 
   async function unfavorite(dealerId: string) {
-    await toggleFavoriteDealer(dealerId);
+    await toggleFavoriteDealer($page.data.supabase, $page.data.session.user.id, dealerId);
     dealers = dealers.filter((dealer) => dealer.dealer_id !== dealerId);
   }
 

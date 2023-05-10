@@ -1,9 +1,12 @@
-import dealService from "$lib/supabase/deal-service";
+import { page } from "$app/stores";
+import { getHotDeals, rotateByCurrentTime, toggleHotDeal } from "$lib/supabase/deal-service";
 import type { ActiveDeal } from "$lib/supabase/public-types";
 import { remove } from "lodash";
 import { get, writable } from "svelte/store";
 
 const hotDeals = writable<ActiveDeal[]>([]);
+const supabase = get(page).data.supabase;
+const userId = get(page).data.session.user.id;
 
 export const hotDealStore = {
   subscribe: hotDeals.subscribe,
@@ -11,13 +14,13 @@ export const hotDealStore = {
   update: hotDeals.update,
 
   load: async function () {
-    const hotDeals = await dealService.getHotDeals();
+    const hotDeals = await getHotDeals(supabase, userId);
     hotDeals.forEach((deal) => (deal.isHot = true));
     this.set(hotDeals);
   },
 
   toggleHot: async function (dealId: string) {
-    const hotDeal = await dealService.toggleHotDeal(dealId);
+    const hotDeal = await toggleHotDeal(supabase, userId, dealId);
 
     if (hotDeal) {
       hotDeal.isHot = true;
@@ -37,7 +40,7 @@ export const hotDealStore = {
   },
 
   rotateByCurrentTime: function () {
-    const rotatedDeals = dealService.rotateByCurrentTime(get(hotDeals));
+    const rotatedDeals = rotateByCurrentTime(get(hotDeals));
     this.set(rotatedDeals);
   }
 };

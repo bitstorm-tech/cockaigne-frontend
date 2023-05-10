@@ -1,8 +1,8 @@
 import dateTimeUtils, { getDateTimeAsIsoString } from "$lib/date-time.utils";
+import { createFilterByCurrentLocationAndSelectedCategories } from "$lib/supabase/location-service";
 import { getDealImages } from "$lib/supabase/storage-service";
 import omit from "lodash/omit";
 import remove from "lodash/remove";
-import locationService from "./location-service";
 import type { ActiveDeal, Deal, DealFilter, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
 import { getUserId, type Supabase, supabase } from "./supabase-client";
 
@@ -138,7 +138,7 @@ export async function getDealsByDealerId(
   return enrichDealWithImageUrls(supabase, data);
 }
 
-export async function toggleHotDeal(supabase: Supabase, dealId: string): Promise<ActiveDeal | null> {
+export async function toggleHotDeal(supabase: Supabase, userId: string, dealId: string): Promise<ActiveDeal | null> {
   const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId);
 
   if (data && data.length >= 1) {
@@ -146,11 +146,6 @@ export async function toggleHotDeal(supabase: Supabase, dealId: string): Promise
     return null;
   }
 
-  const userId = await getUserId();
-  if (!userId) {
-    console.log("Can't toggle hot deal, unknown user");
-    return null;
-  }
   await supabase.from("hot_deals").insert({ user_id: userId, deal_id: dealId });
   const result = await supabase.from("active_deals_view").select().eq("id", dealId).single();
 
@@ -162,8 +157,8 @@ export async function toggleHotDeal(supabase: Supabase, dealId: string): Promise
   return result.data;
 }
 
-export async function getTopDeals(supabase: Supabase, limit: number): Promise<ActiveDeal[]> {
-  const filter = await locationService.createFilterByCurrentLocationAndSelectedCategories();
+export async function getTopDeals(supabase: Supabase, userId: string, limit: number): Promise<ActiveDeal[]> {
+  const filter = await createFilterByCurrentLocationAndSelectedCategories(supabase, userId);
   filter.limit = limit;
 
   return await getDealsByFilter(supabase, filter);

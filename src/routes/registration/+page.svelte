@@ -6,7 +6,7 @@
   import CategorySelect from "$lib/components/ui/CategorySelect.svelte";
   import Checkbox from "$lib/components/ui/Checkbox.svelte";
   import Input from "$lib/components/ui/Input.svelte";
-  import accountService from "$lib/supabase/account-service";
+  import { register } from "$lib/supabase/account-service";
 
   let isDealer = false;
   let email: string;
@@ -49,10 +49,10 @@
     (!isDealer && !age) ||
     (!isDealer && !gender);
 
-  async function register() {
+  async function handleRegistration() {
     loading = true;
 
-    const error = await accountService.register({
+    const error = await register({
       email,
       password,
       isDealer,
@@ -108,7 +108,7 @@
     <ButtonGroup label="Alter" options={ageOptions} bind:value={age} />
   {/if}
   <div class="grid grid-cols-2 gap-4 pt-6">
-    <Button on:click={register} {loading} {disabled}>Registrieren</Button>
+    <Button on:click={handleRegistration} {loading} {disabled}>Registrieren</Button>
     <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </div>

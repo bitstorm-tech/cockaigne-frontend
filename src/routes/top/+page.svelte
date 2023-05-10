@@ -1,10 +1,11 @@
 <script lang="ts">
   import { browser } from "$app/environment";
+  import { page } from "$app/stores";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import { likeStore } from "$lib/stores/like.store";
   import { navigationStore } from "$lib/stores/navigation.store";
-  import dealService from "$lib/supabase/deal-service";
+  import { getTopDeals } from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
 
@@ -12,6 +13,8 @@
   let tabIndex = 10;
   let loading = true;
   let topDeals: ActiveDeal[] = [];
+  const supabase = $page.data.supabase;
+  const userId = $page.data.session.user.id;
 
   onMount(() => {
     likeStore.load();
@@ -23,7 +26,7 @@
 
     loading = true;
     tabIndex = numberOfDeals;
-    topDeals = await dealService.getTopDeals(numberOfDeals);
+    topDeals = await getTopDeals(supabase, userId, numberOfDeals);
     loading = false;
   }
 </script>

@@ -3,6 +3,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
+  import Toast from "$lib/components/ui/Toast.svelte";
   import type { Account } from "$lib/supabase/public-types";
 
   export let account: Account;
@@ -10,6 +11,7 @@
 
   let showTabIndex = 0;
   let showAlert = false;
+  let showToast = false;
   let loading = false;
 
   async function changePassword() {

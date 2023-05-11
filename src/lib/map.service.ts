@@ -4,13 +4,13 @@ import { getDealsByFilter } from "$lib/supabase/deal-service";
 import { getLocation, getSearchRadius, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import { debounce } from "lodash";
 import { Feature, View } from "ol";
+import Map from "ol/Map";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
 import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
-import Map from "ol/Map";
 import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
@@ -30,13 +30,13 @@ const view = new View({
 });
 let circle: Circle;
 let centerPoint: Circle;
-const supabase = get(page).data.supabase;
-const userId = get(page).data.session.user.id;
 
 // createEffect(() => setRadius(searchRadius()));
 // createEffect(() => jumpToLocation(location()));
 
 const saveLocationDebounced = debounce(async (location: Position) => {
+  const supabase = get(page).data.supabase;
+  const userId = get(page).data.session.user.id;
   await saveLocation(supabase, userId, location);
 }, 1000);
 
@@ -46,12 +46,16 @@ const updateDeals = debounce(async (extent: Extent) => {
     extent
   };
 
+  const supabase = get(page).data.supabase;
+  const userId = get(page).data.session.user.id;
   const deals = await getDealsByFilter(supabase, filter);
   setDeals(deals);
 }, 1000);
 
 export async function initMapService(htmlElementId: string) {
   useGeographic();
+  const supabase = get(page).data.supabase;
+  const userId = get(page).data.session.user.id;
   const location = await getLocation(supabase, userId);
   const center = toOpenLayersCoordinate(location);
 
@@ -116,6 +120,8 @@ export function jumpToLocation(position: Position) {
 }
 
 export async function jumpToCurrentLocation() {
+  const supabase = get(page).data.supabase;
+  const userId = get(page).data.session.user.id;
   const postion = await getLocation(supabase, userId);
   const center = toOpenLayersCoordinate(postion);
   view.setCenter(center);
@@ -138,6 +144,8 @@ function setDeals(deals: ActiveDeal[]) {
 }
 
 async function moveCircle(location?: Coordinate) {
+  const supabase = get(page).data.supabase;
+  const userId = get(page).data.session.user.id;
   const newCoordinates = location || toOpenLayersCoordinate(await getLocation(supabase, userId));
   circle?.setCenter(newCoordinates);
   centerPoint?.setCenter(newCoordinates);

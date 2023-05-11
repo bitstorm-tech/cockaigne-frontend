@@ -14,7 +14,7 @@
   }
 </script>
 
-<div class="z-50 flex flex-col gap-8 bg-base-300 p-4">
+<div class="z-50 flex flex-col gap-8 bg-base-300 p-4 backdrop-blur">
   {#if $page.data.session?.user}
     <a href="/settings" class="flex h-8 items-center gap-3">
       <GearIcon />

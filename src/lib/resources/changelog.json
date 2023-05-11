@@ -1,4 +1,9 @@
 {
+  "11.05.2023": [
+    "Umstellung auf neues Supabase Backend",
+    "Sortierung der Deals: zeitlich nächster Deal steht oben",
+    "Bugs gefixt"
+  ],
   "27.1.2023": [
     "Deals werden nach Startzeit sortiert (Datum wird ignoriert)",
     "Icon der aktiven Seite wird im Footer hervorgehoben"

@@ -2,6 +2,7 @@
   import { goto } from "$app/navigation";
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import Toast from "$lib/components/ui/Toast.svelte";
   import { updateAccount } from "$lib/supabase/account-service";
   import type { Account, AccountUpdate } from "$lib/supabase/public-types";
   import { saveProfileImage } from "$lib/supabase/storage-service";
@@ -13,6 +14,7 @@
   let newProfileImage: File | undefined;
   let errorMessage = "";
   let loading = false;
+  let showToast = false;
 
   const originalUsername = account.username;
   const isDealer = data.session?.user.user_metadata.isDealer;
@@ -22,6 +24,7 @@
     await saveAccount();
     await saveImage();
     loading = false;
+    showToast = true;
   }
 
   async function saveAccount() {
@@ -84,3 +87,4 @@
 <Alert show={errorMessage.length > 0} on:confirm={confirmError}>
   {errorMessage}
 </Alert>
+<Toast bind:show={showToast}>Änderungen erfolgreich gespeichert!</Toast>

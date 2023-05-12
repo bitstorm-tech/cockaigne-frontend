@@ -14,6 +14,7 @@
 
   const dispatch = createEventDispatcher();
 
+  // @ts-ignore
   function setValue(event) {
     value = event.target.value;
   }
@@ -30,7 +31,7 @@
     <span class="label-text text-xs">{label}</span>
   </label>
   <input
-    class="input input-bordered focus:border-primary focus:outline-none"
+    class="input-bordered input focus:border-primary focus:outline-none"
     class:text-center={centerText}
     class:tracking-[0.5rem]={letterSpacing}
     {id}

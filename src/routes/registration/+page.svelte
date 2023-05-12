@@ -11,6 +11,7 @@
   let isDealer = false;
   let email: string;
   let password: string;
+  let passwordRepeat: string;
   let username: string;
   let defaultCategory: number;
   let street: string;
@@ -40,6 +41,7 @@
   $: disabled =
     email?.length === 0 ||
     password?.length === 0 ||
+    password !== passwordRepeat ||
     username?.length === 0 ||
     (isDealer && !street) ||
     (isDealer && !houseNumber) ||
@@ -85,7 +87,10 @@
   {#if !isDealer}
     <Input label="Benutzername" type="text" bind:value={username} />
   {/if}
-  <Input label="Passwort" type="password" bind:value={password} />
+  <div class="grid grid-cols-2 gap-3">
+    <Input label="Passwort" type="password" bind:value={password} />
+    <Input label="Passwort wiederholen" type="password" bind:value={passwordRepeat} />
+  </div>
   {#if isDealer}
     <Input label="Firmenname" type="text" bind:value={username} />
     <CategorySelect label="Branche" bind:value={defaultCategory} />

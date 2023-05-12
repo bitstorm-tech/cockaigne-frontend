@@ -18,8 +18,8 @@ export type RegistrationData = {
   taxId: string;
 };
 
-export async function getDefaultCategory(): Promise<number> {
-  const { data, error } = await supabase.from("accounts").select("default_category").single();
+export async function getDefaultCategory(supabase: Supabase, userId: string): Promise<number> {
+  const { data, error } = await supabase.from("accounts").select("default_category").eq("id", userId).single();
 
   if (error) {
     console.error("Can't get default category:", error);

@@ -19,6 +19,7 @@
 
   const supabase = $page.data.supabase;
   const userId = $page.data.session.user.id;
+  const isDealer = $page.data.session.user.user_metadata.isDealer;
 
   async function savePicture(event: CustomEvent<File>) {
     toastText = "Speichere Bild ...";
@@ -57,13 +58,13 @@
   {#each pictures as picture, index}
     <Picture
       url={picture}
-      showDelete={$page.data.user.isDealer}
+      showDelete={isDealer}
       on:delete={() => onDelete(picture)}
       on:zoom={() => onZoom(index)}
     />
   {/each}
 </div>
-{#if $page.data.user.isDealer}
+{#if isDealer}
   <div class="sticky bottom-3 flex w-full justify-end pb-9 pr-3">
     <AddPictureButton on:select={savePicture} />
   </div>

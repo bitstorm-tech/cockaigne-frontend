@@ -3,11 +3,11 @@
   import { page } from "$app/stores";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import type { Deal } from "$lib/database/deal/deal.model";
   import { sortDealsByState } from "$lib/deal.utils";
+  import type { Deal } from "$lib/supabase/public-types.js";
 
   export let data;
-  const deals: Deal[] = data?.deals;
+  const deals: Deal[] = data.deals;
 
   $: sortedDeals = sortDealsByState(deals);
 
@@ -16,18 +16,18 @@
 
 <div class="flex flex-col p-3">
   <div class="grid grid-cols-2 gap-3">
-    <Button warning on:click={() => goto("/deals/new?dealerId=" + $page.data.user.id)}>Deal erstellen</Button>
+    <Button warning on:click={() => goto("/deals/new?dealerId=" + $page.data.session.user.id)}>Deal erstellen</Button>
     <Button on:click={() => goto("/deals/templates")}>Vorlagen</Button>
   </div>
 </div>
-<div class="tabs mt-6 max-h-8 mb-2">
-  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
+<div class="tabs mb-2 mt-6 max-h-8">
+  <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
     Aktiv
   </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
+  <button on:click={() => (showTabIndex = 1)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 1}>
     Geplant
   </button>
-  <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
+  <button on:click={() => (showTabIndex = 2)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 2}>
     Abgelaufen
   </button>
 </div>

@@ -6,13 +6,13 @@ import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ params, url, parent }: LoadEvent) {
   const id = params.id;
-  const { supabase } = await parent();
+  const { supabase, session } = await parent();
 
   if (!id) {
     return;
   }
 
-  const defaultCategory = await getDefaultCategory();
+  const defaultCategory = await getDefaultCategory(supabase, session.user.id);
 
   if (id.toLowerCase() === "new") {
     const deal = newDeal();

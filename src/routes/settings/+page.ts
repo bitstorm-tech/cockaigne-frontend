@@ -12,7 +12,7 @@ export async function load({ parent }: LoadEvent) {
     return goto("/");
   }
 
-  account.profileImageUrl = await getProfileImage(supabase, account.id, account.dealer);
+  account.profileImageUrl = await getProfileImage(supabase, account.id, account.is_dealer);
 
   return {
     account

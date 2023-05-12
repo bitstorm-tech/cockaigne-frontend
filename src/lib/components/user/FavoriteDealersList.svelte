@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
+  import { getActiveDealsByDealer } from "$lib/supabase/deal-service";
   import { getFavoriteDealers, toggleFavoriteDealer } from "$lib/supabase/dealer-service";
   import type { ActiveDeal, FavoriteDealer } from "$lib/supabase/public-types";
   import { onMount } from "svelte";
@@ -15,16 +16,12 @@
     const userId = $page.data.session.user.id;
     dealers = await getFavoriteDealers(supabase, userId);
     const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
-    deals = await getActiveDealsByDealer(dealerIds);
+    deals = await getActiveDealsByDealer(supabase, dealerIds);
   });
 
   async function unfavorite(dealerId: string) {
     await toggleFavoriteDealer($page.data.supabase, $page.data.session.user.id, dealerId);
     dealers = dealers.filter((dealer) => dealer.dealer_id !== dealerId);
-  }
-
-  function getActiveDealsByDealer(dealerIds: string[]): ActiveDeal[] | PromiseLike<ActiveDeal[]> {
-    throw new Error("Function not implemented.");
   }
 </script>
 

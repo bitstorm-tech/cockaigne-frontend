@@ -49,46 +49,40 @@
   $: disableSave = deal.title.length === 0 || deal.description.length === 0;
   $: {
     deal.start && individualEndDate && individuallyTime;
-    const durationInDays = getDurationInHours() / 24;
+    const durationInDays = getDurationInDays();
     costs = (4.99 * durationInDays).toFixed(2).replace(".", ",");
   }
 
   async function save() {
-    loading = true;
-
     if (deal.template) {
       deal.template = false;
       deal.id = "";
     }
 
-    if (individuallyTime) {
-      deal.duration = getDurationInHours();
-    } else {
-      deal.start = startDealImmediately ? getDateTimeAsIsoString() : deal.start;
-    }
+    deal.duration = getDurationInDays() * 24;
+    deal.start = formatDateWithTimeZone(deal.start);
 
-    const dealId = await upsertDeal(supabase, deal, createTemplate);
+    deal.dealer_id = $page.data.session.user.id;
+    const dealId = await upsertDeal($page.data.supabase, deal, createTemplate);
 
     if (!dealId) {
-      openErrorModal = true;
-      loading = false;
       return;
     }
 
-    await saveDealImages(supabase, images, dealId);
+    await saveDealImages($page.data.supabase, images, dealId);
 
     goto("/");
   }
 
-  function getDurationInHours(): number {
+  function getDurationInDays(): number {
     if (individuallyTime) {
       const startDate = deal.start.split("T")[0];
       const startTimestamp = Date.parse(startDate);
       const endTimestamp = Date.parse(individualEndDate);
-      return (endTimestamp - startTimestamp) / (60 * 60 * 1000);
+      return (endTimestamp - startTimestamp) / (60 * 60 * 1000) / 24;
     }
 
-    return +deal.duration;
+    return +deal.duration / 24;
   }
 
   async function del() {
@@ -102,6 +96,7 @@
     openErrorModal = true;
   }
 
+  // @ts-ignore
   function pictureSelected(event) {
     const file = event.target.files[0] as File;
 
@@ -119,6 +114,10 @@
     imagePreviews = [...imagePreviews];
     images.splice(index);
   }
+
+  function formatDateWithTimeZone(start: string): string {
+    throw new Error("Function not implemented.");
+  }
 </script>
 
 <div class="flex flex-col gap-4 p-4">
@@ -133,7 +132,7 @@
   {/if}
   <div class="grid grid-cols-3 gap-2">
     {#if deal.id}
-      {#each deal.imageUrls as imageUrl}
+      {#each deal.imageUrls || [] as imageUrl}
         <Picture url={imageUrl} fixedHeight={false} />
       {/each}
     {:else}
@@ -142,31 +141,32 @@
       {/each}
     {/if}
   </div>
-  <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
-  <div class="flex items-end gap-4">
-    {#if startDealImmediately}
-      <p class="text-xs">Dein Deal startet sofort wenn du auf "Erstellen" klickst!</p>
-    {:else}
-      <Input
-        type="datetime-local"
-        min={nowDateTimeString}
-        label="Start"
-        bind:value={deal.start}
-        disabled={disabled || startDealImmediately}
-      />
-    {/if}
-    <div class="w-52">
-      <Checkbox label="Sofort starten" bind:checked={startDealImmediately} {disabled} />
-    </div>
+  <div class="flex gap-4">
+    <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />
+    <Checkbox label="Sofort starten" bind:checked={startDealImmediately} {disabled} />
   </div>
+  {#if startDealImmediately}
+    <p class="py-7">Dein Deal startet sofort wenn du auf "Erstellen" klickst!</p>
+  {:else}
+    <Input
+      type="datetime-local"
+      min={nowDateTimeString}
+      label="Start"
+      bind:value={deal.start}
+      disabled={disabled || startDealImmediately}
+    />
+  {/if}
   {#if individuallyTime}
     <Input type="date" min={deal.start} label="Ende" bind:value={individualEndDate} {disabled} />
   {:else}
-    <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+    <div class="py-2">
+      <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+    </div>
   {/if}
   <div class="grid grid-cols-2 pt-16">
-    <div class="flex flex-col justify-center">
-      <div class="text-lg font-bold">Kosten: {costs} €</div>
+    <div>
+      <p class="text-lg font-bold">Kosten: {costs} €</p>
+      <p class="pt-4 text-xs">{`${getDurationInDays()} Tag(e) a 4,99 € pro Tag`}</p>
     </div>
     <div class="flex flex-col gap-3">
       <Button warning on:click={save} disabled={disableSave || disabled} {loading}>

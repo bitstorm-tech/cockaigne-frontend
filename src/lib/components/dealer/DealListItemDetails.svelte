@@ -4,7 +4,6 @@
   import ZoomPictureModal from "$lib/components/dealer/pictures/ZoomPictureModal.svelte";
   import ReportDealModal from "$lib/components/dealer/ReportDealModal.svelte";
   import LikeIcon from "$lib/components/ui/icons/LikeIcon.svelte";
-  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
@@ -16,16 +15,15 @@
   let openZoomModal = false;
   let openReportModal = false;
   let zoomImageIndex = 0;
-  let processingLike = false;
+
+  $: liked = $likeStore.includes(deal.id!);
 
   const supabase = $page.data.supabase;
   const userId = $page.data.session.user.id;
 
   async function like() {
-    processingLike = true;
-    deal.likes = await toggleLike(supabase, userId, deal);
     likeStore.toggleLike(deal.id!);
-    processingLike = false;
+    deal.likes = await toggleLike(supabase, userId, deal);
   }
 
   function onZoom(index: number) {
@@ -45,13 +43,9 @@
     <span class="py-4 text-xs">Endet am {formatDate(deal.start, +deal.duration * 60)}</span>
     <div class="flex h-6 justify-between">
       <div class="flex items-center gap-3">
-        {#if processingLike}
-          <LoadingSpinner size={1.5} />
-        {:else}
-          <button on:click={like}>
-            <LikeIcon size={1.3} dislike={$likeStore.includes(deal.id)} />
-          </button>
-        {/if}
+        <button on:click={like}>
+          <LikeIcon size={1.3} dislike={liked} />
+        </button>
         <span class="text-lg">{deal.likes}</span>
       </div>
       <button on:click={() => (openReportModal = true)}>

@@ -5,6 +5,7 @@
 @layer base {
     body {
         @apply box-border;
+        font-family: 'Ubuntu', sans-serif;
     }
 
     h1 {

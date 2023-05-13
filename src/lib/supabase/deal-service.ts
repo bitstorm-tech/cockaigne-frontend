@@ -1,12 +1,13 @@
 import dateTimeUtils, { getDateTimeAsIsoString } from "$lib/date-time.utils";
+import { logError } from "$lib/error-utils";
 import { createFilterByCurrentLocationAndSelectedCategories } from "$lib/supabase/location-service";
 import { getDealImages } from "$lib/supabase/storage-service";
 import omit from "lodash/omit";
 import remove from "lodash/remove";
 import type { ActiveDeal, Deal, DealFilter, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
-import { getUserId, type Supabase, supabase } from "./supabase-client";
+import type { Supabase } from "$lib/supabase/supabase-client";
 
-export async function getDeal(id: string): Promise<Deal | undefined> {
+export async function getDeal(supabase: Supabase, id: string): Promise<Deal | undefined> {
   const { data, error } = await supabase.from("deals").select().eq("id", id).single();
 
   if (error) {
@@ -21,6 +22,16 @@ export async function getDeal(id: string): Promise<Deal | undefined> {
   }
 
   return deal;
+}
+
+export async function getTemplates(supabase: Supabase, dealerId: string): Promise<Deal[]> {
+  const { data, error } = await supabase.from("deals").select().eq("dealer_id", dealerId).eq("template", true);
+
+  if (error) {
+    return logError<Deal[]>(error, "Can't get templates", []);
+  }
+
+  return data;
 }
 
 export async function getActiveDealsByDealer(supabase: Supabase, dealerIds: string | string[]): Promise<ActiveDeal[]> {

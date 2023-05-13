@@ -1,13 +1,11 @@
-import { getUserId, supabase } from "$lib/supabase/supabase-client";
+import { getTemplates } from "$lib/supabase/deal-service";
 import type { LoadEvent } from "@sveltejs/kit";
 
-export async function load({ fetch }: LoadEvent) {
-  const id = await getUserId();
-  const { data } = await supabase.from("deals").select().eq("dealer_id", id).eq("template", true);
+export async function load({ parent }: LoadEvent) {
+  const { supabase, session } = await parent();
+  const templates = getTemplates(supabase, session.user.id);
 
-  if (data) {
-    return {
-      templates: data
-    };
-  }
+  return {
+    templates
+  };
 }

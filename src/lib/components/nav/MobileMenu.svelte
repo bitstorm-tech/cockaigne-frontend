@@ -6,11 +6,12 @@
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
+  import { logout } from "$lib/supabase/auth";
 
-  async function logout() {
-    await $page.data.supabase.auth.signOut();
-    await goto("/login");
+  async function handleLogout() {
+    await logout($page.data.supabase);
     await invalidateAll();
+    await goto("/");
   }
 </script>
 
@@ -24,7 +25,7 @@
       <NewsIcon />
       Was gibt es Neues?
     </a>
-    <button on:click={logout} class="flex h-8 cursor-pointer items-center gap-3">
+    <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
       <LogoutIcon />
       Logout
     </button>

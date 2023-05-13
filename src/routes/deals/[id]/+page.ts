@@ -1,4 +1,4 @@
-import DateTimeUtils from "$lib/date-time.utils";
+import { removeTimezoneOffsetFromDeal } from "$lib/date-time.utils";
 import { getDefaultCategory } from "$lib/supabase/account-service";
 import { getDeal, newDeal } from "$lib/supabase/deal-service";
 import { getDealImages } from "$lib/supabase/storage-service";
@@ -26,7 +26,7 @@ export async function load({ params, url, parent }: LoadEvent) {
 
   const deal = await getDeal(supabase, id);
   if (deal) {
-    DateTimeUtils.removeTimezoneOffsetFromDeal(deal);
+    removeTimezoneOffsetFromDeal(deal);
     deal.category_id = defaultCategory;
     deal.imageUrls = await getDealImages(supabase, deal.id, deal.dealer_id);
   }

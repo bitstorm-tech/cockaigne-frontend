@@ -10,6 +10,7 @@ export type ActiveDeal = Database["public"]["Views"]["active_deals_view"]["Row"]
 };
 export type Category = Database["public"]["Tables"]["categories"]["Row"];
 export type Deal = Database["public"]["Tables"]["deals"]["Row"] & { imageUrls?: string[] };
+export type DealUpsert = Database["public"]["Tables"]["deals"]["Update"];
 export type Dealer = Database["public"]["Views"]["dealer_view"]["Row"];
 export type FavoriteDealer = Database["public"]["Views"]["favorite_dealers_view"]["Row"];
 export type HotDeal = Database["public"]["Tables"]["hot_deals"]["Row"];

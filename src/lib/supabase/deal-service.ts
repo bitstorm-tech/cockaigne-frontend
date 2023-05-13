@@ -1,11 +1,17 @@
-import dateTimeUtils, { getDateTimeAsIsoString } from "$lib/date-time.utils";
+import { addTimezoneOffsetToDeal, getDateTimeAsIsoString, getTimeString } from "$lib/date-time.utils";
 import { logError } from "$lib/error-utils";
 import { createFilterByCurrentLocationAndSelectedCategories } from "$lib/supabase/location-service";
 import { getDealImages } from "$lib/supabase/storage-service";
+import type { Supabase } from "$lib/supabase/supabase-client";
 import omit from "lodash/omit";
 import remove from "lodash/remove";
-import type { ActiveDeal, Deal, DealFilter, GetActiveDealsWithinExtentFunctionArguments } from "./public-types";
-import type { Supabase } from "$lib/supabase/supabase-client";
+import type {
+  ActiveDeal,
+  Deal,
+  DealFilter,
+  DealUpsert,
+  GetActiveDealsWithinExtentFunctionArguments
+} from "./public-types";
 
 export async function getDeal(supabase: Supabase, id: string): Promise<Deal | undefined> {
   const { data, error } = await supabase.from("deals").select().eq("id", id).single();
@@ -51,7 +57,7 @@ export async function upsertDeal(
   deal: Deal,
   alsoCreateTemplate = false
 ): Promise<string | undefined> {
-  dateTimeUtils.addTimezoneOffsetToDeal(deal);
+  addTimezoneOffsetToDeal(deal);
   const _deal = deal.id === "" ? omit(deal, "id") : deal;
   delete _deal.imageUrls;
 
@@ -215,8 +221,8 @@ export async function enrichDealWithImageUrls<T extends ActiveDeal[] | Deal[]>(
 }
 
 export function rotateByCurrentTime(deals: ActiveDeal[]): ActiveDeal[] {
-  const nowTime = dateTimeUtils.getTimeString();
-  const dealsAfterNow = remove(deals, (deal) => nowTime > dateTimeUtils.getTimeString(deal.start!));
+  const nowTime = getTimeString();
+  const dealsAfterNow = remove(deals, (deal) => nowTime > getTimeString(deal.start!));
 
   return [...deals, ...dealsAfterNow];
 }
@@ -250,7 +256,7 @@ export async function toggleLike(supabase: Supabase, userId: string, deal: Activ
   return count === 0 ? deal.likes + 1 : deal.likes - 1;
 }
 
-export function newDeal(): Deal {
+export function newDeal(): DealUpsert {
   return {
     id: "",
     dealer_id: "",
@@ -259,7 +265,6 @@ export function newDeal(): Deal {
     description: "",
     duration: 24,
     template: false,
-    category_id: 1,
-    created: ""
+    category_id: 1
   };
 }

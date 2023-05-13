@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
@@ -54,7 +55,7 @@
   async function handleRegistration() {
     loading = true;
 
-    const error = await register({
+    const error = await register($page.data.supabase, {
       email,
       password,
       isDealer,

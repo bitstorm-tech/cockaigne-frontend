@@ -24,7 +24,7 @@ export async function load({ params, url, parent }: LoadEvent) {
     return { deal };
   }
 
-  const deal = await getDeal(id);
+  const deal = await getDeal(supabase, id);
   if (deal) {
     DateTimeUtils.removeTimezoneOffsetFromDeal(deal);
     deal.category_id = defaultCategory;

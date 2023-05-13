@@ -1,6 +1,7 @@
+import { translateError } from "$lib/error-utils";
 import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
-import { supabase, translateError, type Supabase } from "./supabase-client";
+import type { Supabase } from "./supabase-client";
 
 export type RegistrationData = {
   password: string;
@@ -72,7 +73,7 @@ export async function getLocation(
   };
 }
 
-export async function register(registrationData: RegistrationData): Promise<string | undefined> {
+export async function register(supabase: Supabase, registrationData: RegistrationData): Promise<string | undefined> {
   let position: Position = munichPosition;
 
   if (registrationData.isDealer) {

@@ -1,5 +1,5 @@
+import type { Supabase } from "$lib/supabase/supabase-client";
 import { v4 as uuid } from "uuid";
-import { getUserId, supabase, type Supabase } from "./supabase-client";
 
 const BUCKET_DEALER_IMAGES = "dealer-images";
 const BUCKET_PROFILE_IMAGES = "profile-images";
@@ -95,9 +95,8 @@ export async function getDealImages(supabase: Supabase, dealId: string, dealerId
   return filenames.map((filename) => supabase.storage.from(BUCKET_DEAL_IMAGES).getPublicUrl(filename).data.publicUrl);
 }
 
-export async function saveDealImages(supabase: Supabase, images: File[], dealId: string) {
-  const dealerId = await getUserId();
-  const folder = `${dealerId}/${dealId}`;
+export async function saveDealImages(supabase: Supabase, userId: string, images: File[], dealId: string) {
+  const folder = `${userId}/${dealId}`;
 
   for (const image of images) {
     const filename = generateRandomFilename(image);
@@ -105,7 +104,7 @@ export async function saveDealImages(supabase: Supabase, images: File[], dealId:
   }
 }
 
-export async function deleteDealImages(superbase: Supabase, dealerId: string, dealId: string) {
+export async function deleteDealImages(supabase: Supabase, dealerId: string, dealId: string) {
   const path = `${dealerId}/${dealId}`;
 
   const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);

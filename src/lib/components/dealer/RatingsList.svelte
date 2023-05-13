@@ -1,11 +1,12 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import RatingModal from "$lib/components/dealer/RatingModal.svelte";
   import RatingsListItem from "$lib/components/dealer/RatingsListItem.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import type { Rating } from "$lib/supabase/public-types";
-  import ratingService from "$lib/supabase/rating-service";
+  import { getRatings, saveRating } from "$lib/supabase/rating-service";
 
   export let showRatingButton = false;
   export let dealerId: string;
@@ -15,7 +16,7 @@
   let openModal = false;
 
   async function fetchRatings() {
-    const ratings = await ratingService.getRatings(dealerId);
+    const ratings = await getRatings($page.data.supabase, dealerId);
 
     showRatingButton = !isDealer && !ratings.some((rating) => rating.user_id === userId);
 
@@ -26,7 +27,7 @@
     const rating = event.detail;
     rating.dealer_id = dealerId;
     rating.user_id = userId;
-    await ratingService.saveRating(rating);
+    await saveRating($page.data.supabase, rating);
     newRating = rating;
     showRatingButton = false;
   }

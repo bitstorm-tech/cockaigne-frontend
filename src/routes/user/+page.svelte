@@ -24,7 +24,7 @@
   onMount(async () => {
     hotDealStore.load().then();
     dealStore.load().then();
-    likeStore.load().then();
+    likeStore.load($page.data.supabase).then();
     const supabase = $page.data.supabase;
     const userId = $page.data.session.user.id;
     const location = await getLocation(supabase, userId);

@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import Button from "$lib/components/ui/Button.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import Modal from "$lib/components/ui/Modal.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
-  import reportService from "$lib/supabase/report-service";
+  import { getReport, saveReport } from "$lib/supabase/report-service";
 
   export let open = false;
   export let dealName = "";
@@ -15,14 +16,14 @@
 
   async function onOpen() {
     loading = true;
-    const report = await reportService.getReport(dealId);
+    const report = await getReport($page.data.supabase, $page.data.session.user.id, dealId);
     alreadyReported = !!report;
     reason = alreadyReported ? report!!.reason : "";
     loading = false;
   }
 
   function sendReport() {
-    reportService.saveReport(dealId, reason);
+    saveReport($page.data.supabase, $page.data.session.user.id, dealId, reason);
     open = false;
   }
 </script>

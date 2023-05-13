@@ -17,7 +17,7 @@
   const userId = $page.data.session.user.id;
 
   onMount(() => {
-    likeStore.load();
+    likeStore.load($page.data.supabase);
     switchTab(tabIndex);
   });
 

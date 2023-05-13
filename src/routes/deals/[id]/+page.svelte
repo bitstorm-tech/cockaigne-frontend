@@ -69,7 +69,7 @@
       return;
     }
 
-    await saveDealImages($page.data.supabase, images, dealId);
+    await saveDealImages($page.data.supabase, $page.data.session.user.id, images, dealId);
 
     goto("/");
   }

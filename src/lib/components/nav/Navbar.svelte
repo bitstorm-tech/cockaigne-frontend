@@ -33,6 +33,6 @@
     </div>
   </div>
 </nav>
-<div class="absolute z-10 w-screen border-b-[0.01rem] border-[#556368]">
+<div class="absolute z-50 w-screen border-b-[0.01rem] border-[#556368]">
   <MobileMenu bind:show={showMobileMenu} />
 </div>

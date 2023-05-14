@@ -114,7 +114,7 @@
     <ButtonGroup label="Alter" options={ageOptions} bind:value={age} />
   {/if}
   <div class="grid grid-cols-2 gap-4 pt-6">
-    <Button on:click={handleRegistration} {loading} {disabled}>Registrieren</Button>
+    <Button warning on:click={handleRegistration} {loading} {disabled}>Registrieren</Button>
     <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </div>

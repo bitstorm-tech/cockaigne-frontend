@@ -49,10 +49,12 @@
   let fileInput: HTMLInputElement;
   let loading = false;
   let durationInDays = +deal.duration / 24;
+  let helpText = "";
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
-  $: disableSave = deal.title.length === 0 || deal.description.length === 0 || isBeforeNow(deal.start);
+  $: disableSave =
+    deal.title.length === 0 || deal.description.length === 0 || isBeforeNow(deal.start) || durationInDays < 1;
   $: {
     deal.start && individualEndDate && individuallyTime;
     costs = (4.99 * durationInDays).toFixed(2).replace(".", ",");
@@ -66,6 +68,26 @@
       const startTimestamp = Date.parse(startDate);
       const endTimestamp = Date.parse(individualEndDate);
       durationInDays = (endTimestamp - startTimestamp) / (60 * 60 * 1000) / 24;
+    }
+  }
+
+  $: {
+    if (deal.title.length === 0) {
+      helpText = "Bitte des Titel-Feld ausfüllen";
+    } else if (deal.description.length === 0) {
+      helpText = "Bitte das Beschreibung-Feld ausfüllen";
+    } else if (isBeforeNow(deal.start)) {
+      helpText = "Der Deal darf nicht in der Vergangenheit starten";
+    } else if (durationInDays < 1) {
+      helpText = "Der Start muss vor dem Ende liegen";
+    } else {
+      helpText = "";
+    }
+  }
+
+  $: {
+    if (deal.start > individualEndDate) {
+      individualEndDate = getDateAsIsoString(new Date(deal.start), 25 * 60);
     }
   }
 
@@ -164,6 +186,7 @@
       <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
     </div>
   {/if}
+  <span class="text-red-600">{helpText}</span>
   <div class="grid grid-cols-2 pt-16">
     <div>
       <p class="text-lg font-bold">Kosten: {costs} €</p>

@@ -6,7 +6,7 @@
   const style = `width: ${size}rem; height: ${size}rem`;
 </script>
 
-<div class="avatar z-10 cursor-pointer" class:invisible={$menuOpen}>
+<div class="avatar z-50 cursor-pointer" class:invisible={$menuOpen}>
   <div class="rounded-full ring-2 ring-[#556368]" {style}>
     <img loading="lazy" src={imageUrl} alt="Profile" />
   </div>

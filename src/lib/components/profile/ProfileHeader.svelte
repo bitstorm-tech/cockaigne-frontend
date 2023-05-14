@@ -14,10 +14,8 @@
       <span>{street}</span>
       <span>{city}</span>
     </div>
-    <div class="flex flex-col items-center -mt-6 mr-8">
-      <div class="z-10">
-        <ProfilePicture {imageUrl} />
-      </div>
+    <div class="-mt-6 mr-8 flex flex-col items-center">
+      <ProfilePicture {imageUrl} />
       <slot />
     </div>
   </div>

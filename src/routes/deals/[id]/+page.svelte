@@ -12,8 +12,8 @@
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import {
     formatDateWithTimeZone,
-    getDateAsIsoString,
-    getDateTimeAsIsoString,
+    getDateStringWithoutTimezone,
+    getDateTimeStringWithoutTimezone,
     isBeforeNow
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
@@ -28,12 +28,12 @@
   const supabase = $page.data.supabase;
 
   const runtimes = {
-    "24": "1 Tag",
-    "48": "2 Tage",
-    "72": "3 Tage"
+    24: "1 Tag",
+    48: "2 Tage",
+    72: "3 Tage"
   };
 
-  const nowDateTimeString = getDateTimeAsIsoString();
+  const nowDateTimeString = getDateTimeStringWithoutTimezone();
 
   let openErrorModal = false;
   let openDeleteModal = false;
@@ -41,8 +41,8 @@
   let startDealImmediately = false;
   let individuallyTime = +deal.duration > 72;
   let individualEndDate = deal.id
-    ? getDateAsIsoString(new Date(deal.start), +deal.duration * 60)
-    : getDateAsIsoString(new Date(), 25 * 60);
+    ? getDateStringWithoutTimezone(new Date(deal.start), +deal.duration * 60)
+    : getDateStringWithoutTimezone(new Date(), 25 * 60);
   let costs = "4,99";
   let images: File[] = [];
   let imagePreviews: string[] = [];
@@ -87,7 +87,13 @@
 
   $: {
     if (deal.start > individualEndDate) {
-      individualEndDate = getDateAsIsoString(new Date(deal.start), 25 * 60);
+      individualEndDate = getDateStringWithoutTimezone(new Date(deal.start), 25 * 60);
+    }
+  }
+
+  $: {
+    if (startDealImmediately) {
+      deal.start = getDateTimeStringWithoutTimezone(new Date(), 15);
     }
   }
 
@@ -186,6 +192,7 @@
       <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
     </div>
   {/if}
+  <span>{deal.start.toString()}</span>
   <span class="text-red-600">{helpText}</span>
   <div class="grid grid-cols-2 pt-16">
     <div>

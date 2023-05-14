@@ -15,8 +15,9 @@ export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnT
     serverSession: data?.session
   });
 
-  const result = await supabase.auth.getSession();
-  const session: Session | null = result.data.session;
+  const {
+    data: { session }
+  } = await supabase.auth.getSession();
 
   return { supabase, session };
 }

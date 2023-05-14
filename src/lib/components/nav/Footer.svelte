@@ -7,7 +7,7 @@
   import { navigationStore } from "$lib/stores/navigation.store";
 </script>
 
-{#if $page.data.session.user.user_metadata.isDealer}
+{#if $page.data.session?.user.user_metadata.isDealer}
   <footer class="btm-nav min-h-12 btm-nav-sm h-12 border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
     <a href="/">
       <HomeIcon active={$navigationStore === "home"} />

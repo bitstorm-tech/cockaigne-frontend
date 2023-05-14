@@ -30,6 +30,8 @@ export function stopLocationWatching() {
 }
 
 export async function initLocationWatcher() {
+  if (!browser) return;
+
   const supabase = get(page).data.supabase;
   const userId = get(page).data.session.user.id;
   const useCurrentLocation = await getUseCurrentLocation(supabase, userId);

@@ -30,7 +30,7 @@
       Logout
     </button>
   {:else}
-    <a href="/" class="flex h-8 items-center gap-3">
+    <a href="/login" class="flex h-8 items-center gap-3">
       <LoginIcon />
       Login
     </a>

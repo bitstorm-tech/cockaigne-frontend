@@ -25,7 +25,7 @@
 <div class="flex flex-col gap-1">
   {#if deals.length === 0}
     <EmptyContent>
-      <p>Aktuell gibt es leider keine Deals in deiner Nähe :(</p>
+      <p>Aktuell gibt es leider keine Deals in deiner Nähe 😞</p>
       <p>
         <Link href="/map?showFilter=true" underline>Filter anpassen</Link>
         oder

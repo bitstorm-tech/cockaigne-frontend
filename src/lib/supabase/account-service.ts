@@ -1,4 +1,4 @@
-import { translateError } from "$lib/error-utils";
+import { logError, translateError } from "$lib/error-utils";
 import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
 import type { Supabase } from "./supabase-client";
@@ -45,7 +45,7 @@ export async function updateAccount(supabase: Supabase, update: AccountUpdate): 
   const { error } = await supabase.from("accounts").update(update).eq("id", update.id);
 
   if (error) {
-    console.log("Can't update account:", error);
+    logError(error, "Can't update account");
     if (error.code === "23505") {
       return "Benutzername bereits vergeben";
     }

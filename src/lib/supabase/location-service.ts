@@ -1,4 +1,5 @@
-import { munichPosition, type Position, toPostGisPoint } from "$lib/geo/geo.types";
+import { logError } from "$lib/error-utils";
+import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
 import type { DealFilter, Location } from "$lib/supabase/public-types";
 import type { Supabase } from "$lib/supabase/supabase-client";
 
@@ -6,8 +7,7 @@ export async function getUseCurrentLocation(supabase: Supabase, userId: string):
   const { error, data } = await supabase.from("accounts").select("use_current_location").eq("id", userId).single();
 
   if (error) {
-    console.log("Can't get useCurrentLocation:", error);
-    return false;
+    return logError(error, "Can't get useCurrentLocation", false);
   }
 
   return data.use_current_location || false;
@@ -20,7 +20,7 @@ export async function saveUseCurrentLocation(supabase: Supabase, userId: string,
     .eq("id", userId);
 
   if (error) {
-    console.log("Can't save use current location:", error);
+    logError(error, "Can't save useCurrentLocation");
   }
 }
 
@@ -28,8 +28,7 @@ export async function getLocation(supabase: Supabase, userId: string): Promise<P
   const { error, data } = await supabase.from("accounts").select("location").eq("id", userId).single();
 
   if (error || !data.location) {
-    console.log("Can't get location:", error);
-    return munichPosition;
+    return logError(error, "Can't get location", munichPosition);
   }
 
   const longitude = (data.location as Location).coordinates[0];
@@ -53,15 +52,13 @@ export async function createFilterByCurrentLocationAndSelectedCategories(
   const { error, data } = await supabase.from("accounts").select("search_radius, location").eq("id", userId).single();
 
   if (error) {
-    console.log("Can't create filter by current location:", error);
-    return {};
+    return logError(error, "Can't create filter by current location", {});
   }
 
   const result2 = await supabase.from("selected_categories").select("category_id").eq("user_id", userId);
 
   if (result2.error) {
-    console.log("Can't create filter by selected categories:", result2.error);
-    return {};
+    return logError(error, "Can't create filter by selected categories", {});
   }
 
   return {
@@ -77,12 +74,11 @@ export async function createFilterByCurrentLocationAndSelectedCategories(
 export async function getSearchRadius(supabase: Supabase, userId: string): Promise<number> {
   const { error, data } = await supabase.from("accounts").select("search_radius").eq("id", userId).single();
 
-  if (!data) {
-    console.log("Can't get search radius:", error);
-    return 500;
+  if (error) {
+    return logError(error, "Can't get search radius", 500);
   }
 
-  return data.search_radius || 500;
+  return data.search_radius;
 }
 
 export async function saveSearchRadius(supabase: Supabase, userId: string, searchRadius: number) {

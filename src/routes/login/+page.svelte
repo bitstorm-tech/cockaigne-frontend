@@ -33,7 +33,10 @@
   <h1>Einloggen</h1>
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Password" type="password" bind:value={password} on:enter={handleLogin} />
-  <Button on:click={handleLogin} {loading} {disabled}>Einloggen</Button>
+  <div class="grid grid-cols-2 gap-2">
+    <Button on:click={handleLogin} {loading} {disabled}>Einloggen</Button>
+    <a href="/"><Button fullwidth>Zurück</Button></a>
+  </div>
   <span class="pt-10 text-center text-sm">
     <Link href="/registration">Registrieren</Link> // <Link href="/password">Passwort vergessen</Link> // <Link
       href={`/confirm/${email}`}>Account aktivieren</Link

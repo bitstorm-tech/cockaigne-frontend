@@ -37,7 +37,7 @@
   name={account?.username}
   {address}
   deals={$dealStore.length}
-  imageUrl={account?.profileImageUrl}
+  imageUrl={data.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$dealStore.filter((deal) => deal.isHot).length}
 />

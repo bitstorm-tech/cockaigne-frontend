@@ -1,3 +1,4 @@
+import { logError } from "$lib/error-utils";
 import type { Supabase } from "$lib/supabase/supabase-client";
 import { v4 as uuid } from "uuid";
 
@@ -23,12 +24,12 @@ export async function saveImage(
 
   const { error } = await supabase.storage.from(bucket).upload(path, file);
 
-  if (!error) {
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
-    return data.publicUrl;
+  if (error) {
+    return logError(error, "Can't save image");
   }
 
-  console.log("Can't save image:", error);
+  const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+  return data.publicUrl;
 }
 
 export async function saveProfileImage(supabase: Supabase, userId: string, image: File): Promise<string | undefined> {
@@ -87,8 +88,7 @@ export async function getDealImages(supabase: Supabase, dealId: string, dealerId
   const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);
 
   if (error) {
-    console.log("Can't get deal images:", error);
-    return [];
+    return logError(error, "Can't get deal images", []);
   }
 
   const filenames = data?.map((fileObject) => `${path}/${fileObject.name}`);
@@ -110,9 +110,9 @@ export async function deleteDealImages(supabase: Supabase, dealerId: string, dea
   const { data, error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(path);
 
   if (error) {
-    console.log("Can't delete deal images:", error);
+    return logError(error, "Can't delete deal images");
   }
 
-  const filesToDelete = data?.map((fileObject) => `${path}/${fileObject.name}`) || [];
+  const filesToDelete = data.map((fileObject) => `${path}/${fileObject.name}`) || [];
   await supabase.storage.from(BUCKET_DEAL_IMAGES).remove([...filesToDelete, path]);
 }

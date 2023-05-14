@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import { page } from "$app/stores";
 import { getDealsByFilter, rotateByCurrentTime } from "$lib/supabase/deal-service";
 import { createFilterByCurrentLocationAndSelectedCategories } from "$lib/supabase/location-service";
@@ -12,6 +13,9 @@ export const dealStore = {
   update: deals.update,
 
   load: async function () {
+    if (!browser) {
+      throw Error("Init store on server -> potential information leak!");
+    }
     const supabase = get(page).data.supabase;
     const userId = get(page).data.session.user.id;
     const filter = await createFilterByCurrentLocationAndSelectedCategories(supabase, userId);

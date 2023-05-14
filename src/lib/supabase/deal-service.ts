@@ -64,8 +64,7 @@ export async function upsertDeal(
   const resultUpsertDeal = await supabase.from("deals").upsert(_deal).select("id").single();
 
   if (resultUpsertDeal.error) {
-    console.log("Can't upsert deal:", resultUpsertDeal.error);
-    return;
+    return logError(resultUpsertDeal.error, "Can't upsert deal");
   }
 
   if (!alsoCreateTemplate) {
@@ -76,8 +75,7 @@ export async function upsertDeal(
   const resultUpsertTemplate = await supabase.from("deals").insert(deal).select("id").single();
 
   if (resultUpsertTemplate.error) {
-    console.log("Can't insert deal template:", resultUpsertTemplate.error);
-    return resultUpsertDeal.data.id;
+    return logError(resultUpsertTemplate.error, "Can't insert deal template");
   }
 
   return resultUpsertTemplate.data.id;
@@ -87,8 +85,7 @@ export async function deleteDeal(supabase: Supabase, dealerId: string, dealId: s
   const { error } = await supabase.from("deals").delete().eq("id", dealId).eq("dealer_id", dealerId);
 
   if (error) {
-    console.log("Can't delete deal:", error);
-    return error.message;
+    return logError(error, "Can't delete deal", error.message);
   }
 }
 
@@ -111,7 +108,7 @@ export async function getDealsByFilter(supabase: Supabase, filter: DealFilter): 
   const extent = createExtentFromFilter(filter);
 
   if (!extent) {
-    console.log("Can't get deals by filter -> no valid extent");
+    console.error("Can't get deals by filter -> no valid extent");
     return [];
   }
 
@@ -167,8 +164,7 @@ export async function toggleHotDeal(supabase: Supabase, userId: string, dealId: 
   const result = await supabase.from("active_deals_view").select().eq("id", dealId).single();
 
   if (result.error) {
-    console.log("Can't get hot deal:", result.error);
-    return null;
+    return logError(result.error, "Can't get hot deal", null);
   }
 
   return result.data;
@@ -185,8 +181,7 @@ export async function getHotDeals(supabase: Supabase, userId: string): Promise<A
   const hotDealsResult = await supabase.from("hot_deals").select().eq("user_id", userId);
 
   if (hotDealsResult.error) {
-    console.log("Can't get hot deals:", hotDealsResult.error);
-    return [];
+    return logError(hotDealsResult.error, "Can't get hot deals", []);
   }
 
   const activeDealsResult = await supabase
@@ -198,8 +193,7 @@ export async function getHotDeals(supabase: Supabase, userId: string): Promise<A
     );
 
   if (activeDealsResult.error) {
-    console.log("Can't get hot deals:", activeDealsResult.error);
-    return [];
+    return logError(activeDealsResult.error, "Can't get hot deals", []);
   }
 
   return enrichDealWithImageUrls(supabase, activeDealsResult.data);
@@ -235,8 +229,7 @@ export async function toggleLike(supabase: Supabase, userId: string, deal: Activ
     .eq("deal_id", deal.id);
 
   if (error || !userId || !deal.id) {
-    console.log("Can't toggle like:", error);
-    return deal.likes || 0;
+    return logError(error, "Can't toggle like", deal.likes || 0);
   }
 
   const query =

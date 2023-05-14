@@ -7,6 +7,7 @@
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
+  import { menuOpen } from "$lib/stores/navigation.store";
   import { logout } from "$lib/supabase/auth";
   import { onDestroy, onMount } from "svelte";
   import { slide } from "svelte/transition";
@@ -19,6 +20,7 @@
   }
 
   function handleClickOutside() {
+    menuOpen.set(false);
     show = false;
   }
 
@@ -30,7 +32,7 @@
 </script>
 
 {#if show}
-  <div class="z-50 flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:slide={{ duration: 200 }}>
+  <div class="flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:slide={{ duration: 200 }}>
     {#if $page.data.session?.user}
       <a href="/settings" class="flex h-8 items-center gap-3">
         <GearIcon />

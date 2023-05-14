@@ -20,7 +20,7 @@
       <Link href="/"><img loading="lazy" class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
       <MemberStatus />
     </div>
-    <div class="z-20 flex cursor-pointer text-[#69828c]">
+    <div class="flex cursor-pointer text-[#69828c]">
       {#if showMobileMenu}
         <button on:click|stopPropagation|preventDefault={toggleMobileMenu}>
           <CrossIcon size={1.85} />
@@ -33,6 +33,6 @@
     </div>
   </div>
 </nav>
-<div class="absolute z-50 w-screen border-b-[0.01rem] border-[#556368]">
+<div class="absolute z-10 w-screen border-b-[0.01rem] border-[#556368]">
   <MobileMenu bind:show={showMobileMenu} />
 </div>

@@ -3,9 +3,15 @@
 @tailwind utilities;
 
 @layer base {
+    @font-face {
+            font-family: "Ubuntu";
+            font-weight: 300;
+            src: url("/fonts/Ubuntu.ttf") format("truetype");
+        }
+
     body {
         @apply box-border;
-        font-family: 'Ubuntu', sans-serif;
+        font-family: "Ubuntu", sans-serif;
     }
 
     h1 {

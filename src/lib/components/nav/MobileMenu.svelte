@@ -1,4 +1,5 @@
 <script>
+  import { browser } from "$app/environment";
   import { goto, invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
@@ -7,6 +8,19 @@
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
   import { logout } from "$lib/supabase/auth";
+  import { onDestroy, onMount } from "svelte";
+  import { slide } from "svelte/transition";
+
+  export let show = false;
+
+  if (browser) {
+    onMount(() => document.addEventListener("click", handleClickOutside));
+    onDestroy(() => document.removeEventListener("click", handleClickOutside));
+  }
+
+  function handleClickOutside() {
+    show = false;
+  }
 
   async function handleLogout() {
     await logout($page.data.supabase);
@@ -15,27 +29,29 @@
   }
 </script>
 
-<div class="z-50 flex flex-col gap-8 bg-base-300 p-4 backdrop-blur">
-  {#if $page.data.session?.user}
-    <a href="/settings" class="flex h-8 items-center gap-3">
-      <GearIcon />
-      Einstellungen
-    </a>
-    <a href="/changelog" class="flex h-8 items-center gap-3">
-      <NewsIcon />
-      Was gibt es Neues?
-    </a>
-    <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
-      <LogoutIcon />
-      Logout
-    </button>
-  {:else}
-    <a href="/login" class="flex h-8 items-center gap-3">
-      <LoginIcon />
-      Login
-    </a>
-  {/if}
-  <div class="mt-8">
-    <LegalFooter />
+{#if show}
+  <div class="z-50 flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:slide={{ duration: 200 }}>
+    {#if $page.data.session?.user}
+      <a href="/settings" class="flex h-8 items-center gap-3">
+        <GearIcon />
+        Einstellungen
+      </a>
+      <a href="/changelog" class="flex h-8 items-center gap-3">
+        <NewsIcon />
+        Was gibt es Neues?
+      </a>
+      <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
+        <LogoutIcon />
+        Logout
+      </button>
+    {:else}
+      <a href="/login" class="flex h-8 items-center gap-3">
+        <LoginIcon />
+        Login
+      </a>
+    {/if}
+    <div class="mt-8">
+      <LegalFooter />
+    </div>
   </div>
-</div>
+{/if}

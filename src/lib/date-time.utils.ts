@@ -6,12 +6,20 @@ const DATE_FORMAT = "yyyy-MM-dd";
 const DATE_TIME_FORMAT_WITHOUT_TIMEZONE = DATE_FORMAT + "'T'HH:mm";
 const DATE_TIME_FORMAT_WITH_TIMEZONE = DATE_TIME_FORMAT_WITHOUT_TIMEZONE + "XXX";
 
-export function getDateTimeAsIsoString(date = new Date(), offsetInMinutes = 0, timezone = "Europe/Berlin"): string {
+export function getDateTimeStringWithoutTimezone(
+  date = new Date(),
+  offsetInMinutes = 0,
+  timezone = "Europe/Berlin"
+): string {
   const dateWithOffset = addMinutes(date, offsetInMinutes);
   return formatInTimeZone(dateWithOffset, timezone, DATE_TIME_FORMAT_WITHOUT_TIMEZONE);
 }
 
-export function getDateAsIsoString(date = new Date(), offsetInMinutes = 0, timezone = "Europe/Berlin"): string {
+export function getDateStringWithoutTimezone(
+  date = new Date(),
+  offsetInMinutes = 0,
+  timezone = "Europe/Berlin"
+): string {
   const dateWithOffset = addMinutes(date, offsetInMinutes);
   return formatInTimeZone(dateWithOffset, timezone, DATE_FORMAT);
 }

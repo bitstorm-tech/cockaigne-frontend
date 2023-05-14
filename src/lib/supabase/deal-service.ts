@@ -1,4 +1,4 @@
-import { addTimezoneOffsetToDeal, getDateTimeAsIsoString, getTimeString } from "$lib/date-time.utils";
+import { addTimezoneOffsetToDeal, getDateTimeStringWithoutTimezone, getTimeString } from "$lib/date-time.utils";
 import { logError } from "$lib/error-utils";
 import { createFilterByCurrentLocationAndSelectedCategories } from "$lib/supabase/location-service";
 import { getDealImages } from "$lib/supabase/storage-service";
@@ -260,7 +260,7 @@ export function newDeal(): DealUpsert {
   return {
     id: "",
     dealer_id: "",
-    start: getDateTimeAsIsoString(new Date(), 60),
+    start: getDateTimeStringWithoutTimezone(new Date(), 60),
     title: "",
     description: "",
     duration: 24,

@@ -16,7 +16,7 @@
 <div class="flex justify-between text-[#dbdce6]">
   <div class="flex w-full justify-between">
     <div class="m-4 flex flex-col gap-4 pt-2">
-      <div class="flex justify-between fill-current text-[#69828c]">
+      <div class="flex gap-2 fill-current text-[#69828c]">
         <DealsBadge number={deals} />
         <HotsBadge number={hotDeals} />
         <FavoriteDealerBadge number={favoriteDealers} />

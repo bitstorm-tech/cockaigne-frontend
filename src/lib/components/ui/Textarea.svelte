@@ -5,6 +5,7 @@
   export let value = "";
   export let disabled = false;
   export let lines = 5;
+  export let resize = true;
 </script>
 
 <div class="form-control">
@@ -13,8 +14,9 @@
   </label>
   <textarea
     {id}
+    class:resize-none={!resize}
+    class="textarea-bordered textarea focus:border-primary focus:outline-none"
     rows={lines}
-    class="textarea textarea-bordered focus:border-primary focus:outline-none"
     {placeholder}
     {disabled}
     bind:value

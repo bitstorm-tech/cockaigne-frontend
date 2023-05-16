@@ -10,7 +10,7 @@
   import { menuOpen } from "$lib/stores/navigation.store";
   import { logout } from "$lib/supabase/auth";
   import { onDestroy, onMount } from "svelte";
-  import { slide } from "svelte/transition";
+  import { fade } from "svelte/transition";
 
   export let show = false;
 
@@ -32,7 +32,7 @@
 </script>
 
 {#if show}
-  <div class="flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:slide={{ duration: 200 }}>
+  <div class="flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:fade={{ duration: 150 }}>
     {#if $page.data.session?.user}
       <a href="/settings" class="flex h-8 items-center gap-3">
         <GearIcon />

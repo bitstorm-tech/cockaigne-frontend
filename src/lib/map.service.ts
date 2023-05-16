@@ -1,5 +1,6 @@
 import { page } from "$app/stores";
 import { stopLocationWatching } from "$lib/geo/location-watcher";
+import { locationStore } from "$lib/stores/location.store";
 import { getDealsByFilter } from "$lib/supabase/deal-service";
 import { getLocation, getSearchRadius, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import { debounce } from "lodash";
@@ -33,6 +34,7 @@ let centerPoint: Circle;
 
 // createEffect(() => setRadius(searchRadius()));
 // createEffect(() => jumpToLocation(location()));
+locationStore.subscribe((location) => jumpToLocation(location));
 
 const saveLocationDebounced = debounce(async (location: Position) => {
   const supabase = get(page).data.supabase;
@@ -103,7 +105,7 @@ export async function initMapService(htmlElementId: string) {
     saveUseCurrentLocation(supabase, userId, false).then();
     stopLocationWatching();
     moveCircle(event.coordinate).then();
-    // setLocation(fromOpenLayersCoordinate(event.coordinate));
+    locationStore.set(fromOpenLayersCoordinate(event.coordinate));
     saveLocationDebounced(fromOpenLayersCoordinate(event.coordinate));
   });
 
@@ -125,7 +127,7 @@ export async function jumpToCurrentLocation() {
   const postion = await getLocation(supabase, userId);
   const center = toOpenLayersCoordinate(postion);
   view.setCenter(center);
-  moveCircle().then();
+  moveCircle(center).then();
 }
 
 export function setRadius(radius: number) {
@@ -143,12 +145,9 @@ function setDeals(deals: ActiveDeal[]) {
   });
 }
 
-async function moveCircle(location?: Coordinate) {
-  const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
-  const newCoordinates = location || toOpenLayersCoordinate(await getLocation(supabase, userId));
-  circle?.setCenter(newCoordinates);
-  centerPoint?.setCenter(newCoordinates);
+async function moveCircle(location: Coordinate) {
+  circle?.setCenter(location);
+  centerPoint?.setCenter(location);
 }
 
 function transformRadius(radius: number) {

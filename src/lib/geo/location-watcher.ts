@@ -1,5 +1,6 @@
 import { browser } from "$app/environment";
 import { page } from "$app/stores";
+import { locationStore } from "$lib/stores/location.store";
 import { getUseCurrentLocation, saveLocation } from "$lib/supabase/location-service";
 import { get } from "svelte/store";
 
@@ -16,6 +17,7 @@ export function startLocationWatching() {
       // setLocation(currentLocation);
       const supabase = get(page).data.supabase;
       const userId = get(page).data.session.user.id;
+      locationStore.set(currentLocation);
       saveLocation(supabase, userId, currentLocation).then();
     });
   }

@@ -6,6 +6,17 @@ export interface Position {
   longitude: number;
 }
 
+export type AddressSearchResult = {
+  location: Position;
+  address: string;
+};
+
+export type NominatimSearchResult = {
+  lat: number;
+  lon: number;
+  display_name: string;
+};
+
 export const munichPosition: Position = {
   longitude: 11.576124,
   latitude: 48.137154

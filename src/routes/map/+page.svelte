@@ -7,7 +7,7 @@
   import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
-  import { initMapService, jumpToLocation } from "$lib/map.service";
+  import { initMapService, jumpToCurrentLocation, jumpToLocation } from "$lib/map.service";
   import { navigationStore } from "$lib/stores/navigation.store";
   import { getLocation } from "$lib/supabase/location-service";
   import { onMount } from "svelte";
@@ -28,10 +28,6 @@
     await initMapService("map");
     jumpToLocation(location);
   });
-
-  function jumpToCurrentLocation() {
-    jumpToCurrentLocation();
-  }
 </script>
 
 <div class="fixed right-1 top-12 z-10 m-3 grid grid-cols-3 gap-2">

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import { Categories } from "$lib/categories";
   import DealListItemDetails from "$lib/components/dealer/DealListItemDetails.svelte";
   import type { ActiveDeal, Deal } from "$lib/supabase/public-types";
@@ -10,8 +9,6 @@
   export let showCompanyName = true;
 
   $: category = Categories[deal?.category_id] || { icon: CrossIcon, color: "fuchsia" };
-
-  const isUser = !$page.data.session.user.user_metadata.isDealer;
 </script>
 
 <div class="flex items-center">
@@ -36,7 +33,7 @@
       </button>
     </button>
     {#if showDetails}
-      <DealListItemDetails {deal} {isUser} />
+      <DealListItemDetails {deal} />
     {/if}
   </div>
 </div>

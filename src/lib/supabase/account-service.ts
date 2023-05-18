@@ -1,5 +1,5 @@
 import { logError, translateError } from "$lib/error-utils";
-import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
+import { centerOfGermany, type Position, toPostGisPoint } from "$lib/geo/geo.types";
 import type { Account, AccountUpdate } from "./public-types";
 import type { Supabase } from "./supabase-client";
 
@@ -23,8 +23,7 @@ export async function getDefaultCategory(supabase: Supabase, userId: string): Pr
   const { data, error } = await supabase.from("accounts").select("default_category").eq("id", userId).single();
 
   if (error) {
-    console.error("Can't get default category:", error);
-    return -1;
+    return logError(error, "Can't get default category", -1);
   }
 
   return data.default_category || -1;
@@ -34,8 +33,7 @@ export async function getAccount(supabase: Supabase, userId: string): Promise<Ac
   const { data, error } = await supabase.from("accounts").select().eq("id", userId).single();
 
   if (error) {
-    console.error("Can't get account:", error);
-    return;
+    return logError(error, "Can't get account");
   }
 
   return data;
@@ -74,7 +72,7 @@ export async function getLocation(
 }
 
 export async function register(supabase: Supabase, registrationData: RegistrationData): Promise<string | undefined> {
-  let position: Position = munichPosition;
+  let position: Position = centerOfGermany;
 
   if (registrationData.isDealer) {
     const _position = await getLocation(

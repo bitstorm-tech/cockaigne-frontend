@@ -17,12 +17,12 @@
   let activeTab = 0;
   const { dealerId, deals, account, profileImage, pictures } = data;
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
   let isFavoriteDealer = data.isFavDealer;
   let loadingFavorite = false;
 
   async function toggleFavor() {
-    if (!dealerId) return;
+    if (!dealerId || !userId) return;
     isFavoriteDealer = !isFavoriteDealer;
     await toggleFavoriteDealer(supabase, userId, dealerId);
   }
@@ -34,7 +34,7 @@
   city={`${account.zip} ${account.city}`}
   imageUrl={profileImage}
 >
-  {#if $page.data.session.user.user_metadata.isDealer}
+  {#if $page.data.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId} class="mt-4">
       <Button warning>Neuer<br />Deal</Button>
     </a>
@@ -64,5 +64,5 @@
 {:else if activeTab === 1}
   <Pictures {pictures} companyName={account.username} />
 {:else}
-  <RatingsList {dealerId} userId={$page.data.session.user.id} isDealer={$page.data.session.user.user_metadata.isDealer} />
+  <RatingsList {dealerId} userId={$page.data.userId} isDealer={$page.data.isDealer} />
 {/if}

@@ -19,11 +19,12 @@
   let showLocationSettingsModal = false;
   let showDealFilterModal = data.showDealFilterModal;
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
 
   navigationStore.currentPage("map");
 
   onMount(async () => {
+    if (!userId) return;
     const location = await getLocation(supabase, userId);
     await initMapService("map");
     jumpToLocation(location);

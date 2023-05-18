@@ -13,7 +13,7 @@
   export let data;
   const supabase = data.supabase;
   const session = data.session;
-  $: hideNavigation = ["/login", "/registration", "/confirm", "/activate"].includes($page.url.pathname);
+  const hideNavigation = ["/login", "/registration", "/confirm", "/activate"].includes($page.url.pathname);
 
   onMount(() => {
     const { data } = supabase.auth.onAuthStateChange((_, _session) => {

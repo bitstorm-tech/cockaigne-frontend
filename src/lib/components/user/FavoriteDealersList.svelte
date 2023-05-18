@@ -13,14 +13,17 @@
 
   onMount(async () => {
     const supabase = $page.data.supabase;
-    const userId = $page.data.session.user.id;
+    const userId = $page.data.userId;
+    if (!userId) return;
     dealers = await getFavoriteDealers(supabase, userId);
     const dealerIds = dealers.map((dealer) => dealer.dealer_id!!);
     deals = await getActiveDealsByDealer(supabase, dealerIds);
   });
 
   async function unfavorite(dealerId: string) {
-    await toggleFavoriteDealer($page.data.supabase, $page.data.session.user.id, dealerId);
+    const userId = $page.data.userId;
+    if (!userId) return;
+    await toggleFavoriteDealer($page.data.supabase, userId, dealerId);
     dealers = dealers.filter((dealer) => dealer.dealer_id !== dealerId);
   }
 </script>

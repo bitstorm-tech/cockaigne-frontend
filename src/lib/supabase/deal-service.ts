@@ -17,8 +17,7 @@ export async function getDeal(supabase: Supabase, id: string): Promise<Deal | un
   const { data, error } = await supabase.from("deals").select().eq("id", id).single();
 
   if (error) {
-    console.error("Can't get deal:", error);
-    return;
+    return logError(error, "Can't get deal");
   }
 
   const deal: Deal = data;
@@ -45,8 +44,7 @@ export async function getActiveDealsByDealer(supabase: Supabase, dealerIds: stri
   const { data, error } = await supabase.from("active_deals_view").select().in("dealer_id", ids);
 
   if (error) {
-    console.error("Can't get active deals:", error);
-    return [];
+    return logError(error, "Can't get active deals", []);
   }
 
   return enrichDealWithImageUrls(supabase, data);
@@ -127,8 +125,7 @@ export async function getDealsByFilter(supabase: Supabase, filter: DealFilter): 
   const { data, error } = await query;
 
   if (error) {
-    console.error("Can't get deals by filter:", error);
-    return [];
+    return logError(error, "Can't get deals by filter", []);
   }
 
   return enrichDealWithImageUrls(supabase, data);
@@ -145,8 +142,7 @@ export async function getDealsByDealerId(
   const { data, error } = await query;
 
   if (error) {
-    console.error("Can't get deals by dealer id:", error);
-    return [];
+    return logError(error, "Can't get deals by dealer id", []);
   }
 
   return enrichDealWithImageUrls(supabase, data);

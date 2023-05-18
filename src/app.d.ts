@@ -15,6 +15,8 @@ declare global {
     interface PageData {
       supabase: Supabase;
       session: Session;
+      isDealer: boolean;
+      userId: string | undefined;
     }
   }
 }

@@ -16,14 +16,23 @@
 
   async function onOpen() {
     loading = true;
-    const report = await getReport($page.data.supabase, $page.data.session.user.id, dealId);
+    const userId = $page.data.userId;
+
+    if (!userId) return;
+
+    const report = await getReport($page.data.supabase, userId, dealId);
     alreadyReported = !!report;
-    reason = alreadyReported ? report!!.reason : "";
+    reason = report ? report.reason : "";
     loading = false;
   }
 
   function sendReport() {
-    saveReport($page.data.supabase, $page.data.session.user.id, dealId, reason);
+    const userId = $page.data.userId;
+
+    if (userId) {
+      saveReport($page.data.supabase, userId, dealId, reason);
+    }
+
     open = false;
   }
 </script>

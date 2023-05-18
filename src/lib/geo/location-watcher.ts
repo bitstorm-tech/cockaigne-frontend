@@ -16,9 +16,12 @@ export function startLocationWatching() {
       };
       // setLocation(currentLocation);
       const supabase = get(page).data.supabase;
-      const userId = get(page).data.session.user.id;
+      const userId = get(page).data.userId;
       locationStore.set(currentLocation);
-      saveLocation(supabase, userId, currentLocation).then();
+
+      if (userId) {
+        saveLocation(supabase, userId, currentLocation).then();
+      }
     });
   }
 }
@@ -32,10 +35,11 @@ export function stopLocationWatching() {
 }
 
 export async function initLocationWatcher() {
-  if (!browser) return;
+  const userId = get(page).data.userId;
+
+  if (!browser || !userId) return;
 
   const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
   const useCurrentLocation = await getUseCurrentLocation(supabase, userId);
   useCurrentLocation ? startLocationWatching() : stopLocationWatching();
 }

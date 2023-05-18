@@ -13,11 +13,11 @@
 
 <div class="flex flex-col gap-1">
   {#if deals.length === 0}
-    {#if $page.data.session.user.user_metadata.isDealer}
+    {#if $page.data.isDealer}
       <EmptyContent>
         <p>Du hast noch keine aktiven Deals. Worauf wartest du?</p>
         <p>
-          <Link href={"/deals/new?dealerId=" + $page.data.session.user.id} underline>Deal erstellen!</Link>
+          <Link href={"/deals/new?dealerId=" + $page.data.userId} underline>Deal erstellen!</Link>
         </p>
       </EmptyContent>
     {:else}

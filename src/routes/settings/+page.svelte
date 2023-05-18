@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
@@ -17,7 +18,7 @@
   let showToast = false;
 
   const originalUsername = account.username;
-  const isDealer = data.session?.user.user_metadata.isDealer;
+  const isDealer = $page.data.isDealer;
 
   async function save() {
     loading = true;
@@ -43,7 +44,7 @@
           username: account.username
         };
 
-    updates.id = data.session?.user.id;
+    updates.id = $page.data.userId;
     const error = await updateAccount(data.supabase, updates);
 
     if (error) {

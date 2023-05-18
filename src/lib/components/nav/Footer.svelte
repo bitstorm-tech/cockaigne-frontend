@@ -7,12 +7,12 @@
   import { navigationStore } from "$lib/stores/navigation.store";
 </script>
 
-{#if $page.data.session?.user.user_metadata.isDealer}
+{#if $page.data.isDealer}
   <footer class="btm-nav min-h-12 btm-nav-sm h-12 border-t-[0.01rem] border-t-[#556368] text-[#69828c]">
     <a href="/">
       <HomeIcon active={$navigationStore === "home"} />
     </a>
-    <a href={`/deals/overview/${$page.data.session.user.id}`}>
+    <a href={`/deals/overview/${$page.data.userId}`}>
       <DealsOverviewIcon active={$navigationStore === "dealOverview"} />
     </a>
   </footer>

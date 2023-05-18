@@ -1,3 +1,4 @@
+import { logError } from "$lib/error-utils";
 import { getSelectedCategories } from "$lib/supabase/category-service";
 import type { Category } from "$lib/supabase/public-types";
 import type { Supabase } from "$lib/supabase/supabase-client";
@@ -14,8 +15,7 @@ export const categoryStore = {
     const { data, error } = await supabase.from("categories").select();
 
     if (error) {
-      console.error("Can't fetch categories:", error);
-      return;
+      return logError(error, "Can't fetch categories");
     }
 
     this.set(data);

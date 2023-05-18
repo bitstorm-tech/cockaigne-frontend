@@ -10,8 +10,8 @@
   import { toggleLike } from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
 
-  export let isUser = false;
   export let deal: ActiveDeal;
+  const isUser = !$page.data.isDealer;
   let openZoomModal = false;
   let openReportModal = false;
   let zoomImageIndex = 0;
@@ -19,9 +19,11 @@
   $: liked = $likeStore.includes(deal.id!);
 
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
 
   async function like() {
+    if (!userId) return;
+
     likeStore.toggleLike(deal.id!);
     deal.likes = await toggleLike(supabase, userId, deal);
   }

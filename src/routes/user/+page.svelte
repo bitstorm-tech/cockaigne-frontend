@@ -8,6 +8,7 @@
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
+  import { centerOfGermany } from "$lib/geo/geo.types";
   import { dealStore } from "$lib/stores/deal.store";
   import { hotDealStore } from "$lib/stores/hot-deal.store";
   import { likeStore } from "$lib/stores/like.store";
@@ -26,8 +27,8 @@
     dealStore.load().then();
     likeStore.load($page.data.supabase).then();
     const supabase = $page.data.supabase;
-    const userId = $page.data.session.user.id;
-    const location = await getLocation(supabase, userId);
+    const userId = $page.data.userId;
+    const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
     const longAddress = await getAddress(location);
     address = addressToShortString(longAddress);
   });

@@ -1,3 +1,4 @@
+import { logError } from "$lib/error-utils";
 import type { Supabase } from "$lib/supabase/supabase-client";
 import type { Dealer, FavoriteDealer } from "./public-types";
 
@@ -33,8 +34,7 @@ export async function isFavoriteDealer(supabase: Supabase, userId: string, deale
     .eq("dealer_id", dealerId);
 
   if (error) {
-    console.error("Can't check if dealer is favorite:", error);
-    return false;
+    return logError(error, "Can't check if dealer is favorite", false);
   }
 
   return data.length !== 0;

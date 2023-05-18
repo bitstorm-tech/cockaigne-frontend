@@ -1,5 +1,5 @@
 import { logError } from "$lib/error-utils";
-import { munichPosition, toPostGisPoint, type Position } from "$lib/geo/geo.types";
+import { centerOfGermany, type Position, toPostGisPoint } from "$lib/geo/geo.types";
 import type { DealFilter, Location } from "$lib/supabase/public-types";
 import type { Supabase } from "$lib/supabase/supabase-client";
 
@@ -28,7 +28,7 @@ export async function getLocation(supabase: Supabase, userId: string): Promise<P
   const { error, data } = await supabase.from("accounts").select("location").eq("id", userId).single();
 
   if (error || !data.location) {
-    return logError(error, "Can't get location", munichPosition);
+    return logError(error, "Can't get location", centerOfGermany);
   }
 
   const longitude = (data.location as Location).coordinates[0];

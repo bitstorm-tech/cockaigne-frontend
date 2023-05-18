@@ -5,13 +5,13 @@ import { getDealsByFilter } from "$lib/supabase/deal-service";
 import { getLocation, getSearchRadius, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import { debounce } from "lodash";
 import { Feature, View } from "ol";
-import Map from "ol/Map";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
 import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
+import Map from "ol/Map";
 import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
@@ -19,7 +19,7 @@ import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
 import type { Position } from "./geo/geo.types";
-import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
+import { centerOfGermany, fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import { getIconPathById } from "./icon-mapping";
 import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
 
@@ -38,7 +38,8 @@ locationStore.subscribe((location) => jumpToLocation(location));
 
 const saveLocationDebounced = debounce(async (location: Position) => {
   const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
+  const userId = get(page).data.userId;
+  if (!userId) return;
   await saveLocation(supabase, userId, location);
 }, 1000);
 
@@ -49,7 +50,6 @@ const updateDeals = debounce(async (extent: Extent) => {
   };
 
   const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
   const deals = await getDealsByFilter(supabase, filter);
   setDeals(deals);
 }, 1000);
@@ -57,13 +57,14 @@ const updateDeals = debounce(async (extent: Extent) => {
 export async function initMapService(htmlElementId: string) {
   useGeographic();
   const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
-  const location = await getLocation(supabase, userId);
+  const userId = get(page).data.userId;
+  const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
+  const searchRadius = userId ? transformRadius(await getSearchRadius(supabase, userId)) : 500;
   const center = toOpenLayersCoordinate(location);
 
   view.setCenter(center);
   centerPoint = new Circle(center, transformRadius(2));
-  circle = new Circle(center, transformRadius(await getSearchRadius(supabase, userId)));
+  circle = new Circle(center, searchRadius);
 
   map = new Map({
     target: htmlElementId,
@@ -102,7 +103,9 @@ export async function initMapService(htmlElementId: string) {
   });
 
   map.on("click", async (event) => {
-    saveUseCurrentLocation(supabase, userId, false).then();
+    if (userId) {
+      saveUseCurrentLocation(supabase, userId, false).then();
+    }
     stopLocationWatching();
     moveCircle(event.coordinate).then();
     locationStore.set(fromOpenLayersCoordinate(event.coordinate));
@@ -122,9 +125,7 @@ export function jumpToLocation(position: Position) {
 }
 
 export async function jumpToCurrentLocation() {
-  const supabase = get(page).data.supabase;
-  const userId = get(page).data.session.user.id;
-  const postion = await getLocation(supabase, userId);
+  const postion = get(locationStore);
   const center = toOpenLayersCoordinate(postion);
   view.setCenter(center);
   moveCircle(center).then();

@@ -17,7 +17,10 @@ export const dealStore = {
       throw Error("Init store on server -> potential information leak!");
     }
     const supabase = get(page).data.supabase;
-    const userId = get(page).data.session.user.id;
+    const userId = get(page).data.userId;
+
+    if (!userId) return;
+
     const filter = await createFilterByCurrentLocationAndSelectedCategories(supabase, userId);
     const deals = await getDealsByFilter(supabase, filter);
     this.set(deals);

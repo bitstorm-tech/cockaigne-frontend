@@ -14,7 +14,7 @@
   let loading = true;
   let topDeals: ActiveDeal[] = [];
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
 
   onMount(() => {
     likeStore.load($page.data.supabase);
@@ -22,7 +22,7 @@
   });
 
   async function switchTab(numberOfDeals: number) {
-    if (!browser) return;
+    if (!browser || !userId) return;
 
     loading = true;
     tabIndex = numberOfDeals;

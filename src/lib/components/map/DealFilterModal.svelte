@@ -17,9 +17,10 @@
   export let open = false;
   let searchRadius = 0;
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
 
   onMount(async () => {
+    if (!userId) return;
     searchRadius = await getSearchRadius(supabase, userId);
   });
 
@@ -35,10 +36,12 @@
   selectedCategoriesStore.load(supabase);
 
   const saveRadius = debounce(() => {
+    if (!userId) return;
     saveSearchRadius(supabase, userId, searchRadius);
   }, 2000);
 
   const saveSelectedCategoriesDebounced = debounce(() => {
+    if (!userId) return;
     updateSelectedCategory(supabase, userId, $selectedCategoriesStore);
   }, 2000);
 

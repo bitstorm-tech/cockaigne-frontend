@@ -106,14 +106,14 @@
     deal.duration = durationInDays * 24;
     deal.start = formatDateWithTimeZone(deal.start);
 
-    deal.dealer_id = $page.data.session.user.id;
+    deal.dealer_id = $page.data.userId!;
     const dealId = await upsertDeal($page.data.supabase, deal, createTemplate);
 
     if (!dealId) {
       return;
     }
 
-    await saveDealImages($page.data.supabase, $page.data.session.user.id, images, dealId);
+    await saveDealImages($page.data.supabase, $page.data.userId!, images, dealId);
 
     goto("/");
   }

@@ -18,10 +18,12 @@
   let zoomImageIndex = 0;
 
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
-  const isDealer = $page.data.session.user.user_metadata.isDealer;
+  const userId = $page.data.userId;
+  const isDealer = $page.data.isDealer;
 
   async function savePicture(event: CustomEvent<File>) {
+    if (!userId) return;
+
     toastText = "Speichere Bild ...";
     const imageUrl = await saveDealerImage(supabase, userId, event.detail);
 
@@ -33,6 +35,8 @@
   }
 
   async function deletePictureCallback() {
+    if (!userId) return;
+
     toastText = "Lösche Bild ...";
     const filename = deletePictureUrl.split("/").pop() || "";
     await deleteDealerImage(supabase, userId, filename);
@@ -56,12 +60,7 @@
 {/if}
 <div class="grid grid-cols-3 gap-2">
   {#each pictures as picture, index}
-    <Picture
-      url={picture}
-      showDelete={isDealer}
-      on:delete={() => onDelete(picture)}
-      on:zoom={() => onZoom(index)}
-    />
+    <Picture url={picture} showDelete={isDealer} on:delete={() => onDelete(picture)} on:zoom={() => onZoom(index)} />
   {/each}
 </div>
 {#if isDealer}

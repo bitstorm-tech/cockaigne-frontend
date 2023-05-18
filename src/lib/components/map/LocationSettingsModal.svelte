@@ -20,12 +20,13 @@
   let address = "";
   let useCurrentLocation: boolean;
   const supabase = $page.data.supabase;
-  const userId = $page.data.session.user.id;
+  const userId = $page.data.userId;
 
   const buttons = [
     {
       text: "Übernehmen",
       callback: () => {
+        if (!userId) return;
         saveUseCurrentLocation(supabase, userId, useCurrentLocation);
         open = false;
       }
@@ -38,6 +39,7 @@
   }
 
   async function onOpen() {
+    if (!userId) return;
     useCurrentLocation = await getUseCurrentLocation(supabase, userId);
     const location = await getLocation(supabase, userId);
     setAddressText(location);
@@ -57,8 +59,9 @@
   }
 
   async function handleAddressSelection(event: CustomEvent<AddressSearchResult>) {
+    if (!userId) return;
     const location = event.detail.location;
-    saveLocation($page.data.supabase, $page.data.session.user.id, location);
+    saveLocation(supabase, userId, location);
     jumpToLocation(location);
   }
 </script>

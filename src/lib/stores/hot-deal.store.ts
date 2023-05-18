@@ -13,7 +13,10 @@ export const hotDealStore = {
 
   load: async function () {
     const supabase = get(page).data.supabase;
-    const userId = get(page).data.session.user.id;
+    const userId = get(page).data.userId;
+
+    if (!userId) return;
+
     const hotDeals = await getHotDeals(supabase, userId);
     hotDeals.forEach((deal) => (deal.isHot = true));
     this.set(hotDeals);
@@ -21,7 +24,10 @@ export const hotDealStore = {
 
   toggleHot: async function (dealId: string) {
     const supabase = get(page).data.supabase;
-    const userId = get(page).data.session.user.id;
+    const userId = get(page).data.userId;
+
+    if (!userId) return;
+
     const hotDeal = await toggleHotDeal(supabase, userId, dealId);
 
     if (hotDeal) {

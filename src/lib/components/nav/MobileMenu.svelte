@@ -33,7 +33,7 @@
 
 {#if show}
   <div class="flex flex-col gap-8 bg-base-300 p-4 backdrop-blur" transition:fade={{ duration: 150 }}>
-    {#if $page.data.session?.user}
+    {#if $page.data.userId}
       <a href="/settings" class="flex h-8 items-center gap-3">
         <GearIcon />
         Einstellungen

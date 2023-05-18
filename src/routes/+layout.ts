@@ -1,9 +1,9 @@
 import { PUBLIC_SUPABASE_API_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public";
-import type { Session, Supabase } from "$lib/supabase/supabase-client";
+import type { Supabase } from "$lib/supabase/supabase-client";
 import { createSupabaseLoadClient } from "@supabase/auth-helpers-sveltekit";
 import type { LoadEvent } from "@sveltejs/kit";
 
-type ReturnType = { supabase: Supabase; session: Session | null };
+type ReturnType = { supabase: Supabase; userId: string | undefined; isDealer: boolean };
 
 export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnType> {
   depends("supabase:auth");
@@ -19,5 +19,10 @@ export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnT
     data: { session }
   } = await supabase.auth.getSession();
 
-  return { supabase, session };
+  return {
+    supabase,
+    session,
+    userId: session?.user.id,
+    isDealer: session?.user.user_metadata.isDealer || false
+  };
 }

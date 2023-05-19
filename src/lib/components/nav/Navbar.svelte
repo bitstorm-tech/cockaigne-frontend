@@ -17,7 +17,7 @@
 <nav class="flex items-center border-b-[0.01rem] border-[#556368] px-4 py-2 md:px-52">
   <div class="flex w-full justify-between text-xl">
     <div class="flex items-end gap-6">
-      <Link href="/"><img loading="lazy" class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
+      <Link href="/"><img class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
       <MemberStatus />
     </div>
     <div class="flex cursor-pointer text-[#69828c]">

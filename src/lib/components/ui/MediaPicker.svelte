@@ -24,5 +24,5 @@
 <Button on:click={() => fileInput.click()}>{buttonText}</Button>
 <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
 {#if imagePreview}
-  <img loading="lazy" src={imagePreview} alt="Gewähltes Bild" class="w-screen md:w-2/3 self-center" />
+  <img src={imagePreview} alt="Gewähltes Bild" class="w-screen self-center md:w-2/3" />
 {/if}

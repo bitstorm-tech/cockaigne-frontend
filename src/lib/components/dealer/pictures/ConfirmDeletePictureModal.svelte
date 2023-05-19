@@ -22,7 +22,7 @@
 
 <Modal bind:open {buttons}>
   <div class="flex flex-col gap-3">
-    <img loading="lazy" src={url} alt="Dealer Impression to delete" />
+    <img src={url} alt="Dealer Impression to delete" />
     <b class="text-large">Dieses Bild wirklich löschen?</b>
   </div>
 </Modal>

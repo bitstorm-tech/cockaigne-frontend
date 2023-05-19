@@ -1,7 +1,7 @@
 import { page } from "$app/stores";
 import { getHotDeals, rotateByCurrentTime, toggleHotDeal } from "$lib/supabase/deal-service";
 import type { ActiveDeal } from "$lib/supabase/public-types";
-import { remove } from "lodash";
+import remove from "lodash/remove";
 import { get, writable } from "svelte/store";
 
 const hotDeals = writable<ActiveDeal[]>([]);

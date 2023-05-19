@@ -9,7 +9,9 @@
   import { updateSelectedCategory } from "$lib/supabase/category-service";
   import { getSearchRadius, saveSearchRadius } from "$lib/supabase/location-service";
   import type { Category } from "$lib/supabase/public-types";
-  import { debounce, union, without } from "lodash";
+  import debounce from "lodash/debounce";
+  import union from "lodash/union";
+  import without from "lodash/without";
   import { onMount } from "svelte";
   import { get } from "svelte/store";
 

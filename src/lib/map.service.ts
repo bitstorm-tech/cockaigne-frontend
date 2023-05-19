@@ -3,7 +3,7 @@ import { stopLocationWatching } from "$lib/geo/location-watcher";
 import { locationStore } from "$lib/stores/location.store";
 import { getDealsByFilter } from "$lib/supabase/deal-service";
 import { getLocation, getSearchRadius, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";

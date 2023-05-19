@@ -8,12 +8,16 @@ type ReturnType = { supabase: Supabase; userId: string | undefined; isDealer: bo
 export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnType> {
   depends("supabase:auth");
 
+  console.log("+layout.ts #1");
+
   const supabase = createSupabaseLoadClient({
     supabaseUrl: PUBLIC_SUPABASE_URL,
     supabaseKey: PUBLIC_SUPABASE_API_KEY,
     event: { fetch },
     serverSession: data?.session
   });
+
+  console.log("+layout.ts #2");
 
   const {
     data: { session }

@@ -3,7 +3,7 @@ import type { AuthError, PostgrestError } from "@supabase/supabase-js";
 type AnyError = AuthError | PostgrestError | StorageError | null;
 
 export function logError<T>(error: AnyError, message = "", returnValue?: T): T {
-  console.log(`ERROR: ${message}:`, error!.message);
+  console.error(`ERROR: ${message}:`, error!.message);
   return returnValue;
 }
 

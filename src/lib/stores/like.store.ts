@@ -1,5 +1,5 @@
 import type { Supabase } from "$lib/supabase/supabase-client";
-import { xor } from "lodash";
+import xor from "lodash/xor";
 import { writable } from "svelte/store";
 
 const likedDealIds = writable<string[]>([]);

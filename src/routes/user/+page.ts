@@ -6,14 +6,13 @@ import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ parent }: LoadEvent) {
   navigationStore.currentPage("home");
-  const { supabase, session } = await parent();
-  const userId = session?.user.id;
+  const { supabase, userId } = await parent();
 
-  const [account, favoriteDealers, profileImageUrl] = await Promise.all([
-    getAccount(supabase, userId),
-    getFavoriteDealers(supabase, userId),
-    getProfileImage(supabase, userId)
-  ]);
+  const [profileImageUrl, account, favoriteDealers] = await Promise.all(
+    userId
+      ? [getProfileImage(supabase, userId), getAccount(supabase, userId), getFavoriteDealers(supabase, userId)]
+      : [getProfileImage(supabase, userId)]
+  );
 
   return {
     account,

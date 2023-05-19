@@ -69,7 +69,6 @@ export async function getDealerImages(supabase: Supabase, dealerId: string): Pro
 
 export async function getProfileImage(supabase: Supabase, userId?: string, isDealer = false): Promise<string> {
   if (!userId) {
-    console.log("Can't get profile image -> unknown user");
     return isDealer ? DEFAULT_DEALER_PROFILE_IMAGE_URL : DEFAULT_USER_PROFILE_IMAGE_URL;
   }
 

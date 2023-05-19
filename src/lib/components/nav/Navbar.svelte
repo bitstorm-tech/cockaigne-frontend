@@ -18,7 +18,7 @@
   <div class="flex w-full justify-between text-xl">
     <div class="flex items-end gap-6">
       <Link href="/"><img loading="lazy" class="h-7" src="/images/logo.svg" alt="Logo Text" /></Link>
-      <!--MemberStatus /-->
+      <MemberStatus />
     </div>
     <div class="flex cursor-pointer text-[#69828c]">
       {#if showMobileMenu}

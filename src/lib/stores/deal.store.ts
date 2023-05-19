@@ -19,7 +19,10 @@ export const dealStore = {
     const supabase = get(page).data.supabase;
     const userId = get(page).data.userId;
 
-    if (!userId) return;
+    if (!userId) {
+      this.set([]);
+      return;
+    }
 
     const filter = await createFilterByCurrentLocationAndSelectedCategories(supabase, userId);
     const deals = await getDealsByFilter(supabase, filter);

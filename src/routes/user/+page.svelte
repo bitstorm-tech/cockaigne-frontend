@@ -1,8 +1,10 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
   import FavoriteDealersList from "$lib/components/user/FavoriteDealersList.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
@@ -57,8 +59,24 @@
   {#if showTabIndex === 0}
     <UserDealsList />
   {:else if showTabIndex === 1}
-    <UserHotDealsList />
-  {:else}
+    {#if $page.data.userId}
+      <UserHotDealsList />
+    {:else}
+      <EmptyContent>
+        <p>
+          <Link href="/registration" underline>Registriere dich kostenlos</Link>
+          um dir deine ganz persönliche Liste an heißen Deals zusammen zu stellen! 🔥
+        </p>
+      </EmptyContent>
+    {/if}
+  {:else if $page.data.userId}
     <FavoriteDealersList />
+  {:else}
+    <EmptyContent>
+      <p>
+        <Link href="/registration" underline>Registriere dich kostenlos</Link>
+        um dir alle deine favorisierten Dealer zu speichern! 🤩
+      </p>
+    </EmptyContent>
   {/if}
 </div>

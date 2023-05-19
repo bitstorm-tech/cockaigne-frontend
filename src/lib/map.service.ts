@@ -23,6 +23,8 @@ import { centerOfGermany, fromOpenLayersCoordinate, toOpenLayersCoordinate } fro
 import { getIconPathById } from "./icon-mapping";
 import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
 
+useGeographic();
+
 let map: Map;
 const dealLayerSource = new VectorSource();
 const view = new View({
@@ -55,7 +57,6 @@ const updateDeals = debounce(async (extent: Extent) => {
 }, 1000);
 
 export async function initMapService(htmlElementId: string) {
-  useGeographic();
   const supabase = get(page).data.supabase;
   const userId = get(page).data.userId;
   const location = userId ? await getLocation(supabase, userId) : centerOfGermany;

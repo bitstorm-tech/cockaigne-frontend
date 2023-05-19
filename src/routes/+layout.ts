@@ -23,6 +23,8 @@ export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnT
     data: { session }
   } = await supabase.auth.getSession();
 
+  console.log("+layout.ts #3");
+
   return {
     supabase,
     session,

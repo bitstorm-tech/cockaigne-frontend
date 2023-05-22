@@ -24,9 +24,9 @@
   navigationStore.currentPage("map");
 
   onMount(async () => {
+    await initMapService("map");
     if (!userId) return;
     const location = await getLocation(supabase, userId);
-    await initMapService("map");
     jumpToLocation(location);
   });
 </script>

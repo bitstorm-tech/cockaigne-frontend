@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { browser } from "$app/environment";
   import Button from "$lib/components/ui/Button.svelte";
   import Textarea from "$lib/components/ui/Textarea.svelte";
   import type { NominatimSearchResult, Position } from "$lib/geo/geo.types";
@@ -10,8 +11,10 @@
 
   const dispatch = createEventDispatcher();
 
-  onMount(() => document.addEventListener("click", closeSearchResult));
-  onDestroy(() => document.removeEventListener("click", closeSearchResult));
+  if (browser) {
+    onMount(() => document.addEventListener("click", closeSearchResult));
+    onDestroy(() => document.removeEventListener("click", closeSearchResult));
+  }
 
   async function search() {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${searchText}`;

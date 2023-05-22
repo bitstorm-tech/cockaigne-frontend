@@ -10,13 +10,12 @@
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
-  import { centerOfGermany } from "$lib/geo/geo.types";
   import { dealStore } from "$lib/stores/deal.store";
   import { hotDealStore } from "$lib/stores/hot-deal.store";
   import { likeStore } from "$lib/stores/like.store";
-  import { getLocation } from "$lib/supabase/location-service";
   import { onMount } from "svelte";
   import type { PageData } from "./$types";
+  import { locationStore } from "$lib/stores/location.store";
 
   export let data: PageData;
   const favoriteDealers = data.favoriteDealers ?? [];
@@ -24,15 +23,17 @@
   let showTabIndex = 0;
   let address: string[] = [""];
 
+  $: {
+    getAddress($locationStore).then((longAddress) => {
+      address = addressToShortString(longAddress);
+    });
+  }
+
   onMount(async () => {
     hotDealStore.load().then();
     dealStore.load().then();
     likeStore.load($page.data.supabase).then();
-    const supabase = $page.data.supabase;
-    const userId = $page.data.userId;
-    const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
-    const longAddress = await getAddress(location);
-    address = addressToShortString(longAddress);
+    locationStore.load($page.data.supabase, $page.data.userId);
   });
 </script>
 

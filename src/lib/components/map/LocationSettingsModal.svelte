@@ -26,8 +26,9 @@
     {
       text: "Übernehmen",
       callback: () => {
-        if (!userId) return;
-        saveUseCurrentLocation(supabase, userId, useCurrentLocation);
+        if (userId) {
+          saveUseCurrentLocation(supabase, userId, useCurrentLocation);
+        }
         open = false;
       }
     }
@@ -39,10 +40,10 @@
   }
 
   async function onOpen() {
-    if (!userId) return;
-    useCurrentLocation = await getUseCurrentLocation(supabase, userId);
-    const location = await getLocation(supabase, userId);
-    setAddressText(location);
+    if (userId) {
+      useCurrentLocation = await getUseCurrentLocation(supabase, userId);
+    }
+    setAddressText($locationStore);
   }
 
   async function setAddressText(location: Position) {
@@ -59,10 +60,12 @@
   }
 
   async function handleAddressSelection(event: CustomEvent<AddressSearchResult>) {
-    if (!userId) return;
     const location = event.detail.location;
-    saveLocation(supabase, userId, location);
+    locationStore.set(location);
     jumpToLocation(location);
+    if (userId) {
+      saveLocation(supabase, userId, location);
+    }
   }
 </script>
 

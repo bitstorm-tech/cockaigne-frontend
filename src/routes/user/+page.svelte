@@ -11,9 +11,6 @@
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { dealStore } from "$lib/stores/deal.store";
-  import { hotDealStore } from "$lib/stores/hot-deal.store";
-  import { likeStore } from "$lib/stores/like.store";
-  import { onMount } from "svelte";
   import type { PageData } from "./$types";
   import { locationStore } from "$lib/stores/location.store";
 
@@ -28,13 +25,6 @@
       address = addressToShortString(longAddress);
     });
   }
-
-  onMount(async () => {
-    hotDealStore.load().then();
-    dealStore.load().then();
-    likeStore.load($page.data.supabase).then();
-    locationStore.load($page.data.supabase, $page.data.userId);
-  });
 </script>
 
 <UserHeader

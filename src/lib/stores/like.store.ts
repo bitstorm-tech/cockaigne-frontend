@@ -1,3 +1,4 @@
+import { browser } from "$app/environment";
 import type { Supabase } from "$lib/supabase/supabase-client";
 import xor from "lodash/xor";
 import { writable } from "svelte/store";
@@ -10,6 +11,10 @@ export const likeStore = {
   set: likedDealIds.set,
 
   load: async function (supabase: Supabase) {
+    if (!browser) {
+      throw Error("Init store (likes) on server -> potential information leak!");
+    }
+
     const { data } = await supabase.from("likes").select("deal_id");
 
     if (data) {

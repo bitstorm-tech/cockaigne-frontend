@@ -2,7 +2,7 @@ import { page } from "$app/stores";
 import { stopLocationWatching } from "$lib/geo/location-watcher";
 import { locationStore } from "$lib/stores/location.store";
 import { getDealsByFilter } from "$lib/supabase/deal-service";
-import { getLocation, getSearchRadius, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
+import { getLocation, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import debounce from "lodash/debounce";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
@@ -22,6 +22,7 @@ import type { Position } from "./geo/geo.types";
 import { centerOfGermany, fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import { getIconPathById } from "./icon-mapping";
 import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
+import { searchRadiusStore } from "./stores/search-radius.store";
 
 useGeographic();
 
@@ -34,9 +35,8 @@ const view = new View({
 let circle: Circle;
 let centerPoint: Circle;
 
-// createEffect(() => setRadius(searchRadius()));
-// createEffect(() => jumpToLocation(location()));
 locationStore.subscribe((location) => jumpToLocation(location));
+searchRadiusStore.subscribe(searchRadius => setRadius(searchRadius));
 
 const saveLocationDebounced = debounce(async (location: Position) => {
   const supabase = get(page).data.supabase;
@@ -60,11 +60,11 @@ export async function initMapService(htmlElementId: string) {
   const supabase = get(page).data.supabase;
   const userId = get(page).data.userId;
   const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
-  const searchRadius = userId ? transformRadius(await getSearchRadius(supabase, userId)) : 500;
   const center = toOpenLayersCoordinate(location);
 
   view.setCenter(center);
   centerPoint = new Circle(center, transformRadius(2));
+  const searchRadius = transformRadius(get(searchRadiusStore));
   circle = new Circle(center, searchRadius);
 
   map = new Map({

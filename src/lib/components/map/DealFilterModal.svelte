@@ -6,8 +6,9 @@
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import { setRadius } from "$lib/map.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
+  import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { updateSelectedCategory } from "$lib/supabase/category-service";
-  import { getSearchRadius, saveSearchRadius } from "$lib/supabase/location-service";
+  import { saveSearchRadius } from "$lib/supabase/location-service";
   import type { Category } from "$lib/supabase/public-types";
   import debounce from "lodash/debounce";
   import union from "lodash/union";
@@ -22,8 +23,7 @@
   const userId = $page.data.userId;
 
   onMount(async () => {
-    if (!userId) return;
-    searchRadius = await getSearchRadius(supabase, userId);
+    searchRadius = $searchRadiusStore;
   });
 
   const buttons = [
@@ -49,6 +49,7 @@
 
   function changeSearchRadius() {
     setRadius(searchRadius);
+    searchRadiusStore.set(searchRadius);
     saveRadius();
   }
 

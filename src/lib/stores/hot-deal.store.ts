@@ -1,6 +1,8 @@
+import { browser } from "$app/environment";
 import { page } from "$app/stores";
 import { getHotDeals, rotateByCurrentTime, toggleHotDeal } from "$lib/supabase/deal-service";
 import type { ActiveDeal } from "$lib/supabase/public-types";
+import type { Supabase } from "$lib/supabase/supabase-client";
 import remove from "lodash/remove";
 import { get, writable } from "svelte/store";
 
@@ -11,9 +13,10 @@ export const hotDealStore = {
   set: hotDeals.set,
   update: hotDeals.update,
 
-  load: async function () {
-    const supabase = get(page).data.supabase;
-    const userId = get(page).data.userId;
+  load: async function (supabase: Supabase, userId?: string) {
+    if (!browser) {
+      throw Error("Init store (hot deals) on server -> potential information leak!");
+    }
 
     if (!userId) return;
 

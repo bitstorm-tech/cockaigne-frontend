@@ -1,18 +1,18 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
-  import Link from "$lib/components/ui/Link.svelte";
   import FavoriteDealersList from "$lib/components/user/FavoriteDealersList.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { dealStore } from "$lib/stores/deal.store";
-  import type { PageData } from "./$types";
   import { locationStore } from "$lib/stores/location.store";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
   const favoriteDealers = data.favoriteDealers ?? [];

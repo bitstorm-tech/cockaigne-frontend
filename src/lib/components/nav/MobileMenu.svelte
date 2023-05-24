@@ -7,6 +7,7 @@
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
+  import StarsIcon from "$lib/components/ui/icons/StarsIcon.svelte";
   import { menuOpen } from "$lib/stores/navigation.store";
   import { logout } from "$lib/supabase/auth";
   import { onDestroy, onMount } from "svelte";
@@ -38,10 +39,6 @@
         <GearIcon />
         Einstellungen
       </a>
-      <a href="/changelog" class="flex h-8 items-center gap-3">
-        <NewsIcon />
-        Was gibt es Neues?
-      </a>
       <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
         <LogoutIcon />
         Logout
@@ -52,6 +49,16 @@
         Login
       </a>
     {/if}
+    {#if !$page.data.isDealer}
+      <a href="/basicvspro" class="flex h-8 items-center gap-3">
+        <StarsIcon />
+        Basic vs Pro
+      </a>
+    {/if}
+    <a href="/changelog" class="flex h-8 items-center gap-3">
+      <NewsIcon />
+      Was gibt es Neues?
+    </a>
     <div class="mt-8">
       <LegalFooter />
     </div>

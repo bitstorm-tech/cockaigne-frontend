@@ -37,7 +37,7 @@
   <Navbar />
 {/if}
 {#if loading}
-  <div class="-mt-16 flex h-full items-center justify-center">
+  <div class="flex justify-center pt-52">
     <LoadingSpinner size={6} />
   </div>
 {:else}

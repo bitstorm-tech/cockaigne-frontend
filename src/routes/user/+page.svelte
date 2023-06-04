@@ -1,10 +1,10 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
-  import Link from "$lib/components/ui/Link.svelte";
   import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import StarIcon from "$lib/components/ui/icons/StarIcon.svelte";
+  import Link from "$lib/components/ui/Link.svelte";
   import FavoriteDealersList from "$lib/components/user/FavoriteDealersList.svelte";
   import UserDealsList from "$lib/components/user/UserDealsList.svelte";
   import UserHeader from "$lib/components/user/UserHeader.svelte";
@@ -58,6 +58,10 @@
           <Link href="/registration" underline>Registriere dich kostenlos</Link>
           um dir deine ganz persönliche Liste an heißen Deals zusammen zu stellen! 🔥
         </p>
+        <p class="mt-10">
+          <Link href="/basicvspro" underline>Schau dir hier</Link>
+          die Vorteile der Pro-Mitgliedschaft an! 🚀
+        </p>
       </EmptyContent>
     {/if}
   {:else if $page.data.userId}
@@ -67,6 +71,10 @@
       <p>
         <Link href="/registration" underline>Registriere dich kostenlos</Link>
         um dir alle deine favorisierten Dealer zu speichern! 🤩
+      </p>
+      <p class="mt-10">
+        <Link href="/basicvspro" underline>Schau dir hier</Link>
+        die Vorteile der Pro-Mitgliedschaft an! 🚀
       </p>
     </EmptyContent>
   {/if}

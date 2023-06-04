@@ -1,6 +1,11 @@
+<script>
+  import Button from "$lib/components/ui/Button.svelte";
+  import { goto } from "$app/navigation";
+</script>
+
 <section class="flex flex-col p-4">
   <h1 class="text-center">Basic vs Pro</h1>
-  <table class="table-auto">
+  <table class="mb-10 table-auto">
     <thead>
       <tr>
         <th class="text-start text-xl">Feature</th>
@@ -61,4 +66,5 @@
       </tr>
     </tbody>
   </table>
+  <Button warning on:click={() => goto("/registration")}>Registriere dich jetzt kostenlos!</Button>
 </section>

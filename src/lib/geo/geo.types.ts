@@ -11,8 +11,8 @@ export type AddressSearchResult = {
 };
 
 export type NominatimSearchResult = {
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
   display_name: string;
 };
 

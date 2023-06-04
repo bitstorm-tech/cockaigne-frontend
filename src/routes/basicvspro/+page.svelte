@@ -9,52 +9,52 @@
       </tr>
     </thead>
     <tbody>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Kostenlos</td>
         <td class="text-center">✅</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Nach Deals suchen</td>
         <td class="text-center">✅</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Top Deals in der Umgebung</td>
         <td class="text-center">✅</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Benachrichtigungen</td>
         <td class="text-center">✅</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Favorisierte Dealer</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Favorisierte Deals</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Deales liken</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Letzte Position wird gespeichert</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Personalisiertes Profil</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
-      <tr class="border-t-[0.01rem]">
+      <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Dealer bewerten</td>
         <td class="text-center">❌</td>
         <td class="text-center">✅</td>

@@ -8,10 +8,9 @@ const location = writable(centerOfGermany);
 
 export const locationStore = {
   subscribe: location.subscribe,
-  update: location.update,
   set: location.set,
 
-  load: async function(supabase: Supabase, userId?: string) {
+  load: async function (supabase: Supabase, userId?: string) {
     if (!browser) {
       throw Error("Init store (location) on server -> potential information leak!");
     }

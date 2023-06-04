@@ -40,8 +40,8 @@
 
   function selectSearchResult(searchResult: NominatimSearchResult) {
     const location: Position = {
-      latitude: searchResult.lat,
-      longitude: searchResult.lon
+      latitude: +searchResult.lat,
+      longitude: +searchResult.lon
     };
 
     searchText = searchResult.display_name;
@@ -50,7 +50,7 @@
 </script>
 
 <div class="flex flex-col gap-2">
-  <Textarea label="Adresse" bind:value={searchText} {disabled} resize={false} lines={2} />
+  <Textarea label="Adresse" bind:value={searchText} {disabled} resize={false} lines={2} on:enter={search} />
   <ul
     class="dropdown-content textarea-bordered textarea absolute z-10 mr-8 mt-8 max-h-[70%] overflow-auto bg-primary p-4"
     class:invisible={searchResults.length < 2}

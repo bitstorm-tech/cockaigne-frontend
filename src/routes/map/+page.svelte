@@ -7,7 +7,7 @@
   import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
-  import { initMapService, jumpToCurrentLocation, jumpToLocation } from "$lib/map.service";
+  import { initMapService, jumpToLocation } from "$lib/map.service";
   import { navigationStore } from "$lib/stores/navigation.store";
   import { getLocation } from "$lib/supabase/location-service";
   import { onMount } from "svelte";
@@ -24,7 +24,7 @@
   navigationStore.currentPage("map");
 
   onMount(async () => {
-    await initMapService("map");
+    initMapService("map");
     if (!userId) return;
     const location = await getLocation(supabase, userId);
     jumpToLocation(location);
@@ -38,11 +38,11 @@
   <Button circle on:click={() => (showDealFilterModal = true)}>
     <FilterIcon />
   </Button>
-  <Button circle on:click={jumpToCurrentLocation}>
+  <Button circle on:click={jumpToLocation}>
     <CurrentLocationIcon />
   </Button>
 </div>
-<div id="map" class="h-[calc(100vh-6rem)] w-screen">
+<div id="map" class="h-[calc(100vh-7rem)] w-screen">
   {#if searchCurrentAddress}
     <div class="relative top-1/3 z-[1000] flex content-center justify-center gap-4 bg-gray-500 py-6 text-xl opacity-75">
       <span>Ermittele aktuellen Standort</span>

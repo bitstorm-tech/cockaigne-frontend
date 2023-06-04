@@ -18,12 +18,12 @@
 
   export let categories: Category[] = [];
   export let open = false;
-  let searchRadius = 0;
+  let searchPerimeter = 0;
   const supabase = $page.data.supabase;
   const userId = $page.data.userId;
 
   onMount(async () => {
-    searchRadius = $searchRadiusStore;
+    searchPerimeter = $searchRadiusStore * 2;
   });
 
   const buttons = [
@@ -39,7 +39,7 @@
 
   const saveRadius = debounce(() => {
     if (!userId) return;
-    saveSearchRadius(supabase, userId, searchRadius);
+    saveSearchRadius(supabase, userId, searchPerimeter / 2);
   }, 2000);
 
   const saveSelectedCategoriesDebounced = debounce(() => {
@@ -48,8 +48,8 @@
   }, 2000);
 
   function changeSearchRadius() {
-    setRadius(searchRadius);
-    searchRadiusStore.set(searchRadius);
+    setRadius(searchPerimeter / 2);
+    searchRadiusStore.set(searchPerimeter / 2);
     saveRadius();
   }
 
@@ -82,11 +82,11 @@
   <div class="m-2 flex max-h-[60vh] flex-col">
     <div class="flex flex-col gap-3">
       <RangeSelect
-        label="Suche im Umkreis von {searchRadius} m"
+        label="Suche im Umkreis von {searchPerimeter} m"
         min={500}
         max={15000}
         step={500}
-        bind:value={searchRadius}
+        bind:value={searchPerimeter}
         on:input={changeSearchRadius}
       />
       <Button small on:click={toggleAllCategories}>Alle Filter aktivieren / deaktivieren</Button>

@@ -63,7 +63,7 @@ export async function createFilterByCurrentLocationAndSelectedCategories(
 
   return {
     categoryIds: result2.data.map((result) => result.category_id),
-    radius: data.search_radius! / 2 ?? 250,
+    radius: data.search_radius! ?? 250,
     location: {
       longitude: (data.location as Location).coordinates[0],
       latitude: (data.location as Location).coordinates[1]

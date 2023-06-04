@@ -6,15 +6,10 @@
   import { addressToString } from "$lib/geo/address.service";
   import { getAddress } from "$lib/geo/address.service.js";
   import type { AddressSearchResult, Position } from "$lib/geo/geo.types";
-  import { startLocationWatching, stopLocationWatching } from "$lib/geo/location-watcher";
-  import { jumpToCurrentLocation, jumpToLocation } from "$lib/map.service";
+  import { isLocationWatcherStarted, startLocationWatching, stopLocationWatching } from "$lib/geo/location-watcher";
+  import { jumpToLocation } from "$lib/map.service";
   import { locationStore } from "$lib/stores/location.store";
-  import {
-    getLocation,
-    getUseCurrentLocation,
-    saveLocation,
-    saveUseCurrentLocation
-  } from "$lib/supabase/location-service";
+  import { getUseCurrentLocation, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 
   export let open = false;
   let address = "";
@@ -36,13 +31,10 @@
 
   $: if (useCurrentLocation) {
     setAddressText($locationStore);
-    jumpToCurrentLocation();
   }
 
   async function onOpen() {
-    if (userId) {
-      useCurrentLocation = await getUseCurrentLocation(supabase, userId);
-    }
+    useCurrentLocation = userId ? await getUseCurrentLocation(supabase, userId) : isLocationWatcherStarted();
     setAddressText($locationStore);
   }
 
@@ -60,11 +52,15 @@
   }
 
   async function handleAddressSelection(event: CustomEvent<AddressSearchResult>) {
+    stopLocationWatching();
     const location = event.detail.location;
     locationStore.set(location);
+    useCurrentLocation = false;
     jumpToLocation(location);
+
     if (userId) {
       saveLocation(supabase, userId, location);
+      saveUseCurrentLocation(supabase, userId, false);
     }
   }
 </script>

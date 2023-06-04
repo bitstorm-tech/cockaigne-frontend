@@ -14,7 +14,6 @@ export function startLocationWatching() {
         longitude: geolocationPosition.coords.longitude,
         latitude: geolocationPosition.coords.latitude
       };
-      // setLocation(currentLocation);
       const supabase = get(page).data.supabase;
       const userId = get(page).data.userId;
       locationStore.set(currentLocation);
@@ -42,4 +41,8 @@ export async function initLocationWatcher() {
   const supabase = get(page).data.supabase;
   const useCurrentLocation = await getUseCurrentLocation(supabase, userId);
   useCurrentLocation ? startLocationWatching() : stopLocationWatching();
+}
+
+export function isLocationWatcherStarted(): boolean {
+  return watcherId !== -1;
 }

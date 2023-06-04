@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   export let label: string;
   export let id = label?.toLowerCase();
   export let placeholder = "";
@@ -6,6 +8,14 @@
   export let disabled = false;
   export let lines = 5;
   export let resize = true;
+
+  const dispatch = createEventDispatcher();
+
+  function keydown(event: KeyboardEvent) {
+    if (event.code === "Enter") {
+      dispatch("enter");
+    }
+  }
 </script>
 
 <div class="form-control">
@@ -20,5 +30,6 @@
     {placeholder}
     {disabled}
     bind:value
+    on:keydown={keydown}
   />
 </div>

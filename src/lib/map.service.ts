@@ -1,8 +1,10 @@
 import { page } from "$app/stores";
-import { stopLocationWatching } from "$lib/geo/location-watcher";
+import { isLocationWatcherStarted, stopLocationWatching } from "$lib/geo/location-watcher";
+import { categoryStore } from "$lib/stores/category.store";
+import { dealStore } from "$lib/stores/deal.store";
 import { locationStore } from "$lib/stores/location.store";
 import { getDealsByFilter } from "$lib/supabase/deal-service";
-import { getLocation, saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
+import { saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import debounce from "lodash/debounce";
 import { Feature, View } from "ol";
 import type { Coordinate } from "ol/coordinate";
@@ -19,14 +21,13 @@ import VectorSource from "ol/source/Vector";
 import { Fill, Icon, Stroke, Style } from "ol/style";
 import { get } from "svelte/store";
 import type { Position } from "./geo/geo.types";
-import { centerOfGermany, fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
+import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
 import { getIconPathById } from "./icon-mapping";
-import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
 import { searchRadiusStore } from "./stores/search-radius.store";
+import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
 
 useGeographic();
 
-let map: Map;
 const dealLayerSource = new VectorSource();
 const view = new View({
   zoom: 16,
@@ -35,8 +36,11 @@ const view = new View({
 let circle: Circle;
 let centerPoint: Circle;
 
-locationStore.subscribe((location) => jumpToLocation(location));
-searchRadiusStore.subscribe(searchRadius => setRadius(searchRadius));
+locationStore.subscribe((location) => {
+  if (!isLocationWatcherStarted()) return;
+  jumpToLocation(location);
+});
+searchRadiusStore.subscribe((searchRadius) => setRadius(searchRadius));
 
 const saveLocationDebounced = debounce(async (location: Position) => {
   const supabase = get(page).data.supabase;
@@ -45,29 +49,27 @@ const saveLocationDebounced = debounce(async (location: Position) => {
   await saveLocation(supabase, userId, location);
 }, 1000);
 
-const updateDeals = debounce(async (extent: Extent) => {
+const updateDealsDebounced = debounce(async (extent: Extent) => {
   const filter: DealFilter = {
-    categoryIds: [],
+    categoryIds: get(categoryStore).map((c) => c.id),
     extent
   };
 
   const supabase = get(page).data.supabase;
   const deals = await getDealsByFilter(supabase, filter);
   setDeals(deals);
-}, 1000);
+  dealStore.set(deals);
+}, 500);
 
-export async function initMapService(htmlElementId: string) {
-  const supabase = get(page).data.supabase;
-  const userId = get(page).data.userId;
-  const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
-  const center = toOpenLayersCoordinate(location);
+export function initMapService(htmlElementId: string) {
+  const center = toOpenLayersCoordinate(get(locationStore));
+  const searchRadius = transformRadius(get(searchRadiusStore));
 
   view.setCenter(center);
   centerPoint = new Circle(center, transformRadius(2));
-  const searchRadius = transformRadius(get(searchRadiusStore));
   circle = new Circle(center, searchRadius);
 
-  map = new Map({
+  const map = new Map({
     target: htmlElementId,
     layers: [
       new TileLayer({
@@ -104,36 +106,36 @@ export async function initMapService(htmlElementId: string) {
   });
 
   map.on("click", async (event) => {
+    const supabase = get(page).data.supabase;
+    const userId = get(page).data.userId;
+
     if (userId) {
       saveUseCurrentLocation(supabase, userId, false).then();
     }
+
     stopLocationWatching();
-    moveCircle(event.coordinate).then();
+    moveCircle(event.coordinate);
     locationStore.set(fromOpenLayersCoordinate(event.coordinate));
     saveLocationDebounced(fromOpenLayersCoordinate(event.coordinate));
   });
 
   map.on("moveend", () => {
     const extend = map.getView().calculateExtent(map.getSize());
-    updateDeals(extend);
+    updateDealsDebounced(extend);
   });
+
+  moveCircle(center);
 }
 
-export function jumpToLocation(position: Position) {
-  const center = toOpenLayersCoordinate(position);
+export function jumpToLocation(position?: Position) {
+  const center = position ? toOpenLayersCoordinate(position) : toOpenLayersCoordinate(get(locationStore));
   view.setCenter(center);
-  moveCircle(center).then();
-}
-
-export async function jumpToCurrentLocation() {
-  const postion = get(locationStore);
-  const center = toOpenLayersCoordinate(postion);
-  view.setCenter(center);
-  moveCircle(center).then();
+  moveCircle(center);
 }
 
 export function setRadius(radius: number) {
   circle?.setRadius(transformRadius(radius));
+  centerPoint?.setRadius(transformRadius(2));
 }
 
 function setDeals(deals: ActiveDeal[]) {
@@ -147,9 +149,10 @@ function setDeals(deals: ActiveDeal[]) {
   });
 }
 
-async function moveCircle(location: Coordinate) {
-  circle?.setCenter(location);
-  centerPoint?.setCenter(location);
+function moveCircle(location: Coordinate) {
+  const radius = get(searchRadiusStore);
+  circle?.setCenterAndRadius(location, transformRadius(radius));
+  centerPoint.setCenterAndRadius(location, transformRadius(2));
 }
 
 function transformRadius(radius: number) {
@@ -161,7 +164,7 @@ function transformRadius(radius: number) {
   // console.log("projection, pointResolution, transformedRadius = ", projection, pointResolution, transformedRadius);
   // console.log("units", projection.getUnits());
 
-  return radius / 149500;
+  return radius / 74750;
 }
 
 function createIcon(deal: ActiveDeal, coordinate: Coordinate): Feature {

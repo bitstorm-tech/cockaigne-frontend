@@ -13,12 +13,10 @@ export const hotDealStore = {
   set: hotDeals.set,
   update: hotDeals.update,
 
-  load: async function (supabase: Supabase, userId?: string) {
+  load: async function (supabase: Supabase, userId: string) {
     if (!browser) {
       throw Error("Init store (hot deals) on server -> potential information leak!");
     }
-
-    if (!userId) return;
 
     const hotDeals = await getHotDeals(supabase, userId);
     hotDeals.forEach((deal) => (deal.isHot = true));

@@ -29,8 +29,8 @@ export const selectedCategoriesStore = {
   update: selectedCategories.update,
   set: selectedCategories.set,
 
-  load: async function (supabase: Supabase) {
-    const selectedCategories = await getSelectedCategories(supabase);
+  load: async function (supabase: Supabase, userId: string) {
+    const selectedCategories = await getSelectedCategories(supabase, userId);
     this.set(selectedCategories);
   }
 };

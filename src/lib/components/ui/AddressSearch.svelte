@@ -62,7 +62,7 @@
         </button>
       </li>
       {#if index < searchResults.length - 1}
-        <div class="divider" />
+        <col class="divider" />
       {/if}
     {/each}
   </ul>

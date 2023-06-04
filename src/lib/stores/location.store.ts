@@ -10,12 +10,12 @@ export const locationStore = {
   subscribe: location.subscribe,
   set: location.set,
 
-  load: async function (supabase: Supabase, userId?: string) {
+  load: async function (supabase: Supabase, userId: string) {
     if (!browser) {
       throw Error("Init store (location) on server -> potential information leak!");
     }
 
-    const location = userId ? await getLocation(supabase, userId) : centerOfGermany;
+    const location = await getLocation(supabase, userId);
     this.set(location);
   }
 };

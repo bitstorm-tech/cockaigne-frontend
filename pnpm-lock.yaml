@@ -36,8 +36,8 @@ devDependencies:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.24)
   daisyui:
-    specifier: 3.0.2
-    version: 3.0.2(postcss@8.4.24)
+    specifier: 3.0.3
+    version: 3.0.3(postcss@8.4.24)
   date-fns:
     specifier: 2.30.0
     version: 2.30.0
@@ -1478,8 +1478,8 @@ packages:
       type: 1.2.0
     dev: true
 
-  /daisyui@3.0.2(postcss@8.4.24):
-    resolution: {integrity: sha512-0X+0PkgTIWevt5m4AZCCgvqI5pKRormTEhdfmc31dwfLNq6uY4wENCXAtcXzZMKt7JBKcVTWlj/uDrOjj6XpUQ==}
+  /daisyui@3.0.3(postcss@8.4.24):
+    resolution: {integrity: sha512-RSbXsEBj2LonvjOKEI0I64F5xFJrFrthPgxRNeAZKmACQ3NoIoP45lO6UXLW3bm8PVOUGpKf1Br2SWwc1NqnHQ==}
     peerDependencies:
       postcss: ^8
     dependencies:

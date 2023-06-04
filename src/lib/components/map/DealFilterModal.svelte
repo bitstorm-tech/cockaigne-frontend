@@ -6,6 +6,7 @@
   import RangeSelect from "$lib/components/ui/RangeSelect.svelte";
   import { setRadius } from "$lib/map.service";
   import { selectedCategoriesStore } from "$lib/stores/category.store";
+  import { dealStore } from "$lib/stores/deal.store";
   import { searchRadiusStore } from "$lib/stores/search-radius.store";
   import { updateSelectedCategory } from "$lib/supabase/category-service";
   import { saveSearchRadius } from "$lib/supabase/location-service";
@@ -35,8 +36,6 @@
     }
   ];
 
-  selectedCategoriesStore.load(supabase);
-
   const saveRadius = debounce(() => {
     if (!userId) return;
     saveSearchRadius(supabase, userId, searchPerimeter / 2);
@@ -45,7 +44,8 @@
   const saveSelectedCategoriesDebounced = debounce(() => {
     if (!userId) return;
     updateSelectedCategory(supabase, userId, $selectedCategoriesStore);
-  }, 2000);
+    dealStore.updateByCurrentFilters();
+  }, 1000);
 
   function changeSearchRadius() {
     setRadius(searchPerimeter / 2);

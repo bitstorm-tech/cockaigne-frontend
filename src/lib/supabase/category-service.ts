@@ -11,8 +11,8 @@ export async function getCategories(supabase: Supabase): Promise<Category[]> {
   return data;
 }
 
-export async function getSelectedCategories(supabase: Supabase): Promise<number[]> {
-  const { data } = await supabase.from("selected_categories").select("category_id");
+export async function getSelectedCategories(supabase: Supabase, userId: string): Promise<number[]> {
+  const { data } = await supabase.from("selected_categories").select("category_id").eq("user_id", userId);
 
   if (!data) {
     return [];

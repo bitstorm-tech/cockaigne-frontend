@@ -36,20 +36,14 @@ const view = new View({
 let circle: Circle;
 let centerPoint: Circle;
 
-locationStore.subscribe((location) => {
-  if (!isLocationWatcherStarted()) return;
-  jumpToLocation(location);
-});
-searchRadiusStore.subscribe((searchRadius) => setRadius(searchRadius));
-
-const saveLocationDebounced = debounce(async (location: Position) => {
+const saveLocationInternal = debounce(async (location: Position) => {
   const supabase = get(page).data.supabase;
   const userId = get(page).data.userId;
   if (!userId) return;
   await saveLocation(supabase, userId, location);
 }, 1000);
 
-const updateDealsDebounced = debounce(async (extent: Extent) => {
+const updateDealsOnMap = debounce(async (extent: Extent) => {
   const filter: DealFilter = {
     categoryIds: get(categoryStore).map((c) => c.id),
     extent
@@ -58,8 +52,18 @@ const updateDealsDebounced = debounce(async (extent: Extent) => {
   const supabase = get(page).data.supabase;
   const deals = await getDealsByFilter(supabase, filter);
   setDeals(deals);
-  dealStore.set(deals);
 }, 500);
+
+locationStore.subscribe((location) => {
+  if (!isLocationWatcherStarted()) return;
+  jumpToLocation(location);
+  dealStore.updateByCurrentFilters();
+});
+
+searchRadiusStore.subscribe((searchRadius) => {
+  setRadius(searchRadius);
+  dealStore.updateByCurrentFilters();
+});
 
 export function initMapService(htmlElementId: string) {
   const center = toOpenLayersCoordinate(get(locationStore));
@@ -116,12 +120,12 @@ export function initMapService(htmlElementId: string) {
     stopLocationWatching();
     moveCircle(event.coordinate);
     locationStore.set(fromOpenLayersCoordinate(event.coordinate));
-    saveLocationDebounced(fromOpenLayersCoordinate(event.coordinate));
+    saveLocationInternal(fromOpenLayersCoordinate(event.coordinate));
   });
 
   map.on("moveend", () => {
     const extend = map.getView().calculateExtent(map.getSize());
-    updateDealsDebounced(extend);
+    updateDealsOnMap(extend);
   });
 
   moveCircle(center);
@@ -153,6 +157,7 @@ function moveCircle(location: Coordinate) {
   const radius = get(searchRadiusStore);
   circle?.setCenterAndRadius(location, transformRadius(radius));
   centerPoint.setCenterAndRadius(location, transformRadius(2));
+  dealStore.updateByCurrentFilters(get(page).data.supabase);
 }
 
 function transformRadius(radius: number) {

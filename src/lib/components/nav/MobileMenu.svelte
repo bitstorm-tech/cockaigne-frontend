@@ -37,7 +37,7 @@
     {#if $page.data.userId}
       <a href="/settings" class="flex h-8 items-center gap-3">
         <GearIcon />
-        Einstellungen
+        Einstellungen & Profil
       </a>
       <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
         <LogoutIcon />

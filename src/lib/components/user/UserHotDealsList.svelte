@@ -10,8 +10,13 @@
   let openDetail = -1;
 
   onMount(async () => {
-    await hotDealStore.load($page.data.supabase, $page.data.userId);
-    hotDealStore.rotateByCurrentTime();
+    const userId = $page.data.userId;
+
+    if (userId) {
+      await hotDealStore.load($page.data.supabase, userId);
+      hotDealStore.rotateByCurrentTime();
+    }
+
     loading = false;
   });
 </script>

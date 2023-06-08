@@ -45,7 +45,7 @@
   }
 </script>
 
-{#if showRatingButton}
+{#if showRatingButton && userId}
   <div class="grid grid-cols-1 p-2">
     <Button on:click={() => (openModal = true)}>Schreibe eine Bewertung</Button>
   </div>
@@ -60,7 +60,10 @@
       {#if isDealer}
         <EmptyContent>Leider hat dich noch niemand bewertet :(</EmptyContent>
       {:else}
-        <EmptyContent>Sei der erste der eine Bewertung schreibt!</EmptyContent>
+        <EmptyContent>
+          <p>Sei der erste der eine Bewertung schreibt!</p>
+          <p>(nur für Pro-Mitglieder)</p>
+        </EmptyContent>
       {/if}
     {:else}
       <span class="m-2">Durchschnitt: {calcAverageRating(ratings)}</span>

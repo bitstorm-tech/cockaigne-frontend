@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
   import UserDealListItme from "$lib/components/user/UserDealListItme.svelte";
   import { hotDealStore } from "$lib/stores/hot-deal.store";
@@ -9,7 +10,7 @@
   let openDetail = -1;
 
   onMount(async () => {
-    await hotDealStore.load();
+    await hotDealStore.load($page.data.supabase, $page.data.userId);
     hotDealStore.rotateByCurrentTime();
     loading = false;
   });

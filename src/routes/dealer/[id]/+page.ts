@@ -7,14 +7,14 @@ import type { LoadEvent } from "@sveltejs/kit";
 export async function load({ params, parent }: LoadEvent) {
   const id = params.id || "";
   const { session, supabase } = await parent();
-  const userId = session.user.id;
+  const userId = session?.user.id;
 
   navigationStore.currentPage("home");
 
   const [deals, pictures, isFavDealer, account, profileImage] = await Promise.all([
     getDealsByDealerId(supabase, id),
     getDealerImages(supabase, id),
-    isFavoriteDealer(supabase, userId, id),
+    userId ? isFavoriteDealer(supabase, userId, id) : false,
     getDealer(supabase, id),
     getProfileImage(supabase, id, true)
   ]);

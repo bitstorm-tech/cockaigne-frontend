@@ -6,7 +6,9 @@ export async function load({ params }: LoadEvent) {
   const date = params["date"];
 
   if (!date || !date.match(/[0-9]+-[0-9]+/)) {
-    return;
+    return {
+      date
+    };
   }
 
   const [year, month] = date.split("-");
@@ -15,6 +17,8 @@ export async function load({ params }: LoadEvent) {
   return {
     year,
     monthWord: MONTH_MAPPING[+month],
-    invoiceData
+    invoiceData,
+    date,
+    month
   };
 }

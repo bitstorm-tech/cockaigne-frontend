@@ -21,6 +21,10 @@
 <section>
   {#if !data.invoiceData}
     <h1 class="text-center">Leider kann die Rechnung gerade nicht angezeigt werden.</h1>
+    <p>{JSON.stringify(data.year)}</p>
+    <p>{JSON.stringify(data.month)}</p>
+    <p>{JSON.stringify(data.date)}</p>
+    <p>{JSON.stringify(data.invoiceData)}</p>
   {:else}
     <div class="mt-6 flex items-center justify-center gap-6">
       <a href="/invoices-overview">

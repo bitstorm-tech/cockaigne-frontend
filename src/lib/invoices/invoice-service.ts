@@ -23,11 +23,13 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
   const accountResult = await supabase.from("accounts").select().eq("id", userId).single();
 
   if (accountResult.error) {
-    return logError(accountResult.error, "Can't get invoice data -> no account");
+    return logError(accountResult.error, "Can't get invoice data for account");
   }
 
   const dateStart = `${year}-${month}-01`;
   const dateEnd = `${year}-${month}-` + lastDayOfMonth(new Date(dateStart)).getDate();
+
+  console.log("dateStart / dateEnd", dateStart, dateEnd);
 
   const dealsResult = await supabase
     .from("deals")
@@ -37,7 +39,7 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
     .lte("start", dateEnd);
 
   if (dealsResult.error) {
-    return logError(dealsResult.error, "Can't get invoice data -> no deals");
+    return logError(dealsResult.error, "Can't get invoice data for deals");
   }
 
   return {

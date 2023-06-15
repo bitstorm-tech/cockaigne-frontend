@@ -6,6 +6,22 @@ const DATE_FORMAT = "yyyy-MM-dd";
 const DATE_TIME_FORMAT_WITHOUT_TIMEZONE = DATE_FORMAT + "'T'HH:mm";
 const DATE_TIME_FORMAT_WITH_TIMEZONE = DATE_TIME_FORMAT_WITHOUT_TIMEZONE + "XXX";
 
+export const MONTH_MAPPING = [
+  "", // placeholder so we can begin with 1 as month not 0
+  "Januar",
+  "Februar",
+  "März",
+  "April",
+  "Mai",
+  "Juni",
+  "Juli",
+  "August",
+  "September",
+  "Oktober",
+  "November",
+  "Dezember"
+];
+
 export function getDateTimeStringWithoutTimezone(
   date = new Date(),
   offsetInMinutes = 0,
@@ -68,4 +84,28 @@ export function isBeforeNow(dateTime: string): boolean {
   const date = parseISO(dateTime);
   const now = new Date();
   return date < now;
+}
+
+export type DateRangeSlice = {
+  year: number;
+  month: number;
+};
+
+export function generateDateRange(start: Date, end = new Date()): DateRangeSlice[] {
+  const startYear = start.getFullYear();
+  const startMonth = start.getMonth() + 1;
+  const endYear = end.getFullYear();
+  const endMonth = end.getMonth() + 1;
+  const dateRange: DateRangeSlice[] = [];
+
+  for (let year = startYear; year <= endYear; year++) {
+    let monthFrom = year === startYear ? startMonth : 1;
+    const monthTo = year === endYear ? endMonth : 12;
+
+    for (; monthFrom <= monthTo; monthFrom++) {
+      dateRange.push({ year, month: monthFrom });
+    }
+  }
+
+  return dateRange.reverse();
 }

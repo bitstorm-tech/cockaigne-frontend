@@ -13,6 +13,7 @@ export interface Database {
         Row: {
           age: number | null
           city: string | null
+          created: string
           default_category: number | null
           email: string
           gender: string | null
@@ -31,6 +32,7 @@ export interface Database {
         Insert: {
           age?: number | null
           city?: string | null
+          created?: string
           default_category?: number | null
           email: string
           gender?: string | null
@@ -49,6 +51,7 @@ export interface Database {
         Update: {
           age?: number | null
           city?: string | null
+          created?: string
           default_category?: number | null
           email?: string
           gender?: string | null
@@ -64,6 +67,14 @@ export interface Database {
           username?: string
           zip?: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "accounts_default_category_fkey"
+            columns: ["default_category"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       categories: {
         Row: {
@@ -78,6 +89,7 @@ export interface Database {
           id?: number
           name?: string
         }
+        Relationships: []
       }
       dealer_ratings: {
         Row: {
@@ -101,6 +113,32 @@ export interface Database {
           stars?: number
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "dealer_ratings_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       deals: {
         Row: {
@@ -136,6 +174,26 @@ export interface Database {
           template?: boolean
           title?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "deals_category_id_fkey"
+            columns: ["category_id"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       favorite_dealers: {
         Row: {
@@ -153,6 +211,32 @@ export interface Database {
           dealer_id?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_dealers_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       hot_deals: {
         Row: {
@@ -170,6 +254,44 @@ export interface Database {
           deal_id?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "active_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "future_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "past_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       likes: {
         Row: {
@@ -187,6 +309,44 @@ export interface Database {
           deal_id?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "active_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "future_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "past_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       reported_deals: {
         Row: {
@@ -207,6 +367,44 @@ export interface Database {
           reason?: string
           reporter_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "reported_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reported_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "active_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reported_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "future_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reported_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "past_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reported_deals_reporter_id_fkey"
+            columns: ["reporter_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reported_deals_reporter_id_fkey"
+            columns: ["reporter_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       selected_categories: {
         Row: {
@@ -224,6 +422,26 @@ export interface Database {
           created?: string
           user_id?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "selected_categories_category_id_fkey"
+            columns: ["category_id"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "selected_categories_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "selected_categories_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
@@ -241,6 +459,26 @@ export interface Database {
           title: string | null
           username: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "deals_category_id_fkey"
+            columns: ["category_id"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       dealer_ratings_view: {
         Row: {
@@ -250,6 +488,32 @@ export interface Database {
           user_id: string | null
           username: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "dealer_ratings_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dealer_ratings_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       dealer_view: {
         Row: {
@@ -276,6 +540,7 @@ export interface Database {
           username?: string | null
           zip?: number | null
         }
+        Relationships: []
       }
       favorite_dealers_view: {
         Row: {
@@ -283,6 +548,32 @@ export interface Database {
           user_id: string | null
           username: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "favorite_dealers_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorite_dealers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       future_deals_view: {
         Row: {
@@ -298,12 +589,58 @@ export interface Database {
           title: string | null
           username: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "deals_category_id_fkey"
+            columns: ["category_id"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       like_counts_view: {
         Row: {
           deal_id: string | null
           likecount: number | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "active_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "future_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "past_deals_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       past_deals_view: {
         Row: {
@@ -319,6 +656,26 @@ export interface Database {
           title: string | null
           username: string | null
         }
+        Relationships: [
+          {
+            foreignKeyName: "deals_category_id_fkey"
+            columns: ["category_id"]
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Functions: {

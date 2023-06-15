@@ -38,7 +38,7 @@
   <Button circle on:click={() => (showDealFilterModal = true)}>
     <FilterIcon />
   </Button>
-  <Button circle on:click={jumpToLocation}>
+  <Button circle on:click={() => jumpToLocation()}>
     <CurrentLocationIcon />
   </Button>
 </div>

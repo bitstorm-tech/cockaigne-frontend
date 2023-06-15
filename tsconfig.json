@@ -15,6 +15,12 @@
       ],
       "$lib/*": [
         "./src/lib/*"
+      ],
+      "$routes": [
+        "./src/routes"
+      ],
+      "$routes/*": [
+        "./src/routes/*"
       ]
     }
   }

@@ -21,9 +21,6 @@
   <button on:click={() => (showTabIndex = 2)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 2}>
     Profilbild
   </button>
-  <button on:click={() => (showTabIndex = 3)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 3}>
-    Rechnungen
-  </button>
 </div>
 {#if showTabIndex === 0}
   <div class="flex flex-col gap-3">
@@ -37,6 +34,4 @@
   <AddressSettings bind:account />
 {:else if showTabIndex === 2}
   <MediaPicker imagePreview={account.profileImageUrl} bind:file={profileImageFile} buttonText="Profilbild ändern" />
-{:else}
-  <div>Rechungen</div>
 {/if}

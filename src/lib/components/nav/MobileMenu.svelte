@@ -12,6 +12,7 @@
   import { logout } from "$lib/supabase/auth";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
+  import InvoiceIcon from "$lib/components/ui/icons/InvoiceIcon.svelte";
 
   export let show = false;
 
@@ -37,8 +38,14 @@
     {#if $page.data.userId}
       <a href="/settings" class="flex h-8 items-center gap-3">
         <GearIcon />
-        Einstellungen & Profil
+        Einstellungen
       </a>
+      {#if $page.data.isDealer}
+        <a href="/invoices-overview" class="flex h-8 items-center gap-3">
+          <InvoiceIcon />
+          Rechnungen
+        </a>
+      {/if}
       <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
         <LogoutIcon />
         Logout

@@ -26,8 +26,9 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
     return logError(accountResult.error, "Can't get invoice data for account");
   }
 
-  const dateStart = `${year}-${month}-01`;
-  const dateEnd = `${year}-${month}-` + lastDayOfMonth(new Date(dateStart)).getDate();
+  const monthString = month > 9 ? month + "" : "0" + month;
+  const dateStart = `${year}-${monthString}-01`;
+  const dateEnd = `${year}-${monthString}-` + lastDayOfMonth(new Date(dateStart)).getDate();
 
   console.log("dateStart / dateEnd / lastDayOfMonth", dateStart, dateEnd, lastDayOfMonth(new Date(dateStart)));
 

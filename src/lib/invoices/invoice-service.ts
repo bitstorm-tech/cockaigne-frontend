@@ -29,7 +29,7 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
   const dateStart = `${year}-${month}-01`;
   const dateEnd = `${year}-${month}-` + lastDayOfMonth(new Date(dateStart)).getDate();
 
-  console.log("dateStart / dateEnd", dateStart, dateEnd);
+  console.log("dateStart / dateEnd / lastDayOfMonth", dateStart, dateEnd, lastDayOfMonth(new Date(dateStart)));
 
   const dealsResult = await supabase
     .from("deals")

@@ -33,9 +33,13 @@
       showDetails={openDetail === i}
       on:click={() => (openDetail = openDetail === i ? -1 : i)}
     >
-      <button slot="right-action" on:click={() => goto("/deals/" + deal.id)}>
-        <GearIcon />
-      </button>
+      <svelte:fragment slot="right-action">
+        {#if $page.data.isDealer}
+          <button on:click={() => goto("/deals/" + deal.id)}>
+            <GearIcon />
+          </button>
+        {/if}
+      </svelte:fragment>
     </DealsListItem>
   {/each}
 </div>

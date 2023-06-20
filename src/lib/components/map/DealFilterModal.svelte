@@ -82,9 +82,9 @@
   <div class="m-2 flex max-h-[60vh] flex-col">
     <div class="flex flex-col gap-3">
       <RangeSelect
-        label="Suche im Umkreis von {searchPerimeter} m"
+        label="Suche im Umkreis von {searchPerimeter / 1000} km"
         min={500}
-        max={15000}
+        max={50000}
         step={500}
         bind:value={searchPerimeter}
         on:input={changeSearchRadius}

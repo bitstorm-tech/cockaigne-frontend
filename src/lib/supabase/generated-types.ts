@@ -610,6 +610,29 @@ export interface Database {
           }
         ]
       }
+      invoice_metadata_view: {
+        Row: {
+          dealer_id: string | null
+          deals: number | null
+          month: number | null
+          total_duration_in_min: number | null
+          year: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deals_dealer_id_fkey"
+            columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       like_counts_view: {
         Row: {
           deal_id: string | null

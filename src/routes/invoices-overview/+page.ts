@@ -1,17 +1,19 @@
-import { generateDateRange } from "$lib/date-time.utils";
-import { getAccount } from "$lib/supabase/account-service";
+import { getInvoiceOverviews } from "$lib/invoices/invoice-service";
+
 import type { LoadEvent } from "@sveltejs/kit";
 
 export async function load({ parent }: LoadEvent) {
   const { supabase, userId } = await parent();
-  const account = await getAccount(supabase, userId);
 
-  if (!account) {
+  if (!userId) {
     return {
       invoiceDates: []
     };
   }
 
-  const invoiceDates = generateDateRange(new Date(account.created));
-  return { invoiceDates };
+  const invoiceOverviews = await getInvoiceOverviews(supabase, userId);
+
+  return {
+    invoiceOverviews
+  };
 }

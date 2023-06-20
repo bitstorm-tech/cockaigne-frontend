@@ -20,6 +20,7 @@ export type ReportedDeal = Database["public"]["Tables"]["reported_deals"]["Row"]
 export type SelectedCategory = Database["public"]["Tables"]["selected_categories"]["Row"];
 export type GetActiveDealsWithinExtentFunctionArguments =
   Database["public"]["Functions"]["get_active_deals_within_extent"]["Args"];
+export type InvoiceMetadata = Database["public"]["Views"]["invoice_metadata_view"]["Row"];
 
 export type DealFilter = {
   location?: Position;

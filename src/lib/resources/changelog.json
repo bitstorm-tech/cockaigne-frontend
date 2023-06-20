@@ -1,17 +1,14 @@
 {
-  "4.6.2023": [
-    "Mehr Links auf die Registrierungsseite"
+  "16.6.2023": ["Mehr Details (Anzahl der Deals und Rechnungssumme) in der Rechnungsübersicht anzeigen"],
+  "14.6.2023": [
+    "Erste Version für Rechnungen",
+    "'Springe zum aktuellen Standpunkt' (Fadenkreuz auf der Karte) gefixt",
+    "Icons überarbeitet"
   ],
-  "29.5.2023": [
-    "Bugs auf der Karte gefixt",
-    "Bugs bei der Selektion von Deals gefixt"
-  ],
-  "20.5.2023": [
-    "Feater-Liste 'Basic vs Pro' hinzugefügt"
-  ],
-  "19.5.2023": [
-    "SSR Fehler behoben"
-  ],
+  "4.6.2023": ["Mehr Links auf die Registrierungsseite"],
+  "29.5.2023": ["Bugs auf der Karte gefixt", "Bugs bei der Selektion von Deals gefixt"],
+  "20.5.2023": ["Feater-Liste 'Basic vs Pro' hinzugefügt"],
+  "19.5.2023": ["SSR Fehler behoben"],
   "15.5.2023": [
     "Neuer Adress-Suche Dialog der jetzt alle Suchtrffer in einer Liste anzeigt aus der man dann eine Adresse auswählen kann"
   ],
@@ -24,25 +21,12 @@
     "Deals werden nach Startzeit sortiert (Datum wird ignoriert)",
     "Icon der aktiven Seite wird im Footer hervorgehoben"
   ],
-  "24.1.2023": [
-    "Profilbilder bei den Bewertungen angepasst"
-  ],
-  "23.1.2023": [
-    "Anpassung der Dialoge in der Kartenansicht"
-  ],
-  "22.1.2023": [
-    "Deals werden im Tab der favorisierten Dealer aufgelistet"
-  ],
-  "18.1.2023": [
-    "Die Möglichkeit das Passwort zurücksetzen hinzugefügt"
-  ],
-  "11.1.2023": [
-    "Login nur mit aktiviertem Account möglich",
-    "Fehler beim Neuladen der Karte behoben"
-  ],
-  "4.1.2023": [
-    "Sende E-Mails zur Aktivierung von neuen Accounts"
-  ],
+  "24.1.2023": ["Profilbilder bei den Bewertungen angepasst"],
+  "23.1.2023": ["Anpassung der Dialoge in der Kartenansicht"],
+  "22.1.2023": ["Deals werden im Tab der favorisierten Dealer aufgelistet"],
+  "18.1.2023": ["Die Möglichkeit das Passwort zurücksetzen hinzugefügt"],
+  "11.1.2023": ["Login nur mit aktiviertem Account möglich", "Fehler beim Neuladen der Karte behoben"],
+  "4.1.2023": ["Sende E-Mails zur Aktivierung von neuen Accounts"],
   "2.1.2023": [
     "Schriftfarben im Bilder-Zoom Popup angepasst",
     "Icon-Farben auf der Karten-Seite angepasst",
@@ -52,13 +36,7 @@
     "Größe des Profilbild für Dealer und User vereinheitlicht",
     "Schließen-Knopf in Popups besser hervorheben"
   ],
-  "28.12.2022": [
-    "Größe des 'Menü-Würfel' angepasst"
-  ],
-  "26.12.2022": [
-    "'Was gibt es Neues?' eingeführt"
-  ],
-  "25.12.2022": [
-    "Lupe zum Vergrößern der Bilder entfernt. Ein Klick überall auf das Bild vergrößert es jetzt."
-  ]
+  "28.12.2022": ["Größe des 'Menü-Würfel' angepasst"],
+  "26.12.2022": ["'Was gibt es Neues?' eingeführt"],
+  "25.12.2022": ["Lupe zum Vergrößern der Bilder entfernt. Ein Klick überall auf das Bild vergrößert es jetzt."]
 }

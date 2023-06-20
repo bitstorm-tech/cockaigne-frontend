@@ -32,7 +32,7 @@
       </a>
       <p class="text-center text-2xl">Rechnung vom {data.monthWord} {data.year}</p>
     </div>
-    <div id="invoice" class="m-4 flex flex-col gap-5 rounded-md bg-white p-2 text-black">
+    <div id="invoice" class="m-4 flex flex-col gap-5 rounded-md bg-white p-2 font-mono text-sm text-black">
       <p>Rechnung-Nr.: {data.invoiceData?.invoiceNumber}</p>
       <div class="flex justify-between">
         <div>
@@ -46,6 +46,7 @@
           <div>44795 Bochum</div>
         </div>
       </div>
+      <hr />
       <div>
         {#each data.invoiceData.deals as deal}
           <div class="flex justify-between">
@@ -54,6 +55,7 @@
           </div>
         {/each}
       </div>
+      <hr />
       <div class="text-right">{calculateSumPrice(data.invoiceData.deals)}</div>
     </div>
     <div class="fixed bottom-20 right-8">

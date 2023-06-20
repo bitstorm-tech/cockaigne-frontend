@@ -1,9 +1,9 @@
-import { page } from "$app/stores";
+import { generateDateRange } from "$lib/date-time.utils";
 import { logError } from "$lib/error-utils";
 import type { Address } from "$lib/geo/address.service";
-import type { Deal } from "$lib/supabase/public-types";
+import type { Deal, InvoiceMetadata } from "$lib/supabase/public-types";
+import type { Supabase } from "$lib/supabase/supabase-client";
 import { lastDayOfMonth } from "date-fns";
-import { get } from "svelte/store";
 
 export type InvoiceData = {
   invoiceNumber: string;
@@ -11,10 +11,19 @@ export type InvoiceData = {
   deals: Deal[];
 };
 
-export async function getInvoiceData(year: number, month: number): Promise<InvoiceData | undefined> {
-  const supabase = get(page).data.supabase;
-  const userId = get(page).data.userId;
+export type InvoiceOverview = {
+  year: number;
+  month: number;
+  numberOfDeals: number;
+  totalAmount: number;
+};
 
+export async function getInvoiceData(
+  supabase: Supabase,
+  userId: string,
+  year: number,
+  month: number
+): Promise<InvoiceData | undefined> {
   if (!userId) {
     console.error("Can't get invoice data -> no user ID");
     return;
@@ -30,11 +39,10 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
   const dateStart = `${year}-${monthString}-01`;
   const dateEnd = `${year}-${monthString}-` + lastDayOfMonth(new Date(dateStart)).getDate();
 
-  console.log("dateStart / dateEnd / lastDayOfMonth", dateStart, dateEnd, lastDayOfMonth(new Date(dateStart)));
-
   const dealsResult = await supabase
     .from("deals")
     .select()
+    .eq("dealer_id", userId)
     .eq("template", false)
     .gte("start", dateStart)
     .lte("start", dateEnd);
@@ -44,7 +52,7 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
   }
 
   return {
-    invoiceNumber: "1234567890-1234567890-1234567890",
+    invoiceNumber: `${userId}-${year}-${monthString}`,
     address: {
       name: accountResult.data.username,
       street: accountResult.data.street || "",
@@ -55,4 +63,50 @@ export async function getInvoiceData(year: number, month: number): Promise<Invoi
     },
     deals: dealsResult.data
   };
+}
+
+export async function getInvoiceOverviews(supabase: Supabase, userId: string): Promise<InvoiceOverview[]> {
+  const accountCreationDate = await getAccountCreationDate(supabase, userId);
+
+  if (!accountCreationDate) {
+    return logError(undefined, "Can't get invoice overview -> missing account created date", []);
+  }
+
+  const invoiceMetadata = await getInvoiceMetadata(supabase, userId);
+  const dateRange = generateDateRange(accountCreationDate);
+
+  return dateRange.map((range) => {
+    const metadata = invoiceMetadata.find((m) => m.year === range.year && m.month === range.month);
+    return {
+      year: range.year,
+      month: range.month,
+      numberOfDeals: metadata?.deals || 0,
+      totalAmount: metadata ? ((metadata.total_duration_in_min || 0) / 24) * 4.99 : 0
+    };
+  });
+}
+
+async function getInvoiceMetadata(supabase: Supabase, userId: string): Promise<InvoiceMetadata[]> {
+  if (!userId) {
+    console.error("Can't get invoice metadata -> no user ID");
+    return [];
+  }
+
+  const { error, data } = await supabase.from("invoice_metadata_view").select().eq("dealer_id", userId);
+
+  if (error) {
+    return logError(error, "Can't get invoice metadata", []);
+  }
+
+  return data;
+}
+
+async function getAccountCreationDate(supabase: Supabase, userId: string): Promise<Date | undefined> {
+  const { error, data } = await supabase.from("accounts").select("created").eq("id", userId).single();
+
+  if (error) {
+    return logError(error, "Can't get account created date");
+  }
+
+  return new Date(data.created);
 }

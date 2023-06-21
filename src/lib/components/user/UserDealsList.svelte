@@ -22,7 +22,7 @@
   let openDetail = -1;
 </script>
 
-<div class="flex flex-col gap-1">
+<div class="flex flex-col gap-2">
   {#if deals.length === 0}
     <EmptyContent>
       <p>Aktuell gibt es leider keine Deals in deiner Nähe 😞</p>

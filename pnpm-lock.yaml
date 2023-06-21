@@ -36,8 +36,8 @@ devDependencies:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.24)
   daisyui:
-    specifier: 3.1.1
-    version: 3.1.1(postcss@8.4.24)
+    specifier: 3.1.5
+    version: 3.1.5(postcss@8.4.24)
   date-fns:
     specifier: 2.30.0
     version: 2.30.0
@@ -78,8 +78,8 @@ devDependencies:
     specifier: 3.59.2
     version: 3.59.2
   svelte-check:
-    specifier: 3.4.3
-    version: 3.4.3(postcss@8.4.24)(svelte@3.59.2)
+    specifier: 3.4.4
+    version: 3.4.4(postcss@8.4.24)(svelte@3.59.2)
   svelte-preprocess:
     specifier: 5.0.4
     version: 5.0.4(postcss@8.4.24)(svelte@3.59.2)(typescript@5.1.3)
@@ -1477,8 +1477,8 @@ packages:
       type: 1.2.0
     dev: true
 
-  /daisyui@3.1.1(postcss@8.4.24):
-    resolution: {integrity: sha512-+SPwlCvbk/dQd40Op3jv+C8s5pL/Ix4z/U+Q8KDKnF7oXNmvDYZlZ9e2RkouoevaW/Jta4e/iLTj5ve2WBoSkw==}
+  /daisyui@3.1.5(postcss@8.4.24):
+    resolution: {integrity: sha512-3nk5L//IU31ISzsonKEFG8ris8hS/MRAc+PrOTOyRbssjv1fYmNKSdIrOhG6op2ED3RyJL4p6I81JUwd7RWqTw==}
     engines: {node: '>=16.9.0'}
     peerDependencies:
       postcss: ^8
@@ -3961,8 +3961,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /svelte-check@3.4.3(postcss@8.4.24)(svelte@3.59.2):
-    resolution: {integrity: sha512-O07soQFY3X0VDt+bcGc6D5naz0cLtjwnmNP9JsEBPVyMemFEqUhL2OdLqvkl5H/u8Jwm50EiAU4BPRn5iin/kg==}
+  /svelte-check@3.4.4(postcss@8.4.24)(svelte@3.59.2):
+    resolution: {integrity: sha512-Uys9+R65cj8TmP8f5UpS7B2xKpNLYNxEWJsA5ZoKcWq/uwvABFF7xS6iPQGLoa7hxz0DS6xU60YFpmq06E4JxA==}
     hasBin: true
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0

@@ -21,7 +21,7 @@
   });
 </script>
 
-<div class="flex flex-col justify-center gap-1">
+<div class="flex flex-col justify-center gap-2">
   {#if loading}
     <EmptyContent>
       <LoadingSpinner />

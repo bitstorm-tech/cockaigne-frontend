@@ -5,6 +5,7 @@
   import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import Button from "$lib/components/ui/Button.svelte";
+  import AddDealIcon from "$lib/components/ui/icons/AddDealIcon.svelte";
   import DealIcon from "$lib/components/ui/icons/DealIcon.svelte";
   import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
@@ -36,7 +37,7 @@
 >
   {#if $page.data.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId} class="mt-4">
-      <Button warning>Neuer<br />Deal</Button>
+      <Button warning><AddDealIcon size={4} /></Button>
     </a>
   {:else}
     <Button on:click={toggleFavor} circle warning>

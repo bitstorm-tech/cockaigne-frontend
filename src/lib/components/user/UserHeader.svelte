@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
   import DealsBadge from "$lib/components/user/DealsBadge.svelte";
@@ -16,7 +17,7 @@
 <div class="flex justify-between text-[#dbdce6]">
   <div class="flex w-full justify-between">
     <div class="m-4 flex flex-col gap-4 pt-2">
-      <div class="flex gap-2 fill-current text-[#69828c]">
+      <div class="flex gap-2 fill-current text-[#69828c]" class:opacity-50={!$page.data.userId}>
         <DealsBadge number={deals} />
         <HotsBadge number={hotDeals} />
         <FavoriteDealerBadge number={favoriteDealers} />

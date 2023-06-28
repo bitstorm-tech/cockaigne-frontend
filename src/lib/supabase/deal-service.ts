@@ -47,7 +47,7 @@ export async function getActiveDealsByDealer(supabase: Supabase, dealerIds: stri
     return logError(error, "Can't get active deals", []);
   }
 
-  return enrichDealWithImageUrls(supabase, data);
+  return data;
 }
 
 export async function upsertDeal(
@@ -128,7 +128,7 @@ export async function getDealsByFilter(supabase: Supabase, filter: DealFilter): 
     return logError(error, "Can't get deals by filter", []);
   }
 
-  return enrichDealWithImageUrls(supabase, data);
+  return data;
 }
 
 export async function getDealsByDealerId(
@@ -145,7 +145,7 @@ export async function getDealsByDealerId(
     return logError(error, "Can't get deals by dealer id", []);
   }
 
-  return enrichDealWithImageUrls(supabase, data);
+  return data;
 }
 
 export async function toggleHotDeal(supabase: Supabase, userId: string, dealId: string): Promise<ActiveDeal | null> {
@@ -194,7 +194,7 @@ export async function getHotDeals(supabase: Supabase, userId: string): Promise<A
     return logError(activeDealsResult.error, "Can't get hot deals", []);
   }
 
-  return enrichDealWithImageUrls(supabase, activeDealsResult.data);
+  return activeDealsResult.data;
 }
 
 export async function enrichDealWithImageUrls<T extends ActiveDeal[] | Deal[]>(

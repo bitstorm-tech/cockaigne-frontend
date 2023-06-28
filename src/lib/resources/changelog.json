@@ -1,5 +1,8 @@
 {
-  "26.6.2023": ["Badge für HotDeals zeigt nun auch Deals auserhalb des Suchkreis an"],
+  "26.6.2023": [
+    "Badge für HotDeals zeigt nun auch Deals auserhalb des Suchkreis an",
+    "Lade Deal-Bilder erst beim aufklappen eines Deals"
+  ],
   "22.6.2023": ["Badges ausgegraut für Basic-User"],
   "21.6.2023": ["Neuer 'Add Deal' Button"],
   "20.6.2023": ["Umkreis der Suche auf 50 km erhöht", "Abstand zwischen Deals leicht erhöht"],

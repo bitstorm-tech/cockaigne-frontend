@@ -7,8 +7,9 @@
   import ReportIcon from "$lib/components/ui/icons/ReportIcon.svelte";
   import { formatDate } from "$lib/date-time.utils.js";
   import { likeStore } from "$lib/stores/like.store";
-  import { toggleLike } from "$lib/supabase/deal-service";
+  import { enrichDealWithImageUrls, toggleLike } from "$lib/supabase/deal-service";
   import type { ActiveDeal } from "$lib/supabase/public-types";
+  import { onMount } from "svelte";
 
   export let deal: ActiveDeal;
   const isUser = !$page.data.isDealer;
@@ -20,6 +21,10 @@
 
   const supabase = $page.data.supabase;
   const userId = $page.data.userId;
+
+  onMount(async () => {
+    deal = (await enrichDealWithImageUrls(supabase, [deal]))[0];
+  });
 
   async function like() {
     if (!userId) return;

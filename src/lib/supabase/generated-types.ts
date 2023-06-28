@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -520,6 +520,7 @@ export interface Database {
           city: string | null
           house_number: string | null
           id: string | null
+          phone: string | null
           street: string | null
           username: string | null
           zip: number | null
@@ -528,6 +529,7 @@ export interface Database {
           city?: string | null
           house_number?: string | null
           id?: string | null
+          phone?: string | null
           street?: string | null
           username?: string | null
           zip?: number | null
@@ -536,6 +538,7 @@ export interface Database {
           city?: string | null
           house_number?: string | null
           id?: string | null
+          phone?: string | null
           street?: string | null
           username?: string | null
           zip?: number | null

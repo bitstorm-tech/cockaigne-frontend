@@ -1,8 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import Pictures from "$lib/components/dealer/pictures/Pictures.svelte";
   import RatingsList from "$lib/components/dealer/RatingsList.svelte";
+  import Pictures from "$lib/components/dealer/pictures/Pictures.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import AddDealIcon from "$lib/components/ui/icons/AddDealIcon.svelte";
@@ -12,6 +12,7 @@
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
   import { toggleFavoriteDealer } from "$lib/supabase/dealer-service";
+  import { onMount } from "svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -21,6 +22,10 @@
   const userId = $page.data.userId;
   let isFavoriteDealer = data.isFavDealer;
   let loadingFavorite = false;
+
+  onMount(() => {
+    deals?.sort((a, b) => (a.start?.localeCompare(b.start || "") || 0) * -1);
+  });
 
   async function toggleFavor() {
     if (!dealerId || !userId) return;
@@ -33,6 +38,7 @@
   name={account.username}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
+  phone={account?.phone}
   imageUrl={profileImage}
 >
   {#if $page.data.isDealer}

@@ -10,17 +10,17 @@
   const dispatch = createEventDispatcher();
 </script>
 
-<div class="relative" on:click={() => dispatch("zoom")}>
+<button class="relative" on:click={() => dispatch("zoom")}>
   {#if showDelete}
-    <button class="absolute p-1 text-red-600 cursor-pointer" on:click|stopPropagation={() => dispatch("delete")}>
+    <button class="absolute cursor-pointer p-1 text-red-600" on:click|stopPropagation={() => dispatch("delete")}>
       <TrashIcon />
     </button>
   {/if}
   <img
     class:h-60={fixedHeight}
     class:h-36={smallHeight}
-    class="object-cover"
+    class="h-full w-full object-cover"
     src={url}
     alt="Dealer Impression"
   />
-</div>
+</button>

@@ -11,10 +11,10 @@
   import UserHotDealsList from "$lib/components/user/UserHotDealsList.svelte";
   import { addressToShortString, getAddress } from "$lib/geo/address.service";
   import { dealStore } from "$lib/stores/deal.store";
+  import { hotDealStore } from "$lib/stores/hot-deal.store.js";
   import { locationStore } from "$lib/stores/location.store";
-  import type { PageData } from "./$types";
 
-  export let data: PageData;
+  export let data;
   const favoriteDealers = data.favoriteDealers ?? [];
   const account = data.account;
   let showTabIndex = 0;
@@ -33,7 +33,7 @@
   deals={$dealStore.length}
   imageUrl={data.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
-  hotDeals={$dealStore.filter((deal) => deal.isHot).length}
+  hotDeals={$hotDealStore.length}
 />
 <div class="tabs mb-1 mt-6 flex max-h-8">
   <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>

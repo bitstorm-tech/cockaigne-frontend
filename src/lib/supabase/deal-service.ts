@@ -174,6 +174,8 @@ export async function getTopDeals(supabase: Supabase, userId: string, limit: num
 }
 
 export async function getHotDeals(supabase: Supabase, userId: string): Promise<ActiveDeal[]> {
+  if (!userId) return [];
+
   const hotDealsResult = await supabase.from("hot_deals").select().eq("user_id", userId);
 
   if (hotDealsResult.error) {

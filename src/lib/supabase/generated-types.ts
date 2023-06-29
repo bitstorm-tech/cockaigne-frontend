@@ -482,6 +482,7 @@ export interface Database {
       }
       dealer_ratings_view: {
         Row: {
+          created: string | null
           dealer_id: string | null
           rating_text: string | null
           stars: number | null

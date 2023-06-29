@@ -4,6 +4,7 @@
   import RatingStars from "$lib/components/ui/RatingStars.svelte";
   import type { Rating } from "$lib/supabase/public-types";
   import { getProfileImage } from "$lib/supabase/storage-service";
+  import { format } from "date-fns";
   import { onMount } from "svelte";
   import LoadingSpinner from "../ui/icons/LoadingSpinner.svelte";
 
@@ -11,6 +12,7 @@
 
   let imageUrl: string;
   let name: string;
+  let created: string;
 
   const supabase = $page.data.supabase;
 
@@ -19,6 +21,7 @@
       imageUrl = await getProfileImage(supabase, rating.user_id);
     }
     name = rating.username || "Name";
+    created = format(new Date(rating.created || ""), "dd.MM.yyyy");
   });
 </script>
 
@@ -31,7 +34,7 @@
         <ProfilePicture {imageUrl} size={3} />
       {/if}
     </div>
-    <div>{name}</div>
+    <div>{name} am {created}</div>
     <RatingStars stars={rating.stars} showLabel={false} disabled={true} />
   </div>
   <div class="bg-base-100 p-2 pt-6 text-xs">

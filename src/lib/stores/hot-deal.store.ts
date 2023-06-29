@@ -1,8 +1,9 @@
 import { browser } from "$app/environment";
 import { page } from "$app/stores";
-import { getHotDeals, rotateByCurrentTime, toggleHotDeal } from "$lib/supabase/deal-service";
+import { getHotDeals, toggleHotDeal } from "$lib/supabase/deal-service";
 import type { ActiveDeal } from "$lib/supabase/public-types";
 import type { Supabase } from "$lib/supabase/supabase-client";
+import { addHours } from "date-fns";
 import remove from "lodash/remove";
 import { get, writable } from "svelte/store";
 
@@ -48,8 +49,16 @@ export const hotDealStore = {
     return deals;
   },
 
-  rotateByCurrentTime: function () {
-    const rotatedDeals = rotateByCurrentTime(get(hotDeals));
-    this.set(rotatedDeals);
+  sortByEndDate: function () {
+    const deals = get(hotDeals);
+
+    deals.sort((a, b) => {
+      const endDateA = addHours(new Date(a.start!), a.duration!);
+      const endDateB = addHours(new Date(b.start!), b.duration!);
+
+      return endDateA.getTime() - endDateB.getTime();
+    });
+
+    this.set(deals);
   }
 };

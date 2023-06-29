@@ -1,7 +1,12 @@
 {
-  "28.6.2023": ["Zeige Telefonnummer auf Dealer Seite an"],
+  "29.6.2023": ["Erstellungsdatum bei Bewertungen anzeigen"],
+  "28.6.2023": [
+    "Zeige Telefonnummer auf Dealer Seite an",
+    "Sortiere die Deals auf der Dealer Seite nach Erstellungsdatum",
+    "Hot Deals nach Ablaufdatum sortieren"
+  ],
   "26.6.2023": [
-    "Badge für HotDeals zeigt nun auch Deals auserhalb des Suchkreis an",
+    "Badge für Hot Deals zeigt nun auch Deals auserhalb des Suchkreis an",
     "Lade Deal-Bilder erst beim aufklappen eines Deals",
     "Einheitliche Größe der Bilder in den Deal-Details"
   ],

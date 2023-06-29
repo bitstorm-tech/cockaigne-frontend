@@ -9,6 +9,10 @@
 
   export let deals: Deal[] | ActiveDeal[] = [];
   let openDetail = -1;
+
+  $: {
+    deals && deals?.sort((a, b) => (a.start?.localeCompare(b.start || "") || 0) * -1);
+  }
 </script>
 
 <div class="flex flex-col gap-2">

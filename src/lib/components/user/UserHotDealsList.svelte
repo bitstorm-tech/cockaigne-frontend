@@ -14,7 +14,7 @@
 
     if (userId) {
       await hotDealStore.load($page.data.supabase, userId);
-      hotDealStore.rotateByCurrentTime();
+      hotDealStore.sortByEndDate();
     }
 
     loading = false;

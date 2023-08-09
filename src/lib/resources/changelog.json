@@ -1,5 +1,9 @@
 {
-  "29.6.2023": ["Erstellungsdatum bei Bewertungen anzeigen", "Aktiver Like Button ist nun ausgefüllt"],
+  "29.6.2023": [
+    "Erstellungsdatum bei Bewertungen anzeigen",
+    "Aktiver Like Button ist nun ausgefüllt",
+    "Eigene Dealer Bewertungen können jetzt editiert werden"
+  ],
   "28.6.2023": [
     "Zeige Telefonnummer auf Dealer Seite an",
     "Sortiere die Deals auf der Dealer Seite nach Erstellungsdatum",

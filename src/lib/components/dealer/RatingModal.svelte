@@ -5,24 +5,25 @@
   import { createEventDispatcher } from "svelte";
 
   export let open = false;
-  let stars = 3;
-  let ratingText = "";
+  export let stars = 3;
+  export let ratingText = "";
+  export let update = false;
   const dispatch = createEventDispatcher();
 
   const buttons = [
     { text: "Abbrechen", callback: cancel },
-    { text: "Bewerten", callback: ratingCreated }
+    { text: update ? "Ändern" : "Bewerten", callback: ratingCreated }
   ];
 
   function ratingCreated() {
-    dispatch("create", { stars, rating_text: ratingText });
-    cancel();
+    dispatch("create-or-update", { stars, rating_text: ratingText });
+    ratingText = "";
+    stars = 3;
+    open = false;
   }
 
   function cancel() {
     open = false;
-    ratingText = "";
-    stars = 3;
   }
 </script>
 

@@ -2,11 +2,11 @@
   import Modal from "$lib/components/ui/Modal.svelte";
 
   export let open = false;
-  export let url = "";
-  export let deleteFunction: () => void;
+  export let text = "";
+  export let conformationCallback: () => void;
 
-  function del() {
-    deleteFunction();
+  function confirm() {
+    conformationCallback();
     close();
   }
 
@@ -15,14 +15,13 @@
   }
 
   const buttons = [
-    { text: "Ja", callback: del },
+    { text: "Ja", callback: confirm },
     { text: "Nein", callback: close }
   ];
 </script>
 
 <Modal bind:open {buttons}>
   <div class="flex flex-col gap-3">
-    <img src={url} alt="Dealer Impression to delete" />
-    <b class="text-large">Dieses Bild wirklich löschen?</b>
+    <b class="text-large">{text}</b>
   </div>
 </Modal>

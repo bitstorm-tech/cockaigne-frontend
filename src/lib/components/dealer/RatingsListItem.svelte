@@ -9,26 +9,17 @@
   import { updateRating } from "$lib/supabase/rating-service";
   import { getProfileImage } from "$lib/supabase/storage-service";
   import { format } from "date-fns";
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import LoadingSpinner from "../ui/icons/LoadingSpinner.svelte";
 
   export let rating: Rating;
 
-  let imageUrl: string;
-  let name: string;
-  let created: string;
   let openModal = false;
 
   const dispatch = createEventDispatcher();
   const supabase = $page.data.supabase;
 
-  onMount(async () => {
-    if (rating.user_id) {
-      imageUrl = await getProfileImage(supabase, rating.user_id);
-    }
-    name = rating.username || "Name";
-    created = format(new Date(rating.created || ""), "dd.MM.yyyy");
-  });
+  const created = format(new Date(rating.created || Date.now()), "dd.MM.yyyy");
 
   async function update(event: CustomEvent) {
     const ratingUpdate = event.detail;
@@ -43,14 +34,14 @@
 <div class="flex flex-col">
   <div class="flex items-center justify-between border-y border-base-300 bg-base-200 py-2 pl-20 pr-4">
     <div class="absolute left-4 pt-8">
-      {#if !imageUrl}
+      {#await getProfileImage(supabase, rating.user_id)}
         <LoadingSpinner />
-      {:else}
+      {:then imageUrl}
         <ProfilePicture {imageUrl} size={3} />
-      {/if}
+      {/await}
     </div>
     <div class="flex gap-2">
-      <div>{name} am {created}</div>
+      <div>{rating.username} am {created}</div>
       {#if rating.user_id === $page.data.userId}
         <button on:click={() => (openModal = true)}><EditIcon size={1.2} /></button>
         <button on:click={() => dispatch("delete", rating.user_id)}><TrashIcon size={1.2} /></button>

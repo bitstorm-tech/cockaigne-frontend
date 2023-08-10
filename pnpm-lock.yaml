@@ -18,8 +18,8 @@ devDependencies:
     specifier: 1.22.4
     version: 1.22.4(svelte@4.1.2)(vite@4.4.9)
   '@types/lodash':
-    specifier: 4.14.196
-    version: 4.14.196
+    specifier: 4.14.197
+    version: 4.14.197
   '@types/node':
     specifier: 20.4.9
     version: 20.4.9
@@ -72,8 +72,8 @@ devDependencies:
     specifier: 3.0.3
     version: 3.0.3(prettier@3.0.1)(svelte@4.1.2)
   prettier-plugin-tailwindcss:
-    specifier: 0.4.1
-    version: 0.4.1(prettier-plugin-svelte@3.0.3)(prettier@3.0.1)
+    specifier: 0.5.1
+    version: 0.5.1(prettier-plugin-svelte@3.0.3)(prettier@3.0.1)
   svelte:
     specifier: 4.1.2
     version: 4.1.2
@@ -831,8 +831,8 @@ packages:
     resolution: {integrity: sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==}
     dev: true
 
-  /@types/lodash@4.14.196:
-    resolution: {integrity: sha512-22y3o88f4a94mKljsZcanlNWPzO0uBsBdzLAngf2tp533LzZcQzb6+eZPJ+vCTt+bqF2XnvT9gejTLsAcJAJyQ==}
+  /@types/lodash@4.14.197:
+    resolution: {integrity: sha512-BMVOiWs0uNxHVlHBgzTIqJYmj+PgCo4euloGF+5m4okL3rEYzM2EEv78mw8zWSMM57dM7kVIgJ2QDvwHSoCI5g==}
     dev: true
 
   /@types/node@20.4.9:
@@ -3405,16 +3405,16 @@ packages:
       svelte: 4.1.2
     dev: true
 
-  /prettier-plugin-tailwindcss@0.4.1(prettier-plugin-svelte@3.0.3)(prettier@3.0.1):
-    resolution: {integrity: sha512-hwn2EiJmv8M+AW4YDkbjJ6HlZCTzLyz1QlySn9sMuKV/Px0fjwldlB7tol8GzdgqtkdPtzT3iJ4UzdnYXP25Ag==}
-    engines: {node: '>=12.17.0'}
+  /prettier-plugin-tailwindcss@0.5.1(prettier-plugin-svelte@3.0.3)(prettier@3.0.1):
+    resolution: {integrity: sha512-dvJRVoYlzTXa7mD1DooUl0m+7XXMiaClTgZATah27x0vqWAnmoTdndGdpRZDUXl9chk1FFiaQ0ncquUOKBhMoQ==}
+    engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
       '@prettier/plugin-pug': '*'
       '@shopify/prettier-plugin-liquid': '*'
       '@shufo/prettier-plugin-blade': '*'
       '@trivago/prettier-plugin-sort-imports': '*'
-      prettier: ^2.2 || ^3.0
+      prettier: ^3.0
       prettier-plugin-astro: '*'
       prettier-plugin-css-order: '*'
       prettier-plugin-import-sort: '*'

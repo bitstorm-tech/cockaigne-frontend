@@ -103,6 +103,28 @@ export async function saveDealImages(supabase: Supabase, userId: string, images:
   }
 }
 
+export async function copyDealImages(supabase: Supabase, userId: string, templateId: string, dealId: string) {
+  const templateFolder = `${userId}/${templateId}`;
+  const dealFolder = `${userId}/${dealId}`;
+
+  const filesResult = await supabase.storage.from(BUCKET_DEAL_IMAGES).list(templateFolder);
+
+  if (filesResult.error) {
+    return logError(filesResult.error, "Can't copy deal images from template");
+  }
+
+  const filenames = filesResult.data.map((fileObject) => fileObject.name);
+
+  for (const filename of filenames) {
+    const { error } = await supabase.storage
+      .from(BUCKET_DEAL_IMAGES)
+      .copy(`${templateFolder}/${filename}`, `${dealFolder}/${filename}`);
+    if (error) {
+      logError(error, "Can't copy deal images from template");
+    }
+  }
+}
+
 export async function deleteDealImages(supabase: Supabase, dealerId: string, dealId: string) {
   const path = `${dealerId}/${dealId}`;
 

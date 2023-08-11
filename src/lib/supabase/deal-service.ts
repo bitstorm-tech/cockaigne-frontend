@@ -50,11 +50,7 @@ export async function getActiveDealsByDealer(supabase: Supabase, dealerIds: stri
   return data;
 }
 
-export async function upsertDeal(
-  supabase: Supabase,
-  deal: Deal,
-  alsoCreateTemplate = false
-): Promise<string | undefined> {
+export async function upsertDeal(supabase: Supabase, deal: Deal, alsoCreateTemplate = false): Promise<string[]> {
   addTimezoneOffsetToDeal(deal);
   const _deal = deal.id === "" ? omit(deal, "id") : deal;
   delete _deal.imageUrls;
@@ -62,21 +58,21 @@ export async function upsertDeal(
   const resultUpsertDeal = await supabase.from("deals").upsert(_deal).select("id").single();
 
   if (resultUpsertDeal.error) {
-    return logError(resultUpsertDeal.error, "Can't upsert deal");
+    return logError(resultUpsertDeal.error, "Can't upsert deal", []);
   }
 
   if (!alsoCreateTemplate) {
-    return resultUpsertDeal.data.id;
+    return [resultUpsertDeal.data.id];
   }
 
-  deal.template = true;
-  const resultUpsertTemplate = await supabase.from("deals").insert(deal).select("id").single();
+  _deal.template = true;
+  const resultUpsertTemplate = await supabase.from("deals").insert(_deal).select("id").single();
 
   if (resultUpsertTemplate.error) {
     return logError(resultUpsertTemplate.error, "Can't insert deal template");
   }
 
-  return resultUpsertTemplate.data.id;
+  return [resultUpsertDeal.data.id, resultUpsertTemplate.data.id];
 }
 
 export async function deleteDeal(supabase: Supabase, dealerId: string, dealId: string): Promise<string | undefined> {

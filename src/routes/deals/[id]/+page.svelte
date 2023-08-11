@@ -19,7 +19,7 @@
   import { getDealState } from "$lib/deal.utils";
   import { deleteDeal, upsertDeal } from "$lib/supabase/deal-service";
   import type { Deal } from "$lib/supabase/public-types";
-  import { deleteDealImages, saveDealImages } from "$lib/supabase/storage-service";
+  import { copyDealImages, deleteDealImages, saveDealImages } from "$lib/supabase/storage-service";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -98,6 +98,9 @@
   }
 
   async function save() {
+    const fromTemplate = deal.template;
+    const fromTemplateId = deal.id;
+
     if (deal.template) {
       deal.template = false;
       deal.id = "";
@@ -107,13 +110,21 @@
     deal.start = formatDateWithTimeZone(deal.start);
 
     deal.dealer_id = $page.data.userId!;
-    const dealId = await upsertDeal($page.data.supabase, deal, createTemplate);
+    const [dealId, templateId] = await upsertDeal($page.data.supabase, deal, createTemplate);
 
     if (!dealId) {
       return;
     }
 
-    await saveDealImages($page.data.supabase, $page.data.userId!, images, dealId);
+    if (fromTemplate) {
+      await copyDealImages($page.data.supabase, $page.data.userId!, fromTemplateId, dealId);
+    } else {
+      await saveDealImages($page.data.supabase, $page.data.userId!, images, dealId);
+    }
+
+    if (templateId) {
+      await saveDealImages($page.data.supabase, $page.data.userId!, images, templateId);
+    }
 
     goto("/");
   }

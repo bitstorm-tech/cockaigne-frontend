@@ -63,7 +63,7 @@
     <div class="flex justify-between text-xs">
       <span>Von: {formatDate(deal.start)}</span>
       <div class="flex items-center gap-1">
-        <span>{deal.likes}</span>
+        <span>{deal.likes || 0}</span>
         <LikeIcon size={0.8} />
       </div>
       <span>Bis: {formatDate(deal.start, +deal.duration * 60)}</span>

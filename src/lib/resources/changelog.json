@@ -1,4 +1,5 @@
 {
+  "10.8.2023": ["Bug gefixt, bei dem ein Deal als Vorlage nicht abgespeichert werden konnte"],
   "29.6.2023": [
     "Erstellungsdatum bei Bewertungen anzeigen",
     "Aktiver Like Button ist nun ausgefüllt",

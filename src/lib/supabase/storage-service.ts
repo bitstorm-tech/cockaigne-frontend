@@ -137,3 +137,17 @@ export async function deleteDealImages(supabase: Supabase, dealerId: string, dea
   const filesToDelete = data.map((fileObject) => `${path}/${fileObject.name}`) || [];
   await supabase.storage.from(BUCKET_DEAL_IMAGES).remove([...filesToDelete, path]);
 }
+
+export async function deleteSpecificDealImages(
+  supabase: Supabase,
+  dealerId: string,
+  dealId: string,
+  filenames: string[]
+) {
+  const paths = filenames.map((filename: string) => `${dealerId}/${dealId}/${filename}`);
+  const { error } = await supabase.storage.from(BUCKET_DEAL_IMAGES).remove(paths);
+
+  if (error) {
+    logError(error, "Can't delete specific deal image");
+  }
+}

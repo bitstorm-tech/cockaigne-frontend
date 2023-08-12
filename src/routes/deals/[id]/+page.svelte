@@ -19,13 +19,19 @@
   import { getDealState } from "$lib/deal.utils";
   import { deleteDeal, upsertDeal } from "$lib/supabase/deal-service";
   import type { Deal } from "$lib/supabase/public-types";
-  import { copyDealImages, deleteDealImages, saveDealImages } from "$lib/supabase/storage-service";
+  import {
+    copyDealImages,
+    deleteDealImages,
+    deleteSpecificDealImages,
+    saveDealImages
+  } from "$lib/supabase/storage-service";
   import type { PageData } from "./$types";
 
   export let data: PageData;
   export let deal: Deal = data.deal;
 
   const supabase = $page.data.supabase;
+  const userId = $page.data.userId!;
 
   const runtimes = {
     24: "1 Tag",
@@ -45,11 +51,12 @@
     : getDateStringWithoutTimezone(new Date(), 25 * 60);
   let costs = "4,99";
   let images: File[] = [];
-  let imagePreviews: string[] = [];
+  let imagePreviews: string[] = deal.id ? deal.imageUrls || [] : [];
   let fileInput: HTMLInputElement;
   let loading = false;
   let durationInDays = +deal.duration / 24;
   let helpText = "";
+  let imageFilenamesToDelete: string[] = [];
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
@@ -109,22 +116,24 @@
     deal.duration = durationInDays * 24;
     deal.start = formatDateWithTimeZone(deal.start);
 
-    deal.dealer_id = $page.data.userId!;
-    const [dealId, templateId] = await upsertDeal($page.data.supabase, deal, createTemplate);
+    deal.dealer_id = userId;
+    const [dealId, templateId] = await upsertDeal(supabase, deal, createTemplate);
 
     if (!dealId) {
       return;
     }
 
     if (fromTemplate) {
-      await copyDealImages($page.data.supabase, $page.data.userId!, fromTemplateId, dealId);
+      await copyDealImages(supabase, userId, fromTemplateId, dealId);
     } else {
-      await saveDealImages($page.data.supabase, $page.data.userId!, images, dealId);
+      await saveDealImages(supabase, userId, images, dealId);
     }
 
     if (templateId) {
-      await saveDealImages($page.data.supabase, $page.data.userId!, images, templateId);
+      await saveDealImages(supabase, userId, images, templateId);
     }
+
+    await deleteSpecificDealImages(supabase, userId, dealId, imageFilenamesToDelete);
 
     goto("/");
   }
@@ -154,7 +163,11 @@
   }
 
   function deletePicture(index: number) {
-    imagePreviews.splice(index, 1);
+    const deletedImageFilename = imagePreviews
+      .splice(index, 1)
+      .filter((path: string) => path.startsWith("http"))
+      .map((path: string) => path.split("/").pop()!);
+    imageFilenamesToDelete.push(...deletedImageFilename);
     imagePreviews = [...imagePreviews];
     images.splice(index);
   }
@@ -164,22 +177,14 @@
   <Input label="Titel" bind:value={deal.title} {disabled} />
   <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
   <CategorySelect bind:value={deal.category_id} {disabled} />
-  {#if !deal.id}
-    <Button on:click={() => fileInput.click()} disabled={imagePreviews.length >= 3}>
-      Bild hinzufügen ({imagePreviews.length} / 3)
-    </Button>
-    <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
-  {/if}
+  <Button on:click={() => fileInput.click()} disabled={disabled || imagePreviews.length >= 3}>
+    Bild hinzufügen ({imagePreviews.length} / 3)
+  </Button>
+  <input bind:this={fileInput} on:change={pictureSelected} type="file" hidden />
   <div class="grid grid-cols-3 gap-2">
-    {#if deal.id}
-      {#each deal.imageUrls || [] as imageUrl}
-        <Picture url={imageUrl} fixedHeight={false} />
-      {/each}
-    {:else}
-      {#each imagePreviews as imagePreview, index}
-        <Picture url={imagePreview} showDelete={true} fixedHeight={false} on:delete={() => deletePicture(index)} />
-      {/each}
-    {/if}
+    {#each imagePreviews as imagePreview, index}
+      <Picture url={imagePreview} showDelete={!disabled} fixedHeight={false} on:delete={() => deletePicture(index)} />
+    {/each}
   </div>
   <div class="flex gap-4">
     <Checkbox label="Individuelle Laufzeit" bind:checked={individuallyTime} {disabled} />

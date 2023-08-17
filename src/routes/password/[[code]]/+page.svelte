@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import Alert from "$lib/components/ui/Alert.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import { POST } from "$lib/http.utils";
-  import type { RequestError } from "$lib/request-errors";
-  import type { PageData } from "./$types";
+  import { goto } from '$app/navigation';
+  import Alert from '$lib/components/ui/Alert.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Input from '$lib/components/ui/Input.svelte';
+  import { POST } from '$lib/http.utils';
+  import type { RequestError } from '$lib/request-errors';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -59,7 +59,7 @@
     {:else}
       <Input type="email" label="E-Mail" bind:value={email} />
       <div class="grid grid-cols-2 gap-4 pt-6">
-        <Button disabled={!emailValid} on:click={sendResetPasswordMail} {loading}>Passwort zurücksetzen</Button>
+        <Button warning disabled={!emailValid} on:click={sendResetPasswordMail} {loading}>Passwort zurücksetzen</Button>
         <Button on:click={() => goto("/")}>Abbrechen</Button>
       </div>
     {/if}

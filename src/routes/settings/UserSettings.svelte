@@ -1,17 +1,15 @@
 <script lang="ts">
-  import Alert from "$lib/components/ui/Alert.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
-  import Toast from "$lib/components/ui/Toast.svelte";
-  import type { Account } from "$lib/supabase/public-types";
+  import Alert from '$lib/components/ui/Alert.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Input from '$lib/components/ui/Input.svelte';
+  import MediaPicker from '$lib/components/ui/MediaPicker.svelte';
+  import type { Account } from '$lib/supabase/public-types';
 
   export let account: Account;
   export let profileImageFile: File;
 
   let showTabIndex = 0;
   let showAlert = false;
-  let showToast = false;
   let loading = false;
 
   async function changePassword() {

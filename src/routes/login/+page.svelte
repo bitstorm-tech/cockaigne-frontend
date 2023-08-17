@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import Alert from "$lib/components/ui/Alert.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import Link from "$lib/components/ui/Link.svelte";
-  import { login } from "$lib/supabase/auth";
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
+  import Alert from '$lib/components/ui/Alert.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Input from '$lib/components/ui/Input.svelte';
+  import Link from '$lib/components/ui/Link.svelte';
+  import { login } from '$lib/supabase/auth';
 
   let email: string;
   let password: string;
@@ -34,8 +34,8 @@
   <Input label="E-Mail" type="email" bind:value={email} />
   <Input label="Password" type="password" bind:value={password} on:enter={handleLogin} />
   <div class="grid grid-cols-2 gap-2">
+    <Button warning on:click={handleLogin} {loading} {disabled}>Einloggen</Button>
     <a href="/"><Button fullwidth>Zurück</Button></a>
-    <Button on:click={handleLogin} {loading} {disabled}>Einloggen</Button>
   </div>
   <span class="pt-10 text-center text-sm">
     <Link href="/registration">Registrieren</Link> // <Link href="/password">Passwort vergessen</Link> // <Link

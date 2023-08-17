@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import Alert from "$lib/components/ui/Alert.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import { verifyRegistration } from "$lib/supabase/auth";
-  import type { PageData } from "./$types";
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
+  import Alert from '$lib/components/ui/Alert.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import Input from '$lib/components/ui/Input.svelte';
+  import { verifyRegistration } from '$lib/supabase/auth';
+  import type { PageData } from './$types';
 
   export let data: PageData;
   let token: string;
@@ -33,7 +33,7 @@
   <Input label="Deine E-Mail" bind:value={email} />
   <Input label="Aktivierungscode" centerText letterSpacing bind:value={token} maxlength={6} />
   <div class="grid grid-cols-2 gap-4 pt-6">
-    <Button disabled={token?.length < 6 || email.length === 0} {loading} on:click={confirm}>Aktivieren</Button>
+    <Button warning disabled={token?.length < 6 || email.length === 0} {loading} on:click={confirm}>Aktivieren</Button>
     <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </section>

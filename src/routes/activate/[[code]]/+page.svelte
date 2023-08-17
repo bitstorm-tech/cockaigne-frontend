@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Button from "$lib/components/ui/Button.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
-  import type { PageData } from "./$types";
+  import Button from '$lib/components/ui/Button.svelte';
+  import Input from '$lib/components/ui/Input.svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -36,7 +36,7 @@
       </span>
       <div class="m-8 flex flex-col gap-3">
         <Input label="E-Mail" bind:value={email} />
-        <Button on:click={sendEmail}>Aktivierungscode senden</Button>
+        <Button warning on:click={sendEmail}>Aktivierungscode senden</Button>
       </div>
       <a class="link text-center" href="/">Zurück zur Startseite</a>
     </div>

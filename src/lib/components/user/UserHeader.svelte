@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
-  import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
-  import DealsBadge from "$lib/components/user/DealsBadge.svelte";
-  import FavoriteDealerBadge from "$lib/components/user/FavoriteDealerBadge.svelte";
-  import HotsBadge from "$lib/components/user/HotsBadge.svelte";
+  import { page } from '$app/stores';
+  import ProfilePicture from '$lib/components/profile/ProfilePicture.svelte';
+  import LocationIcon from '$lib/components/ui/icons/LocationIcon.svelte';
+  import DealsBadge from '$lib/components/user/DealsBadge.svelte';
+  import FavoriteDealerBadge from '$lib/components/user/FavoriteDealerBadge.svelte';
+  import HotsBadge from '$lib/components/user/HotsBadge.svelte';
 
   export let name = "";
   export let address: string[] = [""];
@@ -24,7 +24,7 @@
       </div>
       <span class="text-2xl">{name}</span>
       <span class="flex flex-col gap-2 text-sm">
-        <b>Dein Standort</b>
+        <span class="font-extrabold">Dein Standort</span>
         <span class="flex gap-1">
           <LocationIcon size={1.5} />
           <div class="flex flex-col text-xs">

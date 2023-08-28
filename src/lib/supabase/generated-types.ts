@@ -518,6 +518,7 @@ export interface Database {
       }
       dealer_view: {
         Row: {
+          category: string | null
           city: string | null
           house_number: string | null
           id: string | null
@@ -525,24 +526,6 @@ export interface Database {
           street: string | null
           username: string | null
           zip: number | null
-        }
-        Insert: {
-          city?: string | null
-          house_number?: string | null
-          id?: string | null
-          phone?: string | null
-          street?: string | null
-          username?: string | null
-          zip?: number | null
-        }
-        Update: {
-          city?: string | null
-          house_number?: string | null
-          id?: string | null
-          phone?: string | null
-          street?: string | null
-          username?: string | null
-          zip?: number | null
         }
         Relationships: []
       }

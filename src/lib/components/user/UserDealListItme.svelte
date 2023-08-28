@@ -1,8 +1,8 @@
 <script lang="ts">
-  import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
-  import FireIcon from "$lib/components/ui/icons/FireIcon.svelte";
-  import { hotDealStore } from "$lib/stores/hot-deal.store";
-  import type { ActiveDeal } from "$lib/supabase/public-types";
+  import DealsListItem from '$lib/components/dealer/DealsListItem.svelte';
+  import BookmarkIcon from '$lib/components/ui/icons/BookmarkIcon.svelte';
+  import { hotDealStore } from '$lib/stores/hot-deal.store';
+  import type { ActiveDeal } from '$lib/supabase/public-types';
 
   export let openDetail = false;
   export let showCompanyName = true;
@@ -17,6 +17,6 @@
     on:click={() => hotDealStore.toggleHot(deal.id)}
     hidden={!showHotIcon}
   >
-    <FireIcon outline={!deal.isHot} />
+    <BookmarkIcon outline={!deal.isHot} />
   </button>
 </DealsListItem>

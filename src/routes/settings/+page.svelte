@@ -81,7 +81,7 @@
     <UserSettings bind:account bind:profileImageFile={newProfileImage} />
   {/if}
   <div class="grid grid-cols-2 gap-4">
-    <Button on:click={save} {loading}>Speichern</Button>
+    <Button on:click={save} {loading} warning>Speichern</Button>
     <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </section>

@@ -15,7 +15,7 @@
 </script>
 
 {#if show}
-  <div class="transition:blur text- toast z-10 mb-14 whitespace-normal">
+  <div class="transition:blur text- toast z-10 mb-14 w-full whitespace-normal">
     <div class="alert flex justify-between" class:alert-warning={warning}>
       <div class="flex items-center gap-3">
         <div>

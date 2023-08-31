@@ -1,9 +1,11 @@
 <script lang="ts">
-  import Alert from '$lib/components/ui/Alert.svelte';
-  import Button from '$lib/components/ui/Button.svelte';
-  import Input from '$lib/components/ui/Input.svelte';
-  import MediaPicker from '$lib/components/ui/MediaPicker.svelte';
-  import type { Account } from '$lib/supabase/public-types';
+  import { page } from "$app/stores";
+  import Alert from "$lib/components/ui/Alert.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import MediaPicker from "$lib/components/ui/MediaPicker.svelte";
+  import { logError } from "$lib/error-utils";
+  import type { Account } from "$lib/supabase/public-types";
 
   export let account: Account;
   export let profileImageFile: File;
@@ -14,7 +16,14 @@
 
   async function changePassword() {
     loading = true;
-    await fetch("/api/accounts/reset-password");
+    const { error } = await $page.data.supabase.auth.resetPasswordForEmail(account.email, {
+      redirectTo: "http://localhost:5173/password/reset"
+    });
+
+    if (error) {
+      logError(error, "Can't reset password");
+    }
+
     showAlert = true;
     loading = false;
   }
@@ -26,10 +35,10 @@
 </script>
 
 <div class="tabs">
-  <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
+  <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     Allgemein
   </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 1}>
+  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
     Profilbild
   </button>
 </div>

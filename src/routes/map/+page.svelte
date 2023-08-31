@@ -1,17 +1,17 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import DealFilterModal from "$lib/components/map/DealFilterModal.svelte";
-  import LocationSettingsModal from "$lib/components/map/LocationSettingsModal.svelte";
-  import Button from "$lib/components/ui/Button.svelte";
-  import CurrentLocationIcon from "$lib/components/ui/icons/CurrentLocationIcon.svelte";
-  import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
-  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
-  import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
-  import { initMapService, jumpToLocation } from "$lib/map.service";
-  import { navigationStore } from "$lib/stores/navigation.store";
-  import { getLocation } from "$lib/supabase/location-service";
-  import { onMount } from "svelte";
-  import type { PageData } from "./$types";
+  import { page } from '$app/stores';
+  import DealFilterModal from '$lib/components/map/DealFilterModal.svelte';
+  import LocationSettingsModal from '$lib/components/map/LocationSettingsModal.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
+  import CurrentLocationIcon from '$lib/components/ui/icons/CurrentLocationIcon.svelte';
+  import FilterIcon from '$lib/components/ui/icons/FilterIcon.svelte';
+  import LoadingSpinner from '$lib/components/ui/icons/LoadingSpinner.svelte';
+  import LocationIcon from '$lib/components/ui/icons/LocationIcon.svelte';
+  import { initMapService, jumpToLocation } from '$lib/map.service';
+  import { navigationStore } from '$lib/stores/navigation.store';
+  import { getLocation } from '$lib/supabase/location-service';
+  import { onMount } from 'svelte';
+  import type { PageData } from './$types';
 
   export let data: PageData;
 
@@ -36,7 +36,7 @@
     <LocationIcon />
   </Button>
   <Button circle on:click={() => (showDealFilterModal = true)}>
-    <FilterIcon />
+    <FilterIcon size={1.5} />
   </Button>
   <Button circle on:click={() => jumpToLocation()}>
     <CurrentLocationIcon />

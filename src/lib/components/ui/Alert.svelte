@@ -15,13 +15,13 @@
 </script>
 
 {#if show}
-  <div class="transition:blur toast z-10 mb-14 w-screen">
-    <div class="alert" class:alert-warning={warning}>
-      <div class="flex w-full">
+  <div class="transition:blur text- toast z-10 mb-14 whitespace-normal">
+    <div class="alert flex justify-between" class:alert-warning={warning}>
+      <div class="flex items-center gap-3">
         <div>
           <WarningIcon size={2} />
         </div>
-        <p><slot /></p>
+        <span><slot /></span>
       </div>
       <Button on:click={confirm} small {warning}>OK</Button>
     </div>

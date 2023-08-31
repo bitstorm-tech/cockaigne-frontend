@@ -25,7 +25,7 @@
       <div class="absolute right-0 top-36">
         <div class="flex gap-4 items-center">
           <div class="flex flex-col">
-            <a href={`tel:${phone}`}><button><PhoneIcon size={2} /></button></a>
+            <a target="_blank" href={`tel:${phone}`}><button><PhoneIcon size={2} /></button></a>
             <button><NavigatorIcon size={2} /></button>
           </div>
           <slot />

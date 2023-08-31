@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import Button from "./Button.svelte";
+  import { createEventDispatcher } from 'svelte';
+  import Button from './Button.svelte';
 
   export let file: File;
-  export let imagePreview: string;
+  export let imagePreview: string | undefined;
   export let buttonText = "Bild auswählen";
   const dispatch = createEventDispatcher();
   let fileInput: HTMLInputElement;

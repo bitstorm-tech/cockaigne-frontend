@@ -5,6 +5,7 @@
   import Button from "$lib/components/ui/Button.svelte";
   import Input from "$lib/components/ui/Input.svelte";
   import { logError } from "$lib/error-utils";
+  import ResetPasswordButton from "../../settings/ResetPasswordButton.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -32,26 +33,6 @@
 
     goto("/");
   }
-
-  async function sendResetPasswordMail() {
-    loading = true;
-    const { error } = await $page.data.supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "http://localhost:5173/password/reset"
-    });
-
-    if (error) {
-      logError(error, "Can't reset password");
-      alert = "Das Passwort konnte nicht zurückgesetzt werden.";
-      loading = false;
-      return;
-    }
-
-    alert =
-      "Wir haben dir eine E-Mail geschickt. " +
-      "Befolge bitte die dort angegebenen Schritte um dein Passwort zurück zu setzen.";
-
-    loading = false;
-  }
 </script>
 
 <section class="p-4">
@@ -66,7 +47,7 @@
     {:else}
       <Input type="email" label="E-Mail" bind:value={email} />
       <div class="grid grid-cols-2 gap-4 pt-6">
-        <Button warning disabled={!emailValid} on:click={sendResetPasswordMail} {loading}>Passwort zurücksetzen</Button>
+        <ResetPasswordButton {email} disabled={!emailValid} />
         <Button on:click={() => goto("/")}>Abbrechen</Button>
       </div>
     {/if}

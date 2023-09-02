@@ -5,6 +5,7 @@
   import { logError } from "$lib/error-utils";
 
   export let email: string;
+  export let disabled = false;
 
   let loading = false;
   let showAlert = false;
@@ -26,7 +27,7 @@
   }
 </script>
 
-<Button on:click={changePassword} {loading}>Passwort ändern</Button>
+<Button on:click={changePassword} {loading} {disabled}>Passwort ändern</Button>
 
 <Alert bind:show={showAlert} warning={false}>
   Wir haben dir eine E-Mail mit einem Link zum ändern deines Passworts gesendet.

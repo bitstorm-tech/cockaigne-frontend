@@ -13,7 +13,6 @@
 <button
   class="btn"
   class:w-24={additionalWidth}
-  class:loading
   class:w-full={fullwidth}
   class:btn-primary={!warning}
   class:btn-warning={warning}
@@ -25,7 +24,8 @@
   {disabled}
   on:click
 >
-  {#if !loading}
-    <slot />
+  {#if loading}
+    <span class="loading loading-spinner"></span>
   {/if}
+  <slot />
 </button>

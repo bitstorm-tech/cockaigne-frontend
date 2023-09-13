@@ -18,7 +18,7 @@
     if (error) {
       logError(error, "Can't change email");
     }
-    
+
     showAlert = true;
     editEmail = false;
     loading = false;

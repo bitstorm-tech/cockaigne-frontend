@@ -118,7 +118,13 @@
 
     await deleteSpecificDealImages(supabase, userId, dealId, imageFilenamesToDelete);
 
-    goto("/");
+    const response = await fetch("/api/payment", {
+      method: "POST",
+      body: JSON.stringify({ quantity: durationInDays })
+    });
+    const stripeUrl = await response.text();
+
+    goto(stripeUrl);
   }
 
   async function del() {

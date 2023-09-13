@@ -13,8 +13,7 @@
   import {
     formatDateWithTimeZone,
     getDateStringWithoutTimezone,
-    getDateTimeStringWithoutTimezone,
-    isBeforeNow
+    getDateTimeStringWithoutTimezone
   } from "$lib/date-time.utils";
   import { getDealState } from "$lib/deal.utils";
   import { deleteDeal, upsertDeal } from "$lib/supabase/deal-service";
@@ -26,6 +25,7 @@
     saveDealImages
   } from "$lib/supabase/storage-service";
   import type { PageData } from "./$types";
+  import DealOverviewModal from "./DealOverviewModal.svelte";
 
   export let data: PageData;
   export let deal: Deal = data.deal;
@@ -34,15 +34,16 @@
   const userId = $page.data.userId!;
 
   const runtimes = {
-    24: "1 Tag",
-    48: "2 Tage",
-    72: "3 Tage"
+    1: "1 Tag",
+    2: "2 Tage",
+    3: "3 Tage"
   };
 
   const nowDateTimeString = getDateTimeStringWithoutTimezone();
 
   let openErrorModal = false;
   let openDeleteModal = false;
+  let openDealOVerviewModal = false;
   let createTemplate = false;
   let startDealImmediately = false;
   let individuallyTime = +deal.duration > 72;
@@ -54,28 +55,22 @@
   let imagePreviews: string[] = deal.id ? deal.imageUrls || [] : [];
   let fileInput: HTMLInputElement;
   let loading = false;
-  let durationInDays = +deal.duration / 24;
+  let durationInDays = deal.duration / 24;
   let helpText = "";
   let imageFilenamesToDelete: string[] = [];
 
   const disabled = !deal.template && ["active", "past"].includes(getDealState(deal));
 
-  $: disableSave =
-    deal.title.length === 0 || deal.description.length === 0 || isBeforeNow(deal.start) || durationInDays < 1;
+  $: disableSave = deal.title.length === 0 || deal.description.length === 0 || durationInDays < 1;
   $: {
-    deal.start && individualEndDate && individuallyTime;
-    costs = (4.99 * durationInDays).toFixed(2).replace(".", ",");
-  }
-
-  $: {
-    durationInDays = +deal.duration / 24;
-
     if (individuallyTime) {
       const startDate = deal.start.split("T")[0];
       const startTimestamp = Date.parse(startDate);
       const endTimestamp = Date.parse(individualEndDate);
       durationInDays = (endTimestamp - startTimestamp) / (60 * 60 * 1000) / 24;
     }
+
+    costs = (4.99 * durationInDays).toFixed(2).replace(".", ",");
   }
 
   $: {
@@ -83,8 +78,6 @@
       helpText = "Bitte des Titel-Feld ausfüllen";
     } else if (deal.description.length === 0) {
       helpText = "Bitte das Beschreibung-Feld ausfüllen";
-    } else if (isBeforeNow(deal.start)) {
-      helpText = "Der Deal darf nicht in der Vergangenheit starten";
     } else if (durationInDays < 1) {
       helpText = "Der Start muss vor dem Ende liegen";
     } else {
@@ -92,19 +85,7 @@
     }
   }
 
-  $: {
-    if (deal.start > individualEndDate) {
-      individualEndDate = getDateStringWithoutTimezone(new Date(deal.start), 25 * 60);
-    }
-  }
-
-  $: {
-    if (startDealImmediately) {
-      deal.start = getDateTimeStringWithoutTimezone(new Date(), 15);
-    }
-  }
-
-  async function save() {
+  async function save(event: CustomEvent<string>) {
     const fromTemplate = deal.template;
     const fromTemplateId = deal.id;
 
@@ -114,7 +95,9 @@
     }
 
     deal.duration = durationInDays * 24;
-    deal.start = formatDateWithTimeZone(deal.start);
+
+    const startDate = event.detail;
+    deal.start = formatDateWithTimeZone(startDate);
 
     deal.dealer_id = userId;
     const [dealId, templateId] = await upsertDeal(supabase, deal, createTemplate);
@@ -205,10 +188,9 @@
     <Input type="date" min={deal.start} label="Ende" bind:value={individualEndDate} {disabled} />
   {:else}
     <div class="py-2">
-      <ButtonGroup label="Laufzeit" options={runtimes} bind:value={deal.duration} {disabled} />
+      <ButtonGroup label="Laufzeit" options={runtimes} bind:value={durationInDays} {disabled} />
     </div>
   {/if}
-  <span>{deal.start.toString()}</span>
   <span class="text-red-600">{helpText}</span>
   <div class="grid grid-cols-2 pt-16">
     <div>
@@ -216,7 +198,7 @@
       <p class="pt-4 text-xs">{durationInDays} Tag{durationInDays > 1 ? "e" : ""} a 4,99 € pro Tag</p>
     </div>
     <div class="flex flex-col gap-3">
-      <Button warning on:click={save} disabled={disableSave || disabled} {loading}>
+      <Button warning on:click={() => (openDealOVerviewModal = true)} disabled={disableSave || disabled} {loading}>
         {deal.id && !deal.template ? "Speichern" : "Erstellen"}
       </Button>
       {#if deal.id && !disabled}
@@ -233,3 +215,11 @@
 </div>
 <Alert bind:show={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern oder löschen!</Alert>
 <ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />
+<DealOverviewModal
+  bind:open={openDealOVerviewModal}
+  {deal}
+  {costs}
+  {durationInDays}
+  {startDealImmediately}
+  on:startDeal={save}
+/>

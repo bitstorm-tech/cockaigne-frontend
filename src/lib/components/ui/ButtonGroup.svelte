@@ -1,7 +1,7 @@
 <script lang="ts">
-  export let options: Record<string, string>;
+  export let options: Record<any, string>;
   export let label = "";
-  export let value: number;
+  export let value: any;
   export let disabled = false;
 
   let activeButton = value;
@@ -16,8 +16,8 @@
   <div class="btn-group">
     {#each Object.keys(options) as key}
       <button
-        class="btn-outline btn-sm btn grow"
-        class:btn-active={activeButton === key}
+        class="btn btn-outline btn-sm grow"
+        class:btn-active={activeButton == key}
         on:click={() => (activeButton = value = key)}
         {disabled}
       >

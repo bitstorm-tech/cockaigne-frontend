@@ -1,3 +1,4 @@
+import { formatDate } from "$lib/date-time.utils";
 import type { Deal } from "$lib/supabase/public-types";
 
 export type DealState = "past" | "future" | "active";
@@ -37,4 +38,10 @@ export function sortDealsByState(deals: Deal[]): SortedDeals {
   }
 
   return sortedDeals;
+}
+
+export function calcDealEnd(start: string, durationInDays: number): string {
+  const startDate = new Date(start);
+  const end = new Date(startDate.getTime() + durationInDays * 24 * 60 * 60 * 1000);
+  return formatDate(end.toISOString());
 }

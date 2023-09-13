@@ -18,23 +18,22 @@
     if (error) {
       logError(error, "Can't change email");
     }
-
+    
     showAlert = true;
     editEmail = false;
     loading = false;
   }
 </script>
 
-<div class="flex w-full items-end gap-2">
-  <div class="w-full">
-    <Input label="E-Mail" bind:value={email} disabled={!editEmail} />
-  </div>
-  {#if editEmail}
+<Input label="E-Mail" bind:value={email} disabled={!editEmail} />
+{#if editEmail}
+  <div class="grid grid-cols-2 gap-3">
     <Button on:click={changeEmail}>Ändern</Button>
     <Button on:click={() => (editEmail = false)}>Abbrechen</Button>
-  {/if}
-</div>
-<Button on:click={() => (editEmail = true)}>E-Mail ändern</Button>
+  </div>
+{:else}
+  <Button on:click={() => (editEmail = true)}>E-Mail ändern</Button>
+{/if}
 
 <Alert bind:show={showAlert} warning={false}>
   Wir haben dir eine E-Mail an deine alte und neue Adresse gesendet. Bitte bestätige beide um die Adresse zu ändern.

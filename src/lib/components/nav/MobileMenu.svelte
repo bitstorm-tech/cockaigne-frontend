@@ -4,6 +4,7 @@
   import { page } from "$app/stores";
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
+  import InvoiceIcon from "$lib/components/ui/icons/InvoiceIcon.svelte";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
@@ -12,7 +13,6 @@
   import { logout } from "$lib/supabase/auth";
   import { onDestroy, onMount } from "svelte";
   import { fade } from "svelte/transition";
-  import InvoiceIcon from "$lib/components/ui/icons/InvoiceIcon.svelte";
 
   export let show = false;
 
@@ -44,6 +44,10 @@
         <a href="/invoices-overview" class="flex h-8 items-center gap-3">
           <InvoiceIcon />
           Rechnungen
+        </a>
+        <a href="/plans" class="flex h-8 items-center gap-3">
+          <InvoiceIcon />
+          Preise & Abos
         </a>
       {/if}
       <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">

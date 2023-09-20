@@ -1,7 +1,7 @@
 <script lang="ts">
   export let active = false;
   export let size = 1.5;
-  const style = `height: ${size}rem; width: ${size}rem; min-height: ${size}rem`;
+  const style = `height: ${size}rem; min-height: ${size}rem; width: ${size}rem`;
 </script>
 
 {#if active}

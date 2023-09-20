@@ -11,7 +11,7 @@
   const supabase = data.supabase;
   const session = data.session;
   const hideNavigation = ["/login", "/registration", "/confirm", "/activate"].includes($page.url.pathname);
-  const duration = 250;
+  const duration = 150;
 
   onMount(() => {
     const { data } = supabase.auth.onAuthStateChange((_, _session) => {
@@ -27,8 +27,8 @@
 {#if !hideNavigation}
   <Navbar />
 {/if}
-{#key $page.data.pathname}
-  <div class="pb-16" in:fade={{ duration }}>
+{#key data.pathname}
+  <div class="pb-16" in:fade={{ duration, delay: duration }} out:fade={{ duration }}>
     <slot />
   </div>
 {/key}

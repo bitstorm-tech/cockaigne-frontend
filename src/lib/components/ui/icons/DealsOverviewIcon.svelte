@@ -1,7 +1,7 @@
 <script lang="ts">
   export let active = true;
   export let size = 2;
-  $: style = `height: ${size}rem; width: ${size}rem; color: ${active ? "#ffffff" : ""}`;
+  $: style = `height: ${size}rem; min-height: ${size}rem; width: ${size}rem; color: ${active ? "#ffffff" : ""}`;
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 141.732 141.732" fill="currentColor" stroke="currentColor" {style}>

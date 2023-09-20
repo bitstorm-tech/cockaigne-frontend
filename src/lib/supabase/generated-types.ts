@@ -76,6 +76,82 @@ export interface Database {
           }
         ]
       }
+      activated_vouchers: {
+        Row: {
+          activated: string
+          user_id: string
+          voucher_code: string
+        }
+        Insert: {
+          activated?: string
+          user_id: string
+          voucher_code: string
+        }
+        Update: {
+          activated?: string
+          user_id?: string
+          voucher_code?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activated_vouchers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activated_vouchers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activated_vouchers_voucher_code_fkey"
+            columns: ["voucher_code"]
+            referencedRelation: "vouchers"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "activated_vouchers_voucher_code_fkey"
+            columns: ["voucher_code"]
+            referencedRelation: "active_vouchers_view"
+            referencedColumns: ["code"]
+          }
+        ]
+      }
+      admin_accounts: {
+        Row: {
+          comment: string
+          created_at: string | null
+          deleted_at: string | null
+          id: number
+          is_active: boolean
+          password: string
+          updated_at: string | null
+          username: string
+        }
+        Insert: {
+          comment: string
+          created_at?: string | null
+          deleted_at?: string | null
+          id?: number
+          is_active: boolean
+          password: string
+          updated_at?: string | null
+          username: string
+        }
+        Update: {
+          comment?: string
+          created_at?: string | null
+          deleted_at?: string | null
+          id?: number
+          is_active?: boolean
+          password?: string
+          updated_at?: string | null
+          username?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           id: number
@@ -443,6 +519,48 @@ export interface Database {
           }
         ]
       }
+      vouchers: {
+        Row: {
+          code: string
+          comment: string
+          created_at: string | null
+          deleted_at: string | null
+          duration_in_days: number | null
+          end: string | null
+          id: number
+          is_active: boolean
+          multi_use: boolean
+          start: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          code: string
+          comment: string
+          created_at?: string | null
+          deleted_at?: string | null
+          duration_in_days?: number | null
+          end?: string | null
+          id?: number
+          is_active: boolean
+          multi_use: boolean
+          start?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string
+          comment?: string
+          created_at?: string | null
+          deleted_at?: string | null
+          duration_in_days?: number | null
+          end?: string | null
+          id?: number
+          is_active?: boolean
+          multi_use?: boolean
+          start?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       active_deals_view: {
@@ -475,6 +593,29 @@ export interface Database {
           {
             foreignKeyName: "deals_dealer_id_fkey"
             columns: ["dealer_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      active_vouchers_view: {
+        Row: {
+          code: string | null
+          duration_in_days: number | null
+          end: string | null
+          start: string | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activated_vouchers_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "activated_vouchers_user_id_fkey"
+            columns: ["user_id"]
             referencedRelation: "dealer_view"
             referencedColumns: ["id"]
           }
@@ -526,6 +667,26 @@ export interface Database {
           street: string | null
           username: string | null
           zip: number | null
+        }
+        Insert: {
+          category?: never
+          city?: string | null
+          house_number?: string | null
+          id?: string | null
+          phone?: string | null
+          street?: string | null
+          username?: string | null
+          zip?: number | null
+        }
+        Update: {
+          category?: never
+          city?: string | null
+          house_number?: string | null
+          id?: string | null
+          phone?: string | null
+          street?: string | null
+          username?: string | null
+          zip?: number | null
         }
         Relationships: []
       }

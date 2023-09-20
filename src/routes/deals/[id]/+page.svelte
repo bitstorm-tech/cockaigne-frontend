@@ -29,6 +29,7 @@
 
   export let data: PageData;
   export let deal: Deal = data.deal;
+  const activeVouchers = data.activeVouchers;
 
   const supabase = $page.data.supabase;
   const userId = $page.data.userId!;
@@ -118,13 +119,17 @@
 
     await deleteSpecificDealImages(supabase, userId, dealId, imageFilenamesToDelete);
 
-    const response = await fetch("/api/payment", {
-      method: "POST",
-      body: JSON.stringify({ quantity: durationInDays })
-    });
-    const stripeUrl = await response.text();
+    if (!activeVouchers) {
+      const response = await fetch("/api/payment", {
+        method: "POST",
+        body: JSON.stringify({ quantity: durationInDays })
+      });
+      const stripeUrl = await response.text();
 
-    goto(stripeUrl);
+      return goto(stripeUrl);
+    }
+
+    goto("/");
   }
 
   async function del() {
@@ -138,7 +143,6 @@
     openErrorModal = true;
   }
 
-  // @ts-ignore
   function pictureSelected(event) {
     const file = event.target.files[0] as File;
 
@@ -223,6 +227,7 @@
 <ConfirmDeleteDealModal bind:open={openDeleteModal} dealTitle={deal.title} deleteFunction={del} />
 <DealOverviewModal
   bind:open={openDealOVerviewModal}
+  hasActiveVouchers={activeVouchers}
   {deal}
   {costs}
   {durationInDays}

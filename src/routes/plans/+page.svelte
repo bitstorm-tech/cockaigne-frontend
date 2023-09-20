@@ -1,7 +1,14 @@
 <script>
-  import PlanCard from "./PlanCard.svelte";
-  import Input from "$lib/components/ui/Input.svelte";
+  import { page } from "$app/stores";
+  import Alert from "$lib/components/ui/Alert.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
+  import Input from "$lib/components/ui/Input.svelte";
+  import PlanCard from "./PlanCard.svelte";
+  import { activateVoucher } from "$lib/supabase/voucher-service";
+
+  let monthOrYear = 0;
+  let alertMessage = "";
+  let voucherCode = "";
 
   const options = {
     0: "Monatsabo",
@@ -40,10 +47,15 @@
 
   const actionCode = {
     text: "Aktivieren",
-    callback: () => {}
+    callback: async () => {
+      const error = await activateVoucher($page.data.supabase, $page.data.userId || "", voucherCode);
+      if (error) {
+        alertMessage = error;
+      } else {
+        alertMessage = "Gutschein erfolgreich aktiviert!";
+      }
+    }
   };
-
-  let monthOrYear = 0;
 </script>
 
 <section class="flex flex-col items-center gap-4 p-4">
@@ -91,7 +103,8 @@
     </ul>
   </PlanCard>
 
-  <PlanCard title="Promocode aktivieren" action={actionCode}>
-    <Input label="" />
+  <PlanCard title="Gutschein aktivieren" action={actionCode}>
+    <Input bind:value={voucherCode} />
   </PlanCard>
 </section>
+<Alert show={alertMessage?.length > 0} warning on:confirm={() => (alertMessage = "")}>{alertMessage}</Alert>

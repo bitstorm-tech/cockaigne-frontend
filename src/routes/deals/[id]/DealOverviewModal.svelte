@@ -10,6 +10,7 @@
   export let costs: string;
   export let startDealImmediately: boolean;
   export let durationInDays: number;
+  export let hasActiveVouchers = false;
 
   let startDate: string;
   let endDate: string;
@@ -49,8 +50,13 @@
     <div class="col-span-3">{endDate}</div>
     <div>Dauer:</div>
     <div class="col-span-3">{durationInDays} Tag{durationInDays > 1 ? "e" : ""}</div>
-    <hr class="col-span-4 my-6" />
-    <div class="text-xl">Kosten:</div>
-    <div class="col-span-3 text-xl">{costs} €</div>
+  </div>
+  <hr class="my-6" />
+  <div class="flex gap-2 text-xl">
+    <div>Kosten:</div>
+    <div class:line-through={hasActiveVouchers}>{costs} €</div>
+    {#if hasActiveVouchers}
+      <div>0 € (Gutschein aktiv)</div>
+    {/if}
   </div>
 </Modal>

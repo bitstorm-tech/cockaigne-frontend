@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { afterNavigate, beforeNavigate, invalidate } from "$app/navigation";
+  import { invalidate } from "$app/navigation";
   import { page } from "$app/stores";
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
-  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
   import { onMount } from "svelte";
   import { blur } from "svelte/transition";
   import "../tailwind.css";
-
-  let loading = false;
 
   export let data;
   const supabase = data.supabase;
@@ -24,27 +21,14 @@
 
     return () => data.subscription.unsubscribe();
   });
-
-  beforeNavigate(() => {
-    loading = true;
-  });
-  afterNavigate(() => {
-    loading = false;
-  });
 </script>
 
 {#if !hideNavigation}
   <Navbar />
 {/if}
-{#if loading}
-  <div class="flex justify-center pt-52">
-    <LoadingSpinner size={6} />
-  </div>
-{:else}
-  <div class="pb-16" in:blur>
-    <slot />
-  </div>
-{/if}
+<div class="pb-16" in:blur>
+  <slot />
+</div>
 {#if !hideNavigation}
   <Footer />
 {/if}

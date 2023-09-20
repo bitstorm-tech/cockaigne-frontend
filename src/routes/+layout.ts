@@ -12,7 +12,7 @@ import type { LoadEvent } from "@sveltejs/kit";
 
 type ReturnType = { supabase: Supabase; userId: string | undefined; isDealer: boolean };
 
-export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnType> {
+export async function load({ fetch, data, depends, url }: LoadEvent): Promise<ReturnType> {
   depends("supabase:auth");
 
   const supabase = createSupabaseLoadClient({
@@ -39,6 +39,7 @@ export async function load({ fetch, data, depends }: LoadEvent): Promise<ReturnT
     supabase,
     session,
     userId: session?.user.id,
-    isDealer: session?.user.user_metadata.isDealer || false
+    isDealer: session?.user.user_metadata.isDealer || false,
+    pathname: url.pathname
   };
 }

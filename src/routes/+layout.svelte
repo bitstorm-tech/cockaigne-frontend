@@ -4,13 +4,14 @@
   import Footer from "$lib/components/nav/Footer.svelte";
   import Navbar from "$lib/components/nav/Navbar.svelte";
   import { onMount } from "svelte";
-  import { blur } from "svelte/transition";
+  import { fade } from "svelte/transition";
   import "../tailwind.css";
 
   export let data;
   const supabase = data.supabase;
   const session = data.session;
   const hideNavigation = ["/login", "/registration", "/confirm", "/activate"].includes($page.url.pathname);
+  const duration = 250;
 
   onMount(() => {
     const { data } = supabase.auth.onAuthStateChange((_, _session) => {
@@ -26,9 +27,11 @@
 {#if !hideNavigation}
   <Navbar />
 {/if}
-<div class="pb-16" in:blur>
-  <slot />
-</div>
+{#key $page.data.pathname}
+  <div class="pb-16" in:fade={{ duration }}>
+    <slot />
+  </div>
+{/key}
 {#if !hideNavigation}
   <Footer />
 {/if}

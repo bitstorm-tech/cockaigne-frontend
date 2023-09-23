@@ -1,5 +1,7 @@
 import { logError } from "$lib/error-utils";
+import type { ActiveVoucher } from "$lib/supabase/public-types";
 import type { Supabase } from "$lib/supabase/supabase-client";
+import { add } from "date-fns";
 
 export async function activateVoucher(
   supabase: Supabase,
@@ -63,4 +65,30 @@ export async function hasActiveVouchers(supabase: Supabase, userId: string): Pro
   }
 
   return count != null && count > 0;
+}
+
+export async function getActiveVouchers(supabase: Supabase, userId: string): Promise<ActiveVoucher[]> {
+  const { data: vouchers, error } = await supabase.from("active_vouchers_view").select().eq("user_id", userId);
+
+  if (error) {
+    return logError(error, "Can't get active vouchers", []);
+  }
+
+  return vouchers;
+}
+
+export function calculateVoucherValidDays(voucher: ActiveVoucher): number {
+  if ((!voucher.end && !voucher.duration_in_days) || !voucher.start) {
+    console.error(
+      `Can't calculate voucher valid days (code: ${voucher.code}): end, duration_in_days and start are not set`
+    );
+    return 0;
+  }
+
+  const end = voucher.end
+    ? add(new Date(voucher.end), { days: 1 })
+    : add(new Date(voucher.start), { days: voucher.duration_in_days });
+  const now = new Date();
+  const diff = end.getTime() - now.getTime();
+  return Math.ceil(diff / (1000 * 3600 * 24));
 }

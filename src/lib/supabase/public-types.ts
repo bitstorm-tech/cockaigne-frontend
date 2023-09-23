@@ -21,6 +21,7 @@ export type SelectedCategory = Database["public"]["Tables"]["selected_categories
 export type GetActiveDealsWithinExtentFunctionArguments =
   Database["public"]["Functions"]["get_active_deals_within_extent"]["Args"];
 export type InvoiceMetadata = Database["public"]["Views"]["invoice_metadata_view"]["Row"];
+export type ActiveVoucher = Database["public"]["Views"]["active_vouchers_view"]["Row"];
 
 export type DealFilter = {
   location?: Position;

@@ -1,10 +1,14 @@
 <script>
+  import { invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
   import Input from "$lib/components/ui/Input.svelte";
+  import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import { activateVoucher, calculateVoucherValidDays } from "$lib/supabase/voucher-service";
   import PlanCard from "./PlanCard.svelte";
-  import { activateVoucher } from "$lib/supabase/voucher-service";
+
+  export let data;
 
   let monthOrYear = 0;
   let alertMessage = "";
@@ -52,6 +56,7 @@
       if (error) {
         alertMessage = error;
       } else {
+        invalidateAll();
         alertMessage = "Gutschein erfolgreich aktiviert!";
       }
     }
@@ -104,6 +109,18 @@
   </PlanCard>
 
   <PlanCard title="Gutschein aktivieren" action={actionCode}>
+    {#await data.lazy.activeVouchers}
+      <LoadingSpinner />
+    {:then activeVouchers}
+      {#if activeVouchers.length > 0}
+        <div class="text-sm">Bereits aktivierte Gutscheine:</div>
+        <ul class="text-xs">
+          {#each activeVouchers as voucher}
+            <li>{voucher.code} - noch {calculateVoucherValidDays(voucher)} Tag(e) gültig</li>
+          {/each}
+        </ul>
+      {/if}
+    {/await}
     <Input bind:value={voucherCode} />
   </PlanCard>
 </section>

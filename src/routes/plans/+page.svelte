@@ -10,29 +10,35 @@
 
   export let data;
 
-  let monthOrYear = 0;
+  $: console.log(chosenOption);
+
+  let chosenOption = "starter";
   let alertMessage = "";
   let voucherCode = "";
 
   const options = {
-    0: "Monatsabo",
-    1: "Jahresabo (2 Monate geschenkt!)"
+    starter: "Starter",
+    monthly: "Monatsabo",
+    yearly: "Jahresabo *"
   };
 
-  const pricesPerMonth = [
-    ["99,99", "269,99", "749,99"],
-    ["79,99", "224,99", "624,99"]
-  ];
-
-  const pricesPerYaear = [
-    ["", "", ""],
-    ["799,90", "2249,90", "6249,90"]
-  ];
-
-  const pricePerDealDay = [
-    ["3,99", "2,75", "1,25"],
-    ["3,33", "2,29", "1,04"]
-  ];
+  // const pricesPerMonth = [
+  //   ["", "", ""],
+  //   ["99,99", "269,99", "749,99"],
+  //   ["79,99", "224,99", "624,99"]
+  // ];
+  //
+  // const pricesPerYear = [
+  //   ["", "", ""],
+  //   ["", "", ""],
+  //   ["799,90", "2249,90", "6249,90"]
+  // ];
+  //
+  // const pricePerDealDay = [
+  //   ["", "", ""],
+  //   ["3,99", "2,75", "1,25"],
+  //   ["3,33", "2,29", "1,04"]
+  // ];
 
   const action1 = {
     text: "Abo abschließen",
@@ -65,63 +71,84 @@
 
 <section class="flex flex-col items-center gap-4 p-4">
   <h1>Preise & Abos</h1>
-  <ButtonGroup {options} bind:value={monthOrYear}></ButtonGroup>
-  <PlanCard title="Starter" showButton={false}>
-    <ul>
-      <li class="list-disc">Keine monatlichen Gebühren</li>
-      <li class="list-disc">
-        Jeder Deal-Tag<span class="inline-block align-top">*</span> kostet 4,99 €
-      </li>
-    </ul>
-  </PlanCard>
-  <PlanCard
-    title="Basic"
-    pricePerMonth={pricesPerMonth[monthOrYear][0]}
-    pricePerYear={pricesPerYaear[monthOrYear][0]}
-    action={action1}
-  >
-    <ul>
-      <li class="list-disc">25 kostenlose Deal-Tage<span class="inline-block align-top">*</span></li>
-      <li class="list-disc">Entspricht ungefähr {pricePerDealDay[monthOrYear][0]} € pro Deal-Tag</li>
-    </ul>
-  </PlanCard>
-  <PlanCard
-    title="Exclusive"
-    pricePerMonth={pricesPerMonth[monthOrYear][1]}
-    pricePerYear={pricesPerYaear[monthOrYear][1]}
-    action={action2}
-  >
-    <ul>
-      <li class="list-disc">99 kostenlose Deal-Tage<span class="inline-block align-top">*</span></li>
-      <li class="list-disc">Entspricht ungefähr {pricePerDealDay[monthOrYear][1]} € pro Deal-Tag</li>
-    </ul>
-  </PlanCard>
-  <PlanCard
-    title="Premium"
-    pricePerMonth={pricesPerMonth[monthOrYear][2]}
-    pricePerYear={pricesPerYaear[monthOrYear][2]}
-    action={action3}
-  >
-    <ul>
-      <li class="list-disc">600 kostenlose Deal-Tage<span class="inline-block align-top">*</span></li>
-      <li class="list-disc">Entspricht ungefähr {pricePerDealDay[monthOrYear][2]} € pro Deal-Tag</li>
-    </ul>
-  </PlanCard>
-
-  <PlanCard title="Gutschein aktivieren" action={actionCode}>
-    {#await data.lazy.activeVouchers}
-      <LoadingSpinner />
-    {:then activeVouchers}
-      {#if activeVouchers.length > 0}
-        <div class="text-sm">Bereits aktivierte Gutscheine:</div>
-        <ul class="text-xs">
-          {#each activeVouchers as voucher}
-            <li>{voucher.code} - noch {calculateVoucherValidDays(voucher)} Tag(e) gültig</li>
-          {/each}
-        </ul>
-      {/if}
-    {/await}
-    <Input bind:value={voucherCode} />
-  </PlanCard>
+  <ButtonGroup {options} bind:value={chosenOption}></ButtonGroup>
+  <span>*) spare 20% (zwei Monate geschenkt!)</span>
+  {#if chosenOption === "starter"}
+    <PlanCard titleLeft="Starter" titleRight="4,99 € / Deal" showButton={false}>
+      <ul>
+        <li class="list-disc">
+          <div class="flex items-baseline gap-2">
+            Zahle pro Tagesdeal <div class="text-xs">(24 Std. Laufzeit)</div>
+          </div>
+        </li>
+        <li class="list-disc">Kein Abo / keine Grundgebühr</li>
+      </ul>
+    </PlanCard>
+    <PlanCard titleLeft="Gutschein aktivieren" action={actionCode}>
+      {#await data.lazy.activeVouchers}
+        <LoadingSpinner />
+      {:then activeVouchers}
+        {#if activeVouchers.length > 0}
+          <div class="text-sm">Bereits aktivierte Gutscheine:</div>
+          <ul class="text-xs">
+            {#each activeVouchers as voucher}
+              <li>{voucher.code} - noch {calculateVoucherValidDays(voucher)} Tag(e) gültig</li>
+            {/each}
+          </ul>
+        {/if}
+      {/await}
+      <div class="text-white">
+        <Input bind:value={voucherCode} />
+      </div>
+    </PlanCard>
+  {:else if chosenOption === "monthly"}
+    <PlanCard titleLeft="Starter" titleRight="99,90 € / Monat" action={action1}>
+      <ul>
+        <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~33% je Deal</li>
+        <li class="list-disc">Monatlich kündbar</li>
+      </ul>
+    </PlanCard>
+    <PlanCard titleLeft="Exclusive" titleRight="249,90 € / Monat" action={action2}>
+      <ul>
+        <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~44% je Deal</li>
+        <li class="list-disc">Einfache Statistikabfragen (coming soon)</li>
+        <li class="list-disc">Monatlich kündbar</li>
+      </ul>
+    </PlanCard>
+    <PlanCard titleLeft="Premium" titleRight="349,90 € / Monat" action={action3}>
+      <ul>
+        <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~76% je Deal</li>
+        <li class="list-disc">Erweiterte Statistikabfragen (coming soon)</li>
+        <li class="list-disc">Monatlich kündbar</li>
+      </ul>
+    </PlanCard>
+  {:else}
+    <PlanCard titleLeft="Starter" titleRight="1.099,90 € / Jahr" action={action1}>
+      <ul>
+        <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~39% je Deal</li>
+        <li class="list-disc">Kündbar zum Aboende</li>
+      </ul>
+    </PlanCard>
+    <PlanCard titleLeft="Exclusive" titleRight="2.699,90 € / Jahr" action={action2}>
+      <ul>
+        <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~50% je Deal</li>
+        <li class="list-disc">Einfache Statistikabfragen (coming soon)</li>
+        <li class="list-disc">Kündbar zum Aboende</li>
+      </ul>
+    </PlanCard>
+    <PlanCard titleLeft="Premium" titleRight="3.799,90 € / Jahr" action={action3}>
+      <ul>
+        <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">Preisvorteil von ~79% je Deal</li>
+        <li class="list-disc">Erweiterte Statistikabfragen (coming soon)</li>
+        <li class="list-disc">Kündbar zum Aboende</li>
+      </ul>
+    </PlanCard>
+  {/if}
 </section>
 <Alert show={alertMessage?.length > 0} warning on:confirm={() => (alertMessage = "")}>{alertMessage}</Alert>

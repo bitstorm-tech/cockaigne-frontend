@@ -1,5 +1,5 @@
-<script>
-  import { invalidateAll } from "$app/navigation";
+<script lang="ts">
+  import { invalidateAll, goto } from "$app/navigation";
   import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
@@ -12,7 +12,9 @@
 
   $: console.log(chosenOption);
 
-  let chosenOption = "starter";
+  type PlanType = "starter" | "exclusive" | "premium";
+  type AboType = "starter" | "monthly" | "yearly";
+  let chosenOption: AboType = "starter";
   let alertMessage = "";
   let voucherCode = "";
 
@@ -22,37 +24,19 @@
     yearly: "Jahresabo *"
   };
 
-  // const pricesPerMonth = [
-  //   ["", "", ""],
-  //   ["99,99", "269,99", "749,99"],
-  //   ["79,99", "224,99", "624,99"]
-  // ];
-  //
-  // const pricesPerYear = [
-  //   ["", "", ""],
-  //   ["", "", ""],
-  //   ["799,90", "2249,90", "6249,90"]
-  // ];
-  //
-  // const pricePerDealDay = [
-  //   ["", "", ""],
-  //   ["3,99", "2,75", "1,25"],
-  //   ["3,33", "2,29", "1,04"]
-  // ];
-
-  const action1 = {
+  const actionStripeStarter = {
     text: "Abo abschließen",
-    callback: () => {}
+    callback: () => doStripeRequest("starter")
   };
 
-  const action2 = {
+  const actionStripeExclusive = {
     text: "Abo abschließen",
-    callback: () => {}
+    callback: () => doStripeRequest("exclusive")
   };
 
-  const action3 = {
+  const actionStripePremium = {
     text: "Abo abschließen",
-    callback: () => {}
+    callback: () => doStripeRequest("premium")
   };
 
   const actionCode = {
@@ -67,6 +51,19 @@
       }
     }
   };
+
+  async function doStripeRequest(plan: PlanType) {
+    const formData = new FormData();
+    formData.append("lookupKey", `cockaigne-${plan}-${chosenOption}`);
+    const response = await fetch("/api/subscriptions", { method: "post", body: formData });
+
+    if (response.ok) {
+      const url = await response.text();
+      await goto(url);
+    }
+
+    alertMessage = response.statusText;
+  }
 </script>
 
 <section class="flex flex-col items-center gap-4 p-4">
@@ -102,14 +99,14 @@
       </div>
     </PlanCard>
   {:else if chosenOption === "monthly"}
-    <PlanCard titleLeft="Starter" titleRight="99,90 € / Monat" action={action1}>
+    <PlanCard titleLeft="Starter" titleRight="99,90 € / Monat" action={actionStripeStarter}>
       <ul>
         <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~33% je Deal</li>
         <li class="list-disc">Monatlich kündbar</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Exclusive" titleRight="249,90 € / Monat" action={action2}>
+    <PlanCard titleLeft="Exclusive" titleRight="249,90 € / Monat" action={actionStripeExclusive}>
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~44% je Deal</li>
@@ -117,7 +114,7 @@
         <li class="list-disc">Monatlich kündbar</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Premium" titleRight="349,90 € / Monat" action={action3}>
+    <PlanCard titleLeft="Premium" titleRight="349,90 € / Monat" action={actionStripePremium}>
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~76% je Deal</li>
@@ -126,14 +123,14 @@
       </ul>
     </PlanCard>
   {:else}
-    <PlanCard titleLeft="Starter" titleRight="1.099,90 € / Jahr" action={action1}>
+    <PlanCard titleLeft="Starter" titleRight="1.099,90 € / Jahr" action={actionStripeStarter}>
       <ul>
         <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~39% je Deal</li>
         <li class="list-disc">Kündbar zum Aboende</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Exclusive" titleRight="2.699,90 € / Jahr" action={action2}>
+    <PlanCard titleLeft="Exclusive" titleRight="2.699,90 € / Jahr" action={actionStripeExclusive}>
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~50% je Deal</li>
@@ -141,7 +138,7 @@
         <li class="list-disc">Kündbar zum Aboende</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Premium" titleRight="3.799,90 € / Jahr" action={action3}>
+    <PlanCard titleLeft="Premium" titleRight="3.799,90 € / Jahr" action={actionStripePremium}>
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
         <li class="list-disc">Preisvorteil von ~79% je Deal</li>

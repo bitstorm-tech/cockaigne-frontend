@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { page } from "$app/stores";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import NavigatorIcon from "$lib/components/ui/icons/NavigatorIcon.svelte";
   import PhoneIcon from "$lib/components/ui/icons/PhoneIcon.svelte";
@@ -24,10 +25,12 @@
       <ProfilePicture {imageUrl} />
       <div class="absolute right-0 top-36">
         <div class="flex items-center gap-4">
-          <div class="flex flex-col">
-            <a target="_blank" href={`tel:${phone}`}><button><PhoneIcon size={2} /></button></a>
-            <button><NavigatorIcon size={2} /></button>
-          </div>
+          {#if !$page.data.isDealer}
+            <div class="flex flex-col">
+              <a target="_blank" href={`tel:${phone}`}><button><PhoneIcon size={2} /></button></a>
+              <button><NavigatorIcon size={2} /></button>
+            </div>
+          {/if}
           <slot />
         </div>
       </div>

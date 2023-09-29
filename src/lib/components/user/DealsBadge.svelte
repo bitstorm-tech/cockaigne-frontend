@@ -1,10 +1,10 @@
 <script lang="ts">
-  import DealIcon from '$lib/components/ui/icons/DealIcon.svelte';
+  import DealCounterIcon from "$lib/components/ui/icons/DealCounterIcon.svelte";
 
   export let number = 0;
 </script>
 
-<span class="badge gap-2 text-[#69828c] bg-transparent border border-[#2c363a]">
-  <DealIcon size={0.8} />
+<span class="badge gap-2 border border-[#2c363a] bg-transparent text-[#69828c]">
+  <DealCounterIcon size={0.8} />
   {number}
 </span>

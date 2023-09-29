@@ -21,7 +21,7 @@
   const options = {
     starter: "Starter",
     monthly: "Monatsabo",
-    yearly: "Jahresabo *"
+    yearly: "Jahresabo"
   };
 
   const actionStripeStarter = {
@@ -69,7 +69,9 @@
 <section class="flex flex-col items-center gap-4 p-4">
   <h1>Preise & Abos</h1>
   <ButtonGroup {options} bind:value={chosenOption}></ButtonGroup>
-  <span>*) spare 20% (zwei Monate geschenkt!)</span>
+  <span class="px-4 text-center" class:invisible={chosenOption === "starter"}>
+    Spare weitere 10% beim Abschluss eines Jahresabos!
+  </span>
   {#if chosenOption === "starter"}
     <PlanCard titleLeft="Starter" titleRight="4,99 € / Deal" showButton={false}>
       <ul>
@@ -101,14 +103,14 @@
   {:else if chosenOption === "monthly"}
     <PlanCard titleLeft="Starter" titleRight="99,90 € / Monat" action={actionStripeStarter}>
       <ul>
-        <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">30 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~33% je Deal</li>
         <li class="list-disc">Monatlich kündbar</li>
       </ul>
     </PlanCard>
     <PlanCard titleLeft="Exclusive" titleRight="249,90 € / Monat" action={actionStripeExclusive}>
       <ul>
-        <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~44% je Deal</li>
         <li class="list-disc">Einfache Statistikabfragen (coming soon)</li>
         <li class="list-disc">Monatlich kündbar</li>
@@ -116,7 +118,7 @@
     </PlanCard>
     <PlanCard titleLeft="Premium" titleRight="349,90 € / Monat" action={actionStripePremium}>
       <ul>
-        <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~76% je Deal</li>
         <li class="list-disc">Erweiterte Statistikabfragen (coming soon)</li>
         <li class="list-disc">Monatlich kündbar</li>
@@ -125,14 +127,14 @@
   {:else}
     <PlanCard titleLeft="Starter" titleRight="1.099,90 € / Jahr" action={actionStripeStarter}>
       <ul>
-        <li class="list-disc">30 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">30 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~39% je Deal</li>
         <li class="list-disc">Kündbar zum Aboende</li>
       </ul>
     </PlanCard>
     <PlanCard titleLeft="Exclusive" titleRight="2.699,90 € / Jahr" action={actionStripeExclusive}>
       <ul>
-        <li class="list-disc">90 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~50% je Deal</li>
         <li class="list-disc">Einfache Statistikabfragen (coming soon)</li>
         <li class="list-disc">Kündbar zum Aboende</li>
@@ -140,7 +142,7 @@
     </PlanCard>
     <PlanCard titleLeft="Premium" titleRight="3.799,90 € / Jahr" action={actionStripePremium}>
       <ul>
-        <li class="list-disc">300 kostenlose Tagesdeals pro Monat<span class="inline-block align-top">**</span></li>
+        <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~79% je Deal</li>
         <li class="list-disc">Erweiterte Statistikabfragen (coming soon)</li>
         <li class="list-disc">Kündbar zum Aboende</li>

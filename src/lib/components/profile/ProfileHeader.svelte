@@ -10,6 +10,8 @@
   export let imageUrl = "";
   export let phone = "";
   export let category = "";
+
+  const googleLink = `https://maps.google.com/?q=${street},${city}`;
 </script>
 
 <div class="flex h-48 flex-col">
@@ -28,7 +30,7 @@
           {#if !$page.data.isDealer}
             <div class="flex flex-col">
               <a target="_blank" href={`tel:${phone}`}><button><PhoneIcon size={2} /></button></a>
-              <button><NavigatorIcon size={2} /></button>
+              <a target="_blank" href={googleLink}><button><NavigatorIcon size={2} /></button></a>
             </div>
           {/if}
           <slot />

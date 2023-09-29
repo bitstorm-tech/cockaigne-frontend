@@ -3,8 +3,10 @@
   import { page } from "$app/stores";
   import DealsListItem from "$lib/components/dealer/DealsListItem.svelte";
   import EmptyContent from "$lib/components/ui/EmptyContent.svelte";
+  import BookmarkIcon from "$lib/components/ui/icons/BookmarkIcon.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import Link from "$lib/components/ui/Link.svelte";
+  import { hotDealStore } from "$lib/stores/hot-deal.store";
   import type { ActiveDeal, Deal } from "$lib/supabase/public-types";
 
   export let deals: Deal[] | ActiveDeal[] = [];
@@ -12,6 +14,15 @@
 
   $: {
     deals && deals?.sort((a, b) => (a.start?.localeCompare(b.start || "") || 0) * -1);
+  }
+
+  function isFavoriteDeal(deal: Deal): boolean {
+    return !!$hotDealStore.find((hot) => hot.id === deal.id);
+  }
+
+  async function toggleFavoriteDeal(deal: Deal) {
+    await hotDealStore.toggleHot(deal.id);
+    deals = [...hotDealStore.updateHotFlag(deals)];
   }
 </script>
 
@@ -41,6 +52,10 @@
         {#if $page.data.isDealer}
           <button on:click={() => goto("/deals/" + deal.id)}>
             <GearIcon />
+          </button>
+        {:else if $page.data.userId}
+          <button on:click={() => toggleFavoriteDeal(deal)}>
+            <BookmarkIcon outline={!isFavoriteDeal(deal)} />
           </button>
         {/if}
       </svelte:fragment>

@@ -6,6 +6,7 @@
   import AddressSettings from "./AddressSettings.svelte";
   import ChangeEmailForm from "./ChangeEmailForm.svelte";
   import ResetPasswordButton from "./ResetPasswordButton.svelte";
+  import SubscriptionSettings from "./SubscriptionSettings.svelte";
 
   export let account: Account;
   export let profileImageFile: File;
@@ -21,6 +22,9 @@
     Adresse
   </button>
   <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
+    Abo
+  </button>
+  <button on:click={() => (showTabIndex = 3)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 3}>
     Profilbild
   </button>
 </div>
@@ -36,5 +40,7 @@
 {:else if showTabIndex === 1}
   <AddressSettings bind:account />
 {:else if showTabIndex === 2}
+  <SubscriptionSettings />
+{:else if showTabIndex === 3}
   <MediaPicker imagePreview={account.profileImageUrl} bind:file={profileImageFile} buttonText="Profilbild ändern" />
 {/if}

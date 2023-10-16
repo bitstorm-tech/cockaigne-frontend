@@ -6,8 +6,8 @@ const BUCKET_DEALER_IMAGES = "dealer-images";
 const BUCKET_PROFILE_IMAGES = "profile-images";
 const BUCKET_DEAL_IMAGES = "deal-images";
 
-const DEFAULT_DEALER_PROFILE_IMAGE_URL = "/images/anonym-profile-dealer.png";
-const DEFAULT_USER_PROFILE_IMAGE_URL = "/images/anonym-profile.png";
+const DEFAULT_DEALER_PROFILE_IMAGE_URL = "/images/anonym-profile-dealer.svg";
+const DEFAULT_USER_PROFILE_IMAGE_URL = "/images/anonym-profile-user.svg";
 
 function generateRandomFilename(file: File) {
   return uuid() + "." + file.name.split(".").pop();

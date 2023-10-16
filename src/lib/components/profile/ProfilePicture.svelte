@@ -7,7 +7,7 @@
 </script>
 
 <div class="avatar z-50 cursor-pointer" class:invisible={$menuOpen}>
-  <div class="rounded-full ring-2 ring-[#556368]" {style}>
+  <div class="rounded-full bg-base-100 ring-2 ring-[#556368]" {style}>
     <img src={imageUrl} alt="Profile" />
   </div>
 </div>

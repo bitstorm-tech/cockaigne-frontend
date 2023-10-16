@@ -120,7 +120,7 @@ export async function getProfileImageURL(accountId: number, isDealer: boolean): 
   const profileImage = response.Contents?.at(0)?.Key;
 
   if (!profileImage) {
-    return isDealer ? "/images/anonym-profile-dealer.png" : "/images/anonym-profile.png";
+    return isDealer ? "/images/anonym-profile-dealer.svg" : "/images/anonym-profile-user.svg";
   }
 
   return `${baseUrl}/${profileImage}`;

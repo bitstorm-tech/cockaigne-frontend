@@ -40,14 +40,13 @@
   city={`${account.zip} ${account.city}`}
   phone={account?.phone}
   imageUrl={profileImage}
-  category={account.category}
->
+  category={account.category}>
   {#if $page.data.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId}>
       <Button warning rightFlat additionalWidth><AddDealIcon size={4} /></Button>
     </a>
   {:else}
-    <Button on:click={toggleFavor} circle warning rightFlat additionalWidth>
+    <Button on:click={toggleFavor} circle warning rightFlat>
       {#if loadingFavorite}
         <LoadingSpinner />
       {:else}

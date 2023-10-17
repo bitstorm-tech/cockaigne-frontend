@@ -17,10 +17,9 @@
     </button>
   {/if}
   <img
-    class:h-60={fixedHeight}
+    class:h-48={fixedHeight}
     class:h-36={smallHeight}
-    class="h-full w-full object-cover"
+    class="w-full object-cover"
     src={url}
-    alt="Dealer Impression"
-  />
+    alt="Dealer Impression" />
 </button>

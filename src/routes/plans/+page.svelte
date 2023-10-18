@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { invalidateAll, goto } from "$app/navigation";
+  import { goto, invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import Alert from "$lib/components/ui/Alert.svelte";
   import ButtonGroup from "$lib/components/ui/ButtonGroup.svelte";
@@ -9,8 +9,6 @@
   import PlanCard from "./PlanCard.svelte";
 
   export let data;
-
-  $: console.log(chosenOption);
 
   type PlanType = "starter" | "exclusive" | "premium";
   type AboType = "starter" | "monthly" | "yearly";

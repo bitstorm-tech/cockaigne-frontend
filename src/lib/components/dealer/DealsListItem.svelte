@@ -20,7 +20,7 @@
           {deal.username}
         </a>
         <a href="/dealer/{deal.dealer_id}" class="pr-1">
-          <DoubleRightArrowIcon size={1.2} />
+          <DoubleRightArrowIcon size={1.1} />
         </a>
       </div>
     {/if}

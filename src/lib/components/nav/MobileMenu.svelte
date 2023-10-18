@@ -41,10 +41,10 @@
         Einstellungen
       </a>
       {#if $page.data.isDealer}
-        <a href="/invoices-overview" class="flex h-8 items-center gap-3">
+        <!-- <a href="/invoices-overview" class="flex h-8 items-center gap-3">
           <InvoiceIcon />
           Rechnungen
-        </a>
+        </a> -->
         <a href="/plans" class="flex h-8 items-center gap-3">
           <InvoiceIcon />
           Preise & Abos

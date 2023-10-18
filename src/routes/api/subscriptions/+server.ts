@@ -4,10 +4,13 @@ import Stripe from "stripe";
 const STRIPE_PRIVATE_API_KEY = process.env.STRIPE_PRIVATE_API_KEY || "";
 
 const stripe = new Stripe(STRIPE_PRIVATE_API_KEY, {
-  apiVersion: "2023-08-16",
+  apiVersion: "2023-10-16",
   typescript: true
 });
 
+/**
+ * This endpoint is called when a dealer subscribes to a plan.
+ */
 export const POST: RequestHandler = async ({ request, url }) => {
   const formData = await request.formData();
   const lookupKey = formData.get("lookupKey")?.toString() || "";
@@ -26,9 +29,24 @@ export const POST: RequestHandler = async ({ request, url }) => {
       }
     ],
     mode: "subscription",
-    success_url: `${host}`,
+    success_url: `${host}/success?sessionId={CHECKOUT_SESSION_ID}`,
     cancel_url: `${host}/plans`
   });
 
   return new Response(String(session.url));
+};
+
+/**
+ * This endpoint is called after a subscription was successfully completed to get the
+ * subscription data stored at stripe.
+ */
+export const GET: RequestHandler = async ({ url }) => {
+  const sessionId = url.searchParams.get("sessionId") || "";
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  const subscriptionId = session.subscription || "";
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const productId = subscription.items.data[0].plan.product;
+  const name = subscription.items.data[0].plan.nickname?.replaceAll("-", " ");
+
+  return new Response(String(JSON.stringify({ subscriptionId, productId, name })));
 };

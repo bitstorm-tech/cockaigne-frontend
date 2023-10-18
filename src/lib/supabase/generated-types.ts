@@ -424,6 +424,30 @@ export interface Database {
           }
         ]
       }
+      plans: {
+        Row: {
+          active: boolean
+          created: string
+          free_days_per_month: number
+          id: number
+          stripe_product_id: string
+        }
+        Insert: {
+          active?: boolean
+          created?: string
+          free_days_per_month: number
+          id?: number
+          stripe_product_id: string
+        }
+        Update: {
+          active?: boolean
+          created?: string
+          free_days_per_month?: number
+          id?: number
+          stripe_product_id?: string
+        }
+        Relationships: []
+      }
       reported_deals: {
         Row: {
           created: string
@@ -519,6 +543,49 @@ export interface Database {
           }
         ]
       }
+      subscriptions: {
+        Row: {
+          active: boolean
+          created: string
+          plan_id: number
+          stripe_subscription_id: string
+          user_id: string
+        }
+        Insert: {
+          active?: boolean
+          created?: string
+          plan_id: number
+          stripe_subscription_id: string
+          user_id: string
+        }
+        Update: {
+          active?: boolean
+          created?: string
+          plan_id?: number
+          stripe_subscription_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "accounts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "dealer_view"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       vouchers: {
         Row: {
           code: string
@@ -600,6 +667,7 @@ export interface Database {
       }
       active_vouchers_view: {
         Row: {
+          activated: string | null
           code: string | null
           duration_in_days: number | null
           end: string | null

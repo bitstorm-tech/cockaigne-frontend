@@ -22,6 +22,8 @@ export type GetActiveDealsWithinExtentFunctionArguments =
   Database["public"]["Functions"]["get_active_deals_within_extent"]["Args"];
 export type InvoiceMetadata = Database["public"]["Views"]["invoice_metadata_view"]["Row"];
 export type ActiveVoucher = Database["public"]["Views"]["active_vouchers_view"]["Row"];
+export type SubscriptionInsert = Database["public"]["Tables"]["subscriptions"]["Insert"];
+export type Plan = Database["public"]["Tables"]["plans"]["Row"];
 
 export type DealFilter = {
   location?: Position;

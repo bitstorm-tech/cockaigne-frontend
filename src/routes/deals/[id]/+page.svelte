@@ -30,6 +30,7 @@
   export let data: PageData;
   export let deal: Deal = data.deal;
   const activeVouchers = data.activeVouchers;
+  const activeSubscription = data.activeSubscription;
 
   const supabase = $page.data.supabase;
   const userId = $page.data.userId!;
@@ -191,8 +192,7 @@
       min={nowDateTimeString}
       label="Start"
       bind:value={deal.start}
-      disabled={disabled || startDealImmediately}
-    />
+      disabled={disabled || startDealImmediately} />
   {/if}
   {#if individuallyTime}
     <Input type="date" min={deal.start} label="Ende" bind:value={individualEndDate} {disabled} />
@@ -203,7 +203,7 @@
   {/if}
   <span class="text-red-600">{helpText}</span>
   <div class="grid grid-cols-2 pt-16">
-    <div>
+    <div class:invisible={activeSubscription}>
       <p class="text-lg font-bold">Kosten: {costs} €</p>
       <p class="pt-4 text-xs">{durationInDays} Tag{durationInDays > 1 ? "e" : ""} a 4,99 € pro Tag</p>
     </div>
@@ -232,5 +232,4 @@
   {costs}
   {durationInDays}
   {startDealImmediately}
-  on:startDeal={save}
-/>
+  on:startDeal={save} />

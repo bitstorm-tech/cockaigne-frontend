@@ -1,4 +1,5 @@
 import { page } from "$app/stores";
+import { Categories } from "$lib/categories";
 import { isLocationWatcherStarted, stopLocationWatching } from "$lib/geo/location-watcher";
 import { categoryStore } from "$lib/stores/category.store";
 import { dealStore } from "$lib/stores/deal.store";
@@ -7,22 +8,22 @@ import { getDealsByFilter } from "$lib/supabase/deal-service";
 import { saveLocation, saveUseCurrentLocation } from "$lib/supabase/location-service";
 import debounce from "lodash/debounce";
 import { Feature, View } from "ol";
+import Map from "ol/Map";
 import type { Coordinate } from "ol/coordinate";
 import type { Extent } from "ol/extent";
-import { Point } from "ol/geom";
 import Circle from "ol/geom/Circle";
+import Point from "ol/geom/Point";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
-import Map from "ol/Map";
 import "ol/ol.css";
 import { useGeographic } from "ol/proj";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
-import { Fill, Icon, Stroke, Style } from "ol/style";
+import { Fill, Stroke, Style } from "ol/style";
+import CircleStyle from "ol/style/Circle";
 import { get } from "svelte/store";
 import type { Position } from "./geo/geo.types";
 import { fromOpenLayersCoordinate, toOpenLayersCoordinate } from "./geo/geo.types";
-import { getIconPathById } from "./icon-mapping";
 import { searchRadiusStore } from "./stores/search-radius.store";
 import type { ActiveDeal, DealFilter, Location } from "./supabase/public-types";
 
@@ -157,7 +158,7 @@ function moveCircle(location: Coordinate) {
   const radius = get(searchRadiusStore);
   circle?.setCenterAndRadius(location, transformRadius(radius));
   centerPoint.setCenterAndRadius(location, transformRadius(2));
-  dealStore.updateByCurrentFilters(get(page).data.supabase);
+  dealStore.updateByCurrentFilters();
 }
 
 function transformRadius(radius: number) {
@@ -173,18 +174,22 @@ function transformRadius(radius: number) {
 }
 
 function createIcon(deal: ActiveDeal, coordinate: Coordinate): Feature {
-  const feature = new Feature({
-    geometry: new Point(coordinate)
-  });
+  const feature = new Feature(new Point(coordinate));
 
-  const style = new Style({
-    image: new Icon({
-      src: getIconPathById(deal.category_id!),
-      scale: 0.08
+  feature.setStyle(
+    new Style({
+      image: new CircleStyle({
+        radius: 7,
+        fill: new Fill({
+          color: Categories[deal.category_id].color
+        }),
+        stroke: new Stroke({
+          color: "red",
+          width: 1
+        })
+      })
     })
-  });
-
-  feature.setStyle(style);
+  );
 
   return feature;
 }

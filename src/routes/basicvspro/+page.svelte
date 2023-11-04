@@ -26,14 +26,14 @@
       </tr>
       <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Top Deals in der Umgebung</td>
-        <td class="text-center">✅</td>
-        <td class="text-center">✅</td>
-      </tr>
-      <tr class="border-t-[0.01rem] hover:bg-slate-700">
-        <td class="p-2">Benachrichtigungen</td>
-        <td class="text-center">✅</td>
+        <td class="text-center">❌</td>
         <td class="text-center">✅</td>
       </tr>
+      <!--      <tr class="border-t-[0.01rem] hover:bg-slate-700">-->
+      <!--        <td class="p-2">Benachrichtigungen</td>-->
+      <!--        <td class="text-center">✅</td>-->
+      <!--        <td class="text-center">✅</td>-->
+      <!--      </tr>-->
       <tr class="border-t-[0.01rem] hover:bg-slate-700">
         <td class="p-2">Favorisierte Dealer</td>
         <td class="text-center">❌</td>

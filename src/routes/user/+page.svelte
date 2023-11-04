@@ -33,17 +33,16 @@
   deals={$dealStore.length}
   imageUrl={data.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
-  hotDeals={$hotDealStore.length}
-/>
+  hotDeals={$hotDealStore.length} />
 <div class="tabs mb-1 mt-6 flex max-h-8">
   <button on:click={() => (showTabIndex = 0)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 0}>
     <DealIcon outline={showTabIndex !== 0} />
   </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
-    <BookmarkBoxedIcon outline={showTabIndex !== 1} />
-  </button>
   <button on:click={() => (showTabIndex = 2)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 2}>
     <HeartIcon outline={showTabIndex !== 2} />
+  </button>
+  <button on:click={() => (showTabIndex = 1)} class="tab tab-bordered grow" class:tab-active={showTabIndex === 1}>
+    <BookmarkBoxedIcon outline={showTabIndex !== 1} />
   </button>
 </div>
 <div class="h-full overflow-auto">

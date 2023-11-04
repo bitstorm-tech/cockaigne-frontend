@@ -12,7 +12,9 @@
 
 <button class="relative" on:click={() => dispatch("zoom")}>
   {#if showDelete}
-    <button class="absolute cursor-pointer p-1 text-red-600" on:click|stopPropagation={() => dispatch("delete")}>
+    <button
+      class="absolute right-1 top-1 cursor-pointer text-red-600"
+      on:click|stopPropagation={() => dispatch("delete")}>
       <TrashIcon />
     </button>
   {/if}

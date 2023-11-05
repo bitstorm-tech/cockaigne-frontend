@@ -145,10 +145,10 @@ export async function getDealsByDealerId(
 }
 
 export async function toggleHotDeal(supabase: Supabase, userId: string, dealId: string): Promise<ActiveDeal | null> {
-  const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId);
+  const { data } = await supabase.from("hot_deals").select().eq("deal_id", dealId).eq("user_id", userId);
 
   if (data && data.length >= 1) {
-    await supabase.from("hot_deals").delete().eq("deal_id", dealId);
+    await supabase.from("hot_deals").delete().eq("deal_id", dealId).eq("user_id", userId);
     return null;
   }
 

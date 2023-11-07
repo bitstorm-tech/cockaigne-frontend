@@ -115,7 +115,7 @@
   {/if}
   <div class="grid grid-cols-2 gap-4 pt-6">
     <Button warning on:click={handleRegistration} {loading} {disabled}>Registrieren</Button>
-    <Button on:click={() => goto("/")}>Abbrechen</Button>
+    <a href="/login"><Button fullwidth>Abbrechen</Button></a>
   </div>
 </div>
 <Alert show={!!errorMessage} on:confirm={() => (errorMessage = null)}>{errorMessage}</Alert>

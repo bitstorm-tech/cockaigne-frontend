@@ -30,7 +30,7 @@
   async function handleLogout() {
     await logout($page.data.supabase);
     await invalidateAll();
-    await goto("/");
+    goto("/login");
   }
 </script>
 

@@ -25,11 +25,11 @@
   <textarea
     {id}
     class:resize-none={!resize}
-    class="textarea-bordered textarea focus:border-primary focus:outline-none"
+    class="textarea textarea-bordered focus:border-primary focus:outline-none"
+    maxlength="1000"
     rows={lines}
     {placeholder}
     {disabled}
     bind:value
-    on:keydown={keydown}
-  />
+    on:keydown={keydown} />
 </div>

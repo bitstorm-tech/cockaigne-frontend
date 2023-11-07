@@ -636,6 +636,7 @@ export interface Database {
           dealer_id: string | null
           description: string | null
           duration: number | null
+          hots: number | null
           id: string | null
           likes: number | null
           location: unknown | null
@@ -826,6 +827,38 @@ export interface Database {
           }
         ]
       }
+      hot_deal_counts_view: {
+        Row: {
+          deal_id: string | null
+          hotcount: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "active_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "future_deals_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hot_deals_deal_id_fkey"
+            columns: ["deal_id"]
+            referencedRelation: "past_deals_view"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       invoice_metadata_view: {
         Row: {
           dealer_id: string | null
@@ -929,6 +962,7 @@ export interface Database {
           dealer_id: string | null
           description: string | null
           duration: number | null
+          hots: number | null
           id: string | null
           likes: number | null
           location: unknown | null

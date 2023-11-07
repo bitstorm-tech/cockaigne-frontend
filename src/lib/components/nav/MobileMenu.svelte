@@ -3,6 +3,7 @@
   import { goto, invalidateAll } from "$app/navigation";
   import { page } from "$app/stores";
   import LegalFooter from "$lib/components/nav/LegalFooter.svelte";
+  import AtIcon from "$lib/components/ui/icons/AtIcon.svelte";
   import GearIcon from "$lib/components/ui/icons/GearIcon.svelte";
   import InvoiceIcon from "$lib/components/ui/icons/InvoiceIcon.svelte";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
@@ -41,15 +42,15 @@
         Einstellungen
       </a>
       {#if $page.data.isDealer}
-        <!-- <a href="/invoices-overview" class="flex h-8 items-center gap-3">
-          <InvoiceIcon />
-          Rechnungen
-        </a> -->
         <a href="/plans" class="flex h-8 items-center gap-3">
           <InvoiceIcon />
           Preise & Abos
         </a>
       {/if}
+      <a href="/contact" class="flex h-8 items-center gap-3">
+        <AtIcon />
+        Kontaktiere uns
+      </a>
       <button on:click={handleLogout} class="flex h-8 cursor-pointer items-center gap-3">
         <LogoutIcon />
         Logout

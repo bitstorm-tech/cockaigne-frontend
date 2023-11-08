@@ -4,6 +4,8 @@
   import Alert from "$lib/components/ui/Alert.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import Toast from "$lib/components/ui/Toast.svelte";
+  import { getLocation } from "$lib/geo/address.service";
+  import { toPostGisPoint } from "$lib/geo/geo.types";
   import { updateAccount } from "$lib/supabase/account-service";
   import type { Account, AccountUpdate } from "$lib/supabase/public-types";
   import { saveProfileImage } from "$lib/supabase/storage-service";
@@ -43,6 +45,11 @@
       : {
           username: account.username
         };
+
+    const coordinates = await getLocation(account);
+    if (coordinates) {
+      updates.location = toPostGisPoint(coordinates);
+    }
 
     updates.id = $page.data.userId;
     const error = await updateAccount(data.supabase, updates);

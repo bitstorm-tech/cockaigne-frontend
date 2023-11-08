@@ -53,7 +53,7 @@
   });
 
   async function showOnMap() {
-    const coordinates = await getLocation(`${account.street} ${account.house_number}, ${account.zip} ${account.city}`);
+    const coordinates = await getLocation(account);
     if (coordinates) {
       const olCoordinates = toOpenLayersCoordinate(coordinates);
       view.setCenter(olCoordinates);
@@ -75,5 +75,9 @@
   </div>
   <Input label="PLZ" bind:value={account.zip} />
 </div>
+<span>
+  Bitte prüfen Sie, ob die Adresse auf der Karte korrekt angezeigt wird. Es ist extrem wichtig, dass die Position auf
+  der Karte korrket ist, da hier ihre eingestellten Deals angezeigt werden!
+</span>
 <Button small on:click={showOnMap}>Auf Karte anzeigen</Button>
 <div id="map" class="h-52 w-full"></div>

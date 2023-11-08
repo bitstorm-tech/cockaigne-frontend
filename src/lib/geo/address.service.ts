@@ -1,3 +1,4 @@
+import type { Account } from "$lib/supabase/public-types";
 import type { Position } from "./geo.types";
 
 export interface Address {
@@ -31,8 +32,11 @@ export async function getAddress(position: Position): Promise<Address | undefine
   }
 }
 
-export async function getLocation(address: Address | string): Promise<Position | undefined> {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${address}`;
+export async function getLocation(address: string | Account): Promise<Position | undefined> {
+  const query =
+    typeof address == "string" ? address : `${address.street} ${address.house_number}, ${address.zip} ${address.city}`;
+
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}`;
   const response = await fetch(url);
 
   if (response.ok) {

@@ -5,6 +5,13 @@
   export let titleRight = "";
   export let showButton = true;
   export let action: { text: string; callback: () => void } = { text: "Button", callback: () => {} };
+
+  let loading = false;
+
+  function clickHandler() {
+    loading = true;
+    action.callback();
+  }
 </script>
 
 <div class="card w-full bg-white text-primary shadow-xl">
@@ -16,7 +23,7 @@
     <slot />
     {#if showButton}
       <div class="card-actions justify-end">
-        <Button warning on:click={action.callback}>{action.text}</Button>
+        <Button {loading} warning on:click={clickHandler}>{action.text}</Button>
       </div>
     {/if}
   </div>

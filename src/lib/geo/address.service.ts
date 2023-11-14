@@ -20,12 +20,12 @@ export async function getAddress(position: Position): Promise<Address | undefine
       return;
     }
 
-    const { road, house_number, city, postcode, country } = address.address;
+    const { road, house_number, city, postcode, country, town, village } = address.address;
 
     return {
       street: road || "",
       houseNumber: house_number || "",
-      city: city || "",
+      city: city || town || village || "",
       postcode: postcode || "",
       country: country || ""
     };

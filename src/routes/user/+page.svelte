@@ -34,7 +34,7 @@
   imageUrl={data.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
   hotDeals={$hotDealStore.length} />
-<div class="tabs tabs-bordered mb-1 mt-6">
+<div class="tabs tabs-bordered mb-1">
   <button on:click={() => (showTabIndex = 0)} class="tab" class:tab-active={showTabIndex === 0}>
     <DealIcon outline={showTabIndex !== 0} />
   </button>

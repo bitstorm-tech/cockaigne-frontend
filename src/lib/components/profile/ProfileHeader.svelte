@@ -14,7 +14,7 @@
   const googleLink = `https://maps.google.com/?q=${street},${city}`;
 </script>
 
-<div class="flex h-48 flex-col">
+<div class=" h-52 flex-col">
   <div class="grid grid-cols-7">
     <div class="col-span-4 m-4 flex flex-col pt-2">
       <span class="text-xs text-[#6a828c]"><b>Kategorie</b></span>

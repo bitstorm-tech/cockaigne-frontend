@@ -55,7 +55,7 @@
     </Button>
   {/if}
 </ProfileHeader>
-<div class="tabs tabs-bordered mb-1 mt-4">
+<div class="tabs tabs-bordered mb-1">
   <button class="tab" class:tab-active={activeTab === 0} on:click={() => (activeTab = 0)}>
     <DealIcon outline={activeTab !== 0} />
   </button>

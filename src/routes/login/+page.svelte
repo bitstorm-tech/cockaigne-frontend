@@ -37,7 +37,7 @@
     <Button warning on:click={handleLogin} {loading} {disabled}>Einloggen</Button>
     <a href="/"><Button fullwidth>Zurück</Button></a>
   </div>
-  <a href="/"><Button fullwidth small>Weiter mit Basic User</Button></a>
+  <a href="/"><Button fullwidth small>Weiter als Basic User</Button></a>
 
   <span class="pt-10 text-center text-sm">
     <Link href="/registration">Registrieren</Link> //

@@ -13,14 +13,13 @@
       <span class="label-text text-xs">{label}</span>
     </label>
   {/if}
-  <div class="btn-group">
+  <div class="join">
     {#each Object.keys(options) as key}
       <button
-        class="btn btn-outline btn-sm grow"
+        class="btn join-item btn-sm grow"
         class:btn-active={activeButton == key}
         on:click={() => (activeButton = value = key)}
-        {disabled}
-      >
+        {disabled}>
         {options[key]}
       </button>
     {/each}

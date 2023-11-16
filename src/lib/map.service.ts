@@ -179,13 +179,9 @@ function createIcon(deal: ActiveDeal, coordinate: Coordinate): Feature {
   feature.setStyle(
     new Style({
       image: new CircleStyle({
-        radius: 7,
+        radius: 10,
         fill: new Fill({
           color: Categories[deal.category_id].color
-        }),
-        stroke: new Stroke({
-          color: "red",
-          width: 1
         })
       })
     })

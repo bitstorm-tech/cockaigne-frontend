@@ -10,7 +10,7 @@
   import { onMount } from "svelte";
 
   navigationStore.currentPage("top");
-  let tabIndex = 10;
+  let tabIndex = 25;
   let loading = true;
   let topDeals: ActiveDeal[] = [];
   const supabase = $page.data.supabase;
@@ -32,19 +32,9 @@
 </script>
 
 <p class="my-4 text-center">TOP-Deals in deiner Nähe</p>
-<div class="tabs mb-1 flex max-h-8">
-  <button on:click={() => switchTab(10)} class="tab-bordered tab grow" class:tab-active={tabIndex === 10}>
-    Top 10
-  </button>
-  <button on:click={() => switchTab(25)} class="tab-bordered tab grow" class:tab-active={tabIndex === 25}>
-    Top 25
-  </button>
-  <button on:click={() => switchTab(50)} class="tab-bordered tab grow" class:tab-active={tabIndex === 50}>
-    Top 50
-  </button>
-  <button on:click={() => switchTab(100)} class="tab-bordered tab grow" class:tab-active={tabIndex === 100}>
-    Top 100
-  </button>
+<div class="tabs tabs-bordered mb-1">
+  <button on:click={() => switchTab(25)} class="tab" class:tab-active={tabIndex === 25}>Top 25</button>
+  <button on:click={() => switchTab(100)} class="tab" class:tab-active={tabIndex === 150}>Alle</button>
 </div>
 <section class="flex flex-col">
   {#if loading}

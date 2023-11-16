@@ -76,8 +76,8 @@
   <Input label="PLZ" bind:value={account.zip} />
 </div>
 <span>
-  Bitte prüfen Sie, ob die Adresse auf der Karte korrekt angezeigt wird. Es ist extrem wichtig, dass die Position auf
-  der Karte korrket ist, da hier ihre eingestellten Deals angezeigt werden!
+  Bitte prüfe genau, ob die Adresse auf der Karte korrekt angezeigt wird. Es ist extrem wichtig, dass die Position auf
+  der Karte stimmt, da hier die eingestellten Deals angezeigt werden!
 </span>
 <Button small on:click={showOnMap}>Auf Karte anzeigen</Button>
 <div id="map" class="h-52 w-full"></div>

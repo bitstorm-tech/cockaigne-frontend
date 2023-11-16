@@ -8,6 +8,7 @@
   import InvoiceIcon from "$lib/components/ui/icons/InvoiceIcon.svelte";
   import LoginIcon from "$lib/components/ui/icons/LoginIcon.svelte";
   import LogoutIcon from "$lib/components/ui/icons/LogoutIcon.svelte";
+  import ManageSubscriptionIcon from "$lib/components/ui/icons/ManageSubscriptionIcon.svelte";
   import NewsIcon from "$lib/components/ui/icons/NewsIcon.svelte";
   import StarsIcon from "$lib/components/ui/icons/StarsIcon.svelte";
   import { menuOpen } from "$lib/stores/navigation.store";
@@ -45,6 +46,13 @@
         <a href="/plans" class="flex h-8 items-center gap-3">
           <InvoiceIcon />
           Preise & Abos
+        </a>
+        <a
+          target="_blank"
+          class="flex h-8 items-center gap-3"
+          href="https://billing.stripe.com/p/login/test_4gw9AKfJh5rw9QQeUU">
+          <ManageSubscriptionIcon />
+          Abo verwalten
         </a>
       {/if}
       <a href="/contact" class="flex h-8 items-center gap-3">

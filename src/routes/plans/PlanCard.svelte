@@ -5,8 +5,9 @@
   export let titleRight = "";
   export let showButton = true;
   export let action: { text: string; callback: () => void } = { text: "Button", callback: () => {} };
+  export let hasActiveSubscription = true;
 
-  let loading = false;
+  export let loading = false;
 
   function clickHandler() {
     loading = true;
@@ -21,10 +22,13 @@
       <span class="text-sm">{titleRight}</span>
     </span>
     <slot />
-    {#if showButton}
-      <div class="card-actions justify-end">
+    <div class="card-actions justify-end">
+      {#if showButton}
         <Button {loading} warning on:click={clickHandler}>{action.text}</Button>
-      </div>
-    {/if}
+      {/if}
+      {#if hasActiveSubscription}
+        <span>Du hast bereits ein aktives Abo!</span>
+      {/if}
+    </div>
   </div>
 </div>

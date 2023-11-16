@@ -15,6 +15,7 @@
   let chosenOption: AboType = "starter";
   let alertMessage = "";
   let voucherCode = "";
+  let loading = false;
 
   const options = {
     starter: "Starter",
@@ -62,16 +63,24 @@
 
     alertMessage = response.statusText;
   }
+
+  function confirm() {
+    alertMessage = "";
+    loading = false;
+  }
 </script>
 
 <section class="flex flex-col items-center gap-4 p-4">
   <h1>Preise & Abos</h1>
+  {#if data.activeSubscription}
+    <h2 class="text-red">Du hast bereits ein aktives Abo!</h2>
+  {/if}
   <ButtonGroup {options} bind:value={chosenOption}></ButtonGroup>
   <span class="px-4 text-center" class:invisible={chosenOption === "starter"}>
     Spare weitere 10% beim Abschluss eines Jahresabos!
   </span>
   {#if chosenOption === "starter"}
-    <PlanCard titleLeft="Starter" titleRight="4,99 € / Deal" showButton={false}>
+    <PlanCard titleLeft="Starter" titleRight="4,99 € / Deal" showButton={false} hasActiveSubscription={false}>
       <ul>
         <li class="list-disc">
           <div class="flex items-baseline gap-2">
@@ -81,7 +90,7 @@
         <li class="list-disc">Kein Abo / keine Grundgebühr</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Gutschein aktivieren" action={actionCode}>
+    <PlanCard titleLeft="Gutschein aktivieren" action={actionCode} hasActiveSubscription={false} bind:loading>
       {#await data.lazy.activeVouchers}
         <LoadingSpinner />
       {:then activeVouchers}
@@ -99,14 +108,25 @@
       </div>
     </PlanCard>
   {:else if chosenOption === "monthly"}
-    <PlanCard titleLeft="Starter" titleRight="99,90 € / Monat" action={actionStripeStarter}>
+    <PlanCard
+      titleLeft="Starter"
+      titleRight="99,90 € / Monat"
+      action={actionStripeStarter}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
       <ul>
         <li class="list-disc">30 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~33% je Deal</li>
         <li class="list-disc">Monatlich kündbar</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Exclusive" titleRight="249,90 € / Monat" action={actionStripeExclusive}>
+    <PlanCard
+      titleLeft="Exclusive"
+      titleRight="249,90 € / Monat"
+      action={actionStripeExclusive}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
+      >
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~44% je Deal</li>
@@ -114,7 +134,13 @@
         <li class="list-disc">Monatlich kündbar</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Premium" titleRight="349,90 € / Monat" action={actionStripePremium}>
+    <PlanCard
+      titleLeft="Premium"
+      titleRight="349,90 € / Monat"
+      action={actionStripePremium}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
+      >
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~76% je Deal</li>
@@ -123,14 +149,26 @@
       </ul>
     </PlanCard>
   {:else}
-    <PlanCard titleLeft="Starter" titleRight="1.099,90 € / Jahr" action={actionStripeStarter}>
+    <PlanCard
+      titleLeft="Starter"
+      titleRight="1.099,90 € / Jahr"
+      action={actionStripeStarter}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
+      >
       <ul>
         <li class="list-disc">30 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~39% je Deal</li>
         <li class="list-disc">Kündbar zum Aboende</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Exclusive" titleRight="2.699,90 € / Jahr" action={actionStripeExclusive}>
+    <PlanCard
+      titleLeft="Exclusive"
+      titleRight="2.699,90 € / Jahr"
+      action={actionStripeExclusive}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
+      >
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~50% je Deal</li>
@@ -138,7 +176,13 @@
         <li class="list-disc">Kündbar zum Aboende</li>
       </ul>
     </PlanCard>
-    <PlanCard titleLeft="Premium" titleRight="3.799,90 € / Jahr" action={actionStripePremium}>
+    <PlanCard
+      titleLeft="Premium"
+      titleRight="3.799,90 € / Jahr"
+      action={actionStripePremium}
+      hasActiveSubscription={data.activeSubscription}
+      showButton={!data.activeSubscription}>
+      >
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~79% je Deal</li>
@@ -148,4 +192,6 @@
     </PlanCard>
   {/if}
 </section>
-<Alert show={alertMessage?.length > 0} warning on:confirm={() => (alertMessage = "")}>{alertMessage}</Alert>
+<Alert show={alertMessage?.length > 0} warning on:confirm={confirm}>
+  {alertMessage}
+</Alert>

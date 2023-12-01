@@ -3,7 +3,6 @@
   import RatingModal from "$lib/components/dealer/RatingModal.svelte";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import EditIcon from "$lib/components/ui/icons/EditIcon.svelte";
-  import TrashIcon from "$lib/components/ui/icons/TrashIcon.svelte";
   import RatingStars from "$lib/components/ui/RatingStars.svelte";
   import type { Rating } from "$lib/supabase/public-types";
   import { updateRating } from "$lib/supabase/rating-service";
@@ -32,7 +31,7 @@
 </script>
 
 <div class="flex flex-col">
-  <div class="flex items-center justify-between border-y border-base-300 bg-base-200 py-2 pl-20 pr-4">
+  <div class="flex items-center justify-between border-y border-base-300 bg-[#232b2e] py-2 pl-20 pr-4">
     <div class="absolute left-4 pt-8">
       {#await getProfileImage(supabase, rating.user_id)}
         <LoadingSpinner />
@@ -40,11 +39,12 @@
         <ProfilePicture {imageUrl} size={3} />
       {/await}
     </div>
-    <div class="flex gap-2">
+    <div class="flex gap-2 text-sm">
       <div>{rating.username} am {created}</div>
       {#if rating.user_id === $page.data.userId}
-        <button on:click={() => (openModal = true)}><EditIcon size={1.2} /></button>
-        <button on:click={() => dispatch("delete", rating.user_id)}><TrashIcon size={1.2} /></button>
+        <button on:click={() => (openModal = true)}>
+          <EditIcon size={1.2} />
+        </button>
       {/if}
     </div>
     <RatingStars stars={rating.stars} showLabel={false} disabled={true} />
@@ -58,5 +58,6 @@
   bind:open={openModal}
   ratingText={rating.rating_text || ""}
   stars={rating.stars || 5}
+  allowDelete={rating.user_id === $page.data.userId}
   on:create-or-update={update}
-/>
+  on:delete={() => dispatch("delete", rating.user_id)} />

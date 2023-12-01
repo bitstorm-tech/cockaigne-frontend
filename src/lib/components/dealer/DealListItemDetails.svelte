@@ -70,5 +70,5 @@
     </div>
   {/if}
 </div>
-<ZoomPictureModal bind:open={openZoomModal} imageUrls={deal.imageUrls} index={zoomImageIndex} title={deal.title} />
+<ZoomPictureModal bind:open={openZoomModal} imageUrls={deal.imageUrls} index={zoomImageIndex} />
 <ReportDealModal bind:open={openReportModal} dealName={deal.title} dealId={deal.id} />

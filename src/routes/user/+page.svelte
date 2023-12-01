@@ -33,7 +33,8 @@
   deals={$dealStore.length}
   imageUrl={data.profileImageUrl}
   favoriteDealers={favoriteDealers?.length}
-  hotDeals={$hotDealStore.length} />
+  hotDeals={$hotDealStore.length}
+  categories={data.categories} />
 <div class="tabs tabs-bordered mb-1">
   <button on:click={() => (showTabIndex = 0)} class="tab" class:tab-active={showTabIndex === 0}>
     <DealIcon outline={showTabIndex !== 0} />

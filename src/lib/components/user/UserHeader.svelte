@@ -1,10 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import DealFilterModal from "$lib/components/map/DealFilterModal.svelte";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
+  import Button from "$lib/components/ui/Button.svelte";
+  import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
   import DealsBadge from "$lib/components/user/DealsBadge.svelte";
   import FavoriteDealerBadge from "$lib/components/user/FavoriteDealerBadge.svelte";
   import HotsBadge from "$lib/components/user/HotsBadge.svelte";
+  import type { Category } from "$lib/supabase/public-types";
 
   export let name = "";
   export let address: string[] = [""];
@@ -12,28 +16,31 @@
   export let favoriteDealers = 0;
   export let hotDeals = 0;
   export let deals = 0;
+  export let categories: Category[] = [];
+
+  let showFilterModal = false;
 </script>
 
 <div class="flex h-52 justify-between text-[#dbdce6]">
   <div class="flex w-full justify-between">
-    <div class="m-4 flex flex-col gap-4 pt-2">
+    <div class="m-4 flex flex-col gap-4">
       <div class="flex gap-2 fill-current text-[#69828c]" class:opacity-50={!$page.data.userId}>
         <DealsBadge number={deals} />
         <HotsBadge number={hotDeals} />
         <FavoriteDealerBadge number={favoriteDealers} />
       </div>
       <span class="text-2xl">{name}</span>
-      <span class="flex flex-col gap-2 text-sm">
-        <span class="font-extrabold">Dein Standort</span>
-        <span class="flex gap-1">
+      <div class="flex flex-col gap-2 text-sm">
+        <div class="font-extrabold">Dein Standort</div>
+        <div class="flex gap-1">
           <LocationIcon size={1.5} />
           <div class="flex flex-col text-xs">
             {#each address as addressItem}
               <i>{addressItem}</i>
             {/each}
           </div>
-        </span>
-      </span>
+        </div>
+      </div>
     </div>
     <div class="-mt-6 mr-14 flex flex-col">
       <div class="h-24 w-24">
@@ -42,3 +49,12 @@
     </div>
   </div>
 </div>
+
+<div class="absolute right-0 top-40 w-20">
+  <Button rightFlat warning fullwidth circle on:click={() => (showFilterModal = true)}>
+    <FilterIcon></FilterIcon>
+  </Button>
+</div>
+
+<!--TODO move categories inside modal -->
+<DealFilterModal bind:open={showFilterModal} {categories}></DealFilterModal>

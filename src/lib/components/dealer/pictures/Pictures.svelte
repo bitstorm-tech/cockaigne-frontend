@@ -9,7 +9,6 @@
   import { deleteDealerImage, saveDealerImage } from "$lib/supabase/storage-service";
 
   export let pictures: string[] = [];
-  export let companyName = "";
 
   let toastText: string | null;
   let openDeleteModal = false;
@@ -75,4 +74,4 @@
 {/if}
 <Toast show={!!toastText}>{toastText}</Toast>
 <ConfirmDeletePictureModal bind:open={openDeleteModal} url={deletePictureUrl} deleteFunction={deletePictureCallback} />
-<ZoomPictureModal bind:open={openZoomModal} imageUrls={pictures} index={zoomImageIndex} title={companyName} />
+<ZoomPictureModal bind:open={openZoomModal} imageUrls={pictures} index={zoomImageIndex} />

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import DealsList from "$lib/components/dealer/DealsList.svelte";
-  import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import Pictures from "$lib/components/dealer/pictures/Pictures.svelte";
+  import RatingsList from "$lib/components/dealer/RatingsList.svelte";
   import ProfileHeader from "$lib/components/profile/ProfileHeader.svelte";
   import Button from "$lib/components/ui/Button.svelte";
   import AddDealIcon from "$lib/components/ui/icons/AddDealIcon.svelte";
@@ -43,16 +43,20 @@
   category={account.category}>
   {#if $page.data.isDealer}
     <a href={"/deals/new?dealerId=" + dealerId}>
-      <Button warning rightFlat additionalWidth><AddDealIcon size={4} /></Button>
+      <Button warning rightFlat additionalWidth>
+        <AddDealIcon size={4} />
+      </Button>
     </a>
   {:else}
-    <Button on:click={toggleFavor} circle warning rightFlat>
-      {#if loadingFavorite}
-        <LoadingSpinner />
-      {:else}
-        <HeartIcon outline={!isFavoriteDealer} />
-      {/if}
-    </Button>
+    <div class="grid w-20 grid-cols-1">
+      <Button on:click={toggleFavor} circle warning rightFlat fullwidth>
+        {#if loadingFavorite}
+          <LoadingSpinner />
+        {:else}
+          <HeartIcon outline={!isFavoriteDealer} />
+        {/if}
+      </Button>
+    </div>
   {/if}
 </ProfileHeader>
 <div class="tabs tabs-bordered mb-1">
@@ -69,7 +73,7 @@
 {#if activeTab === 0}
   <DealsList {deals} />
 {:else if activeTab === 1}
-  <Pictures {pictures} companyName={account.username} />
+  <Pictures {pictures} />
 {:else}
   <RatingsList {dealerId} userId={$page.data.userId} isDealer={$page.data.isDealer} />
 {/if}

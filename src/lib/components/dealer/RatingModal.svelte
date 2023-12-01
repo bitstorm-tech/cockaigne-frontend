@@ -8,17 +8,28 @@
   export let stars = 3;
   export let ratingText = "";
   export let update = false;
+  export let allowDelete = false;
   const dispatch = createEventDispatcher();
 
   const buttons = [
-    { text: "Abbrechen", callback: cancel },
-    { text: update ? "Ändern" : "Bewerten", callback: ratingCreated }
+    { text: update ? "Ändern" : "Bewerten", callback: ratingCreated },
+    { text: "Löschen", callback: del },
+    { text: "Abbrechen", callback: cancel }
   ];
+
+  if (!allowDelete) {
+    buttons.splice(1, 1);
+  }
 
   function ratingCreated() {
     dispatch("create-or-update", { stars, rating_text: ratingText });
     ratingText = "";
     stars = 3;
+    open = false;
+  }
+
+  function del() {
+    dispatch("delete");
     open = false;
   }
 

@@ -5,7 +5,6 @@
   export let open = false;
   export let index = 0;
   export let imageUrls: string[] = [];
-  export let title = "Bilder";
 
   function next() {
     index = index === imageUrls.length - 1 ? 0 : ++index;
@@ -17,16 +16,12 @@
 </script>
 
 <Modal bind:open>
-  <div class="flex flex-col gap-3 max-h-[75vh]">
+  <div class="flex max-h-[75vh] flex-col gap-3">
     <div class="overflow-auto">
       <img src={imageUrls[index]} alt="Dealer shop impression or deal images" />
     </div>
-    <div class="flex items-center text-[#fff4eb]">
+    <div class="flex items-center justify-between text-[#fff4eb]">
       <Button on:click={previous} circle>&lt;</Button>
-      <div class="flex flex-col grow text-center">
-        <p>{title}</p>
-        <p class="text-xs">({index + 1}/{imageUrls.length})</p>
-      </div>
       <Button on:click={next} circle>&gt;</Button>
     </div>
   </div>

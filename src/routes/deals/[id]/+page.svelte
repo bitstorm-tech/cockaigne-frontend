@@ -169,7 +169,7 @@
 
 <div class="flex flex-col gap-4 p-4">
   <Input label="Titel" bind:value={deal.title} {disabled} />
-  <Textarea label="Beschreibung" bind:value={deal.description} {disabled} />
+  <Textarea label="Beschreibung" bind:value={deal.description} {disabled} lines={3} />
   <CategorySelect bind:value={deal.category_id} {disabled} />
   <Button on:click={() => fileInput.click()} disabled={disabled || imagePreviews.length >= 3}>
     Bild hinzufügen ({imagePreviews.length} / 3)
@@ -202,25 +202,17 @@
     </div>
   {/if}
   <span class="text-red-600">{helpText}</span>
-  <div class="grid grid-cols-2 pt-16">
-    <div class:invisible={activeSubscription}>
-      <p class="text-lg font-bold">Kosten: {costs} €</p>
-      <p class="pt-4 text-xs">{durationInDays} Tag{durationInDays > 1 ? "e" : ""} a 4,99 € pro Tag</p>
-    </div>
-    <div class="flex flex-col gap-3">
-      <Button warning on:click={() => (openDealOVerviewModal = true)} disabled={disableSave || disabled} {loading}>
-        {deal.id && !deal.template ? "Speichern" : "Erstellen"}
-      </Button>
-      {#if deal.id && !disabled}
-        <Button error on:click={() => (openDeleteModal = true)}>Löschen</Button>
-      {/if}
-      <Button small on:click={() => goto("/")}>Abbrechen</Button>
-      {#if !deal.template}
-        <div class="flex justify-center">
-          <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />
-        </div>
-      {/if}
-    </div>
+  {#if !deal.template}
+    <Checkbox label="Zusätzlich als Vorlage speichern" bind:checked={createTemplate} {disabled} />
+  {/if}
+  <div class="grid grid-cols-2 gap-3">
+    <Button warning on:click={() => (openDealOVerviewModal = true)} disabled={disableSave || disabled} {loading}>
+      {deal.id && !deal.template ? "Speichern" : "Erstellen"}
+    </Button>
+    {#if deal.id && !disabled}
+      <Button error on:click={() => (openDeleteModal = true)}>Löschen</Button>
+    {/if}
+    <Button on:click={() => goto("/")}>Abbrechen</Button>
   </div>
 </div>
 <Alert bind:show={openErrorModal}>Ups, da ging was schief. Konnte den Deal leider nicht speichern oder löschen!</Alert>

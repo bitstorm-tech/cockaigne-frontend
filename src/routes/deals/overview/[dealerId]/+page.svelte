@@ -20,16 +20,10 @@
     <Button on:click={() => goto("/deals/templates")}>Vorlagen</Button>
   </div>
 </div>
-<div class="tabs mb-2 mt-6 max-h-8">
-  <button on:click={() => (showTabIndex = 0)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 0}>
-    Aktiv
-  </button>
-  <button on:click={() => (showTabIndex = 1)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 1}>
-    Geplant
-  </button>
-  <button on:click={() => (showTabIndex = 2)} class="tab-bordered tab grow" class:tab-active={showTabIndex === 2}>
-    Abgelaufen
-  </button>
+<div class="tabs tabs-bordered">
+  <button on:click={() => (showTabIndex = 0)} class="tab" class:tab-active={showTabIndex === 0}>Aktiv</button>
+  <button on:click={() => (showTabIndex = 1)} class="tab" class:tab-active={showTabIndex === 1}>Geplant</button>
+  <button on:click={() => (showTabIndex = 2)} class="tab" class:tab-active={showTabIndex === 2}>Abgelaufen</button>
 </div>
 {#if showTabIndex === 0}
   <DealsList deals={sortedDeals.active} />

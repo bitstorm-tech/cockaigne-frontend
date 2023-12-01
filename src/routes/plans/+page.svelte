@@ -126,7 +126,6 @@
       action={actionStripeExclusive}
       hasActiveSubscription={data.activeSubscription}
       showButton={!data.activeSubscription}>
-      >
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~44% je Deal</li>
@@ -140,7 +139,6 @@
       action={actionStripePremium}
       hasActiveSubscription={data.activeSubscription}
       showButton={!data.activeSubscription}>
-      >
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~76% je Deal</li>
@@ -155,7 +153,6 @@
       action={actionStripeStarter}
       hasActiveSubscription={data.activeSubscription}
       showButton={!data.activeSubscription}>
-      >
       <ul>
         <li class="list-disc">30 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~39% je Deal</li>
@@ -168,7 +165,6 @@
       action={actionStripeExclusive}
       hasActiveSubscription={data.activeSubscription}
       showButton={!data.activeSubscription}>
-      >
       <ul>
         <li class="list-disc">90 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~50% je Deal</li>
@@ -182,7 +178,6 @@
       action={actionStripePremium}
       hasActiveSubscription={data.activeSubscription}
       showButton={!data.activeSubscription}>
-      >
       <ul>
         <li class="list-disc">300 kostenlose Tagesdeals pro Monat</li>
         <li class="list-disc">Preisvorteil von ~79% je Deal</li>

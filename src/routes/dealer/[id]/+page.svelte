@@ -7,8 +7,10 @@
   import Button from "$lib/components/ui/Button.svelte";
   import AddDealIcon from "$lib/components/ui/icons/AddDealIcon.svelte";
   import DealIcon from "$lib/components/ui/icons/DealIcon.svelte";
-  import HeartIcon from "$lib/components/ui/icons/HeartIcon.svelte";
+  import HeartInProfileIcon from "$lib/components/ui/icons/HeartInProfileIcon.svelte";
   import LoadingSpinner from "$lib/components/ui/icons/LoadingSpinner.svelte";
+  import NavigatorIcon from "$lib/components/ui/icons/NavigatorIcon.svelte";
+  import PhoneIcon from "$lib/components/ui/icons/PhoneIcon.svelte";
   import PhotoIcon from "$lib/components/ui/icons/PhotoIcon.svelte";
   import RatingIcon from "$lib/components/ui/icons/RatingIcon.svelte";
   import { toggleFavoriteDealer } from "$lib/supabase/dealer-service";
@@ -20,6 +22,8 @@
   const { dealerId, deals, account, profileImage, pictures } = data;
   const supabase = $page.data.supabase;
   const userId = $page.data.userId;
+  const address = `${account?.street} ${account?.house_number}, ${account?.zip} ${account?.city}`;
+  const googleLink = `https://maps.google.com/?q=${address}`;
   let isFavoriteDealer = data.isFavDealer;
   let loadingFavorite = false;
 
@@ -38,7 +42,6 @@
   name={account.username}
   street={`${account.street} ${account.house_number}`}
   city={`${account.zip} ${account.city}`}
-  phone={account?.phone}
   imageUrl={profileImage}
   category={account.category}>
   {#if $page.data.isDealer}
@@ -48,14 +51,36 @@
       </Button>
     </a>
   {:else}
-    <div class="grid w-20 grid-cols-1">
-      <Button on:click={toggleFavor} circle warning rightFlat fullwidth>
-        {#if loadingFavorite}
-          <LoadingSpinner />
-        {:else}
-          <HeartIcon outline={!isFavoriteDealer} />
-        {/if}
-      </Button>
+    <div class="flex flex-col items-end">
+      <div class="grid w-12 grid-cols-1">
+        <a target="_blank" href={`tel:${account?.phone}`}>
+          <Button circle small rightFlat fullwidth>
+            <div class="w-full">
+              <PhoneIcon size={2} />
+            </div>
+          </Button>
+        </a>
+      </div>
+      <div class=" grid w-16 grid-cols-1">
+        <a target="_blank" href={googleLink}>
+          <Button circle small rightFlat fullwidth>
+            <div class="w-full">
+              <NavigatorIcon size={2} />
+            </div>
+          </Button>
+        </a>
+      </div>
+      <div class="grid w-20 grid-cols-1">
+        <Button on:click={toggleFavor} circle warning rightFlat fullwidth>
+          {#if loadingFavorite}
+            <LoadingSpinner />
+          {:else}
+            <div class="w-full">
+              <HeartInProfileIcon outline={!isFavoriteDealer} size={2.8} />
+            </div>
+          {/if}
+        </Button>
+      </div>
     </div>
   {/if}
 </ProfileHeader>

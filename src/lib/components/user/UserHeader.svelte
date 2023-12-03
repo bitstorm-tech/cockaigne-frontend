@@ -3,7 +3,7 @@
   import DealFilterModal from "$lib/components/map/DealFilterModal.svelte";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
   import Button from "$lib/components/ui/Button.svelte";
-  import FilterIcon from "$lib/components/ui/icons/FilterIcon.svelte";
+  import FilterInProfileIcon from "$lib/components/ui/icons/FilterInProfileIcon.svelte";
   import LocationIcon from "$lib/components/ui/icons/LocationIcon.svelte";
   import DealsBadge from "$lib/components/user/DealsBadge.svelte";
   import FavoriteDealerBadge from "$lib/components/user/FavoriteDealerBadge.svelte";
@@ -51,8 +51,10 @@
 </div>
 
 <div class="absolute right-0 top-40 w-20">
-  <Button rightFlat warning fullwidth circle on:click={() => (showFilterModal = true)}>
-    <FilterIcon></FilterIcon>
+  <Button rightFlat fullwidth circle on:click={() => (showFilterModal = true)}>
+    <div class="w-full">
+      <FilterInProfileIcon size={2.8} />
+    </div>
   </Button>
 </div>
 

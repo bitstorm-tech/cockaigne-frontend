@@ -1,17 +1,11 @@
 <script lang="ts">
-  import { page } from "$app/stores";
   import ProfilePicture from "$lib/components/profile/ProfilePicture.svelte";
-  import NavigatorIcon from "$lib/components/ui/icons/NavigatorIcon.svelte";
-  import PhoneIcon from "$lib/components/ui/icons/PhoneIcon.svelte";
 
   export let name = "";
   export let street = "";
   export let city = "";
   export let imageUrl = "";
-  export let phone = "";
   export let category = "";
-
-  const googleLink = `https://maps.google.com/?q=${street},${city}`;
 </script>
 
 <div class=" h-52 flex-col">
@@ -25,24 +19,8 @@
     </div>
     <div class="col-span-3 -mt-6 mr-14 flex flex-col items-center gap-2">
       <ProfilePicture {imageUrl} />
-      <div class="absolute right-0 top-36">
-        <div class="flex items-center gap-12">
-          {#if !$page.data.isDealer}
-            <div class="flex flex-col">
-              <a target="_blank" href={`tel:${phone}`}>
-                <button>
-                  <PhoneIcon size={2} />
-                </button>
-              </a>
-              <a target="_blank" href={googleLink}>
-                <button>
-                  <NavigatorIcon size={2} />
-                </button>
-              </a>
-            </div>
-          {/if}
-          <slot />
-        </div>
+      <div class="absolute right-0 top-20">
+        <slot />
       </div>
     </div>
   </div>

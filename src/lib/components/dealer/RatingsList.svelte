@@ -86,10 +86,13 @@
       </EmptyContent>
     {/if}
   {:else}
-    <span class="m-2 flex items-center gap-2">
-      {averageRating}
-      <StarIcon size={0.8} />
-    </span>
+    <div class="m-2 flex items-baseline justify-end gap-3">
+      Gesamtbewertung:
+      <div class="flex items-center gap-3 text-3xl">
+        {averageRating}
+        <StarIcon size={1.5} />
+      </div>
+    </div>
     {#each ratings as rating}
       <RatingsListItem {rating} on:update={updateAverageRating} on:delete={() => (openConfirmationModal = true)} />
     {/each}

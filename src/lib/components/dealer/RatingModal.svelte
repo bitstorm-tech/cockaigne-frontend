@@ -12,7 +12,7 @@
   const dispatch = createEventDispatcher();
 
   const buttons = [
-    { text: update ? "Ändern" : "Bewerten", callback: ratingCreated },
+    { text: update ? "Ändern" : "Bewerten", warning: true, callback: ratingCreated },
     { text: "Löschen", callback: del },
     { text: "Abbrechen", callback: cancel }
   ];
@@ -40,7 +40,7 @@
 
 <Modal bind:open {buttons}>
   <div class="flex flex-col gap-3">
-    <RatingStars bind:stars />
+    <RatingStars bind:stars big />
     <Textarea label="Bewertungstext" bind:value={ratingText} />
   </div>
 </Modal>

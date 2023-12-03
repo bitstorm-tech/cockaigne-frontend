@@ -3,11 +3,7 @@
   const style = `height: ${size}rem; width: ${size}rem`;
 </script>
 
-<svg
-  id="f541dab2-711c-4277-aa06-5e5c3c2a25d7"
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 102.88235 81.41176"
-  {style}>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 102.88235 81.41176" {style}>
   <defs>
     <style>
       .aebfd42d-1a68-4dfa-82e0-6ff5c7f4e16a {

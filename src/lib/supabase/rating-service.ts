@@ -21,7 +21,11 @@ export async function saveRating(supabase: Supabase, rating: RatingUpdate) {
 }
 
 export async function updateRating(supabase: Supabase, rating: RatingUpdate) {
-  const { error } = await supabase.from("dealer_ratings").update(rating).eq("user_id", rating.user_id);
+  const { error } = await supabase
+    .from("dealer_ratings")
+    .update(rating)
+    .eq("user_id", rating.user_id)
+    .eq("dealer_id", rating.dealer_id);
 
   if (error) {
     return logError(error, "Can't update dealer rating");

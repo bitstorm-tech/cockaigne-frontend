@@ -23,6 +23,7 @@
   async function update(event: CustomEvent) {
     const ratingUpdate = event.detail;
     ratingUpdate.user_id = $page.data.userId;
+    ratingUpdate.dealer_id = rating.dealer_id;
     await updateRating($page.data.supabase, ratingUpdate);
     rating.rating_text = ratingUpdate.rating_text;
     rating.stars = ratingUpdate.stars;
